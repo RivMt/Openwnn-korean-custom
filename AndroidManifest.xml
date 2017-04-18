@@ -32,24 +32,14 @@
             <meta-data android:name="android.view.im" android:resource="@xml/method_ko" />
         </service>
         
-        <activity android:name="OpenWnnControlPanelJAJP"
-                android:label="@string/preference_ime_setting_app">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
         <activity android:name="OpenWnnControlPanelKOKR"
                 android:label="@string/preference_ime_setting_app">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-	<activity android:name="me.blog.hgl1002.openwnn.EN.UserDictionaryToolsListEN" /> 
-
-	<activity android:name="me.blog.hgl1002.openwnn.EN.UserDictionaryToolsEditEN" android:label="@string/user_dictionary_edit_words" /> 
-
+		
     </application>
 
 </manifest> 
