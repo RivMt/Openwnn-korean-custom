@@ -243,31 +243,6 @@ public class DefaultSoftKeyboard implements InputViewManager, KeyboardView.OnKey
     /** Chinese key-mode (Half-width number) */
     public static final int KEYMODE_CN_HALF_NUMBER   = 4;
     
-    public static final int KEYMODE_KO_ALPHABET_QWERTY = 0;
-    public static final int KEYMODE_KO_ALPHABET_DVORAK = 1;
-    
-    public static final int KEYMODE_KO_DUBUL_STANDARD = 2;
-    public static final int KEYMODE_KO_DUBUL_DANMOEUM_GOOGLE = 3;
-    public static final int KEYMODE_KO_DUBUL_DANMOEUM_MUE128= 4;
-    
-    public static final int KEYMODE_KO_SEBUL_390 = 5;
-    public static final int KEYMODE_KO_SEBUL_391 = 6;
-    public static final int KEYMODE_KO_SEBUL_DANMOEUM = 7;
-    
-    public static final int KEYMODE_KO_ALT_SYMBOLS = 8;
-    
-    public static final int KEYMODE_KO_SEBUL_SHIN_ORIGINAL = 9;
-    public static final int KEYMODE_KO_SEBUL_SHIN_EDIT = 10;
-    
-    // Keymode number 0-1 is reserved for QWERTY-based Keymode.
-    
-    public static final int KEYMODE_KO_12KEY_SEBUL_MUNHWA = 5;
-    public static final int KEYMODE_KO_12KEY_SEBUL_SENA = 6;
-    public static final int KEYMODE_KO_12KEY_SEBUL_HANSON = 7;
-    
-    public static final int KEYMODE_KO_12KEY_ALT_SYMBOLS = 8;
-    public static final int KEYMODE_KO_12KEY_ALPHABET = 9;
-    
     /* key-modes for HARD */
     /** HARD key-mode (SHIFT_OFF_ALT_OFF) */
     public static final int HARD_KEYMODE_SHIFT_OFF_ALT_OFF     = 2;

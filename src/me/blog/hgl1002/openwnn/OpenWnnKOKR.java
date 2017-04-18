@@ -1139,7 +1139,7 @@ public class OpenWnnKOKR extends OpenWnn {
 		} else if(key == KeyEvent.KEYCODE_SPACE) {
 			mHangulEngine.resetJohab();
 			if(mHardShift != 0) {
-				((DefaultSoftKeyboardKOKR) mInputViewManager).nextKeyMode();
+				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 				mHardShift = 0;
 				mShiftPressing = false;
 				updateMetaKeyStateDisplay();
