@@ -313,5 +313,8 @@
     <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
     
+    <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
+    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 250.</string>
+    
 </resources>
 

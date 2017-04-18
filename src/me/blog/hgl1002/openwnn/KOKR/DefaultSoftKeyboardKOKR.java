@@ -70,6 +70,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private boolean useFlick = true;
 	private int flickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
+	private int timeoutDelay = 250;
+	
 	int[] languageCycleTable = {
 			LANG_EN, LANG_KO
 	};
@@ -415,7 +417,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		if(mTimeoutHandler == null) {
 			mTimeoutHandler = new Handler();
-			mTimeoutHandler.postDelayed(new TimeOutHandler(), 250);
+			mTimeoutHandler.postDelayed(new TimeOutHandler(), timeoutDelay);
 		}
 	}
 
@@ -526,6 +528,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		longPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		useFlick = pref.getBoolean("keyboard_use_flick", true);
 		flickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
+		timeoutDelay = pref.getInt("keyboard_timeout_delay", 250);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {

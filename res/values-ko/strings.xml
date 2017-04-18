@@ -67,4 +67,8 @@
     
     <string name="preference_keyboard_flick_sensitivity_title">플릭 감도</string>
     <string name="preference_keyboard_flick_sensitivity_summary">플릭 감도를 조정합니다. 기본값은 100입니다.</string>
+    
+    <string name="preference_keyboard_timeout_delay_title">자동 조합 종료 타이머</string>
+    <string name="preference_keyboard_timeout_delay_summary">단모음 자판 등에서 사용할 자동 조합 타이머를 설정합니다. 기본값은 250입니다.</string>
+    
 </resources>
