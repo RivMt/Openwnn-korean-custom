@@ -197,6 +197,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
 			}
 		} else {
+			createKeyboardsLandscape(parent);
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
 					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
 		}
