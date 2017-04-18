@@ -40,6 +40,7 @@
     <string name="preference_hardware_hangul_summary">하드웨어 키보드 사용시 한글 키보드 레이아웃을 설정합니다.</string>
     
     <string name="preference_keyboard_dubul_standard">두벌식 표준</string>
+    <string name="preference_keyboard_dubul_danmoeum_google">Google 두벌식 단모음</string>
     <string name="preference_keyboard_sebul_390">세벌식 390</string>
     <string name="preference_keyboard_sebul_391">세벌식 최종</string>
     <string name="preference_keyboard_sebul_danmoeum">세벌식 단모음</string>

@@ -257,7 +257,10 @@ public class HangulEngine {
 					// Start new syllable by adding cho
 					if(!combine) {
 						int addCho = getDubul(dubulCho, jamo);
-						if(addCho != -1) {
+						int combination = getCombination(lastJamo, jamo);
+						if(combination != -1) {
+							cho = getDubul(dubulCho, combination) - 0x1100;
+						} else if(addCho != -1) {
 							processVisible();
 							resetJohab();
 							cho = addCho - 0x1100;

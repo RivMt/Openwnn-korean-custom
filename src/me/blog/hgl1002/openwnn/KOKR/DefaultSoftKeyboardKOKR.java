@@ -249,6 +249,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_EDIT;
 					break;
 					
+				case KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE:
+					mode = OpenWnnKOKR.ENGINE_MODE_DUBUL_DANMOEUM;
+					break;
+					
 				}
 			} else {
 				switch(targetMode) {
@@ -643,6 +647,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
+			case "keyboard_dubul_danmoeum_google":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+				break;
+				
 			}
 		}
 		
@@ -737,6 +746,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_shift);
 				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
+				break;
+				
+			case "keyboard_dubul_danmoeum_google":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 				break;
 				
 			}

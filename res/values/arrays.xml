@@ -41,6 +41,7 @@
         <item>@string/preference_keyboard_sebul_391</item>
         <item>@string/preference_keyboard_sebul_danmoeum</item>
         <item>@string/preference_keyboard_dubul_standard</item>
+        <item>@string/preference_keyboard_dubul_danmoeum_google</item>
         <item>@string/preference_keyboard_sebul_shin_original</item>
         <item>@string/preference_keyboard_sebul_shin_edit</item>
     </string-array>
@@ -50,6 +51,7 @@
         <item>keyboard_sebul_391</item>
         <item>keyboard_sebul_danmoeum</item>
         <item>keyboard_dubul_standard</item>
+        <item>keyboard_dubul_danmoeum_google</item>
         <item>keyboard_sebul_shin_original</item>
         <item>keyboard_sebul_shin_edit</item>
     </string-array>
