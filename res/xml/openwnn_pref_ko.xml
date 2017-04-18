@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (C) 2008,2009  OMRON SOFTWARE Co., Ltd.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+		  android:key="openwnn_pref_ko">
+
+  <PreferenceCategory android:title="@string/preference_key_setting_menu">
+    <CheckBoxPreference android:key="key_sound"
+			android:title="@string/preference_key_sound_title"
+			android:summary="@string/preference_key_sound_summary"/>
+    <CheckBoxPreference android:key="key_vibration"
+			android:title="@string/preference_key_vibration_title"
+			android:summary="@string/preference_key_vibration_summary"/>
+    <CheckBoxPreference android:key="popup_preview"
+			android:title="@string/preference_preview_title"
+			android:summary="@string/preference_preview_summary"
+			android:defaultValue="false" />
+    <me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+        	android:key="keyboard_long_press_timeout"
+        	android:title="@string/preference_keyboard_long_press_timeout_title"
+        	android:summary="@string/preference_keyboard_long_press_timeout_summary"
+        	android:defaultValue="500" />
+    <me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+            android:key="keyboard_skin"
+			android:title="@string/preference_keyboard_skin_title"
+			android:summary="@string/preference_keyboard_skin_summary"
+			android:entries="@array/keyboard_skin"
+			android:entryValues="@array/keyboard_skin_id"
+			android:defaultValue="keyboard_android_default" />
+    <CheckBoxPreference android:key="keyboard_hangul_use_12key"
+        android:title="@string/preference_keyboard_use_12key_title"
+        android:summary="@string/preference_keyboard_use_12key_summary" />
+    <me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+          android:key="keyboard_hangul_12key_layout"
+          android:title="@string/preference_keyboard_hangul_12key_title"
+          android:summary="@string/preference_keyboard_hangul_12key_summary"
+          android:entries="@array/keyboard_12key_layout"
+          android:entryValues="@array/keyboard_12key_layout_id"
+          android:defaultValue="keyboard_12key_sebul_munhwa" />
+    <me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+          android:key="keyboard_hangul_layout"
+          android:title="@string/preference_keyboard_hangul_title"
+          android:summary="@string/preference_keyboard_hangul_summary"
+          android:entries="@array/keyboard_hangul_layout"
+          android:entryValues="@array/keyboard_hangul_layout_id"
+          android:defaultValue="keyboard_sebul_391" />
+    <CheckBoxPreference android:key="keyboard_alphabet_use_qwerty"
+    	android:title="@string/preference_keyboard_alphabet_use_qwerty_title"
+    	android:summary="@string/preference_keyboard_alphabet_use_qwerty_summary" />
+	<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		android:key="keyboard_alphabet_layout"
+		android:title="@string/preference_keyboard_alphabet_title"
+		android:summary="@string/preference_keyboard_alphabet_summary"
+		android:entries="@array/keyboard_alphabet_layout"
+		android:entryValues="@array/keyboard_alphabet_layout_id"
+		android:defaultValue="keyboard_alphabet_qwerty" />
+	<CheckBoxPreference android:key="keyboard_use_flick"
+		android:title="@string/preference_keyboard_use_flick_title"
+		android:summary="@string/preference_keyboard_use_flick_summary"
+		android:defaultValue="true" />
+	<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		android:key="keyboard_flick_sensitivity"
+		android:title="@string/preference_keyboard_flick_sensitivity_title"
+		android:summary="@string/preference_keyboard_flick_sensitivity_summary"
+		android:defaultValue="100" />
+  </PreferenceCategory>
+  
+  <PreferenceCategory android:title="@string/preference_hardware_setting_menu">
+    <me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+        android:key="hardware_hangul_layout"
+        android:title="@string/preference_hardware_hangul_title"
+        android:summary="@string/preference_hardware_hangul_summary"
+        android:entries="@array/keyboard_hangul_layout"
+        android:entryValues="@array/keyboard_hangul_layout_id"
+        android:defaultValue="keyboard_sebul_391" />
+    <me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+    	android:key="hardware_alphabet_layout"
+    	android:title="@string/preference_hardware_alphabet_title"
+    	android:summary="@string/preference_hardware_alphabet_summary"
+    	android:entries="@array/keyboard_alphabet_layout"
+    	android:entryValues="@array/keyboard_alphabet_layout_id"
+    	android:defaultValue="keyboard_alphabet_qwerty" />
+  </PreferenceCategory>
+    
+  <PreferenceCategory android:title="@string/preference_aboutime_menu">
+    <Preference android:key="openwnn_version" 
+			style="?android:preferenceInformationStyle"
+			android:title="@string/openwnn_korean"
+			android:summary="@string/openwnn_korean_copyright" />
+  </PreferenceCategory>
+
+</PreferenceScreen>
+

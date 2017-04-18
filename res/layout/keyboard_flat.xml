@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.inputmethodservice.KeyboardView
+   xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/keyboard"
+   android:layout_alignParentBottom="true"
+   android:layout_width="match_parent"
+   android:layout_height="wrap_content"
+   android:keyTextColor="#D4D6D7"
+   android:keyBackground="@drawable/keybg_flat_def"
+   android:background="@drawable/keybg_flat_bg"
+/>

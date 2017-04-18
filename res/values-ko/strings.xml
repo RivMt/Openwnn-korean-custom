@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="preference_ime_setting_app">한글 키보드 설정</string>
+    
+    <string name="preference_key_setting_menu">소프트 키보드</string>
+
+    <string name="preference_key_sound_title">사운드</string>
+    <string name="preference_key_sound_summary">키를 누를 때 소리를 냅니다.</string>
+
+    <string name="preference_key_vibration_title">진동</string>
+    <string name="preference_key_vibration_summary">키를 누를 때 진동합니다.</string>
+
+    <string name="preference_preview_title">키 프리뷰</string>
+    <string name="preference_preview_summary">키 미리보기를 켭니다.</string>
+
+    <string name="preference_keyboard_skin_title">키보드 테마</string>
+    <string name="preference_keyboard_skin_summary">키보드 테마를 바꿉니다.</string>
+
+    <string name="preference_keyboard_android_default">기본</string>
+    <string name="preference_keyboard_simple">심플</string>
+    <string name="preference_keyboard_metal">메탈</string>
+    
+    <string name="preference_keyboard_long_press_timeout_title">길게 누르기 시간 (ms)</string>
+    <string name="preference_keyboard_long_press_timeout_summary">키보드를 길게 누르는 대기 시간을 설정합니다.</string>
+    
+    <string name="preference_keyboard_use_12key_title">12키 배열 사용</string>
+    <string name="preference_keyboard_use_12key_summary">12키 자판 배열을 사용합니다.</string>
+    
+    <string name="preference_keyboard_hangul_12key_title">12키 한글 키보드 종류</string>
+    <string name="preference_keyboard_hangul_12key_summary">12키 한글 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_keyboard_hangul_title">한글 키보드 종류</string>
+    <string name="preference_keyboard_hangul_summary">한글 키보드 레이아웃을 설정합니다.</string>
+    
+    
+    <string name="preference_hardware_setting_menu">하드웨어 키보드</string>
+    
+    <string name="preference_hardware_hangul_title">하드웨어 한글 키보드 종류</string>
+    <string name="preference_hardware_hangul_summary">하드웨어 키보드 사용시 한글 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_keyboard_dubul_standard">두벌식 표준</string>
+    <string name="preference_keyboard_sebul_390">세벌식 390</string>
+    <string name="preference_keyboard_sebul_391">세벌식 최종</string>
+    <string name="preference_keyboard_sebul_danmoeum">세벌식 단모음</string>
+    <string name="preference_keyboard_sebul_shin_original">신세벌식 1995 원안</string>
+    <string name="preference_keyboard_sebul_shin_edit">수정 신세벌식 (박경남)</string>
+    
+    <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
+    <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
+    
+    <string name="preference_keyboard_alphabet_use_qwerty_title">항상 쿼티 기반 영문 키보드 사용</string>
+    <string name="preference_keyboard_alphabet_use_qwerty_summary">12키 한글 키보드를 사용할 때도 쿼티 기반(PC) 영문 키보드를 사용합니다.</string>
+    
+    <string name="preference_keyboard_alphabet_title">영문 키보드 종류</string>
+    <string name="preference_keyboard_alphabet_summary">영문 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
+    <string name="preference_keyboard_alphabet_dvorak">DVORAK</string>
+    
+    <string name="preference_hardware_alphabet_title">하드웨어 영문 키보드 종류</string>
+    <string name="preference_hardware_alphabet_summary">하드웨어 키보드 사용시 영문 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_keyboard_use_flick_title">플릭 사용</string>
+    <string name="preference_keyboard_use_flick_summary">키보드에 플릭(밀기) 기능을 사용합니다.</string>
+    
+    <string name="preference_keyboard_flick_sensitivity_title">플릭 감도</string>
+    <string name="preference_keyboard_flick_sensitivity_summary">플릭 감도를 조정합니다. 기본값은 100입니다.</string>
+</resources>
