@@ -58,7 +58,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	private int mLastInputType = 0;
 	private int mLastKeyMode = -1;
-	private int mLastLanguage = -1;
+	private int mReturnLanguage = -1;
 	
 	private int[] mCurrentKeyboard = new int[4];
 	
@@ -284,8 +284,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public void setDefaultKeyboard() {
 		Locale locale = Locale.getDefault();
 		int language = languageCycleTable[0];
-		
+
+		if(mReturnLanguage != -1) {
+			language = mReturnLanguage;
+			mReturnLanguage = -1;
+		}
 		if(mPreferenceLanguage != INVALID_KEYMODE) {
+			mReturnLanguage = mCurrentLanguage;
 			language = mPreferenceLanguage;
 //		} else if(mLimitedKeyMode != null) {
 //			language = mLimitedKeyMode[0];
@@ -544,12 +549,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			altKeyMode = KEYMODE_ALT_SYMBOLS;
 		}
 		if(mCurrentKeyMode == altKeyMode) {
-			if(mLastLanguage != -1) {
-//				mCurrentLanguage = mLastLanguage;
-			}
 			changeKeyMode(KEYMODE_HANGUL);
 		} else {
-//			mLastLanguage = mCurrentLanguage;
 			changeKeyMode(altKeyMode);
 		}
 	}
