@@ -78,8 +78,9 @@
   </Row>
   
   <Row android:rowEdgeFlags="bottom">
-    <Key android:codes="-500" android:keyLabel="가" 
-         android:keyWidth="20%p" android:keyEdgeFlags="left" />
+    <Key android:codes="-103" android:keyLabel="ALT"
+         android:keyWidth="10%p" android:keyEdgeFlags="left"/>
+    <Key android:codes="-500" android:keyLabel="A가" android:keyWidth="10%p"/>
     <Key android:codes="44" android:keyLabel="," android:keyWidth="10%p"/>
     <Key android:codes="-10"
 	 android:keyIcon="@drawable/key_qwerty_space" 
