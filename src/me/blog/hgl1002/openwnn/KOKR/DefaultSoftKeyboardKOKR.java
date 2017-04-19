@@ -60,7 +60,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private int mLastKeyMode = -1;
 	private int mReturnLanguage = -1;
 	
-	private int[] mCurrentKeyboard = new int[4];
+	private int[] mCurrentKeyboards = new int[4];
 	
 	private int[] mLimitedKeyMode = null;
 	
@@ -197,7 +197,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
 			}
 		} else {
-			createKeyboardsLandscape(parent);
+			if(mDisplayMode == PORTRAIT) {
+				createKeyboardsPortrait(parent);
+			} else {
+				createKeyboardsLandscape(parent);
+			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
 					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
 		}
@@ -209,7 +213,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if(targetMode == INVALID_KEYMODE) {
 			return;
 		}
-
+		
 		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 				new KeyEvent(KeyEvent.ACTION_UP,
 						KeyEvent.KEYCODE_SHIFT_LEFT)));
@@ -224,7 +228,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
 			if(mCurrentKeyboardType == KEYBOARD_QWERTY) {
-				switch(mCurrentKeyboard[mCurrentLanguage]) {
+				switch(mCurrentKeyboards[mCurrentLanguage]) {
 				case KEYBOARD_KO_DUBUL_STANDARD:
 					mode = OpenWnnKOKR.ENGINE_MODE_DUBULSIK;
 					break;
@@ -251,7 +255,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					
 				}
 			} else {
-				switch(targetMode) {
+				switch(mCurrentKeyboards[mCurrentLanguage]) {
 				case KEYBOARD_EN_12KEY_ALPHABET:
 					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET;
 					break;
@@ -281,8 +285,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	public void setDefaultKeyboard() {
 		Locale locale = Locale.getDefault();
-		int language = languageCycleTable[0];
-
+		int language = languageCycleTable[1];
+		
 		if(mReturnLanguage != -1) {
 			language = mReturnLanguage;
 			mReturnLanguage = -1;
@@ -303,7 +307,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public View initView(OpenWnn parent, int width, int height) {
 		View view = super.initView(parent, width, height);
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
-		changeKeyMode(0);
 		
 		return view;
 	}
@@ -392,7 +395,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				}
 				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char)primaryCode));
 				
-				switch(mCurrentKeyboard[LANG_KO]) {
+				switch(mCurrentKeyboards[LANG_KO]) {
 				case KEYBOARD_KO_SEBUL_SHIN_ORIGINAL:
 				case KEYBOARD_KO_SEBUL_SHIN_EDIT:
 					if(mCurrentLanguage == LANG_KO) break;
@@ -511,14 +514,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public void setPreferences(SharedPreferences pref, EditorInfo editor) {
 		super.setPreferences(pref, editor);
 		
-		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY));
-		} else {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
-		}
-		
 		longPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		useFlick = pref.getBoolean("keyboard_use_flick", true);
 		flickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
@@ -526,6 +521,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
 			
+		}
+
+		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
+					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY));
+		} else {
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
+					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
 		}
 		
 		mLimitedKeyMode = null;
@@ -562,11 +565,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		
 		if(inputType != mLastInputType) {
-			setDefaultKeyboard();
 			mLastInputType = inputType;
-		} else {
 		}
-		
+		setDefaultKeyboard();
 	}
 
 	private void createKeyboardsPortrait(OpenWnn parent) {
@@ -578,8 +579,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		boolean use12key = pref.getBoolean("keyboard_hangul_use_12key", false);
 		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
 		
+		if(!mHardKeyboardHidden) use12key = false;
+		
 		if(use12key) {
-
 			keyList = mKeyboard[LANG_KO][PORTRAIT][KEYBOARD_12KEY];
 			
 			mCurrentKeyboardType = KEYBOARD_12KEY;
@@ -587,10 +589,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			switch(defaultLayout) {
 			case "keyboard_12key_sebul_munhwa":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_MUNHWA;
 				break;
 				
 			case "keyboard_12key_sebul_hanson":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_hanson);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_HANSON;
 				break;
 				
 			}
@@ -610,37 +614,37 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case "keyboard_sebul_390":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_390;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
 				break;
 				
 			case "keyboard_sebul_391":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_391;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
 				break;
 				
 			case "keyboard_sebul_danmoeum":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
 				break;
 				
 			case "keyboard_dubul_standard":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
 				break;
 				
 			case "keyboard_sebul_shin_original":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
 				break;
 				
 			case "keyboard_sebul_shin_edit":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
 			}
@@ -650,7 +654,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 		if(useAlphabetQwerty) {
 			
-			keyList = mKeyboard[LANG_EN][PORTRAIT][KEYBOARD_QWERTY];
+			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 			
 			String defaultLayout = "keyboard_alphabet_qwerty";
 			if(!mHardKeyboardHidden) {
@@ -662,23 +666,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case "keyboard_alphabet_qwerty":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty_shift);
-				mCurrentKeyboard[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
 				break;
 				
 			case "keyboard_alphabet_dvorak":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
-				mCurrentKeyboard[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
 				break;
 				
 			}
 		} else {
 			
-			keyList = mKeyboard[LANG_EN][PORTRAIT][KEYBOARD_12KEY];
+			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 			
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_english);
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_english_shift);
-			mCurrentKeyboard[LANG_EN] = KEYBOARD_EN_12KEY_ALPHABET;
+			mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_12KEY_ALPHABET;
 		}
 		
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
@@ -706,37 +710,37 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case "keyboard_sebul_390":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_390;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
 				break;
 				
 			case "keyboard_sebul_391":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_391;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
 				break;
 				
 			case "keyboard_sebul_danmoeum":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
 				break;
 				
 			case "keyboard_dubul_standard":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
 				break;
 				
 			case "keyboard_sebul_shin_original":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
 				break;
 				
 			case "keyboard_sebul_shin_edit":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_shift);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
 			}
@@ -758,13 +762,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case "keyboard_alphabet_qwerty":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty_shift);
-				mCurrentKeyboard[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
 				break;
 				
 			case "keyboard_alphabet_dvorak":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
-				mCurrentKeyboard[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
 				break;
 				
 			}
