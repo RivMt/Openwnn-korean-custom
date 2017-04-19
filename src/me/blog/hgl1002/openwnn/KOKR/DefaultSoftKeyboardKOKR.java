@@ -174,7 +174,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	public DefaultSoftKeyboardKOKR(OpenWnn parent) {
 		mWnn = parent;
-		mCurrentLanguage = LANG_KO;
+		mCurrentLanguage = languageCycleTable[mCurrentLanguageIndex];
 		mCurrentKeyboardType = KEYBOARD_QWERTY;
 		mShiftOn = KEYBOARD_SHIFT_OFF;
 		
@@ -291,19 +291,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	public void setDefaultKeyboard() {
 		Locale locale = Locale.getDefault();
-		int language = languageCycleTable[1];
+		int language = mCurrentLanguage;
 		
 		if(mReturnLanguage != -1) {
-			language = mReturnLanguage;
+			mCurrentLanguageIndex = mReturnLanguage;
+			language = languageCycleTable[mReturnLanguage];
 			mReturnLanguage = -1;
 		}
-		if(mPreferenceLanguage != INVALID_KEYMODE) {
-			mReturnLanguage = mCurrentLanguage;
-			language = mPreferenceLanguage;
-		} else {
-			if(!locale.getLanguage().equals(Locale.KOREAN.getLanguage())) {
-				language = languageCycleTable[0];
-			}
+		if(mPreferenceLanguage != -1) {
+			mReturnLanguage = mCurrentLanguageIndex;
+			mCurrentLanguageIndex = mPreferenceLanguage;
+			language = languageCycleTable[mPreferenceLanguage];
 		}
 		mCurrentLanguage = language;
 		changeKeyMode(0);
@@ -540,7 +538,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 		mLimitedKeyMode = null;
 		mPreferenceKeyMode = INVALID_KEYMODE;
-		mPreferenceLanguage = INVALID_KEYMODE;
+		mPreferenceLanguage = -1;
 		mNoInput = true;
 		mDisableKeyInput = false;
 		mCapsLock = false;
@@ -554,12 +552,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			switch(inputType & EditorInfo.TYPE_MASK_VARIATION) {
 			case EditorInfo.TYPE_TEXT_VARIATION_PASSWORD:
 			case EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD:
-				mPreferenceLanguage = LANG_EN;
+				mPreferenceLanguage = languageCycleTable[0];
 				break;
 				
 			case EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS:
 			case EditorInfo.TYPE_TEXT_VARIATION_URI:
-				mPreferenceLanguage = LANG_EN;
+				mPreferenceLanguage = languageCycleTable[0];
 				break;
 				
 			default:
