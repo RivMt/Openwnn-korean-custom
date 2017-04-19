@@ -285,6 +285,7 @@
     <string name="preference_hardware_hangul_summary">Type of Hangul keyboard while using hardware keyboard.</string>
     
     <string name="preference_keyboard_dubul_standard">Dubeolsik Standard</string>
+    <string name="preference_keyboard_dubul_danmoeum_google">Google Dubeolsik Danmoeum (Single-Vowel)</string>
     <string name="preference_keyboard_sebul_390">Sebeolsik 390</string>
     <string name="preference_keyboard_sebul_391">Sebeolsik Final</string>
     <string name="preference_keyboard_sebul_danmoeum">Sebeolsik Danmoeum (Single-Vowel)</string>
@@ -311,6 +312,9 @@
     
     <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
+    
+    <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
+    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 250.</string>
     
 </resources>
 

@@ -70,6 +70,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private boolean useFlick = true;
 	private int flickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
+	private int timeoutDelay = 250;
+	
 	int[] languageCycleTable = {
 			LANG_EN, LANG_KO
 	};
@@ -253,6 +255,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_EDIT;
 					break;
 					
+				case KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE:
+					mode = OpenWnnKOKR.ENGINE_MODE_DUBUL_DANMOEUM;
+					break;
+					
 				}
 			} else {
 				switch(mCurrentKeyboards[mCurrentLanguage]) {
@@ -414,7 +420,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		if(mTimeoutHandler == null) {
 			mTimeoutHandler = new Handler();
-			mTimeoutHandler.postDelayed(new TimeOutHandler(), 250);
+			mTimeoutHandler.postDelayed(new TimeOutHandler(), timeoutDelay);
 		}
 	}
 
@@ -517,6 +523,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		longPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		useFlick = pref.getBoolean("keyboard_use_flick", true);
 		flickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
+		timeoutDelay = pref.getInt("keyboard_timeout_delay", 250);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
@@ -647,6 +654,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
+			case "keyboard_dubul_danmoeum_google":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+				break;
+				
 			}
 		}
 		
@@ -741,6 +753,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_shift);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
+				break;
+				
+			case "keyboard_dubul_danmoeum_google":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 				break;
 				
 			}
