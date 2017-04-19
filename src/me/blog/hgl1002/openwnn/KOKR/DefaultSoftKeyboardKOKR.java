@@ -140,6 +140,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case MotionEvent.ACTION_MOVE:
 				dx = event.getX() - downX;
 				dy = event.getY() - downY;
+				if(dy > flickSensitivity || dy < -flickSensitivity
+						|| dx < -flickSensitivity || dx > flickSensitivity) {
+					for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
+						Handler handler = mLongClickHandlers.get(mLongClickHandlers.keyAt(i));
+						handler.removeCallbacksAndMessages(null);
+					}
+				}
 				return true;
 				
 			case MotionEvent.ACTION_UP:
