@@ -656,7 +656,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			case "keyboard_dubul_danmoeum_google":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 				break;
 				
 			}
@@ -757,7 +757,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			case "keyboard_dubul_danmoeum_google":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
-				mCurrentKeyboard[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 				break;
 				
 			}
