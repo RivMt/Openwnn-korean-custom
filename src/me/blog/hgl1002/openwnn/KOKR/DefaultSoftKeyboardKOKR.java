@@ -273,10 +273,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET;
 					break;
 					
-				case KEYBOARD_EN_ALPHABET_DVORAK:
-					mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
-					break;
-					
 				case KEYBOARD_KO_SEBUL_MUNHWA:
 					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_MUNHWA;
 					break;
@@ -290,6 +286,20 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		} else if(targetMode == KEYMODE_ALT_SYMBOLS) {
 			mode = OpenWnnEvent.Mode.DIRECT;
 		}
+		
+		if(mCurrentLanguage == LANG_EN) {
+			switch(mCurrentKeyboards[mCurrentLanguage]) {
+			case KEYBOARD_EN_ALPHABET_QWERTY:
+				mode = OpenWnnEvent.Mode.DIRECT;
+				break;
+				
+			case KEYBOARD_EN_ALPHABET_DVORAK:
+				mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
+				break;
+				
+			}
+		}
+		
 		changeKeyboard(kbd);
 		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
 		
