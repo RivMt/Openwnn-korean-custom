@@ -3,6 +3,12 @@
     
     <string name="preference_ime_setting_app">한글 키보드 설정</string>
     
+    <string name="preference_method_setting_menu">입력 방식</string>
+    
+    <string name="preference_method_enabler_title">입력 방식 활성화 창 열기</string>
+    <string name="preference_method_enabler_summary">\'OpenWnn Korean\'을 활성화해 주세요.</string>
+    <string name="preference_method_picker_title">입력 방식 선택 창 열기</string>
+    
     <string name="preference_key_setting_menu">소프트 키보드</string>
 
     <string name="preference_key_sound_title">사운드</string>

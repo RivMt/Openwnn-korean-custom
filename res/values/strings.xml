@@ -19,6 +19,10 @@
     <!-- Preferences -->
     <string name="preference_ime_setting_app">Setting</string>
 
+    <string name="preference_method_enabler_title">Enable / Disable Input Methods</string>
+    <string name="preference_method_enabler_summary">Please enable \'OpenWnn Korean\'.</string>
+    <string name="preference_method_picker_title">Show Input Method Picker</string>
+    
     <string name="preference_key_setting_menu">Software Keyboard</string>
 
     <string name="preference_key_sound_title"> Sound on Key Press </string>
@@ -317,4 +321,3 @@
     <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 250.</string>
     
 </resources>
-
