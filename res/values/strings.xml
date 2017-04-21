@@ -16,11 +16,16 @@
 -->
 <resources>
   <!-- common part -->
+  
+    <string name="ime_name">OpenWnn Korean</string>
+    
     <!-- Preferences -->
     <string name="preference_ime_setting_app">Setting</string>
     
     <string name="preference_method_setting_menu">Input Method</string>
     
+    <string name="preference_method_enabler_title">Enable / Disable Input Methods</string>
+    <string name="preference_method_enabler_summary">Please enable \'OpenWnn Korean\'.</string>
     <string name="preference_method_picker_title">Show Input Method Picker</string>
 
     <string name="preference_key_setting_menu">Software Keyboard</string>

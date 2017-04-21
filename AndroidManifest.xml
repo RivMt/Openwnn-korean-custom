@@ -23,7 +23,7 @@
     <uses-sdk android:targetSdkVersion="23" android:minSdkVersion="3"/>
     <application android:icon="@drawable/icon" android:label="OpenWnn">
 
-        <service android:name="OpenWnnKOKR" android:label="Korean IME (OpenWnn)"
+        <service android:name="OpenWnnKOKR" android:label="@string/ime_name"
 		 android:permission="android.permission.BIND_INPUT_METHOD"
 		 android:id="@+id/openwnn_korean">
             <intent-filter>

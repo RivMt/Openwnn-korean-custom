@@ -18,6 +18,9 @@
 			android:key="openwnn_pref_ko">
 	
 	<PreferenceCategory android:title="@string/preference_method_setting_menu">
+		<me.blog.hgl1002.openwnn.KOKR.EnableInputMethodPreference
+			android:title="@string/preference_method_enabler_title"
+			android:summary="@string/preference_method_enabler_summary" />
 		<me.blog.hgl1002.openwnn.KOKR.PickInputMethodPreference
 			android:title="@string/preference_method_picker_title" />
     </PreferenceCategory>
