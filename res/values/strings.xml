@@ -251,6 +251,8 @@
 
     <string name="indicator_caps">CAPS</string>
     <string name="indicator_alt">ALT</string>
+	<string name="indicator_lang_en">A</string>
+	<string name="indicator_lang_ko">가</string>
 
 
     <!-- Tutorial -->

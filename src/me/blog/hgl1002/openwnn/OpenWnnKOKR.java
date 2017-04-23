@@ -1409,6 +1409,9 @@ public class OpenWnnKOKR extends OpenWnn {
 			mode = DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF;
 		}
 		((DefaultSoftKeyboard) mInputViewManager).updateIndicator(mode);
+		mode = DefaultSoftKeyboardKOKR.HARD_KEYMODE_LANG
+				+ ((DefaultSoftKeyboard) mInputViewManager).mCurrentLanguage;
+		((DefaultSoftKeyboard) mInputViewManager).updateIndicator(mode);
 	}
 
 	@Override

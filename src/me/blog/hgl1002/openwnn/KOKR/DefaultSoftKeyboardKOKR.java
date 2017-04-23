@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
 import me.blog.hgl1002.openwnn.OpenWnn;
 import me.blog.hgl1002.openwnn.OpenWnnEvent;
@@ -19,7 +20,11 @@ import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.R;
 
 public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
-
+	
+	public static final int HARD_KEYMODE_LANG = 10000;
+	public static final int HARD_KEYMODE_LANG_ENGLISH = HARD_KEYMODE_LANG + LANG_EN;
+	public static final int HARD_KEYMODE_LANG_KOREAN = HARD_KEYMODE_LANG + LANG_KO;
+	
 	public static final int KEYBOARD_EN_ALPHABET_QWERTY = 0;
 	public static final int KEYBOARD_EN_ALPHABET_DVORAK = 1;
 
@@ -328,7 +333,20 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public View initView(OpenWnn parent, int width, int height) {
 		View view = super.initView(parent, width, height);
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
-		
+		TextView langView = (TextView) mSubView.findViewById(R.id.lang);
+		langView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+					if(mVibrator != null) {
+						mVibrator.vibrate(30);
+					}
+					nextLanguage();
+					updateIndicator(HARD_KEYMODE_LANG + mCurrentLanguage);
+				}
+				return false;
+			}
+		});
 		return view;
 	}
 
@@ -878,6 +896,25 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 		}
 		return targetMode;
+	}
+
+	@Override
+	public void updateIndicator(int mode) {
+		TextView text = (TextView) mSubView.findViewById(R.id.lang);
+		switch(mode) {
+		case HARD_KEYMODE_LANG_ENGLISH:
+			text.setText(R.string.indicator_lang_en);
+			break;
+			
+		case HARD_KEYMODE_LANG_KOREAN:
+			text.setText(R.string.indicator_lang_ko);
+			break;
+			
+		default:
+			super.updateIndicator(mode);
+			break;
+			
+		}
 	}
 
 }
