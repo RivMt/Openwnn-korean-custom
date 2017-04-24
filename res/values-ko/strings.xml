@@ -39,12 +39,6 @@
     <string name="preference_keyboard_hangul_title">한글 키보드 종류</string>
     <string name="preference_keyboard_hangul_summary">한글 키보드 레이아웃을 설정합니다.</string>
     
-    
-    <string name="preference_hardware_setting_menu">하드웨어 키보드</string>
-    
-    <string name="preference_hardware_hangul_title">하드웨어 한글 키보드 종류</string>
-    <string name="preference_hardware_hangul_summary">하드웨어 키보드 사용시 한글 키보드 레이아웃을 설정합니다.</string>
-    
     <string name="preference_keyboard_dubul_standard">두벌식 표준</string>
     <string name="preference_keyboard_dubul_danmoeum_google">Google 두벌식 단모음</string>
     <string name="preference_keyboard_sebul_390">세벌식 390</string>
@@ -65,9 +59,6 @@
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
     <string name="preference_keyboard_alphabet_dvorak">DVORAK</string>
     
-    <string name="preference_hardware_alphabet_title">하드웨어 영문 키보드 종류</string>
-    <string name="preference_hardware_alphabet_summary">하드웨어 키보드 사용시 영문 키보드 레이아웃을 설정합니다.</string>
-    
     <string name="preference_keyboard_use_flick_title">플릭 사용</string>
     <string name="preference_keyboard_use_flick_summary">키보드에 플릭(밀기) 기능을 사용합니다.</string>
     
@@ -76,5 +67,17 @@
     
     <string name="preference_keyboard_timeout_delay_title">자동 조합 종료 타이머</string>
     <string name="preference_keyboard_timeout_delay_summary">단모음 자판 등에서 사용할 자동 조합 타이머를 설정합니다. 기본값은 250입니다.</string>
+    
+    
+    <string name="preference_hardware_setting_menu">하드웨어 키보드</string>
+    
+    <string name="preference_hardware_hangul_title">하드웨어 한글 키보드 종류</string>
+    <string name="preference_hardware_hangul_summary">하드웨어 키보드 사용시 한글 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_hardware_alphabet_title">하드웨어 영문 키보드 종류</string>
+    <string name="preference_hardware_alphabet_summary">하드웨어 키보드 사용시 영문 키보드 레이아웃을 설정합니다.</string>
+    
+    <string name="preference_hardware_use_subview_title">서브 뷰 사용</string>
+    <string name="preference_hardware_use_subview_summary">하드웨어 키보드 사용시 서브 뷰를 표시합니다.</string>
     
 </resources>

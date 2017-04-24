@@ -106,6 +106,10 @@
 			android:entries="@array/keyboard_alphabet_layout"
 			android:entryValues="@array/keyboard_alphabet_layout_id"
 			android:defaultValue="keyboard_alphabet_qwerty" />
+		<CheckBoxPreference android:key="hardware_use_subview"
+		    android:title="@string/preference_hardware_use_subview_title"
+		    android:summary="@string/preference_hardware_use_subview_summary"
+		    android:defaultValue="true"/>
 	</PreferenceCategory>
 		
 	<PreferenceCategory android:title="@string/preference_aboutime_menu">

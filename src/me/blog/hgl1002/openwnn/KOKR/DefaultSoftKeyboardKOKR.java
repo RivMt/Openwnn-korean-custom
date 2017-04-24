@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
@@ -76,6 +77,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private int flickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
 	private int timeoutDelay = 250;
+
+	private boolean mShowSubView = true;
 	
 	int[] languageCycleTable = {
 			LANG_EN, LANG_KO
@@ -347,6 +350,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				return false;
 			}
 		});
+		if(!mShowSubView && view instanceof ViewGroup && mSubView != null) {
+			((ViewGroup) view).removeView(mSubView);
+		}
 		return view;
 	}
 
@@ -557,12 +563,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		useFlick = pref.getBoolean("keyboard_use_flick", true);
 		flickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
 		timeoutDelay = pref.getInt("keyboard_timeout_delay", 250);
+		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
+		if(showSubView != mShowSubView) {
+			mShowSubView = showSubView;
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+		}
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
 			
 		}
-
+		
 		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
 					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY));
