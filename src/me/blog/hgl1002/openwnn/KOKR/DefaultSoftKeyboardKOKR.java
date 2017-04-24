@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.inputmethodservice.Keyboard;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -74,6 +76,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mLongPressTimeout = 500;
 	
 	protected int mVibrateDuration = 30;
+	
+	protected int mKeyHeight = 50;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -821,7 +825,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	@SuppressWarnings("deprecation")
 	public Keyboard loadKeyboard(Context context, int xmlLayoutResId) {
-		Keyboard keyboard = new Keyboard(context, xmlLayoutResId);
+		KeyboardKOKR keyboard = new KeyboardKOKR(context, xmlLayoutResId);
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mWnn);
 		String skin = pref.getString("keyboard_skin",
 				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
@@ -834,6 +838,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		default:
 			icon = 0;
 		}
+		DisplayMetrics metrics = mWnn.getResources().getDisplayMetrics();
+		int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mKeyHeight, metrics);
+		keyboard.resize(height);
 		KeyIconParams params = mKeyIconparams[icon];
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			switch(key.codes[0]) {
