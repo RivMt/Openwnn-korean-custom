@@ -77,7 +77,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	protected int mVibrateDuration = 30;
 	
-	protected int mKeyHeight = 50;
+	protected int mKeyHeightPortrait = 50;
+	protected int mKeyHeightLandscape = 42;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -547,6 +548,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public void setPreferences(SharedPreferences pref, EditorInfo editor) {
 		super.setPreferences(pref, editor);
 		
+		int keyHeightPortrait = pref.getInt("key_height_portrait", mKeyHeightPortrait);
+		int keyHeightLandscape = pref.getInt("key_height_landscape", mKeyHeightLandscape);
+		if(keyHeightPortrait != mKeyHeightPortrait || keyHeightLandscape != mKeyHeightLandscape) {
+			mKeyHeightPortrait = keyHeightPortrait;
+			mKeyHeightLandscape = keyHeightLandscape;
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+		}
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
@@ -839,7 +847,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			icon = 0;
 		}
 		DisplayMetrics metrics = mWnn.getResources().getDisplayMetrics();
-		int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mKeyHeight, metrics);
+		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
+		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resize(height);
 		KeyIconParams params = mKeyIconparams[icon];
 		for(Keyboard.Key key : keyboard.getKeys()) {
