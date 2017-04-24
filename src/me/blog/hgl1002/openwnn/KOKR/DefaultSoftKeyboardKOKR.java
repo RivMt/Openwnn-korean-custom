@@ -73,6 +73,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mTimeoutDelay = 250;
 	protected int mLongPressTimeout = 500;
 	
+	protected int mVibrateDuration = 30;
+	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
 	};
@@ -119,7 +121,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.LONG_CLICK_EVENT,
 					new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
-			try { mVibrator.vibrate(50); } catch (Exception ex) { }
+			try { mVibrator.vibrate(mVibrateDuration*2); } catch (Exception ex) { }
 			mIgnoreCode = keyCode;
 		}
 	}
@@ -441,7 +443,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onPress(int x) {
-		super.onPress(x);
+        /* key click sound & vibration */
+        if (mVibrator != null) {
+            try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
+        }
+        if (mSound != null) {
+            try { mSound.seekTo(0); mSound.start(); } catch (Exception ex) { }
+        }
 		if(mCapsLock) return;
 		mLongClickHandlers.put(x, new Handler());
 		mLongClickHandlers.get(x).postDelayed(new LongClickHandler(x), mLongPressTimeout);
@@ -539,6 +547,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
 		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 250);
+		mVibrateDuration = pref.getInt("key_vibration_duration", mVibrateDuration);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
