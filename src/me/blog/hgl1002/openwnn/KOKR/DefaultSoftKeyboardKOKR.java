@@ -42,37 +42,38 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	private static final int KEYMODE_LENGTH = 11;
 	
-	private static final int DEFAULT_FLICK_SENSITIVITY = 100;
+	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
 	
-	private static final int KEYCODE_NOP = -310;
+	protected static final int KEYCODE_NOP = -310;
 	
 	public static final int KEYCODE_KR12_ADDSTROKE = -310;
 	
-	private static final int INVALID_KEYMODE = -1;
+	protected static final int INVALID_KEYMODE = -1;
 	
 	public static final int KEYMODE_HANGUL = 0;
 	public static final int KEYMODE_ENGLISH = 0;
 	public static final int KEYMODE_ALT_SYMBOLS = 1;
 	
-	private boolean mCapsLock;
+	protected boolean mCapsLock;
 	
-	private int mLastInputType = 0;
-	private int mLastKeyMode = -1;
-	private int mReturnLanguage = -1;
+	protected int mLastInputType = 0;
+	protected int mLastKeyMode = -1;
+	protected int mReturnLanguage = -1;
 	
-	private int[] mCurrentKeyboards = new int[4];
+	protected int[] mCurrentKeyboards = new int[4];
 	
-	private int[] mLimitedKeyMode = null;
+	protected int[] mLimitedKeyMode = null;
 	
-	private int mPreferenceKeyMode = INVALID_KEYMODE;
-	private int mPreferenceLanguage = INVALID_KEYMODE;
+	protected int mPreferenceKeyMode = INVALID_KEYMODE;
+	protected int mPreferenceLanguage = INVALID_KEYMODE;
 	
-	private boolean mUseFlick = true;
-	private int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
+	protected boolean mUseFlick = true;
+	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
-	private int mTimeoutDelay = 250;
+	protected int mTimeoutDelay = 250;
+	protected int mLongPressTimeout = 500;
 	
-	int[] mLanguageCycleTable = {
+	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
 	};
 	int mCurrentLanguageIndex = 0;
@@ -99,7 +100,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	int mIgnoreCode = KEYCODE_NOP;
-	int mLongPressTimeout = 500;
 	
 	SparseArray<Handler> mLongClickHandlers = new SparseArray<>();
 	class LongClickHandler implements Runnable {
