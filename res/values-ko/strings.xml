@@ -17,9 +17,18 @@
     <string name="preference_key_vibration_title">진동</string>
     <string name="preference_key_vibration_summary">키를 누를 때 진동합니다.</string>
 
+    <string name="preference_key_vibration_duration_title">진동 세기</string>
+    <string name="preference_key_vibration_duration_summary">진동 세기를 설정합니다. 기본값은 30입니다.</string>
+    
     <string name="preference_preview_title">키 프리뷰</string>
     <string name="preference_preview_summary">키 미리보기를 켭니다.</string>
 
+    <string name="preference_key_height_portrait_title">키 높이 (세로 화면)</string>
+    <string name="preference_key_height_portrait_summary">세로 화면에서의 키 높이를 조절합니다. 기본값은 50입니다.</string>
+        
+    <string name="preference_key_height_landscape_title">키 높이 (가로 화면)</string>
+    <string name="preference_key_height_landscape_summary">가로 화면에서의 키 높이를 조절합니다. 기본값은 42입니다.</string>
+    
     <string name="preference_keyboard_skin_title">키보드 테마</string>
     <string name="preference_keyboard_skin_summary">키보드 테마를 바꿉니다.</string>
 

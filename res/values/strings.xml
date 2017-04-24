@@ -35,10 +35,19 @@
 
     <string name="preference_key_vibration_title"> Vibrate on Key Press </string>
     <string name="preference_key_vibration_summary"> Enable key click vibration. </string>
-
+    
+    <string name="preference_key_vibration_duration_title">Key Vibration Duration</string>
+    <string name="preference_key_vibration_duration_summary">Set key vibration duration. Default value is 30.</string>
+    
     <string name="preference_preview_title"> Key Preview </string>
     <string name="preference_preview_summary"> Enable key preview. </string>
 
+    <string name="preference_key_height_portrait_title">Key Height (Portrait)</string>
+    <string name="preference_key_height_portrait_summary">Adjust key height in portrait mode. Default value is 50.</string>
+        
+    <string name="preference_key_height_landscape_title">Key Height (Landscape)</string>
+    <string name="preference_key_height_landscape_summary">Adjust key height in landscape mode. Default value is 42.</string>
+    
     <string name="preference_auto_caps_title"> Auto Capitalization </string>
     <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet mode. </string>
 
