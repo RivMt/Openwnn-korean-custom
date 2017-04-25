@@ -839,6 +839,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mDirectInputMode;
 	boolean mEnableTimeout;
 	
+	boolean mMoachigi;
+	boolean mHardwareMoachigi;
+	
 	private static OpenWnnKOKR mSelf;
 	public static OpenWnnKOKR getInstance() {
 		return mSelf;
@@ -893,7 +896,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		//fitInputType(pref, attribute);
+		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
+		
+		mMoachigi = pref.getBoolean("keyboard_use_moachigi", mMoachigi);
+		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
+		
+		if(hardKeyboardHidden) mHangulEngine.setMoachigi(mMoachigi);
+		else mHangulEngine.setMoachigi(mHardwareMoachigi);
+		
 	}
 
 	@Override

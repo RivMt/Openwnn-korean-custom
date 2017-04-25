@@ -327,6 +327,9 @@
     <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
     <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 250.</string>
     
+    <string name="preference_keyboard_use_moachigi_title">Use Moachigi</string>
+    <string name="preference_keyboard_use_moachigi_summary">Use moachigi. (Fix jamo order when using sebeol layouts)</string>
+    
     
     <string name="preference_hardware_setting_menu">Hardware Keyboard</string>
     
@@ -338,5 +341,8 @@
     
     <string name="preference_hardware_use_subview_title">Show Sub View</string>
     <string name="preference_hardware_use_subview_summary">Show sub view when using hardware keyboard.</string>
+    
+    <string name="preference_hardware_use_moachigi_title">Use Moachigi</string>
+    <string name="preference_hardware_use_moachigi_summary">Use moachigi when using hardware keyboard.</string>
     
 </resources>

@@ -104,6 +104,10 @@
 			android:title="@string/preference_keyboard_timeout_delay_title"
 			android:summary="@string/preference_keyboard_timeout_delay_summary"
 			android:defaultValue="250" />
+		<CheckBoxPreference android:key="keyboard_use_moachigi"
+			android:title="@string/preference_keyboard_use_moachigi_title"
+			android:summary="@string/preference_keyboard_use_moachigi_summary"
+			android:defaultValue="true" />
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="@string/preference_hardware_setting_menu">
@@ -125,6 +129,10 @@
 		    android:title="@string/preference_hardware_use_subview_title"
 		    android:summary="@string/preference_hardware_use_subview_summary"
 		    android:defaultValue="true"/>
+		<CheckBoxPreference android:key="hardware_use_moachigi"
+			android:title="@string/preference_hardware_use_moachigi_title"
+			android:summary="@string/preference_hardware_use_moachigi_summary"
+			android:defaultValue="true" />
 	</PreferenceCategory>
 		
 	<PreferenceCategory android:title="@string/preference_aboutime_menu">
