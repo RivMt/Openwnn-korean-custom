@@ -949,6 +949,7 @@ public class OpenWnnKOKR extends OpenWnn {
 			
 		case OpenWnnEvent.CHANGE_INPUT_VIEW:
 			setInputView(onCreateInputView());
+			onStartInputView(getCurrentInputEditorInfo(), false);
 			return true;
 			
 		case TIMEOUT_EVENT:
