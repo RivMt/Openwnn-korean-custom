@@ -1,7 +1,5 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
-import me.blog.hgl1002.openwnn.OpenWnn;
-
 public class TwelveHangulEngine extends HangulEngine {
 	
 	int[][] addStrokeTable;
@@ -13,7 +11,7 @@ public class TwelveHangulEngine extends HangulEngine {
 	int cycleIndex;
 	int addStrokeIndex;
 	
-	public TwelveHangulEngine(OpenWnn parent) {
+	public TwelveHangulEngine() {
 		super();
 	}
 

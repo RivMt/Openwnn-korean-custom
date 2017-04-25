@@ -4,7 +4,9 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class HangulEngine {
-
+	
+	public static final int INPUT_NON_HANGUL = 0x0000;
+	
 	public static final int INPUT_CHO3 = 0x1031;
 	public static final int INPUT_JUNG3 = 0x1032;
 	public static final int INPUT_JONG3 = 0x1033;
@@ -51,11 +53,6 @@ public class HangulEngine {
 			0x11b6, 0x11b7, 0x11b8, 0x0000, 0x11b9,
 			0x11ba, 0x11bb, 0x11bc, 0x11bd, 0x0000,
 			0x11be, 0x11bf, 0x11c0, 0x11c1, 0x11c2,
-	};
-
-	public static int[][] DISASSEMBLE_2BEOL = {
-			{0x11a9, 0x11a8, 0x1100},
-			{0x11aa, 0x11a8, 0x1109},
 	};
 	
 	boolean moachigi;

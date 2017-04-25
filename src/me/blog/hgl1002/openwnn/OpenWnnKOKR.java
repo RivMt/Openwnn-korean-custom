@@ -852,7 +852,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mSelf = this;
 		mInputViewManager = new DefaultSoftKeyboardKOKR(this);
 		mQwertyEngine = new HangulEngine();
-		m12keyEngine = new TwelveHangulEngine(this);
+		m12keyEngine = new TwelveHangulEngine();
 		mHangulEngine = mQwertyEngine;
 		mQwertyEngine.setListener(this);
 		m12keyEngine.setListener(this);
