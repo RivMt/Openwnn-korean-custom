@@ -901,8 +901,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mMoachigi = pref.getBoolean("keyboard_use_moachigi", mMoachigi);
 		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
 		
-		if(hardKeyboardHidden) mHangulEngine.setMoachigi(mMoachigi);
-		else mHangulEngine.setMoachigi(mHardwareMoachigi);
+		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
+		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
 		
 	}
 
@@ -949,11 +949,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Override
 	public void onEvent(HangulEngineEvent event) {
 		if(event instanceof FinishComposingEvent) {
-			mInputConnection.finishComposingText();
+			if(mInputConnection != null) mInputConnection.finishComposingText();
 		}
 		if(event instanceof SetComposingEvent) {
 			SetComposingEvent composingEvent = (SetComposingEvent) event;
-			mInputConnection.setComposingText(composingEvent.getComposing(), 1);
+			if(mInputConnection != null) mInputConnection.setComposingText(composingEvent.getComposing(), 1);
 		}
 	}
 
@@ -967,7 +967,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 			
 		case OpenWnnEvent.CHANGE_MODE:
-			if(mInputConnection != null) mInputConnection.finishComposingText();
+			mHangulEngine.resetJohab();
 			changeEngineMode(ev.mode);
 			return true;
 			

@@ -134,7 +134,12 @@ public class HangulEngine {
 			if(!moachigi && !isCho(last)) resetJohab();
 			if(this.cho > -1) {
 				if((combination = getCombination(this.cho+0x1100, code)) > -1) {
-					this.cho = combination - 0x1100;
+					if(!isCho(last)) {
+						resetJohab();
+						this.cho = code - 0x1100;
+					} else {
+						this.cho = combination - 0x1100;
+					}
 				} else {
 					resetJohab();
 					this.cho = code - 0x1100;
