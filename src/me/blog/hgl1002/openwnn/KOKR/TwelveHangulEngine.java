@@ -99,6 +99,10 @@ public class TwelveHangulEngine extends HangulEngine {
 		if(cycled) return;
 		super.resetJohab();
 	}
+	
+	public void forceResetJohab() {
+		super.resetJohab();
+	}
 
 	public void resetCycle() {
 		cycleIndex = 0;

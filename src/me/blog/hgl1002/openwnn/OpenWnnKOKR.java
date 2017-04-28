@@ -982,6 +982,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(mEnableTimeout) {
 				mHangulEngine.resetJohab();
 				if(mHangulEngine instanceof TwelveHangulEngine) {
+					((TwelveHangulEngine) mHangulEngine).forceResetJohab();
 					((TwelveHangulEngine) mHangulEngine).resetCycle();
 				}
 			}
