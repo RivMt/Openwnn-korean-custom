@@ -196,8 +196,14 @@ public class HangulEngine {
 						last = CHO_CONVERT[code - 0x3131];
 					}
 				} else {
-					this.jong = jongCode;
-					last = jongCode + 0x11a7;
+					if(jongCode <= 0) {
+						resetJohab();
+						this.cho = CHO_CONVERT[code - 0x3131] - 0x1100;
+						last = CHO_CONVERT[code - 0x3131];
+					} else {
+						this.jong = jongCode;
+						last = jongCode + 0x11a7;						
+					}
 				}
 			} else {
 				int choCode = CHO_CONVERT[code - 0x3131] - 0x1100;
