@@ -16,7 +16,8 @@
 -->
 <resources>
   <!-- common part -->
-  
+  	
+  	<string name="app_name">OpenWnn Korean</string>
   	<string name="ime_name">OpenWnn Korean</string>
   	
     <!-- Preferences -->
