@@ -245,6 +245,8 @@ public class HangulEngine {
 						if(listener != null) listener.onEvent(new SetComposingEvent(composing));
 						resetJohab();
 						this.cho = dis.cho - 0x1100;
+						composing = getVisible(this.cho, this.jung, this.jong);
+						histories.push(new History(cho, jung, jong, last, composing, lastInputType));
 						this.jung = jungCode;
 					} else {
 						int convertedCho;
@@ -254,6 +256,8 @@ public class HangulEngine {
 							if(listener != null) listener.onEvent(new SetComposingEvent(composing));
 							resetJohab();
 							this.cho = convertedCho - 0x1100;
+							composing = getVisible(this.cho, this.jung, this.jong);
+							histories.push(new History(cho, jung, jong, last, composing, lastInputType));
 							this.jung = jungCode;
 						}
 					}
