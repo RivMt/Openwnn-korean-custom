@@ -1,14 +1,18 @@
 package me.blog.hgl1002.openwnn;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
@@ -844,6 +848,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mMoachigi;
 	boolean mHardwareMoachigi;
 	
+	boolean selectionMode;
+	int selectionStart, selectionEnd;
+	
 	private static OpenWnnKOKR mSelf;
 	public static OpenWnnKOKR getInstance() {
 		return mSelf;
@@ -1199,8 +1206,46 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 	}
 	
+	@SuppressLint("NewApi")
 	private boolean processKeyEvent(KeyEvent ev) {
 		int key = ev.getKeyCode();
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if(ev.isCtrlPressed()) return false;
+		}
+		
+		if(ev.isShiftPressed()) {
+			switch(key) {
+			case KeyEvent.KEYCODE_DPAD_UP:
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				if(!selectionMode) {
+					selectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+					selectionStart = selectionEnd;
+					selectionMode = true;
+				}
+				if(selectionMode) {
+					if(key == KeyEvent.KEYCODE_DPAD_LEFT) selectionEnd--;
+					if(key == KeyEvent.KEYCODE_DPAD_RIGHT) selectionEnd++;
+					int start = selectionStart, end = selectionEnd;
+					if(selectionStart > selectionEnd) {
+						start = selectionEnd;
+						end = selectionStart;
+					}
+					mInputConnection.setSelection(start, end);
+					mHardShift = 0;
+					updateMetaKeyStateDisplay();
+				}
+				return true;
+				
+			default:
+				selectionMode = false;
+				break;
+			}
+		} else {
+			selectionMode = false;
+		}
 		
 		if((key <= -200 && key > -300) || (key <= -2000 && key > -3000)) {
 			int jamo = mHangulEngine.inputCode(key, mHardShift);
