@@ -91,20 +91,28 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			LANG_EN, LANG_KO
 	};
 	int mCurrentLanguageIndex = 0;
-	
-	KeyIconParams[] mKeyIconparams = {
-			new KeyIconParams(
-					R.drawable.key_qwerty_shift,
-					R.drawable.key_qwerty_enter,
-					R.drawable.key_qwerty_space,
-					R.drawable.key_qwerty_del),
-			new KeyIconParams(
-					R.drawable.key_qwerty_shift_b,
-					R.drawable.key_qwerty_enter_b,
-					R.drawable.key_qwerty_space_b,
-					R.drawable.key_qwerty_del_b),
-	};
-	
+
+	SparseArray<SparseArray<Integer>> mKeyIcons = new SparseArray<SparseArray<Integer>>() {{
+		put(0, new SparseArray<Integer>() {{
+			put(KEYCODE_QWERTY_SHIFT, R.drawable.key_qwerty_shift);
+			put(KEYCODE_QWERTY_ENTER, R.drawable.key_qwerty_enter);
+			put(-10, R.drawable.key_qwerty_space);
+			put(KEYCODE_QWERTY_BACKSPACE, R.drawable.key_qwerty_del);
+			put(KEYCODE_JP12_ENTER, R.drawable.key_12key_enter);
+			put(KEYCODE_JP12_SPACE, R.drawable.key_12key_space);
+			put(KEYCODE_JP12_BACKSPACE, R.drawable.key_12key_del);
+		}});
+		put(1, new SparseArray<Integer>() {{
+			put(KEYCODE_QWERTY_SHIFT, R.drawable.key_qwerty_shift_b);
+			put(KEYCODE_QWERTY_ENTER, R.drawable.key_qwerty_enter_b);
+			put(-10, R.drawable.key_qwerty_space_b);
+			put(KEYCODE_QWERTY_BACKSPACE, R.drawable.key_qwerty_del_b);
+			put(KEYCODE_JP12_ENTER, R.drawable.key_12key_enter_b);
+			put(KEYCODE_JP12_SPACE, R.drawable.key_12key_space_b);
+			put(KEYCODE_JP12_BACKSPACE, R.drawable.key_12key_del_b);
+		}});
+	}};
+
 	Handler mTimeoutHandler;
 	class TimeOutHandler implements Runnable {
 		@Override
@@ -183,17 +191,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			return false;
 		}
 	}
-	
-	public static class KeyIconParams {
-		int shift, enter, space, delete;
-		public KeyIconParams(int shift, int enter, int space, int delete) {
-			this.shift = shift;
-			this.enter = enter;
-			this.space = space;
-			this.delete = delete;
-		}
-	}
-	
+
 	public DefaultSoftKeyboardKOKR(OpenWnn parent) {
 		mWnn = parent;
 		mCurrentLanguage = mLanguageCycleTable[mCurrentLanguageIndex];
@@ -879,24 +877,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resize(height);
-		KeyIconParams params = mKeyIconparams[icon];
+		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
 		for(Keyboard.Key key : keyboard.getKeys()) {
-			switch(key.codes[0]) {
-			case KEYCODE_QWERTY_SHIFT:
-				key.icon = mWnn.getResources().getDrawable(params.shift);
-				break;
-				
-			case KEYCODE_QWERTY_ENTER:
-				key.icon = mWnn.getResources().getDrawable(params.enter);
-				break;
-				
-			case -10:
-				key.icon = mWnn.getResources().getDrawable(params.space);
-				break;
-				
-			case KEYCODE_QWERTY_BACKSPACE:
-				key.icon = mWnn.getResources().getDrawable(params.delete);
-				break;
+			Integer keyIcon = keyIcons.get(key.codes[0]);
+			if(keyIcon != null) {
+				key.icon = mWnn.getResources().getDrawable(keyIcon);
 			}
 		}
 		
