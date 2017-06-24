@@ -471,6 +471,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onPress(int x) {
+		switch(x) {
+		case KEYCODE_QWERTY_SHIFT:
+		case KEYCODE_QWERTY_ENTER:
+		case KEYCODE_JP12_ENTER:
+		case KEYCODE_QWERTY_BACKSPACE:
+		case KEYCODE_JP12_BACKSPACE:
+		case -10:
+		case KEYCODE_JP12_SPACE:
+			break;
+		default:
+			mKeyboardView.setPreviewEnabled(true);
+		}
         /* key click sound & vibration */
         if (mVibrator != null) {
             try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
@@ -485,6 +497,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onRelease(int x) {
+		mKeyboardView.setPreviewEnabled(false);
 		super.onRelease(x);
 		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
 			int key = mLongClickHandlers.keyAt(i);
