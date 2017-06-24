@@ -1466,7 +1466,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		return (getCurrentInputConnection().getCursorCapsMode(editor.inputType) == 0) ? 0 : 1;
 	}
 
-	private void updateMetaKeyStateDisplay() {
+	public void updateMetaKeyStateDisplay() {
 		int mode = 0;
 		if(mHardShift == 0 && mHardAlt == 0){
 			mode = DefaultSoftKeyboard.HARD_KEYMODE_SHIFT_OFF_ALT_OFF;
@@ -1498,6 +1498,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	private void updateNumKeyboardShiftState() {
 		if(!(mInputViewManager instanceof DefaultSoftKeyboardKOKR)) return;
 		DefaultSoftKeyboardKOKR softKeyboard = (DefaultSoftKeyboardKOKR) mInputViewManager;
+		if(softKeyboard.mHardKeyboardHidden) return;
 		softKeyboard.setShiftState(mHardShift);
 		softKeyboard.setCapsLock(mHardShift == 2);
 	}
@@ -1518,6 +1519,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Override
 	public boolean onEvaluateInputViewShown() {
 		return true;
+	}
+
+	public void resetHardShift(boolean force) {
+		if(mHardShift == 2 && !force) return;
+		mHardShift = 0;
+		mShiftPressing = false;
 	}
 
 }

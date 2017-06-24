@@ -497,7 +497,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					
 				default:
 					if(mKeyboardView.isShifted()) {
-						if(!mCapsLock) onKey(KEYCODE_QWERTY_SHIFT, new int[]{KEYCODE_QWERTY_SHIFT});
+						if(!mCapsLock) {
+							setShiftState(KEYBOARD_SHIFT_OFF);
+							OpenWnnKOKR kokr = (OpenWnnKOKR) mWnn;
+							if(!mHardKeyboardHidden) kokr.resetHardShift(false);
+							kokr.updateMetaKeyStateDisplay();
+						}
 					}
 				}
 				mIgnoreCode = KEYCODE_NOP;
@@ -605,6 +610,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	public void setCapsLock(boolean capsLock) {
 		mCapsLock = capsLock;
+	}
+
+	public boolean isCapsLock() {
+		return mCapsLock;
 	}
 
 	@Override
@@ -960,6 +969,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+
+		keyList = mNumKeyboard[LANG_KO][LANDSCAPE][KEYBOARD_QWERTY];
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+
+		keyList = mNumKeyboard[LANG_EN][LANDSCAPE][KEYBOARD_QWERTY];
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
 
 	}
 	
