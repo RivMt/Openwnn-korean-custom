@@ -10,5 +10,5 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 	android:keyBackground="@drawable/keybg_dark_def"
 	android:background="@drawable/keybg_dark_bg"
 	android:keyPreviewLayout="@layout/keyboard_preview_dark"
-	android:keyPreviewOffset="20dp"
+	android:keyPreviewOffset="@dimen/key_preview_offset"
 />

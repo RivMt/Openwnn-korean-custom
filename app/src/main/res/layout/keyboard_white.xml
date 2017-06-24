@@ -10,5 +10,5 @@
 	android:keyBackground="@drawable/keybg_white_def"
 	android:background="@drawable/keybg_white_bg"
 	android:keyPreviewLayout="@layout/keyboard_preview_white"
-	android:keyPreviewOffset="20dp"
+	android:keyPreviewOffset="@dimen/key_preview_offset"
 />
