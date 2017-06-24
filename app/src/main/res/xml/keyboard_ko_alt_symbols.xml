@@ -66,8 +66,8 @@
          android:keyWidth="15%p" android:isModifier="true"
          android:isSticky="true" android:keyEdgeFlags="left"/>
     <Key android:codes="0x5f" android:keyLabel="\u005f"/>
-    <Key android:codes="0x7b" android:keyLabel="\u007b"/>
-    <Key android:codes="0x7d" android:keyLabel="\u007d"/>
+    <Key android:codes="0xb7" android:keyLabel="\u00b7"/>
+    <Key android:codes="0x3d" android:keyLabel="\u003d"/>
     <Key android:codes="0x2b" android:keyLabel="\u002b"/>
     <Key android:codes="0x3f" android:keyLabel="\u003f"/>
     <Key android:codes="0x2d" android:keyLabel="\u002d"/>

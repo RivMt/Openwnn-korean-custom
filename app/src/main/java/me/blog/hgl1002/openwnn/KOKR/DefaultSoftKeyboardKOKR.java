@@ -817,9 +817,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			}
 		}
-		
+
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+
 		if(useAlphabetQwerty) {
 			
 			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
@@ -852,8 +853,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_english_shift);
 			mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_12KEY_ALPHABET;
 		}
-		
+
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
 		keyList = mNumKeyboard[LANG_KO][PORTRAIT][KEYBOARD_QWERTY];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
@@ -926,9 +928,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			}
 		}
-		
+
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+
 		{
 			
 			keyList = mKeyboard[LANG_EN][LANDSCAPE][KEYBOARD_QWERTY];
@@ -954,9 +957,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			}
 		}
-		
+
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+
 	}
 	
 	@SuppressWarnings("deprecation")
