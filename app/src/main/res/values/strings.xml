@@ -342,7 +342,10 @@
     
     <string name="preference_hardware_use_subview_title">Show Sub View</string>
     <string name="preference_hardware_use_subview_summary">Show sub view when using hardware keyboard.</string>
-    
+
+    <string name="preference_hardware_use_numkeyboard_title">Show Num Keyboard</string>
+    <string name="preference_hardware_use_numkeyboard_summary">Show Number Keyboard when using hardware keyboard.</string>
+
     <string name="preference_hardware_use_moachigi_title">Use Moachigi</string>
     <string name="preference_hardware_use_moachigi_summary">Use moachigi when using hardware keyboard.</string>
     

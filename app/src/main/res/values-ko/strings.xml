@@ -91,7 +91,10 @@
     
     <string name="preference_hardware_use_subview_title">서브 뷰 사용</string>
     <string name="preference_hardware_use_subview_summary">하드웨어 키보드 사용시 서브 뷰를 표시합니다.</string>
-    
+
+    <string name="preference_hardware_use_numkeyboard_title">숫자 키보드 사용</string>
+    <string name="preference_hardware_use_numkeyboard_summary">하드웨어 키보드 사용시 숫자 키보드를 표시합니다.</string>
+
     <string name="preference_hardware_use_moachigi_title">모아치기 사용</string>
     <string name="preference_hardware_use_moachigi_summary">하드웨어 키보드 사용시 모아치기를 사용합니다.</string>
     

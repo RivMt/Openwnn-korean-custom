@@ -129,6 +129,10 @@
 		    android:title="@string/preference_hardware_use_subview_title"
 		    android:summary="@string/preference_hardware_use_subview_summary"
 		    android:defaultValue="true"/>
+		<CheckBoxPreference android:key="hardware_use_numkeyboard"
+			android:title="@string/preference_hardware_use_numkeyboard_title"
+			android:summary="@string/preference_hardware_use_numkeyboard_summary"
+			android:defaultValue="true"/>
 		<CheckBoxPreference android:key="hardware_use_moachigi"
 			android:title="@string/preference_hardware_use_moachigi_title"
 			android:summary="@string/preference_hardware_use_moachigi_summary"
