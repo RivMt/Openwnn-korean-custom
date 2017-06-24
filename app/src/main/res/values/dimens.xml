@@ -17,6 +17,8 @@
 <resources>
     <dimen name="key_height">50dip</dimen>
     <dimen name="key_height_landscape">34dip</dimen>
+    <dimen name="key_preview_text_size">15pt</dimen>
+    <dimen name="key_preview_offset">15dp</dimen>
     <dimen name="candidate_font_size">20sp</dimen>
     <dimen name="candidate_delete_word_size">28px</dimen>
     <dimen name="candidate_delete_word_size_landscape">24px</dimen>

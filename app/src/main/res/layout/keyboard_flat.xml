@@ -8,4 +8,6 @@
    android:keyTextColor="#D4D6D7"
    android:keyBackground="@drawable/keybg_flat_def"
    android:background="@drawable/keybg_flat_bg"
+	android:keyPreviewLayout="@layout/keyboard_preview_flat"
+	android:keyPreviewOffset="@dimen/key_preview_offset"
 />

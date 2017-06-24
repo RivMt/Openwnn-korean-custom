@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Handler;
@@ -92,8 +93,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mKeyHeightLandscape = 42;
 	
 	protected boolean mShowSubView = true;
+
 	protected boolean mShowNumKeyboardViewPortrait = true;
 	protected boolean mShowNumKeyboardViewLandscape = true;
+
+	protected boolean mShowKeyPreview = false;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -139,6 +143,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			this.keyCode = keyCode;
 		}
 		public void run() {
+			setPreviewEnabled(keyCode);
 			switch(keyCode) {
 			case KEYCODE_QWERTY_SHIFT:
 				toggleShiftLock();
@@ -520,6 +525,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onPress(int x) {
+		setPreviewEnabled(x);
         /* key click sound & vibration */
         if (mVibrator != null) {
             try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
@@ -534,12 +540,28 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onRelease(int x) {
+		mKeyboardView.setPreviewEnabled(false);
 		super.onRelease(x);
 		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
 			int key = mLongClickHandlers.keyAt(i);
 			Handler handler = mLongClickHandlers.get(key);
 			handler.removeCallbacksAndMessages(null);
 			mLongClickHandlers.remove(key);
+		}
+	}
+
+	public void setPreviewEnabled(int x) {
+		switch(x) {
+		case KEYCODE_QWERTY_SHIFT:
+		case KEYCODE_QWERTY_ENTER:
+		case KEYCODE_JP12_ENTER:
+		case KEYCODE_QWERTY_BACKSPACE:
+		case KEYCODE_JP12_BACKSPACE:
+		case -10:
+		case KEYCODE_JP12_SPACE:
+			break;
+		default:
+			mKeyboardView.setPreviewEnabled(mShowKeyPreview);
 		}
 	}
 
@@ -683,12 +705,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mShowSubView = showSubView;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
-		mNumKeyboardView.setPreviewEnabled(pref.getBoolean("popup_preview", true));
+		mNumKeyboardView.setPreviewEnabled(false);
 		boolean showNum = pref.getBoolean("hardware_use_numkeyboard", true);
 		if(showNum != mShowNumKeyboardViewPortrait || showNum != mShowNumKeyboardViewLandscape) {
 			mShowNumKeyboardViewLandscape = mShowNumKeyboardViewPortrait = showNum;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
+		mShowKeyPreview = pref.getBoolean("popup_preview", true);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
@@ -1003,7 +1026,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			Integer keyIcon = keyIcons.get(key.codes[0]);
 			if(keyIcon != null) {
-				key.icon = mWnn.getResources().getDrawable(keyIcon);
+				Drawable drawable = mWnn.getResources().getDrawable(keyIcon);
+				key.icon = drawable;
+				key.iconPreview = drawable;
 			}
 		}
 		
