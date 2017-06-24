@@ -87,6 +87,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mKeyHeightLandscape = 42;
 	
 	protected boolean mShowSubView = true;
+
+	protected boolean mShowKeyPreview = false;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -508,7 +510,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case KEYCODE_JP12_SPACE:
 			break;
 		default:
-			mKeyboardView.setPreviewEnabled(true);
+			mKeyboardView.setPreviewEnabled(mShowKeyPreview);
 		}
 	}
 
@@ -606,6 +608,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mShowSubView = showSubView;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
+		mShowKeyPreview = pref.getBoolean("popup_preview", true);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
