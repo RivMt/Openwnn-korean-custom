@@ -71,19 +71,19 @@ public class TwelveHangulEngine extends HangulEngine {
 		if(jung == 0x119e - 0x1161 || jung == 0x11a2 - 0x1161) {
 			char displayJung = (char) ((jung + 0x1161 == 0x11a2) ? 0x2025 : 0x00b7);
 			if(cho != -1 && jung != -1 && jong != -1) {
-				composing = CHO_TABLE[cho] + "" + displayJung + "" + JONG_TABLE[jong];
+				composing = (char) CHO_TABLE[cho] + "" + displayJung + "" + (char) JONG_TABLE[jong];
 			}
 			else if(cho != -1 && jung != -1) {
-				composing = CHO_TABLE[cho] + "" + displayJung;
+				composing = (char) CHO_TABLE[cho] + "" + displayJung;
 			}
 			else if(cho != -1) {
-				composing = String.valueOf(CHO_TABLE[cho]);
+				composing = String.valueOf((char) CHO_TABLE[cho]);
 			}
 			else if(jung != -1) {
 				composing = String.valueOf(displayJung);
 			}
 			else if(jong != -1) {
-				composing = String.valueOf(JONG_TABLE[jong]);
+				composing = String.valueOf((char) JONG_TABLE[jong]);
 			}
 			else {
 				composing = "";

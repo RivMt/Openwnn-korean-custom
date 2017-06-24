@@ -149,7 +149,7 @@ public class HangulEngine {
 			}
 			result = INPUT_CHO3;
 			last = code;
-		} else if((code >= 0x1161 && code <= 0x1175) || code == -5000 || code == -5001) {
+		} else if((code >= 0x1161 && code <= 0x1175) || code == 0x119e || code == 0x11a2 || code == -5000 || code == -5001) {
 			boolean virtual = false;
 			if(code < 0) virtual = true;
 			if(code == -5000) code = 0x1169;
@@ -355,7 +355,7 @@ public class HangulEngine {
 	}
 	
 	public boolean isJung(int code) {
-		return code >= 0x1161 && code <= 0x1175;
+		return (code >= 0x1161 && code <= 0x1175) || code == 0x119e || code == 0x11a2;
 	}
 	
 	public boolean isJong(int code) {
