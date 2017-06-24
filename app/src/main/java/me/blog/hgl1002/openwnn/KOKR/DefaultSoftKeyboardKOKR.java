@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -881,7 +882,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			Integer keyIcon = keyIcons.get(key.codes[0]);
 			if(keyIcon != null) {
-				key.icon = mWnn.getResources().getDrawable(keyIcon);
+				Drawable drawable = mWnn.getResources().getDrawable(keyIcon);
+				key.icon = drawable;
+				key.iconPreview = drawable;
 			}
 		}
 		
