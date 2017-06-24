@@ -847,6 +847,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	boolean mMoachigi;
 	boolean mHardwareMoachigi;
+
+	boolean mAltDirect;
 	
 	boolean selectionMode;
 	int selectionStart, selectionEnd;
@@ -913,6 +915,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
+
+		mAltDirect = pref.getBoolean("hardware_alt_direct", true);
 		
 	}
 
@@ -1263,7 +1267,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(ev.isPrintingKey()) {
 			
 			int code = ev.getUnicodeChar(mShiftKeyToggle[mHardShift] | mAltKeyToggle[mHardAlt]);
-			this.inputChar((char) code, (mHardAlt == 0) ? false : true);
+			this.inputChar((char) code, (mHardAlt != 0 && mAltDirect) ? true : false);
 			
 			if(mHardShift == 1){
 				mShiftPressing = false;

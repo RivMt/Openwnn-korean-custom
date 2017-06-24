@@ -137,6 +137,10 @@
 			android:title="@string/preference_hardware_use_moachigi_title"
 			android:summary="@string/preference_hardware_use_moachigi_summary"
 			android:defaultValue="true" />
+		<CheckBoxPreference android:key="hardware_alt_direct"
+			android:title="@string/preference_hardware_alt_direct_title"
+			android:summary="@string/preference_hardware_alt_direct_summary"
+			android:defaultValue="true" />
 	</PreferenceCategory>
 		
 	<PreferenceCategory android:title="@string/preference_aboutime_menu">

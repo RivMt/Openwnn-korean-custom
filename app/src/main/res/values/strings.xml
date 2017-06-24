@@ -348,5 +348,8 @@
 
     <string name="preference_hardware_use_moachigi_title">Use Moachigi</string>
     <string name="preference_hardware_use_moachigi_summary">Use moachigi when using hardware keyboard.</string>
+
+    <string name="preference_hardware_alt_direct_title">Alt Direct input</string>
+    <string name="preference_hardware_alt_direct_summary">Always input literal chars on hard Alt combination.</string>
     
 </resources>
