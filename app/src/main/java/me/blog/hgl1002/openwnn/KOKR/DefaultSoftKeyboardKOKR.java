@@ -132,6 +132,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			this.keyCode = keyCode;
 		}
 		public void run() {
+			setPreviewEnabled(keyCode);
 			switch(keyCode) {
 			case KEYCODE_QWERTY_SHIFT:
 				toggleShiftLock();
@@ -471,18 +472,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onPress(int x) {
-		switch(x) {
-		case KEYCODE_QWERTY_SHIFT:
-		case KEYCODE_QWERTY_ENTER:
-		case KEYCODE_JP12_ENTER:
-		case KEYCODE_QWERTY_BACKSPACE:
-		case KEYCODE_JP12_BACKSPACE:
-		case -10:
-		case KEYCODE_JP12_SPACE:
-			break;
-		default:
-			mKeyboardView.setPreviewEnabled(true);
-		}
+		setPreviewEnabled(x);
         /* key click sound & vibration */
         if (mVibrator != null) {
             try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
@@ -504,6 +494,21 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			Handler handler = mLongClickHandlers.get(key);
 			handler.removeCallbacksAndMessages(null);
 			mLongClickHandlers.remove(key);
+		}
+	}
+
+	public void setPreviewEnabled(int x) {
+		switch(x) {
+		case KEYCODE_QWERTY_SHIFT:
+		case KEYCODE_QWERTY_ENTER:
+		case KEYCODE_JP12_ENTER:
+		case KEYCODE_QWERTY_BACKSPACE:
+		case KEYCODE_JP12_BACKSPACE:
+		case -10:
+		case KEYCODE_JP12_SPACE:
+			break;
+		default:
+			mKeyboardView.setPreviewEnabled(true);
 		}
 	}
 
