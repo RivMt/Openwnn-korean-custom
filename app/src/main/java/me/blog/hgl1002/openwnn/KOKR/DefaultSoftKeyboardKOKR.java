@@ -4,7 +4,9 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -61,7 +63,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYMODE_HANGUL = 0;
 	public static final int KEYMODE_ENGLISH = 0;
 	public static final int KEYMODE_ALT_SYMBOLS = 1;
-	
+
+	protected KeyboardView mNumKeyboardView;
+
+	protected Keyboard[][][][][][] mNumKeyboard;
+
 	protected boolean mCapsLock;
 	
 	protected int mLastInputType = 0;
@@ -86,6 +92,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mKeyHeightLandscape = 42;
 	
 	protected boolean mShowSubView = true;
+	protected boolean mShowNumKeyboardViewPortrait = true;
+	protected boolean mShowNumKeyboardViewLandscape = true;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -204,6 +212,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected void createKeyboards(OpenWnn parent) {
 		/* Keyboard[# of Languages][portrait/landscape][# of keyboard type][shift off/on][max # of key-modes][subkeyboard] */
 		mKeyboard = new Keyboard[4][2][4][2][KEYMODE_LENGTH][4];
+		mNumKeyboard = new Keyboard[4][2][4][2][1][4];
 		
 		if(mHardKeyboardHidden) {
 			if(mDisplayMode == PORTRAIT) {
@@ -314,6 +323,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		
 		changeKeyboard(kbd);
+		mNumKeyboardView.setKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][KEYBOARD_QWERTY][mShiftOn][0][0]);
 		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
 		
 		mLastKeyMode = mCurrentKeyMode;
@@ -338,8 +348,39 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	@Override
-	public View initView(OpenWnn parent, int width, int height) {
-		View view = super.initView(parent, width, height);
+	public View initView(OpenWnn parent, int width, int height) {mWnn = parent;
+		mDisplayMode =
+				(parent.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+						? LANDSCAPE : PORTRAIT;
+
+        /*
+         * create keyboards & the view.
+         * To re-display the input view when the display mode is changed portrait <-> landscape,
+         * create keyboards every time.
+         */
+		createKeyboards(parent);
+
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
+		String skin = pref.getString("keyboard_skin",
+				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
+		int id = parent.getResources().getIdentifier(skin, "layout", "me.blog.hgl1002.openwnn");
+
+		mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
+		mKeyboardView.setOnKeyboardActionListener(this);
+		mCurrentKeyboard = null;
+
+		mNumKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
+		mNumKeyboardView.setOnKeyboardActionListener(this);
+
+		mMainView = (ViewGroup) parent.getLayoutInflater().inflate(R.layout.keyboard_default_main, null);
+		mSubView = (ViewGroup) parent.getLayoutInflater().inflate(R.layout.keyboard_default_sub, null);
+		if (!mHardKeyboardHidden) {
+			if(mShowSubView) mMainView.addView(mSubView);
+			if(mShowNumKeyboardViewPortrait && mDisplayMode == PORTRAIT) mMainView.addView(mNumKeyboardView);
+			if(mShowNumKeyboardViewLandscape && mDisplayMode == LANDSCAPE) mMainView.addView(mNumKeyboardView);
+		} else if (mKeyboardView != null) {
+			mMainView.addView(mKeyboardView);
+		}
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		TextView langView = (TextView) mSubView.findViewById(R.id.lang);
 		langView.setOnTouchListener(new View.OnTouchListener() {
@@ -355,14 +396,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				return false;
 			}
 		});
-		if(!mShowSubView && view instanceof ViewGroup && mSubView != null) {
-			((ViewGroup) view).removeView(mSubView);
-		}
-		return view;
+
+		return mMainView;
 	}
 
 	@Override
 	protected boolean changeKeyboard(Keyboard keyboard) {
+		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
+			int key = mLongClickHandlers.keyAt(i);
+			Handler handler = mLongClickHandlers.get(key);
+			handler.removeCallbacksAndMessages(null);
+			mLongClickHandlers.remove(key);
+		}
 		return super.changeKeyboard(keyboard);
 	}
 
@@ -553,6 +598,31 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 	}
 
+	public void setShiftState(int shiftState) {
+		mShiftOn = (shiftState == 0) ? 1 : 0;
+		toggleShiftLock();
+	}
+
+	public void setCapsLock(boolean capsLock) {
+		mCapsLock = capsLock;
+	}
+
+	@Override
+	public void toggleShiftLock() {
+		super.toggleShiftLock();
+		if(mShiftOn != 0) {
+			Keyboard newKeyboard = getShiftChangeNumKeyboard(KEYBOARD_SHIFT_ON);
+			if(newKeyboard != null) {
+				changeNumKeyboard(newKeyboard);
+			}
+		} else {
+			Keyboard newKeyboard = getShiftChangeNumKeyboard(KEYBOARD_SHIFT_OFF);
+			if(newKeyboard != null) {
+				changeNumKeyboard(newKeyboard);
+			}
+		}
+	}
+
 	@Override
 	protected void processAltKey() {
 		int altKeyMode = KEYMODE_ALT_SYMBOLS;
@@ -563,6 +633,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			changeKeyMode(KEYMODE_HANGUL);
 		} else {
 			changeKeyMode(altKeyMode);
+		}
+	}
+
+	public void changeNumKeyboard(Keyboard keyboard) {
+		mNumKeyboardView.setKeyboard(keyboard);
+	}
+
+	public Keyboard getShiftChangeNumKeyboard(int shift) {
+		try {
+			Keyboard[] kbd = mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][shift][mCurrentKeyMode];
+
+			if (!mNoInput && kbd[1] != null) {
+				return kbd[1];
+			}
+			return kbd[0];
+		} catch (Exception ex) {
+			return null;
 		}
 	}
 
@@ -645,7 +732,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mWnn);
 		
 		Keyboard[][][] keyList;
-		
+
 		boolean use12key = pref.getBoolean("keyboard_hangul_use_12key", false);
 		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
 		
@@ -761,7 +848,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		
+
+		keyList = mNumKeyboard[LANG_KO][PORTRAIT][KEYBOARD_QWERTY];
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+
+		keyList = mNumKeyboard[LANG_EN][PORTRAIT][KEYBOARD_QWERTY];
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+
 	}
 
 	private void createKeyboardsLandscape(OpenWnn parent) {

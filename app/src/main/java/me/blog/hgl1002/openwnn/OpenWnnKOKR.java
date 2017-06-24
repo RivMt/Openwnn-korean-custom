@@ -901,6 +901,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
+			updateNumKeyboardShiftState();
 		}
 		
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -1126,6 +1127,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				}
 				mShiftPressing = true;
 				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
 				return true;
 			}
 			ret = processKeyEvent(keyEvent);
@@ -1281,6 +1283,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 			if (!ev.isShiftPressed() && !ev.isShiftPressed()) {
 				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
 			}
 			return true;
 			
@@ -1291,6 +1294,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				mHardShift = 0;
 				mShiftPressing = false;
 				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
 				return true;
 			}
 			mInputConnection.commitText(" ", 1);
@@ -1308,6 +1312,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
+			updateNumKeyboardShiftState();
 			return false;
 		} else {
 			mHangulEngine.resetJohab();
@@ -1423,6 +1428,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				mHardShift = 0;
 				mShiftPressing = true;
 				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
 			}
 		}
 		if(!mAltPressing ){
@@ -1452,6 +1458,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			
 		default:
 		}
+		updateMetaKeyStateDisplay();
+		updateNumKeyboardShiftState();
 	}
 
 	protected int getShiftKeyState(EditorInfo editor) {
@@ -1485,6 +1493,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mode = DefaultSoftKeyboardKOKR.HARD_KEYMODE_LANG
 				+ ((DefaultSoftKeyboard) mInputViewManager).mCurrentLanguage;
 		((DefaultSoftKeyboard) mInputViewManager).updateIndicator(mode);
+	}
+
+	private void updateNumKeyboardShiftState() {
+		if(!(mInputViewManager instanceof DefaultSoftKeyboardKOKR)) return;
+		DefaultSoftKeyboardKOKR softKeyboard = (DefaultSoftKeyboardKOKR) mInputViewManager;
+		softKeyboard.setShiftState(mHardShift);
+		softKeyboard.setCapsLock(mHardShift == 2);
 	}
 
 	@Override
