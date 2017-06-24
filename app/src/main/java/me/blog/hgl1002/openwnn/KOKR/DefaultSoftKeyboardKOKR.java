@@ -503,7 +503,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				default:
 					if(mKeyboardView.isShifted()) {
 						if(!mCapsLock) {
-							setShiftState(KEYBOARD_SHIFT_OFF);
+							onKey(KEYCODE_QWERTY_SHIFT, new int[]{KEYCODE_QWERTY_SHIFT});
 							OpenWnnKOKR kokr = (OpenWnnKOKR) mWnn;
 							if(!mHardKeyboardHidden) kokr.resetHardShift(false);
 							kokr.updateMetaKeyStateDisplay();
