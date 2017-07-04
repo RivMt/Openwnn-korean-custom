@@ -764,8 +764,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{108, 0x3b},		// l
 			
 			{122, 0x5f},		// z
-			{120, 0x7b},		// x
-			{99, 0x7d},			// c
+			{120, 0xb7},		// x
+			{99, 0x3d},			// c
 			{118, 0x2b},		// v
 			{98, 0x3f},			// b
 			{110, 0x2d},		// n

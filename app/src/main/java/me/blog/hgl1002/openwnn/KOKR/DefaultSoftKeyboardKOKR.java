@@ -705,6 +705,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mShowSubView = showSubView;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
+		mKeyboardView.setPreviewEnabled(false);
 		mNumKeyboardView.setPreviewEnabled(false);
 		boolean showNum = pref.getBoolean("hardware_use_numkeyboard", true);
 		if(showNum != mShowNumKeyboardViewPortrait || showNum != mShowNumKeyboardViewLandscape) {
