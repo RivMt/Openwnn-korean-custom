@@ -832,6 +832,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	int mHardShift;
 	int mHardAlt;
+	boolean mCapsLock;
+	boolean mShiftOnCapsLock;
 	
 	boolean mShiftPressing;
 	boolean mAltPressing;
@@ -1130,9 +1132,45 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					if (++mHardShift > 2) { mHardShift = 0; }
 				}
 				mShiftPressing = true;
+				if(mCapsLock) {
+					mHardShift = 0;
+					mShiftPressing = false;
+					mShiftOnCapsLock = true;
+				}
 				updateMetaKeyStateDisplay();
 				updateNumKeyboardShiftState();
 				return true;
+
+			case KeyEvent.KEYCODE_CAPS_LOCK:
+				mCapsLock = !mCapsLock;
+				if(mCapsLock) {
+					mHardShift = 2;
+					mShiftPressing = true;
+				} else {
+					mHardShift = 0;
+					mShiftPressing = false;
+				}
+				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
+				return true;
+
+			}
+			if((keyEvent.getMetaState() & KeyEvent.META_CAPS_LOCK_ON) != 0) {
+				if(!mShiftOnCapsLock) {
+					mCapsLock = true;
+					mHardShift = 2;
+					mShiftPressing = true;
+					updateMetaKeyStateDisplay();
+					updateNumKeyboardShiftState();
+				}
+			} else {
+				if(mCapsLock == true) {
+					mCapsLock = false;
+					mHardShift = 0;
+					mShiftPressing = false;
+					updateMetaKeyStateDisplay();
+					updateNumKeyboardShiftState();
+				}
 			}
 			ret = processKeyEvent(keyEvent);
 			shinShift();
@@ -1242,6 +1280,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					mInputConnection.setSelection(start, end);
 					mHardShift = 0;
 					updateMetaKeyStateDisplay();
+					updateNumKeyboardShiftState();
 				}
 				return true;
 				
@@ -1293,7 +1332,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			
 		} else if(key == KeyEvent.KEYCODE_SPACE) {
 			mHangulEngine.resetJohab();
-			if(mHardShift != 0) {
+			if(mHardShift == 1) {
 				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 				mHardShift = 0;
 				mShiftPressing = false;
@@ -1431,6 +1470,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(key == KeyEvent.KEYCODE_SHIFT_LEFT || key == KeyEvent.KEYCODE_SHIFT_RIGHT){
 				mHardShift = 0;
 				mShiftPressing = true;
+				if(mShiftOnCapsLock) {
+					mHardShift = 2;
+					mShiftPressing = true;
+					mShiftOnCapsLock = false;
+				}
 				updateMetaKeyStateDisplay();
 				updateNumKeyboardShiftState();
 			}
