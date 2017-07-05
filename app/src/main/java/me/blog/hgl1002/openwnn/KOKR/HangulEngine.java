@@ -165,7 +165,8 @@ public class HangulEngine {
 			} else {
 				this.jung = code - 0x1161;
 			}
-			if(virtual) result = lastInputType;
+			if(lastInputType == 0) result = INPUT_JUNG3;
+			else if(virtual) result = lastInputType;
 			else result = INPUT_JUNG3;
 			last = code;
 		} else if(code >= 0x11a8 && code <= 0x11c2) {
