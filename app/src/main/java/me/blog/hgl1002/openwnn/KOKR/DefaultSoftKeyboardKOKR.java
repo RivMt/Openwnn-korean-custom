@@ -81,6 +81,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	protected int mPreferenceKeyMode = INVALID_KEYMODE;
 	protected int mPreferenceLanguage = INVALID_KEYMODE;
+
+	protected boolean mHardwareLayout;
+
+	protected boolean mUse12Key = false;
+	protected boolean mUseAlphabetQwerty = true;
 	
 	protected boolean mUseFlick = true;
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
@@ -260,6 +265,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		Keyboard kbd = getModeChangeKeyboard(targetMode);
 		mCurrentKeyMode = targetMode;
 		
+		changeEngineOption();
+		
 		int mode = OpenWnnEvent.Mode.DIRECT;
 		
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
@@ -328,7 +335,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		
 		changeKeyboard(kbd);
-		mNumKeyboardView.setKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][KEYBOARD_QWERTY][mShiftOn][0][0]);
+		changeNumKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][0][0]);
 		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
 		
 		mLastKeyMode = mCurrentKeyMode;
@@ -667,8 +674,19 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 	}
 
-	public void changeNumKeyboard(Keyboard keyboard) {
-		mNumKeyboardView.setKeyboard(keyboard);
+	protected boolean changeNumKeyboard(Keyboard keyboard) {
+
+		if (keyboard == null) {
+			return false;
+		}
+		if (mCurrentKeyboard != keyboard) {
+			mNumKeyboardView.setKeyboard(keyboard);
+			mNumKeyboardView.setShifted((mShiftOn == 0) ? false : true);
+			return true;
+		} else {
+			mNumKeyboardView.setShifted((mShiftOn == 0) ? false : true);
+			return false;
+		}
 	}
 
 	public Keyboard getShiftChangeNumKeyboard(int shift) {
@@ -718,15 +736,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if(mHardKeyboardHidden) {
 			
 		}
-		
-		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY));
-		} else {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-					OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY));
-		}
-		
+
+		changeEngineOption();
+
 		mLimitedKeyMode = null;
 		mPreferenceKeyMode = INVALID_KEYMODE;
 		mPreferenceLanguage = -1;
@@ -772,12 +784,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 		Keyboard[][][] keyList;
 
-		boolean use12key = pref.getBoolean("keyboard_hangul_use_12key", false);
-		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
+		mUse12Key = pref.getBoolean("keyboard_hangul_use_12key", false);
+		mUseAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
 		
-		if(!mHardKeyboardHidden) use12key = false;
+		if(!mHardKeyboardHidden) {
+			mHardwareLayout = true;
+			mUse12Key = false;
+		} else {
+			mHardwareLayout = false;
+		}
 		
-		if(use12key) {
+		if(mUse12Key) {
 			keyList = mKeyboard[LANG_KO][PORTRAIT][KEYBOARD_12KEY];
 			
 			mCurrentKeyboardType = KEYBOARD_12KEY;
@@ -799,7 +816,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyList = mKeyboard[LANG_KO][PORTRAIT][KEYBOARD_QWERTY];
 			
 			mCurrentKeyboardType = KEYBOARD_QWERTY;
-			useAlphabetQwerty = true;
+			mUseAlphabetQwerty = true;
 			String defaultLayout = "keyboard_sebul_391";
 			if(!mHardKeyboardHidden) {
 				defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
@@ -854,7 +871,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
-		if(useAlphabetQwerty) {
+		if(mUseAlphabetQwerty) {
 			
 			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 			
@@ -890,11 +907,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
-		keyList = mNumKeyboard[LANG_KO][PORTRAIT][KEYBOARD_QWERTY];
+		keyList = mNumKeyboard[LANG_KO][PORTRAIT][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
 		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
 
-		keyList = mNumKeyboard[LANG_EN][PORTRAIT][KEYBOARD_QWERTY];
+		keyList = mNumKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
 		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
 
@@ -905,7 +922,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mWnn);
 		
 		Keyboard[][][] keyList;
-		
+
+		if(!mHardKeyboardHidden) {
+			mHardwareLayout = true;
+		} else {
+			mHardwareLayout = false;
+		}
+
 		{
 			
 			keyList = mKeyboard[LANG_KO][LANDSCAPE][KEYBOARD_QWERTY];
@@ -994,14 +1017,25 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
-		keyList = mNumKeyboard[LANG_KO][LANDSCAPE][KEYBOARD_QWERTY];
+		keyList = mNumKeyboard[LANG_KO][LANDSCAPE][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
 		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
 
-		keyList = mNumKeyboard[LANG_EN][LANDSCAPE][KEYBOARD_QWERTY];
+		keyList = mNumKeyboard[LANG_EN][LANDSCAPE][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
 		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
 
+	}
+
+	protected void changeEngineOption() {
+		int option;
+		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
+			if(mUseAlphabetQwerty && mCurrentLanguage == LANG_EN) option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY;
+			else option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY;
+		} else {
+			option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY;
+		}
+		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, option));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -1065,6 +1099,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 		}
 		return targetMode;
+	}
+
+	public void fixHardwareLayoutState() {
+		if(mHardwareLayout != !mHardKeyboardHidden) {
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+		}
 	}
 
 	@Override

@@ -1172,6 +1172,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					updateNumKeyboardShiftState();
 				}
 			}
+			((DefaultSoftKeyboardKOKR) mInputViewManager).fixHardwareLayoutState();
 			ret = processKeyEvent(keyEvent);
 			shinShift();
 			break;
