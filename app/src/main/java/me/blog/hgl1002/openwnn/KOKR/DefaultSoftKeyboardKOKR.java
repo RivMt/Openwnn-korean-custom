@@ -1109,6 +1109,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void updateIndicator(int mode) {
+		if(mSubView == null) return;
 		TextView text = (TextView) mSubView.findViewById(R.id.lang);
 		switch(mode) {
 		case HARD_KEYMODE_LANG_ENGLISH:
