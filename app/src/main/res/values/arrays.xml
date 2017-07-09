@@ -37,43 +37,65 @@
     </string-array>
     
     <string-array name="keyboard_hangul_layout">
+        <item>@string/preference_keyboard_dubul_standard</item>
+        <item>@string/preference_keyboard_dubul_danmoeum_google</item>
+        <item>@string/preference_keyboard_dubul_nk</item>
         <item>@string/preference_keyboard_sebul_390</item>
         <item>@string/preference_keyboard_sebul_391</item>
         <item>@string/preference_keyboard_sebul_danmoeum</item>
-        <item>@string/preference_keyboard_dubul_standard</item>
-        <item>@string/preference_keyboard_dubul_danmoeum_google</item>
+        <item>@string/preference_keyboard_sebul_sun_2014</item>
+        <item>@string/preference_keyboard_sebul_3_2015m</item>
+        <item>@string/preference_keyboard_sebul_3_2015</item>
+        <item>@string/preference_keyboard_sebul_3_p3</item>
         <item>@string/preference_keyboard_sebul_shin_original</item>
         <item>@string/preference_keyboard_sebul_shin_edit</item>
+        <item>@string/preference_keyboard_sebul_shin_m</item>
+        <item>@string/preference_keyboard_sebul_shin_p2</item>
+        <item>@string/preference_keyboard_sebul_ahnmatae</item>
+        <item>@string/preference_keyboard_sebul_semoe</item>
     </string-array>
     
     <string-array name="keyboard_hangul_layout_id">
+        <item>keyboard_dubul_standard</item>
+        <item>keyboard_dubul_danmoeum_google</item>
+        <item>keyboard_dubul_nk</item>
         <item>keyboard_sebul_390</item>
         <item>keyboard_sebul_391</item>
         <item>keyboard_sebul_danmoeum</item>
-        <item>keyboard_dubul_standard</item>
-        <item>keyboard_dubul_danmoeum_google</item>
+        <item>keyboard_sebul_sun_2014</item>
+        <item>keyboard_sebul_3_2015m</item>
+        <item>keyboard_sebul_3_2015</item>
+        <item>keyboard_sebul_3_p3</item>
         <item>keyboard_sebul_shin_original</item>
         <item>keyboard_sebul_shin_edit</item>
+        <item>keyboard_sebul_shin_m</item>
+        <item>keyboard_sebul_shin_p2</item>
+        <item>keyboard_sebul_ahnmatae</item>
+        <item>keyboard_sebul_semoe</item>
     </string-array>
     
     <string-array name="keyboard_12key_layout">
         <item>@string/preference_keyboard_12key_sebul_munhwa</item>
         <item>@string/preference_keyboard_12key_sebul_hanson</item>
+        <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
     
     <string-array name="keyboard_12key_layout_id">
         <item>keyboard_12key_sebul_munhwa</item>
         <item>keyboard_12key_sebul_hanson</item>
+        <item>keyboard_12key_sebul_sena</item>
     </string-array>
     
     <string-array name="keyboard_alphabet_layout">
     	<item>@string/preference_keyboard_alphabet_qwerty</item>
     	<item>@string/preference_keyboard_alphabet_dvorak</item>
+    	<item>@string/preference_keyboard_alphabet_colemak</item>
     </string-array>
     
     <string-array name="keyboard_alphabet_layout_id">
     	<item>keyboard_alphabet_qwerty</item>
     	<item>keyboard_alphabet_dvorak</item>
+    	<item>keyboard_alphabet_colemak</item>
     </string-array>
-    
+	
 </resources>
