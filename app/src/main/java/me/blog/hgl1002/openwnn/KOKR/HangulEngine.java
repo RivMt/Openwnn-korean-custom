@@ -26,7 +26,7 @@ public class HangulEngine {
 			'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ',
 			'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ',
 			'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ',
-			'ㅣ',
+			'ㅣ', 'ㆍ', 'ㆎ', 'ᆢ',
 	};
 	public static int[] JONG_TABLE = {
 			' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ',
@@ -149,11 +149,14 @@ public class HangulEngine {
 			}
 			result = INPUT_CHO3;
 			last = code;
-		} else if((code >= 0x1161 && code <= 0x1175) || code == 0x119e || code == 0x11a2 || code == -5000 || code == -5001) {
+		//} else if((code >= 0x1161 && code <= 0x1175) || code == 0x119e || code == 0x11a2 || code == -5000 || code == -5001 || code == -5002 || code == -5003 ) {
+		} else if((code >= 0x1161 && code <= 0x1175) || code == 0x119e || code == 0x11a2 || code == -5000 || code == -5001 || code == -5002 ) {
 			boolean virtual = false;
 			if(code < 0) virtual = true;
 			if(code == -5000) code = 0x1169;
 			if(code == -5001) code = 0x116e;
+			if(code == -5002) code = 0x1173;
+			//if(code == -5003) code = 0x119e;
 			if(!moachigi && !isCho(last) && !isJung(last)) resetJohab();
 			if(this.jung > -1) {
 				if((combination = getCombination(this.jung+0x1161, code)) > -1) {

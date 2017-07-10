@@ -33,23 +33,34 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	public static final int KEYBOARD_EN_ALPHABET_QWERTY = 0;
 	public static final int KEYBOARD_EN_ALPHABET_DVORAK = 1;
+	public static final int KEYBOARD_EN_ALPHABET_COLEMAK = 2;
 
 	public static final int KEYBOARD_EN_12KEY_ALPHABET = 4;
 	
 	public static final int KEYBOARD_KO_DUBUL_STANDARD = 2;
 	public static final int KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE = 3;
 	public static final int KEYBOARD_KO_DUBUL_DANMOEUM_MUE128= 4;
+	public static final int KEYBOARD_KO_DUBUL_NK= 5;
 	
-	public static final int KEYBOARD_KO_SEBUL_390 = 5;
-	public static final int KEYBOARD_KO_SEBUL_391 = 6;
-	public static final int KEYBOARD_KO_SEBUL_DANMOEUM = 7;
+	public static final int KEYBOARD_KO_SEBUL_390 = 6;
+	public static final int KEYBOARD_KO_SEBUL_391 = 7;
+	public static final int KEYBOARD_KO_SEBUL_DANMOEUM = 8;
+	public static final int KEYBOARD_KO_SEBUL_SUN_2014 = 9;
+	public static final int KEYBOARD_KO_SEBUL_3_2015M = 10;	
+	public static final int KEYBOARD_KO_SEBUL_3_2015 = 11;
+	public static final int KEYBOARD_KO_SEBUL_3_P3 = 12;
 	
-	public static final int KEYBOARD_KO_SEBUL_SHIN_ORIGINAL = 9;
-	public static final int KEYBOARD_KO_SEBUL_SHIN_EDIT = 10;
+	public static final int KEYBOARD_KO_SEBUL_SHIN_ORIGINAL = 13;
+	public static final int KEYBOARD_KO_SEBUL_SHIN_EDIT = 14;
+	public static final int KEYBOARD_KO_SEBUL_SHIN_M = 15;
+	public static final int KEYBOARD_KO_SEBUL_SHIN_P2 = 17;
 	
-	public static final int KEYBOARD_KO_SEBUL_MUNHWA = 11;
-	public static final int KEYBOARD_KO_SEBUL_SENA = 12;
-	public static final int KEYBOARD_KO_SEBUL_HANSON = 13;
+	public static final int KEYBOARD_KO_SEBUL_AHNMATAE = 18;
+	public static final int KEYBOARD_KO_SEBUL_SEMOE = 19;
+	
+	public static final int KEYBOARD_KO_SEBUL_MUNHWA = 20;
+	public static final int KEYBOARD_KO_SEBUL_SENA = 16;
+	public static final int KEYBOARD_KO_SEBUL_HANSON = 21;
 	
 	private static final int KEYMODE_LENGTH = 11;
 	
@@ -90,7 +101,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected boolean mUseFlick = true;
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
-	protected int mTimeoutDelay = 250;
+	protected int mTimeoutDelay = 1000;
 	
 	protected int mVibrateDuration = 30;
 
@@ -276,6 +287,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_DUBULSIK;
 					break;
 					
+				case KEYBOARD_KO_DUBUL_NK:
+					mode = OpenWnnKOKR.ENGINE_MODE_DUBULSIK_NK;
+					break;
+					
 				case KEYBOARD_KO_SEBUL_390:
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_390;
 					break;
@@ -286,8 +301,24 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					
 				case KEYBOARD_KO_SEBUL_DANMOEUM:
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_DANMOEUM;
+					break;					
+					
+				case KEYBOARD_KO_SEBUL_SUN_2014:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SUN_2014;
 					break;
 					
+				case KEYBOARD_KO_SEBUL_3_2015M:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_3_2015M;
+					break;
+					
+				case KEYBOARD_KO_SEBUL_3_2015:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_3_2015;
+					break;
+					
+				case KEYBOARD_KO_SEBUL_3_P3:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_3_P3;
+					break;
+				
 				case KEYBOARD_KO_SEBUL_SHIN_ORIGINAL:
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_ORIGINAL;
 					break;
@@ -296,6 +327,22 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_EDIT;
 					break;
 					
+				case KEYBOARD_KO_SEBUL_SHIN_M:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_M;
+					break;					
+
+				case KEYBOARD_KO_SEBUL_SHIN_P2:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_P2;
+					break;					
+
+				case KEYBOARD_KO_SEBUL_AHNMATAE:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_AHNMATAE;
+					break;					
+
+				case KEYBOARD_KO_SEBUL_SEMOE:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE;
+					break;			
+
 				case KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE:
 					mode = OpenWnnKOKR.ENGINE_MODE_DUBUL_DANMOEUM;
 					break;
@@ -315,6 +362,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_HANSON;
 					break;
 					
+				case KEYBOARD_KO_SEBUL_SENA:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_SENA;
+					break;	
+					
 				}
 			}
 		} else if(targetMode == KEYMODE_ALT_SYMBOLS) {
@@ -329,6 +380,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			case KEYBOARD_EN_ALPHABET_DVORAK:
 				mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
+				break;
+
+			case KEYBOARD_EN_ALPHABET_COLEMAK:
+				mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_COLEMAK;
 				break;
 				
 			}
@@ -505,6 +560,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				switch(mCurrentKeyboards[LANG_KO]) {
 				case KEYBOARD_KO_SEBUL_SHIN_ORIGINAL:
 				case KEYBOARD_KO_SEBUL_SHIN_EDIT:
+				case KEYBOARD_KO_SEBUL_SHIN_M:
+				case KEYBOARD_KO_SEBUL_SHIN_P2:
+				case KEYBOARD_KO_SEBUL_3_2015M:
+				case KEYBOARD_KO_SEBUL_3_2015:
+				case KEYBOARD_KO_SEBUL_3_P3:
 					if(mCurrentLanguage == LANG_KO) break;
 					
 				default:
@@ -716,7 +776,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
-		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 250);
+		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 1000);
 		mVibrateDuration = pref.getInt("key_vibration_duration", mVibrateDuration);
 		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
 		if(showSubView != mShowSubView) {
@@ -809,6 +869,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_hanson);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_HANSON;
 				break;
+			
+			case "keyboard_12key_sebul_sena":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_sena);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SENA;
+				break;
 				
 			}
 		} else {
@@ -847,7 +912,37 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
 				break;
+			
+			case "keyboard_dubul_nk":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_NK;
+				break;
+			
+			case "keyboard_sebul_sun_2014":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SUN_2014;
+				break;
 				
+			case "keyboard_sebul_3_2015m":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015M;
+				break;
+			
+			case "keyboard_sebul_3_2015":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015;
+				break;
+
+			case "keyboard_sebul_3_p3":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
+				break;
+
 			case "keyboard_sebul_shin_original":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
@@ -860,6 +955,30 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
+			case "keyboard_sebul_shin_m":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_M;
+				break;
+								
+			case "keyboard_sebul_shin_p2":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_P2;
+				break;
+			
+			case "keyboard_sebul_ahnmatae":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
+				break;
+			
+			case "keyboard_sebul_semoe":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE;
+				break;					
+			
 			case "keyboard_dubul_danmoeum_google":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
@@ -894,6 +1013,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
 				break;
 				
+			case "keyboard_alphabet_colemak":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak_shift);
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_COLEMAK;
+				break;	
+			
 			}
 		} else {
 			
@@ -964,7 +1089,37 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
 				break;
-				
+			
+			case "keyboard_dubul_nk":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_NK;
+				break;	
+			
+			case "keyboard_sebul_sun_2014":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SUN_2014;
+				break;	
+			
+			case "keyboard_sebul_3_2015m":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015M;
+				break;	
+			
+			case "keyboard_sebul_3_2015":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015;
+				break;	
+			
+			case "keyboard_sebul_3_p3":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
+				break;	
+			
 			case "keyboard_sebul_shin_original":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
@@ -977,6 +1132,30 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
 				break;
 				
+			case "keyboard_sebul_shin_m":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_M;
+				break;
+				
+			case "keyboard_sebul_shin_p2":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_P2;
+				break;
+
+			case "keyboard_sebul_ahnmatae":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
+				break;	
+				
+			case "keyboard_sebul_semoe":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE;
+				break;	
+			
 			case "keyboard_dubul_danmoeum_google":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
@@ -1010,6 +1189,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
 				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
 				break;
+				
+			case "keyboard_alphabet_colemak":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak_shift);
+				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_COLEMAK;
+				break;	
 				
 			}
 		}

@@ -103,7 +103,7 @@
 			android:key="keyboard_timeout_delay"
 			android:title="@string/preference_keyboard_timeout_delay_title"
 			android:summary="@string/preference_keyboard_timeout_delay_summary"
-			android:defaultValue="250" />
+			android:defaultValue="1000" />
 		<CheckBoxPreference android:key="keyboard_use_moachigi"
 			android:title="@string/preference_keyboard_use_moachigi_title"
 			android:summary="@string/preference_keyboard_use_moachigi_summary"

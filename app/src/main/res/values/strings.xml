@@ -300,15 +300,25 @@
     <string name="preference_keyboard_hangul_summary">Type of Hangul keyboard.</string>
     
     <string name="preference_keyboard_dubul_standard">Dubeolsik Standard</string>
-    <string name="preference_keyboard_dubul_danmoeum_google">Google Dubeolsik Danmoeum (Single-Vowel)</string>
+    <string name="preference_keyboard_dubul_danmoeum_google">Dubeolsik Google Danmoeum (Single-Vowel)</string>
+    <string name="preference_keyboard_dubul_nk">Dubeolsik North Korea</string>
     <string name="preference_keyboard_sebul_390">Sebeolsik 390</string>
     <string name="preference_keyboard_sebul_391">Sebeolsik Final</string>
     <string name="preference_keyboard_sebul_danmoeum">Sebeolsik Danmoeum (Single-Vowel)</string>
-    <string name="preference_keyboard_sebul_shin_original">Shin Sebeolsik 1995 Original</string>
-    <string name="preference_keyboard_sebul_shin_edit">Edited Shin Sebeolsik</string>
+    <string name="preference_keyboard_sebul_sun_2014">Sebeolsik Sunarae 2014 by Ahn Jonghyeok</string>
+    <string name="preference_keyboard_sebul_3_2015m">Sebeolsik 3-2015M by Metalliza</string>
+    <string name="preference_keyboard_sebul_3_2015">Sebeolsik 3-2015 by Soinbae</string>
+    <string name="preference_keyboard_sebul_3_p3">Sebeolsik 3-P3 by Pat-al</string>
+    <string name="preference_keyboard_sebul_shin_original">Shin Sebeolsik 1995 Original by Shin Gwangjo</string>
+    <string name="preference_keyboard_sebul_shin_edit">Shin Sebeolsik 2003 Edited by Park Gyeongnam</string>
+    <string name="preference_keyboard_sebul_shin_m">Shin Sebeolsik M by Metalliza</string>
+    <string name="preference_keyboard_sebul_shin_p2">Shin Sebeolsik P2 by Pat-al</string>
+    <string name="preference_keyboard_sebul_ahnmatae">Moachigi Sebeolsik Ahnmatae Keyboard</string>
+    <string name="preference_keyboard_sebul_semoe">Moachigi Sebeolsik Semo-e 2017 by Shin Segi</string>
     
     <string name="preference_keyboard_12key_sebul_munhwa">12-Key Sebeolsik by Hangul Munhwawon</string>
-    <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik by ZanNavi</string>
+    <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik (ZanNavi)</string>
+    <string name="preference_keyboard_12key_sebul_sena">One-hand Sebeolsik (Sena)</string>
     
     <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">Use qwerty based Alphabet layout while using 12-key as Hangul.</string>
@@ -318,6 +328,7 @@
     
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
     <string name="preference_keyboard_alphabet_dvorak">DVORAK</string>
+    <string name="preference_keyboard_alphabet_colemak">COLEMAK</string>
     
     <string name="preference_keyboard_use_flick_title">Use Flick</string>
     <string name="preference_keyboard_use_flick_summary">Use flick (slide) function for keyboard.</string>
@@ -326,7 +337,7 @@
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
     
     <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
-    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 250.</string>
+    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 1000.</string>
     
     <string name="preference_keyboard_use_moachigi_title">Use Moachigi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moachigi. (Fix jamo order when using sebeol layouts)</string>

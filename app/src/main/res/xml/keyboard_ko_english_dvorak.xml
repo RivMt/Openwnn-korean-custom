@@ -68,11 +68,11 @@
     <Key android:codes="-103" android:keyLabel="ALT"
          android:keyWidth="10%p" android:keyEdgeFlags="left"/>
     <Key android:codes="-500" android:keyLabel="가" android:keyWidth="10%p"/>
-    <Key android:codes="44" android:keyLabel="," android:keyWidth="10%p"/>
+    <Key android:codes="119" android:keyLabel="," android:keyWidth="10%p"/>
     <Key android:codes="-10"
 	 android:keyIcon="@drawable/key_qwerty_space" 
          android:keyWidth="40%p" android:isRepeatable="true"/>
-    <Key android:codes="46" android:keyLabel="." android:keyWidth="10%p"/>
+    <Key android:codes="101" android:keyLabel="." android:keyWidth="10%p"/>
     <Key android:codes="-101"
          android:keyIcon="@drawable/key_qwerty_enter" 
          android:keyWidth="20%p" android:keyEdgeFlags="right"/>

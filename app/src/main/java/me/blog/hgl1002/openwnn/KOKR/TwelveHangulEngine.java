@@ -42,6 +42,22 @@ public class TwelveHangulEngine extends HangulEngine {
 		if(cycled) composing = "";
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
 			boolean found = false;
+//ykhong edit start			
+			int cc, c2;
+            if(INPUT_CHO3 == lastInputType) {
+				c2 = CHO_TABLE[this.cho];
+				cc = CHO_CONVERT[c2 - 0x3131];
+			} else if(INPUT_JUNG3 == lastInputType) {
+                c2 = JUNG_TABLE[this.jung];
+				cc = c2 - 0x314f + 0x1161;
+			} else if(INPUT_JONG3 == lastInputType) {
+                c2 = JONG_TABLE[this.jong];
+				cc = JONG_CONVERT[c2 - 0x3131];
+            } else {
+                return 0;
+            }
+
+/* 
 			for(int[] item : addStrokeTable) {
 				int index = 0;
 				if(addStrokeIndex > 0 && addStrokeIndex < item.length) index = addStrokeIndex;
@@ -52,6 +68,26 @@ public class TwelveHangulEngine extends HangulEngine {
 					found = true;
 				}
 			}
+*/
+			for(int[] item : addStrokeTable) {
+				int index = 0;
+				if(true == found)
+					break;
+				for(; index < item.length; index++) {
+					if(item[index] == cc) {
+						addStrokeIndex = index;
+						if(++addStrokeIndex >= item.length)
+							continue;
+						jamo = item[addStrokeIndex];
+						cycled = true; // ??
+						found = true;
+						break; // 원하는 STROKE 으로 변환했다면 그만한다.
+					}
+					if( (index + 1) >= (item.length - 1) )
+						break;
+				}
+			}
+//ykhong edit end			
 			if(!found) return 0;
 		}
 		int result = super.inputJamo(jamo);
