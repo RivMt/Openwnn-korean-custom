@@ -104,8 +104,9 @@ public class TwelveHangulEngine extends HangulEngine {
 	@Override
 	public String getVisible(int cho, int jung, int jong) {
 		String composing;
-		if(jung == 0x119e - 0x1161 || jung == 0x11a2 - 0x1161) {
-			char displayJung = (char) ((jung + 0x1161 == 0x11a2) ? 0x2025 : 0x00b7);
+		// process virtual 'Cheon' of cheonjiin.
+		if(jung == -2003 || jung == -2004 || jung == -5003 || jung == -5004) {
+			char displayJung = (char) ((jung == -5004 || jung == -2004) ? 0x2025 : 0x00b7);
 			if(cho != -1 && jung != -1 && jong != -1) {
 				composing = (char) CHO_TABLE[cho] + "" + displayJung + "" + (char) JONG_TABLE[jong];
 			}
