@@ -112,4 +112,10 @@
     <string name="preference_hardware_alt_direct_title">Alt키로 항상 기호 입력</string>
     <string name="preference_hardware_alt_direct_summary">하드웨어 Alt키 조합시 기호를 그대로 입력합니다.</string>
 
+
+    <string name="preference_system_setting_menu">시스템 설정</string>
+
+    <string name="preference_system_use_standard_jamo_title">표준 한글 자모 사용</string>
+    <string name="preference_system_use_standard_jamo_summary">필요할 경우 표준 한글 자모로 첫가끝 한글 조합을 합니다.</string>
+
 </resources>

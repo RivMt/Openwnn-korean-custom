@@ -362,5 +362,11 @@
 
     <string name="preference_hardware_alt_direct_title">Alt Direct input</string>
     <string name="preference_hardware_alt_direct_summary">Always input literal chars on hard Alt combination.</string>
-    
+
+
+    <string name="preference_system_setting_menu">System Settings</string>
+
+    <string name="preference_system_use_standard_jamo_title">Use standard Hangul jamo</string>
+    <string name="preference_system_use_standard_jamo_summary">Use First-Mid-End Hangul code with standard hangul jamo when required.</string>
+
 </resources>

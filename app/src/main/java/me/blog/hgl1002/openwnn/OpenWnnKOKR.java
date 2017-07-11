@@ -1951,6 +1951,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mMoachigi;
 	boolean mHardwareMoachigi;
 
+	boolean mStandardJamo;
+
 	boolean mAltDirect;
 	
 	boolean selectionMode;
@@ -2015,9 +2017,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		mMoachigi = pref.getBoolean("keyboard_use_moachigi", mMoachigi);
 		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
+		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
+		mQwertyEngine.setFirstMidEnd(mStandardJamo);
+		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
 		mAltDirect = pref.getBoolean("hardware_alt_direct", true);
 		
