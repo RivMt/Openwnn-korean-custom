@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
@@ -1950,6 +1951,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	boolean mMoachigi;
 	boolean mHardwareMoachigi;
+	boolean mFullMoachigi = true;
+	int mMoachigiDelay;
 
 	boolean mStandardJamo;
 
@@ -1957,7 +1960,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	boolean selectionMode;
 	int selectionStart, selectionEnd;
-	
+
+	Handler mTimeOutHandler;
+
 	private static OpenWnnKOKR mSelf;
 	public static OpenWnnKOKR getInstance() {
 		return mSelf;
@@ -2017,10 +2022,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		mMoachigi = pref.getBoolean("keyboard_use_moachigi", mMoachigi);
 		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
+		mFullMoachigi = pref.getBoolean("hardware_full_moachigi", mFullMoachigi);
+		mMoachigiDelay = pref.getInt("hardware_full_moachigi_delay", 100);
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
+		mQwertyEngine.setFullMoachigi(mFullMoachigi);
 		mQwertyEngine.setFirstMidEnd(mStandardJamo);
 		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
@@ -2598,14 +2606,16 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		case ENGINE_MODE_SEBUL_AHNMATAE:
 			mDirectInputMode = false;
-			mEnableTimeout = false;
+			if(mFullMoachigi) mEnableTimeout = true;
+			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_AHNMATAE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_AHNMATAE);
 			break;	
 		
 		case ENGINE_MODE_SEBUL_SEMOE:
 			mDirectInputMode = false;
-			mEnableTimeout = false;
+			if(mFullMoachigi) mEnableTimeout = true;
+			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
 			break;	
@@ -2748,6 +2758,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mInputViewManager.closing();
 		
 		super.hideWindow();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(mTimeOutHandler == null) {
+			mTimeOutHandler = new Handler();
+			mTimeOutHandler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					onEvent(new OpenWnnEvent(OpenWnnKOKR.TIMEOUT_EVENT));
+					mTimeOutHandler = null;
+				}
+			}, mMoachigiDelay);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
