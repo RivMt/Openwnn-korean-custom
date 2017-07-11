@@ -65,6 +65,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private static final int KEYMODE_LENGTH = 11;
 	
 	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
+
+	protected static final int SPACE_SLIDE_UNIT = 30;
 	
 	protected static final int KEYCODE_NOP = -310;
 	
@@ -100,6 +102,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	protected boolean mUseFlick = true;
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
+	protected int mSpaceSlideSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
 	protected int mTimeoutDelay = 1000;
 	
@@ -179,6 +182,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	class OnKeyboardViewTouchListener implements View.OnTouchListener {
 		float downX, downY;
 		float dx, dy;
+		float beforeX, beforeY;
+		int space = -1;
+		int spaceDistance;
+		int beforeSpaceDistance;
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			switch(event.getAction()) {
@@ -192,16 +199,51 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case MotionEvent.ACTION_MOVE:
 				dx = event.getX() - downX;
 				dy = event.getY() - downY;
-				if(dy > mFlickSensitivity || dy < -mFlickSensitivity
-						|| dx < -mFlickSensitivity || dx > mFlickSensitivity) {
-					for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-						Handler handler = mLongClickHandlers.get(mLongClickHandlers.keyAt(i));
+				for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
+					int keyCode = mLongClickHandlers.keyAt(i);
+					switch(keyCode) {
+					case KEYCODE_JP12_SPACE:
+					case -10:
+						if(Math.abs(dx) >= mSpaceSlideSensitivity) space = keyCode;
+						break;
+
+					default:
+						space = -1;
+						break;
+					}
+					if(dy > mFlickSensitivity || dy < -mFlickSensitivity
+							|| dx < -mFlickSensitivity || dx > mFlickSensitivity || space != -1) {
+						Handler handler = mLongClickHandlers.get(keyCode);
 						handler.removeCallbacksAndMessages(null);
 					}
 				}
+				if(space != -1) {
+					spaceDistance += event.getX() - beforeX;
+					if(spaceDistance < -SPACE_SLIDE_UNIT) {
+						spaceDistance = 0;
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+								new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+								new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT)));
+					}
+					if(spaceDistance > +SPACE_SLIDE_UNIT) {
+						spaceDistance = 0;
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+								new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+								new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
+					}
+				}
+				beforeX = event.getX();
+				beforeY = event.getY();
 				return true;
 				
 			case MotionEvent.ACTION_UP:
+				if(space != -1) {
+					mIgnoreCode = space;
+					space = -1;
+					break;
+				}
 				if(dy > mFlickSensitivity) {
 					flickDown();
 				}
@@ -542,6 +584,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			
 		case KEYCODE_JP12_SPACE:
 		case -10:
+			if(mIgnoreCode == primaryCode) {
+				mIgnoreCode = KEYCODE_NOP;
+				break;
+			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE)));
 			break;
@@ -777,6 +823,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
 		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 1000);
+		mSpaceSlideSensitivity = mFlickSensitivity;
 		mVibrateDuration = pref.getInt("key_vibration_duration", mVibrateDuration);
 		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
 		if(showSubView != mShowSubView) {

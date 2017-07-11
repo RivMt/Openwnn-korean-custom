@@ -177,7 +177,6 @@ public class HangulEngine {
 				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 				int source = this.jung;
 				if(source >= 0) source += 0x1161;
-				System.out.println(source + " + " + code);
 				if((combination = getCombination(source, code)) != -1) {
 					jungCode = combination;
 					if(jungCode >= 0x1161) jungCode -= 0x1161;
@@ -189,7 +188,6 @@ public class HangulEngine {
 			} else {
 				this.jung = jungCode;
 			}
-			System.out.println("jung " + jung);
 			if(lastInputType == 0) result = INPUT_JUNG3;
 			else if(virtual) result = lastInputType;
 			else result = INPUT_JUNG3;
