@@ -59,7 +59,7 @@
     <Key android:codes="47" android:keyLabel="\u110f"/>
     <Key android:codes="-100"
      	 android:keyIcon="@drawable/key_qwerty_del"
-	 	 android:keyWidth="10%p" android:keyEdgeFlags="right" android:isRepeatable="true"/>
+	 	 android:keyWidth="10%p" android:keyEdgeFlags="right"/>
   </Row>
   
   <Row android:rowEdgeFlags="bottom">
