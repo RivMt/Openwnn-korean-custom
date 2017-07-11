@@ -49,7 +49,7 @@
   <Row>
 	<Key android:codes="-1"
 	 android:keyIcon="@drawable/key_qwerty_shift" android:iconPreview="@drawable/key_qwerty_shift_b"
-	 android:isModifier="true"
+     android:keyWidth="15%p" android:isModifier="true"
      android:isSticky="true" android:keyEdgeFlags="left"/>
     <Key android:codes="122" android:keyLabel="z"/>
     <Key android:codes="120" android:keyLabel="x"/>
@@ -60,7 +60,7 @@
     <Key android:codes="109" android:keyLabel="m"/>
 	<Key android:codes="-100"
 	 android:keyIcon="@drawable/key_qwerty_del" android:iconPreview="@drawable/key_qwerty_del_b"
-	 android:keyEdgeFlags="right" android:keyWidth="20%p"  android:isRepeatable="true"/>
+	 android:keyEdgeFlags="right" android:keyWidth="15%p" android:isRepeatable="true"/>
   </Row>
   
   <Row android:rowEdgeFlags="bottom">

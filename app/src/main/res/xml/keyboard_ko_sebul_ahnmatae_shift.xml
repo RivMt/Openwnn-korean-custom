@@ -67,11 +67,11 @@
     <Key android:codes="-10"
 	 android:keyIcon="@drawable/key_qwerty_space" 
          android:keyWidth="40%p" android:isRepeatable="false"/>
-	<Key android:codes="-100"
-	 android:keyIcon="@drawable/key_qwerty_del" android:iconPreview="@drawable/key_qwerty_del_b"
-	 android:keyWidth="15%p" android:isRepeatable="true"/>
     <Key android:codes="-101"
          android:keyIcon="@drawable/key_qwerty_enter" 
-         android:keyWidth="15%p" android:keyEdgeFlags="right"/>
+         android:keyWidth="15%p"/>
+    <Key android:codes="-100"
+        android:keyIcon="@drawable/key_qwerty_del" android:iconPreview="@drawable/key_qwerty_del_b"
+        android:keyWidth="15%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
   </Row>
 </Keyboard>

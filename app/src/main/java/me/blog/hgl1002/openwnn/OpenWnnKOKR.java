@@ -2036,7 +2036,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
-		mQwertyEngine.setFullMoachigi(mFullMoachigi);
+		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardKeyboardHidden);
 		mQwertyEngine.setFirstMidEnd(mStandardJamo);
 		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
@@ -2489,6 +2489,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void changeEngineMode(int mode) {
+		boolean hardHidden = ((DefaultSoftKeyboardKOKR) mInputViewManager).mHardKeyboardHidden;
 		switch(mode) {
 		case ENGINE_MODE_OPT_TYPE_12KEY:
 			mHangulEngine = m12keyEngine;
@@ -2614,7 +2615,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		case ENGINE_MODE_SEBUL_AHNMATAE:
 			mDirectInputMode = false;
-			if(mFullMoachigi) mEnableTimeout = true;
+			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_AHNMATAE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_AHNMATAE);
@@ -2622,7 +2623,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		case ENGINE_MODE_SEBUL_SEMOE:
 			mDirectInputMode = false;
-			if(mFullMoachigi) mEnableTimeout = true;
+			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
