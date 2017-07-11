@@ -880,6 +880,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x11ba, 0x11ba, 0x11bb},	// ㅆ
 	};
 
+	public static final int[][] VIRTUAL_SEBUL_SHIN_ORIGINAL = {
+			{HangulEngine.VIRTUAL_JUNG, -5000, 0x1169},
+			{HangulEngine.VIRTUAL_JUNG, -5001, 0x116e},
+			{HangulEngine.VIRTUAL_JUNG, -5002, 0x1173},
+			{HangulEngine.VIRTUAL_JUNG, -5010, 0x119e},
+	};
+
 	public static final int[][] JAMO_SEBUL_SHIN_EDIT = {
 			
 			{113, 0x11ba, 0x1164},		// q
@@ -916,7 +923,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{36, 0x110f, -5000},			// $
 			{0x20ac, 0x110f, -5000},
 	};
-	
+
 		public static final int[][] JAMO_SEBUL_SHIN_M = {
 			
 			{113, 0x11ba, 0x1164},		// q
@@ -2590,6 +2597,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SHIN_ORIGINAL);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
 			
 		case ENGINE_MODE_SEBUL_SHIN_EDIT:
@@ -2597,6 +2605,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SHIN_EDIT);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
 			
 		case ENGINE_MODE_SEBUL_SHIN_M:
@@ -2604,6 +2613,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SHIN_M);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
 		
 		case ENGINE_MODE_SEBUL_SHIN_P2:
@@ -2611,6 +2621,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SHIN_P2);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
 		
 		case ENGINE_MODE_SEBUL_AHNMATAE:

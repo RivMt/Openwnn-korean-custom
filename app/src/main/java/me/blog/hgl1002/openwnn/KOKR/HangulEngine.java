@@ -15,12 +15,11 @@ public class HangulEngine {
 	public static final int INPUT_JUNG2 = 0x1022;
 	public static final int INPUT_JONG2 = 0x1023;
 
-	public static final int VIRTUAL_DOUBLE_JUNG_O = -5000;
-	public static final int VIRTUAL_DOUBLE_JUNG_U = -5001;
-	public static final int VIRTUAL_DOUBLE_JUNG_I = -5002;
-	public static final int VIRTUAL_JUNG_CHEON = -2003;
-	public static final int VIRTUAL_JUNG_DOUBLE_CHEON = -2004;
-	
+	public static final int VIRTUAL_NON_HANGUL = 0;
+	public static final int VIRTUAL_CHO = 1;
+	public static final int VIRTUAL_JUNG = 2;
+	public static final int VIRTUAL_JONG = 3;
+
 	public static int[] CHO_TABLE = {
 			'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ',
 			'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
@@ -90,6 +89,7 @@ public class HangulEngine {
 	
 	int[][] jamoTable;
 	int[][] combinationTable;
+	int[][] virtualJamoTable;
 	
 	public HangulEngine() {
 		resetJohab();
@@ -363,10 +363,9 @@ public class HangulEngine {
 	
 	String getVisible(int cho, int jung, int jong) {
 		String visible;
-		if(jung == -5000) jung = 0x1169 - 0x1161;
-		if(jung == -5001) jung = 0x116e - 0x1161;
-		if(jung == -5002) jung = 0x1173 - 0x1161;
-		if(jung == -5010) jung = 0x119e - 0x1161;
+		cho = getVirtualCho(cho);
+		jung = getVirtualJung(jung);
+		jong = getVirtualJong(jong);
 		if(cho > 0x12 || jung > 0x14 || jong > 0x1a) {
 			if(cho == -1) cho = 0x5f;
 			visible = new String(new char[] {(char) (cho + 0x1100)})
@@ -402,7 +401,28 @@ public class HangulEngine {
 		}
 		return visible;
 	}
-	
+
+	public int getVirtualCho(int cho) {
+		for(int[] item : virtualJamoTable) {
+			if(item[0] == VIRTUAL_CHO && item[1] == cho) return item[2] - 0x1100;
+		}
+		return cho;
+	}
+
+	public int getVirtualJung(int jung) {
+		for(int[] item : virtualJamoTable) {
+			if(item[0] == VIRTUAL_JUNG&& item[1] == jung) return item[2] - 0x1161;
+		}
+		return jung;
+	}
+
+	public int getVirtualJong(int jong) {
+		for(int[] item : virtualJamoTable) {
+			if(item[0] == VIRTUAL_JONG && item[1] == jong) return item[2] - 0x11a7;
+		}
+		return jong;
+	}
+
 	public boolean isCho(int code) {
 		return code >= 0x1100 && code <= 0x115e || code <= -1000 && code > -2000 || code <= -4000 && code > -5000;
 	}
@@ -469,6 +489,14 @@ public class HangulEngine {
 
 	public void setCombinationTable(int[][] combinations) {
 		this.combinationTable = combinations;
+	}
+
+	public int[][] getVirtualJamoTable() {
+		return virtualJamoTable;
+	}
+
+	public void setVirtualJamoTable(int[][] virtualJamoTable) {
+		this.virtualJamoTable = virtualJamoTable;
 	}
 
 	public static interface HangulEngineListener {
