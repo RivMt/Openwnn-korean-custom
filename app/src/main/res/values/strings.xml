@@ -337,7 +337,7 @@
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
     
     <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
-    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 1000.</string>
+    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 500.</string>
     
     <string name="preference_keyboard_use_moachigi_title">Use Moachigi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moachigi. (Fix jamo order when using sebeol layouts)</string>
@@ -359,6 +359,12 @@
 
     <string name="preference_hardware_use_moachigi_title">Use Moachigi</string>
     <string name="preference_hardware_use_moachigi_summary">Use moachigi when using hardware keyboard.</string>
+
+  <string name="preference_hardware_full_moachigi_title">Full Moachigi</string>
+  <string name="preference_hardware_full_moachigi_summary">Use Full Moachigi (Moachigi at once) if available.</string>
+
+  <string name="preference_hardware_full_moachigi_delay_title">Full Moachigi Timeout</string>
+  <string name="preference_hardware_full_moachigi_delay_summary">Set the timeout (ms) for Full Moachigi. Default value is 100.</string>
 
     <string name="preference_hardware_alt_direct_title">Alt Direct input</string>
     <string name="preference_hardware_alt_direct_summary">Always input literal chars on hard Alt combination.</string>

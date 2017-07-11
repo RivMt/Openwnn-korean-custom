@@ -61,7 +61,7 @@ public class HangulEngine {
 			0x11be, 0x11bf, 0x11c0, 0x11c1, 0x11c2,
 	};
 	
-	boolean moachigi, firstMidEnd;
+	boolean moachigi, fullMoachigi, firstMidEnd;
 	HangulEngineListener listener;
 	
 	int cho, jung, jong;
@@ -93,7 +93,6 @@ public class HangulEngine {
 	
 	public HangulEngine() {
 		resetJohab();
-//		this.firstMidEnd = true;
 	}
 	
 	public HangulEngine(boolean moachigi) {
@@ -143,27 +142,25 @@ public class HangulEngine {
 			// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 			int choCode = code;
 			if(choCode >= 0x1100) choCode-= 0x1100;
-			if(!moachigi && !isCho(last) && !isJung(last)) resetJohab();
-			if(!moachigi && !isCho(last)) resetJohab();
-			if(this.cho != -1) {
+			if(!fullMoachigi) {
+				if (!moachigi && !isCho(last) && !isJung(last)) resetJohab();
+				if (!moachigi && !isCho(last)) resetJohab();
+			}
+			if(isCho(last) || fullMoachigi && this.cho != -1) {
 				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 				int source = this.cho;
 				if(source >= 0) source += 0x1100;
 				if((combination = getCombination(source, code)) != -1) {
-					if(!isCho(last)) {
-						resetJohab();
-						this.cho = choCode;
-					} else {
-						// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-						choCode = combination;
-						if(choCode >= 0) choCode-= 0x1100;
-						this.cho = choCode;
-					}
+					// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
+					choCode = combination;
+					if(choCode >= 0) choCode-= 0x1100;
+					this.cho = choCode;
 				} else {
 					resetJohab();
 					this.cho = choCode;
 				}
 			} else {
+				if(this.cho != -1) resetJohab();
 				this.cho = choCode;
 			}
 			result = INPUT_CHO3;
@@ -173,7 +170,7 @@ public class HangulEngine {
 			int jungCode = code;
 			if(jungCode >= 0x1161) jungCode -= 0x1161;
 			if(!moachigi && !isCho(last) && !isJung(last)) resetJohab();
-			if(this.jung != -1) {
+			if(isJung(last) || fullMoachigi && this.jung != -1) {
 				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 				int source = this.jung;
 				if(source >= 0) source += 0x1161;
@@ -186,6 +183,7 @@ public class HangulEngine {
 					this.jung = jungCode;
 				}
 			} else {
+				if(this.jung != -1) resetJohab();
 				this.jung = jungCode;
 			}
 			if(lastInputType == 0) result = INPUT_JUNG3;
@@ -196,7 +194,7 @@ public class HangulEngine {
 			int jongCode = code;
 			if(jongCode >= 0x11a8) jongCode -= 0x11a7;
 			if(!moachigi && !isJung(last) && !isJong(last)) resetJohab();
-			if(this.jong != -1) {
+			if(isJong(last) || fullMoachigi && this.jong != -1) {
 				int source = this.jong;
 				if(source >= 0) source += 0x11a7;
 				if((combination = getCombination(source, code)) != -1) {
@@ -208,6 +206,7 @@ public class HangulEngine {
 					this.jong = jongCode;
 				}
 			} else {
+				if(this.jong != -1) resetJohab();
 				this.jong = jongCode;
 			}
 			result = INPUT_JONG3;
@@ -422,6 +421,14 @@ public class HangulEngine {
 
 	public void setMoachigi(boolean moachigi) {
 		this.moachigi = moachigi;
+	}
+
+	public boolean isFullMoachigi() {
+		return fullMoachigi;
+	}
+
+	public void setFullMoachigi(boolean fullMoachigi) {
+		this.fullMoachigi = fullMoachigi;
 	}
 
 	public boolean isFirstMidEnd() {
