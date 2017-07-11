@@ -1403,8 +1403,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{48,0x30,0x29},
 			
 			{113, 0x27, 0x22},		// q
-			{119, 0x2c, 0x2c},		// w
-			{101, 0x2e, 0x2c},		// e
+			{119, 0x2c, 0x3c},		// w
+			{101, 0x2e, 0x3e},		// e
 			{114, 112, 80},		// r
 			{116, 121, 89},		// t
 			{121, 102, 70},		// y
@@ -1422,7 +1422,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{106, 104, 72},		// j
 			{107, 116, 84},		// k
 			{108, 110, 78},		// l
-			{0x3b, 115, 83},
+			{0x3b, 115, 83},	// ;
+			{0x27, 0x2d, 0x5f},	// '
 			
 			{122, 0x3b, 0x3a},		// z
 			{120, 113, 81},		// x
@@ -1431,9 +1432,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{98, 120, 88},			// b
 			{110, 98, 66},		// n
 			{109, 109, 77},		// m
-			{0x2c, 119, 87},
-			{0x2e, 118, 86},
-			{0x2f, 122, 90},
+			{0x2c, 119, 87},	// ,
+			{0x2e, 118, 86},	// .
+			{0x2f, 122, 90},	// /
+
+			{0x2d, 0x5b, 0x7b},
+			{0x3d, 0x5d, 0x7d},
+			{0x5b, 0x2f, 0x3f},
+			{0x5d, 0x3d, 0x2b},
 	};
 
 	public static final int[][] CONVERT_ENGLISH_COLEMAK = {

@@ -21,7 +21,8 @@
   
   <Row>
     <Key android:codes="113" android:keyLabel="\u0022" android:keyEdgeFlags="left"/>
-    <Key android:codes="101" android:keyLabel="\u002c"/>
+    <Key android:codes="119" android:keyLabel="\u003c"/>
+    <Key android:codes="101" android:keyLabel="\u003e"/>
     <Key android:codes="114" android:keyLabel="p"/>
     <Key android:codes="116" android:keyLabel="y"/>
     <Key android:codes="121" android:keyLabel="f"/>
@@ -51,7 +52,7 @@
   <Row>
     <Key android:codes="-1"
 	 android:keyIcon="@drawable/key_qwerty_shift" android:iconPreview="@drawable/key_qwerty_shift_b"
-	 android:isModifier="true"
+	     android:keyWidth="15%p" android:isModifier="true"
          android:isSticky="true" android:keyEdgeFlags="left"/>
     <Key android:codes="120" android:keyLabel="q"/>
     <Key android:codes="99" android:keyLabel="j"/>
@@ -59,20 +60,21 @@
     <Key android:codes="98" android:keyLabel="x"/>
     <Key android:codes="110" android:keyLabel="b"/>
     <Key android:codes="109" android:keyLabel="m"/>
-    <Key android:codes="0x2c" android:keyLabel="w"/>
-    <Key android:codes="0x2e" android:keyLabel="v"/>
-    <Key android:codes="0x2f" android:keyLabel="z" android:keyEdgeFlags="right"/>
+    <Key android:codes="0x2f" android:keyLabel="z"/>
+    <Key android:codes="-100"
+        android:keyIcon="@drawable/key_qwerty_del" android:iconPreview="@drawable/key_qwerty_del_b"
+        android:keyWidth="15%p" android:keyEdgeFlags="right" android:isRepeatable="true"/>
   </Row>
   
   <Row android:rowEdgeFlags="bottom">
     <Key android:codes="-103" android:keyLabel="ALT"
          android:keyWidth="10%p" android:keyEdgeFlags="left"/>
     <Key android:codes="-500" android:keyLabel="가" android:keyWidth="10%p"/>
-    <Key android:codes="119" android:keyLabel="," android:keyWidth="10%p"/>
+    <Key android:codes="0x2c" android:keyLabel="w" android:keyWidth="10%p"/>
     <Key android:codes="-10"
 	 android:keyIcon="@drawable/key_qwerty_space"
          android:keyWidth="40%p" android:isRepeatable="false"/>
-    <Key android:codes="46" android:keyLabel="." android:keyWidth="10%p"/>
+    <Key android:codes="0x2e" android:keyLabel="v" android:keyWidth="10%p"/>
     <Key android:codes="-101"
          android:keyIcon="@drawable/key_qwerty_enter" 
          android:keyWidth="20%p" android:keyEdgeFlags="right"/>

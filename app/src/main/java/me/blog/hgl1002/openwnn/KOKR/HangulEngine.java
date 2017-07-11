@@ -131,7 +131,7 @@ public class HangulEngine {
 	}
 	
 	public int inputJamo(int code) {
-		
+
 		if(composing == "") histories.clear();
 		else histories.push(new History(cho, jung, jong, last, composing, lastInputType));
 
