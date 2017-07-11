@@ -251,7 +251,7 @@ public class HangulEngine {
 				last = choCode + 0x1100;
 			}
 			result = INPUT_CHO2;
-		} else if(code >= 314f && code <= 0x3163) {
+		} else if(code >= 0x314f && code <= 0x3163) {
 			if(this.jong < 0) {
 				int jungCode = code - 0x314f;
 				if(isJung(last) && this.jung != -1) {
