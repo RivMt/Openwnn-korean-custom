@@ -366,7 +366,7 @@ public class HangulEngine {
 		cho = getVirtualCho(cho);
 		jung = getVirtualJung(jung);
 		jong = getVirtualJong(jong);
-		if(cho > 0x12 || jung > 0x14 || jong > 0x1a) {
+		if(cho > 0x12 || jung > 0x14 || jong > 0x1b) {
 			if(cho == -1) cho = 0x5f;
 			visible = new String(new char[] {(char) (cho + 0x1100)})
 					+ new String(new char[] {(char) (jung + 0x1161)});
