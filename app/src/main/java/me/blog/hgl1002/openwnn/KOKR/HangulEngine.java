@@ -403,6 +403,7 @@ public class HangulEngine {
 	}
 
 	public int getVirtualCho(int cho) {
+		if(virtualJamoTable == null) return cho;
 		for(int[] item : virtualJamoTable) {
 			if(item[0] == VIRTUAL_CHO && item[1] == cho) return item[2] - 0x1100;
 		}
@@ -410,6 +411,7 @@ public class HangulEngine {
 	}
 
 	public int getVirtualJung(int jung) {
+		if(virtualJamoTable == null) return jung;
 		for(int[] item : virtualJamoTable) {
 			if(item[0] == VIRTUAL_JUNG&& item[1] == jung) return item[2] - 0x1161;
 		}
@@ -417,6 +419,7 @@ public class HangulEngine {
 	}
 
 	public int getVirtualJong(int jong) {
+		if(virtualJamoTable == null) return jong;
 		for(int[] item : virtualJamoTable) {
 			if(item[0] == VIRTUAL_JONG && item[1] == jong) return item[2] - 0x11a7;
 		}
