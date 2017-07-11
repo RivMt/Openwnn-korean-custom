@@ -849,7 +849,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x116e, 0x1166, 0x1170},	// ㅞ
 			{0x116e, 0x1175, 0x1171},	// ㅟ
 			{0x1173, 0x1175, 0x1174},	// ㅢ
-			{-5002, 0x1175, 0x1174},
+			{0x119e, 0x1175, 0x11a1},	// ㆎ
+			{0x119e, 0x119e, 0x11a2},	// ᆢ
 
 			// 가상 낱자 조합
 			{-5000, 0x1161, 0x116a},	// ㅘ
@@ -858,9 +859,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{-5001, 0x1165, 0x116f},	// ㅝ
 			{-5001, 0x1166, 0x1170},	// ㅞ
 			{-5001, 0x1175, 0x1171},	// ㅟ
-			{0x1173, 0x1175, 0x1174},	// ㅢ
-			//{0x119e, 0x1175, 0x11a1},	// ㆎ
-			//{0x119e, 0x119e, 0x11a2},	// ᆢ
+			{-5002, 0x1175, 0x1174},	// ㅢ
+			{-5010, 0x1175, 0x11a1},	// ㆎ
+			{-5010, 0x119e, 0x11a2},	// ᆢㆎ
+			{-5010, -5010, 0x11a2},	// ᆢ
 
 			{0x11a8, 0x11a8, 0x11a9},	// ㄲ
 			{0x11a8, 0x11ba, 0x11aa},	// ㄳ
@@ -964,8 +966,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{117, 0x1103, 0x1103},		// u
 			{105, 0x1106, -5002},		// i
 			{111, 0x110e, -5001},		// o
-			{112, 0x1111, 0x1111},		// p
-			//{112, 0x1111, -5003},		// p
+//			{112, 0x1111, 0x1111},		// p
+			{112, 0x1111, -5010},		// p
 			
 			{97, 0x11bc, 0x1172},		// a
 			{115, 0x11ab, 0x1168},		// s
@@ -979,8 +981,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{59, 0x1107, 0x1107},
 			{39, 0x1110, 0x1110},
 			
-			//{122, 0x11b7, 0x119e},		// z
-			{122, 0x11b7, 0x11b7},		// z
+			{122, 0x11b7, 0x119e},		// z
+//			{122, 0x11b7, 0x11b7},		// z
 			{120, 0x11bb, 0x116d},		// x
 			{99, 0x11a8, 0x1166},		// c
 			{118, 0x11bd, 0x1169},		// v

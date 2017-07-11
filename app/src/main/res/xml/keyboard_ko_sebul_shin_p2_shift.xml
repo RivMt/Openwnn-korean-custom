@@ -30,7 +30,7 @@
     <Key android:codes="117" android:keyLabel="\u1103"/>
     <Key android:codes="105" android:keyLabel="\u1173"/>
     <Key android:codes="111" android:keyLabel="\u116e"/>
-    <Key android:codes="112" android:keyLabel="\u1111" android:keyEdgeFlags="right"/>
+    <Key android:codes="112" android:keyLabel="\u119e" android:keyEdgeFlags="right"/>
   </Row>
   
   <Row>
@@ -48,7 +48,7 @@
   </Row>
   
   <Row>
-    <Key android:codes="122" android:keyLabel="\u11b7" android:keyEdgeFlags="left"/>
+    <Key android:codes="122" android:keyLabel="\u119e" android:keyEdgeFlags="left"/>
     <Key android:codes="120" android:keyLabel="\u116d"/>
     <Key android:codes="99" android:keyLabel="\u1166"/>
     <Key android:codes="118" android:keyLabel="\u1169"/>
