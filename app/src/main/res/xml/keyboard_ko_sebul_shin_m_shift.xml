@@ -56,7 +56,7 @@
     <Key android:codes="110" android:keyLabel="\u1109"/>
     <Key android:codes="109" android:keyLabel="\u1112"/>
     <Key android:codes="39" android:keyLabel="\u1110"/>
-    <Key android:codes="47" android:keyLabel="\u110f"/>
+    <Key android:codes="47" android:keyLabel="\u1169"/>
 	<Key android:codes="-100"
      	 android:keyIcon="@drawable/key_qwerty_del"
 	 	 android:keyWidth="10%p" android:keyEdgeFlags="right"/>
