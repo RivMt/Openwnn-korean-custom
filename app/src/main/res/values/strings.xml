@@ -21,7 +21,7 @@
   	<string name="ime_name">OpenWnn Korean</string>
   	
     <!-- Preferences -->
-    <string name="preference_ime_setting_app">Setting</string>
+    <string name="preference_ime_setting_app">OpenWnn Settings</string>
 
     <string name="preference_method_setting_menu">Input Method</string>
     
