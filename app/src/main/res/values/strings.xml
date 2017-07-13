@@ -302,12 +302,15 @@
     <string name="preference_keyboard_dubul_standard">Dubeolsik Standard</string>
     <string name="preference_keyboard_dubul_danmoeum_google">Dubeolsik Google Danmoeum (Single-Vowel)</string>
     <string name="preference_keyboard_dubul_nk">Dubeolsik North Korea</string>
+	<string name="preference_keyboard_dubul_yet">Dubeolsik Treditional Hangul</string>
     <string name="preference_keyboard_sebul_390">Sebeolsik 390</string>
     <string name="preference_keyboard_sebul_391">Sebeolsik Final</string>
+	<string name="preference_keyboard_sebul_393y">Sebeolsik 393 Treditional Hangul</string>
     <string name="preference_keyboard_sebul_danmoeum">Sebeolsik Danmoeum (Single-Vowel)</string>
     <string name="preference_keyboard_sebul_sun_2014">Sebeolsik Sunarae 2014 by Ahn Jonghyeok</string>
     <string name="preference_keyboard_sebul_3_2015m">Sebeolsik 3-2015M by Metalliza</string>
     <string name="preference_keyboard_sebul_3_2015">Sebeolsik 3-2015 by Soinbae</string>
+	<string name="preference_keyboard_sebul_3_2015y">Sebeolsik 3-2015 Treditional Hangul by Soinbae</string>
     <string name="preference_keyboard_sebul_3_p3">Sebeolsik 3-P3 by Pat-al</string>
     <string name="preference_keyboard_sebul_shin_original">Shin Sebeolsik 1995 Original by Shin Gwangjo</string>
     <string name="preference_keyboard_sebul_shin_edit">Shin Sebeolsik 2003 Edited by Park Gyeongnam</string>

@@ -22,10 +22,10 @@
   
   <Row>
     <Key android:codes="113" android:keyLabel="\u1106" android:keyEdgeFlags="left"/>
-    <Key android:codes="119" android:keyLabel="\u1109"/>
+    <Key android:codes="119" android:keyLabel="\u1140"/>
     <Key android:codes="101" android:keyLabel="\u1102"/>
     <Key android:codes="114" android:keyLabel="\u1105"/>
-    <Key android:codes="116" android:keyLabel="\u1112"/>
+    <Key android:codes="116" android:keyLabel="\u1159"/>
     <Key android:codes="121" android:keyLabel="\u003b"/>
     <Key android:codes="117" android:keyLabel="\u0027"/>
     <Key android:codes="105" android:keyLabel="\u002f"/>
@@ -38,9 +38,9 @@
     <Key android:codes="115" android:keyLabel="\u110e"/>
     <Key android:codes="100" android:keyLabel="\u1110"/>
     <Key android:codes="102" android:keyLabel="\u110f"/>
-    <Key android:codes="103" android:keyLabel="\u110b"/>
+    <Key android:codes="103" android:keyLabel="\u114c"/>
     <Key android:codes="104" android:keyLabel="\u1165"/>
-    <Key android:codes="106" android:keyLabel="\u1161"/>
+    <Key android:codes="106" android:keyLabel="\u119e"/>
     <Key android:codes="107" android:keyLabel="\u1175"/>
     <Key android:codes="108" android:keyLabel="\u1169"/>
     <Key android:codes="59" android:keyLabel="\u003a" android:keyEdgeFlags="right"/>
@@ -51,12 +51,12 @@
     <Key android:codes="120" android:keyLabel="\u11c0"/>
     <Key android:codes="99" android:keyLabel="\u11c1"/>
     <Key android:codes="118" android:keyLabel="\u11bf"/>
-    <Key android:codes="98" android:keyLabel="\u11bc"/>
-    <Key android:codes="110" android:keyLabel="\u11ba"/>
+    <Key android:codes="98" android:keyLabel="\u11f0"/>
+    <Key android:codes="110" android:keyLabel="\u11eb"/>
     <Key android:codes="109" android:keyLabel="\u11ab"/>
     <Key android:codes="44" android:keyLabel="\u003c"/>
     <Key android:codes="46" android:keyLabel="\u003e"/>
-    <Key android:codes="47" android:keyLabel="\u11c2" android:keyEdgeFlags="right"/>
+    <Key android:codes="47" android:keyLabel="\u11f9" android:keyEdgeFlags="right"/>
   </Row>
   
   <Row android:rowEdgeFlags="bottom">
