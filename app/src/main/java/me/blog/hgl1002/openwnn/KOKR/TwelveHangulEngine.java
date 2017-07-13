@@ -21,7 +21,12 @@ public class TwelveHangulEngine extends HangulEngine {
 		if((lastCode != code)) {
 			resetCycle();
 		}
-		for(int[] item : jamoTable) {
+		int[][] table;
+		if(jamoTable != null) table = jamoTable;
+		else if(jamoSet != null) table = currentJamoTable;
+		else table = null;
+		if(table == null) return -1;
+		for(int[] item : table) {
 			if(item[0] == code) {
 				cycled = true;
 				if(item.length == 2) cycled = false;

@@ -7,9 +7,9 @@ public class HangulEngine {
 	
 	public static final int INPUT_NON_HANGUL = 0x0000;
 	
-	public static final int INPUT_CHO3 = 0x1031;
-	public static final int INPUT_JUNG3 = 0x1032;
-	public static final int INPUT_JONG3 = 0x1033;
+	public static final int INPUT_CHO3 = 0x1011;
+	public static final int INPUT_JUNG3 = 0x1012;
+	public static final int INPUT_JONG3 = 0x1013;
 
 	public static final int INPUT_CHO2 = 0x1021;
 	public static final int INPUT_JUNG2 = 0x1022;
@@ -88,6 +88,8 @@ public class HangulEngine {
 	Stack<History> histories = new Stack<History>();
 	
 	int[][] jamoTable;
+	int[][][] jamoSet;
+	int[][] currentJamoTable;
 	int[][] combinationTable;
 	int[][] virtualJamoTable;
 	
@@ -117,11 +119,17 @@ public class HangulEngine {
 			else composing = "";
 		}
 		if(listener != null) listener.onEvent(new SetComposingEvent(composing));
+		changeJamoTable(((lastInputType & 0x1010) != 0) ? lastInputType & 0x000f : 0);
 		return true;
 	}
 
 	public int inputCode(int code, int shift) {
-		for(int[] item : jamoTable) {
+		int[][] table;
+		if(jamoTable != null) table = jamoTable;
+		else if(jamoSet != null) table = currentJamoTable;
+		else table = null;
+		if(table == null) return -1;
+		for(int[] item : table) {
 			if(item[0] == code) {
 				return (shift == 0) ? item[1] : item[2];
 			}
@@ -300,16 +308,18 @@ public class HangulEngine {
 		}
 		else {
 			resetJohab();
-			result = 0;
+			result = INPUT_NON_HANGUL;
 			last = code;
 			return result;
 		}
 		
 		this.composing = getVisible(this.cho, this.jung, this.jong);
 		if(listener != null) listener.onEvent(new SetComposingEvent(composing));
-		
+
 		lastInputType = result;
-		
+
+		changeJamoTable(((lastInputType & 0x1010) != 0) ? lastInputType & 0x000f : 0);
+
 		return result;
 	}
 	
@@ -484,6 +494,24 @@ public class HangulEngine {
 
 	public void setJamoTable(int[][] jamoTable) {
 		this.jamoTable = jamoTable;
+		this.jamoSet = null;
+	}
+
+	public int[][][] getJamoSet() {
+		return jamoSet;
+	}
+
+	public void setJamoSet(int[][][] jamoSet) {
+		this.jamoSet = jamoSet;
+		this.jamoTable = null;
+		this.changeJamoTable(lastInputType);
+	}
+
+	public void changeJamoTable(int num) {
+		if(jamoSet == null) return;
+		int[][] table = jamoSet[num];
+		if(table == null) return;
+		currentJamoTable = table;
 	}
 
 	public int[][] getCombinationTable() {

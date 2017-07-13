@@ -74,9 +74,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	protected static final int INVALID_KEYMODE = -1;
 	
-	public static final int KEYMODE_HANGUL = 0;
-	public static final int KEYMODE_ENGLISH = 0;
-	public static final int KEYMODE_ALT_SYMBOLS = 1;
+	public static final int KEYMODE_HANGUL = 1;
+	public static final int KEYMODE_HANGUL_CHO = 2;
+	public static final int KEYMODE_HANGUL_JUNG = 3;
+	public static final int KEYMODE_HANGUL_JONG = 4;
+	public static final int KEYMODE_ENGLISH = 1;
+	public static final int KEYMODE_ALT_SYMBOLS = 0;
 
 	protected KeyboardView mNumKeyboardView;
 
@@ -317,9 +320,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mShiftOn = KEYBOARD_SHIFT_OFF;
 		Keyboard kbd = getModeChangeKeyboard(targetMode);
 		mCurrentKeyMode = targetMode;
-		
-		changeEngineOption();
-		
+
 		int mode = OpenWnnEvent.Mode.DIRECT;
 		
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
@@ -430,11 +431,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				
 			}
 		}
-		
+
 		changeKeyboard(kbd);
 		changeNumKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][0][0]);
-		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
-		
+
+		if(targetMode == KEYMODE_HANGUL_CHO || targetMode == KEYMODE_HANGUL_JUNG || targetMode == KEYMODE_HANGUL_JONG) {
+
+		} else {
+			changeEngineOption();
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
+		}
+
 		mLastKeyMode = mCurrentKeyMode;
 	}
 	
@@ -453,7 +460,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			language = mLanguageCycleTable[mPreferenceLanguage];
 		}
 		mCurrentLanguage = language;
-		changeKeyMode(0);
+		changeKeyMode(KEYMODE_HANGUL);
 	}
 
 	@Override
@@ -734,7 +741,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		
 		mCurrentLanguage = language;
 		
-		changeKeyMode(0);
+		changeKeyMode(KEYMODE_HANGUL);
 		
 	}
 
@@ -990,11 +997,22 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
 				break;
 
-			case "keyboard_sebul_shin_original":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
+			case "keyboard_sebul_shin_original": {
+				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojong);
+				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojung);
+				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjong);
+				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjung);
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
 				break;
+			}
 				
 			case "keyboard_sebul_shin_edit":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit);
@@ -1168,8 +1186,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;	
 			
 			case "keyboard_sebul_shin_original":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_shift);
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojong);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojung);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
 				break;
 				
