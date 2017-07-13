@@ -800,7 +800,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	};
 	
 	public static final int[][] JAMO_SEBUL_SHIN_ORIGINAL_CHOJONG = {
-			
+
 			{113, 0x11ba, 0x1174},		// q
 			{119, 0x11af, 0x1163},		// w
 			{101, 0x11b8, 0x1167},		// e
@@ -931,15 +931,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{HangulEngine.VIRTUAL_JUNG, -5010, 0x119e},
 	};
 
-	public static final int[][] JAMO_SEBUL_SHIN_EDIT = {
+	public static final int[][] JAMO_SEBUL_SHIN_EDIT_CHOJONG = {
 			
 			{113, 0x11ba, 0x1164},		// q
 			{119, 0x11af, 0x1163},		// w
 			{101, 0x11b8, 0x1167},		// e
 			{114, 0x11c0, 0x1162},		// r
 			{116, 0x11c1, 0x1165},		// t
-			{121, 0x1105, 0x1105},		// y
-			{117, 0x1103, 0x1103},		// u
+			{121, 0x1105, 0x201c},		// y
+			{117, 0x1103, 0x201d},		// u
 			{105, 0x1106, 0x1174},		// i
 			{111, 0x110e, -5001},		// o
 			{112, 0x1111, -5000},		// p
@@ -949,26 +949,70 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{100, 0x11ae, 0x1175},		// d
 			{102, 0x11bb, 0x1161},		// f
 			{103, 0x11bd, 0x1173},		// g
-			{104, 0x1102, 0x1102},		// h
-			{106, 0x110b, 0x110b},		// j
-			{107, 0x1100, 0x1100},		// k
-			{108, 0x110c, 0x110c},		// l
-			{59, 0x1107, 0x1107},
-			{39, 0x1110, 0x1110},
+			{104, 0x1102, 0x2018},		// h
+			{106, 0x110b, 0x2019},		// j
+			{107, 0x1100, 0x3b},		// k
+			{108, 0x110c, 0x27},		// l
+			{59, 0x1107, 0x3a},
+			{39, 0x1110, 0x22},
 			
 			{122, 0x11b7, 0x203b},		// z
 			{120, 0x11a8, 0x116d},		// x
 			{99, 0x11be, 0x1166},		// c
 			{118, 0x11c2, 0x1169},		// v
 			{98, 0x11bf, 0x116e},			// b
-			{110, 0x1109, 0x1109},		// n
-			{109, 0x1112, 0x1112},		// m
-			{47, 0x110f, -5000},
-			{36, 0x110f, -5000},			// $
-			{0x20ac, 0x110f, -5000},
+			{110, 0x1109, 0x00b7},		// n
+			{109, 0x1112, 0x2f},		// m
+			{47, 0x110f, 0x3f},
+
+			{128, 0x2e, 0x2c},
 	};
 
-		public static final int[][] JAMO_SEBUL_SHIN_M = {
+	public static final int[][] JAMO_SEBUL_SHIN_EDIT_CHOJUNG = {
+
+			{113, 0x1164, 0x11ba},		// q
+			{119, 0x1163, 0x11af},		// w
+			{101, 0x1167, 0x11b8},		// e
+			{114, 0x1162, 0x11c0},		// r
+			{116, 0x1165, 0x11c1},		// t
+			{121, 0x1105, 0x201c},		// y
+			{117, 0x1103, 0x201d},		// u
+			{105, 0x1174, 0x1106},		// i
+			{111, -5001, 0x110e},		// o
+			{112, -5000, 0x1111},		// p
+
+			{97, 0x1172, 0x11bc},		// a
+			{115, 0x1168, 0x11ab},		// s
+			{100, 0x1175, 0x11ae},		// d
+			{102, 0x1161, 0x11bb},		// f
+			{103, 0x1173, 0x11bd},		// g
+			{104, 0x1102, 0x2018},		// h
+			{106, 0x110b, 0x2019},		// j
+			{107, 0x1100, 0x3b},		// k
+			{108, 0x110c, 0x27},		// l
+			{59, 0x1107, 0x3a},
+			{39, 0x1110, 0x22},
+
+			{122, 0x203b, 0x11b7},		// z
+			{120, 0x116d, 0x11a8},		// x
+			{99, 0x1166, 0x11be},		// c
+			{118, 0x1169, 0x11c2},		// v
+			{98, 0x116e, 0x11bf},			// b
+			{110, 0x1109, 0x00b7},		// n
+			{109, 0x1112, 0x2f},		// m
+			{47, -5000, 0x3f},
+
+			{128, 0x2e, 0x2c},
+	};
+
+	public static final int[][][] JAMOSET_SHIN_EDIT = {
+			JAMO_SEBUL_SHIN_EDIT_CHOJONG,
+			JAMO_SEBUL_SHIN_EDIT_CHOJUNG,
+			JAMO_SEBUL_SHIN_EDIT_CHOJONG,
+			JAMO_SEBUL_SHIN_EDIT_CHOJONG
+	};
+
+	public static final int[][] JAMO_SEBUL_SHIN_M = {
 			
 			{113, 0x11ba, 0x1164},		// q
 			{119, 0x11af, 0x1163},		// w
@@ -2648,7 +2692,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case ENGINE_MODE_SEBUL_SHIN_EDIT:
 			mDirectInputMode = false;
 			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_SHIN_EDIT);
+			mHangulEngine.setJamoSet(JAMOSET_SHIN_EDIT);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
 			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
@@ -2752,7 +2796,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	private void shinShift() {
 		int type = mHangulEngine.getLastInputType();
 		switch(mCurrentEngineMode) {
-		case ENGINE_MODE_SEBUL_SHIN_EDIT:
 		case ENGINE_MODE_SEBUL_SHIN_M:
 		case ENGINE_MODE_SEBUL_SHIN_P2:
 		case ENGINE_MODE_SEBUL_3_2015M:
@@ -2770,6 +2813,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		case ENGINE_MODE_SEBUL_SHIN_ORIGINAL:
+		case ENGINE_MODE_SEBUL_SHIN_EDIT:
 			DefaultSoftKeyboardKOKR kokr = (DefaultSoftKeyboardKOKR) mInputViewManager;
 			if(type == HangulEngine.INPUT_CHO3) {
 				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_CHO);
