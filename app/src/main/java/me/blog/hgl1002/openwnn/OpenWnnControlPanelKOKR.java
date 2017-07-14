@@ -1,11 +1,19 @@
 package me.blog.hgl1002.openwnn;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
+
+import java.util.List;
+
 import me.blog.hgl1002.openwnn.R;
 
 public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -13,8 +21,81 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 		if(OpenWnnKOKR.getInstance() == null) {
 			new OpenWnnKOKR(this);
 		}
-		
-		addPreferencesFromResource(R.xml.openwnn_pref_ko);
+
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_method);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_appearance);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_softkeyboard);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_hardkeyboard);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_system);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
+		}
+	}
+
+	@TargetApi(11)
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		loadHeadersFromResource(R.xml.openwnn_pref_ko_headers, target);
+	}
+
+	@TargetApi(11)
+	@Override
+	protected boolean isValidFragment(String fragmentName) {
+		return true;
+	}
+
+	@TargetApi(11)
+	public static class InputMethodFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_method);
+		}
+	}
+
+	@TargetApi(11)
+	public static class KeyboardAppearanceFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_appearance);
+		}
+	}
+
+	@TargetApi(11)
+	public static class SoftKeyboardFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_softkeyboard);
+		}
+	}
+
+	@TargetApi(11)
+	public static class HardKeyboardFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_hardkeyboard);
+		}
+	}
+
+	@TargetApi(11)
+	public static class SystemFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_system);
+		}
+	}
+
+	@TargetApi(11)
+	public static class AboutFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
+		}
 	}
 
 }

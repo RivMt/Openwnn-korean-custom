@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+			android:key="openwnn_pref_ko">
+
+	<PreferenceCategory android:title="@string/preference_hardware_setting_menu">
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="hardware_hangul_layout"
+			android:title="@string/preference_hardware_hangul_title"
+			android:summary="@string/preference_hardware_hangul_summary"
+			android:entries="@array/keyboard_hangul_layout"
+			android:entryValues="@array/keyboard_hangul_layout_id"
+			android:defaultValue="keyboard_sebul_391" />
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="hardware_alphabet_layout"
+			android:title="@string/preference_hardware_alphabet_title"
+			android:summary="@string/preference_hardware_alphabet_summary"
+			android:entries="@array/keyboard_alphabet_layout"
+			android:entryValues="@array/keyboard_alphabet_layout_id"
+			android:defaultValue="keyboard_alphabet_qwerty" />
+		<CheckBoxPreference android:key="hardware_use_subview"
+			android:title="@string/preference_hardware_use_subview_title"
+			android:summary="@string/preference_hardware_use_subview_summary"
+			android:defaultValue="true"/>
+		<CheckBoxPreference android:key="hardware_use_numkeyboard"
+			android:title="@string/preference_hardware_use_numkeyboard_title"
+			android:summary="@string/preference_hardware_use_numkeyboard_summary"
+			android:defaultValue="false"/>
+		<CheckBoxPreference android:key="hardware_use_moachigi"
+			android:title="@string/preference_hardware_use_moachigi_title"
+			android:summary="@string/preference_hardware_use_moachigi_summary"
+			android:defaultValue="true" />
+		<CheckBoxPreference android:key="hardware_full_moachigi"
+			android:title="@string/preference_hardware_full_moachigi_title"
+			android:summary="@string/preference_hardware_full_moachigi_summary"
+			android:defaultValue="true" />
+		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+			android:key="hardware_full_moachigi_delay"
+			android:title="@string/preference_hardware_full_moachigi_delay_title"
+			android:summary="@string/preference_hardware_full_moachigi_delay_summary"
+			android:defaultValue="100" />
+		<CheckBoxPreference android:key="hardware_alt_direct"
+			android:title="@string/preference_hardware_alt_direct_title"
+			android:summary="@string/preference_hardware_alt_direct_summary"
+			android:defaultValue="true" />
+	</PreferenceCategory>
+
+</PreferenceScreen>
