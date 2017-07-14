@@ -53,15 +53,12 @@
     <string name="preference_keyboard_dubul_standard">두벌식 표준</string>
     <string name="preference_keyboard_dubul_danmoeum_google">두벌식 Google 단모음</string>
     <string name="preference_keyboard_dubul_nk">두벌식 북한 국규</string>
-	<string name="preference_keyboard_dubul_yet">두벌식 옛한글</string>
     <string name="preference_keyboard_sebul_390">세벌식 390</string>
     <string name="preference_keyboard_sebul_391">세벌식 최종</string>
-	<string name="preference_keyboard_sebul_393y">세벌식 393 옛한글</string>
     <string name="preference_keyboard_sebul_danmoeum">세벌식 단모음</string>
     <string name="preference_keyboard_sebul_sun_2014">세벌식 순아래 2014 (안종혁)</string>
     <string name="preference_keyboard_sebul_3_2015m">세벌식 3-2015M (메탈리쟈)</string>
     <string name="preference_keyboard_sebul_3_2015">세벌식 3-2015 (소인배)</string>
-	<string name="preference_keyboard_sebul_3_2015y">세벌식 3-2015 옛한글 (소인배)</string>
     <string name="preference_keyboard_sebul_3_p3">세벌식 3-P3 (팥알)</string>
     <string name="preference_keyboard_sebul_shin_original">신세벌식 1995 원안 (신광조)</string>
     <string name="preference_keyboard_sebul_shin_edit">신세벌식 2003 수정 (박경남)</string>
@@ -69,6 +66,9 @@
     <string name="preference_keyboard_sebul_shin_p2">신세벌식 P2 (옛한글 가능)(팥알)</string>
     <string name="preference_keyboard_sebul_ahnmatae">모아치기세벌식 안마태 소리글판</string>
     <string name="preference_keyboard_sebul_semoe">모아치기세벌식 세모이 2017 (신세기)</string>
+    <string name="preference_keyboard_dubul_yet">옛한글 두벌식</string>
+    <string name="preference_keyboard_sebul_393y">옛한글 세벌식 393 (김경석)</string>
+    <string name="preference_keyboard_sebul_3_2015y">옛한글 세벌식 3-2015 (소인배)</string>
     
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
