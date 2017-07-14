@@ -48,7 +48,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x2e, 0x3e},
 			{0x2f, 0x3f},
 	};
-	
+
 	public static final int[][] JAMO_DUBUL_STANDARD = {
 			{49,0x31,0x21},
 			{50,0x32,0x40},
@@ -2774,17 +2774,17 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{-2017, 0x11ba},	// ㅅ
 			{-2018, 0x2e},
 			{-2518, 0x2c},
-			
-			{-2502, 0x31},
-			{-2503, 0x32},
-			{-2504, 0x33},
-			{-2507, 0x34},
-			{-2508, 0x35},
-			{-2509, 0x36},
-			{-2512, 0x37},
-			{-2513, 0x38},
-			{-2514, 0x39},
-			{-2511, 0x30},
+
+			{-2503, 0x31},
+			{-2504, 0x32},
+			{-2505, 0x33},
+			{-2509, 0x34},
+			{-2510, 0x35},
+			{-2511, 0x36},
+			{-2515, 0x37},
+			{-2516, 0x38},
+			{-2517, 0x39},
+			{-2514, 0x30},
 	};
 	
 	public static final int[][] COMB_SEBUL_12KEY_SENA = {
