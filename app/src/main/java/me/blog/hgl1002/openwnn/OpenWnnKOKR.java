@@ -3461,7 +3461,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 			return true;
 		}
-		
+
+		if(key >= KeyEvent.KEYCODE_NUMPAD_0 && key <= KeyEvent.KEYCODE_NUMPAD_RIGHT_PAREN) {
+			mHangulEngine.resetJohab();
+			return false;
+		}
+
 		if(ev.isPrintingKey()) {
 			
 			int code = ev.getUnicodeChar(mShiftKeyToggle[mHardShift] | mAltKeyToggle[mHardAlt]);
