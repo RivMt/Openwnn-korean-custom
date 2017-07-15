@@ -818,7 +818,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	public Keyboard getShiftChangeNumKeyboard(int shift) {
 		try {
-			Keyboard[] kbd = mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][shift][mCurrentKeyMode];
+			Keyboard[] kbd = mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][shift][0];
 
 			if (!mNoInput && kbd[1] != null) {
 				return kbd[1];
