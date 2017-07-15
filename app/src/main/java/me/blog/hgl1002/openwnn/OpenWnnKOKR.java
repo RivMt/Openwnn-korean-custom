@@ -229,6 +229,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+		if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).forceResetJohab();
 		mHangulEngine.resetJohab();
 		if(restarting) {
 			super.onStartInputView(attribute, restarting);

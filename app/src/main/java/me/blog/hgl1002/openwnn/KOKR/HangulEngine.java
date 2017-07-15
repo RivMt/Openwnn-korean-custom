@@ -354,7 +354,7 @@ public class HangulEngine {
 				// 종성이 없을 경우
 				} else {
 					// 해당하는 종성이 없을 경우 (ㄸ, ㅉ, ㅃ 등)
-					if(jongCode == 0) {
+					if(jongCode == -0x11a7) {
 						// 조합을 종료하고 새로운 초성으로 조합을 시작한다.
 						resetJohab();
 						this.cho = CHO_CONVERT[code - 0x3131] - 0x1100;
