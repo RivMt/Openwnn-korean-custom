@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:keyWidth="10%p"
+	  android:horizontalGap="0dip"
+	  android:verticalGap="0dip"
+	  android:keyHeight="@dimen/key_height"
+	  >
+
+  <Row>
+    <Key android:codes="0x21" android:keyLabel="\u0021" android:keyEdgeFlags="left"/>
+    <Key android:codes="0x40" android:keyLabel="\u0040"/>
+    <Key android:codes="0x23" android:keyLabel="\u0023"/>
+    <Key android:codes="0x24" android:keyLabel="\u0024"/>
+    <Key android:codes="0x25" android:keyLabel="\u0025"/>
+    <Key android:codes="0x5e" android:keyLabel="\u005e"/>
+    <Key android:codes="0x26" android:keyLabel="\u0026"/>
+    <Key android:codes="0x2a" android:keyLabel="\u002a"/>
+    <Key android:codes="0x28" android:keyLabel="\u0028"/>
+    <Key android:codes="0x29" android:keyLabel="\u0029" android:keyEdgeFlags="right"/>
+  </Row>
+
+  
+  <Row>
+    <Key android:codes="113" android:keyLabel="\u11ba" android:keyEdgeFlags="left"/>
+    <Key android:codes="119" android:keyLabel="\u11af"/>
+    <Key android:codes="101" android:keyLabel="\u11b8"/>
+    <Key android:codes="114" android:keyLabel="\u11bd"/>
+    <Key android:codes="116" android:keyLabel="\u11bf"/>
+    <Key android:codes="121" android:keyLabel="\u201c"/>
+    <Key android:codes="117" android:keyLabel="\u201d"/>
+    <Key android:codes="105" android:keyLabel="\u203b"/>
+    <Key android:codes="111" android:keyLabel="\u110e"/>
+    <Key android:codes="112" android:keyLabel="\u1111" android:keyEdgeFlags="right"/>
+  </Row>
+  
+  <Row>
+    <Key android:codes="97" android:keyLabel="\u11bc" android:horizontalGap="0%p" 
+         android:keyEdgeFlags="left"/>
+    <Key android:codes="115" android:keyLabel="\u11ab"/>
+    <Key android:codes="100" android:keyLabel="\u11bb"/>
+    <Key android:codes="102" android:keyLabel="\u11c0"/>
+    <Key android:codes="103" android:keyLabel="\u11ae"/>
+    <Key android:codes="104" android:keyLabel="\u300a"/>
+    <Key android:codes="106" android:keyLabel="\u300b"/>
+    <Key android:codes="107" android:keyLabel="\u00b7"/>
+    <Key android:codes="108" android:keyLabel="\u003b"/>
+    <Key android:codes="59" android:keyLabel="\u003a" android:keyEdgeFlags="right"/>
+  </Row>
+  
+  <Row>
+    <Key android:codes="122" android:keyLabel="\u11b7" android:keyEdgeFlags="left"/>
+    <Key android:codes="120" android:keyLabel="\u11a8"/>
+    <Key android:codes="99" android:keyLabel="\u11c2"/>
+    <Key android:codes="118" android:keyLabel="\u11c1"/>
+    <Key android:codes="98" android:keyLabel="\u11be"/>
+    <Key android:codes="110" android:keyLabel="\u0027"/>
+    <Key android:codes="109" android:keyLabel="\u0022"/>
+    <Key android:codes="39" android:keyLabel="\u002f"/>
+    <Key android:codes="47" android:keyLabel="\u110f"/>
+	<Key android:codes="-100"
+     	 android:keyIcon="@drawable/key_qwerty_del"
+	 	 android:keyWidth="10%p" android:keyEdgeFlags="right"/>
+
+  </Row>
+  
+  <Row android:rowEdgeFlags="bottom">
+    <Key android:codes="-103" android:keyLabel="ALT"
+         android:keyWidth="10%p" android:keyEdgeFlags="left"/>
+    <Key android:codes="-500" android:keyLabel="A" android:keyWidth="10%p"/>
+	<Key android:codes="-1"
+	 android:keyIcon="@drawable/key_qwerty_shift" android:iconPreview="@drawable/key_qwerty_shift_b"
+	 android:isModifier="true"
+     android:isSticky="true" android:keyWidth="10%p"/>
+    <Key android:codes="-10"
+	 android:keyIcon="@drawable/key_qwerty_space" 
+         android:keyWidth="40%p" android:isRepeatable="false"/>
+    <Key android:codes="128" android:keyLabel=". ," android:keyWidth="10%p"/>
+    <Key android:codes="-101"
+         android:keyIcon="@drawable/key_qwerty_enter" 
+         android:keyWidth="20%p" android:keyEdgeFlags="right"/>
+  </Row>
+</Keyboard>
