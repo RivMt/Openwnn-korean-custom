@@ -23,8 +23,8 @@
   <Row>
     <Key android:codes="113" android:keyLabel="\u11a9" android:keyEdgeFlags="left"/>
     <Key android:codes="119" android:keyLabel="\u11b0"/>
-    <Key android:codes="101" android:keyLabel="\u1167"/>
-    <Key android:codes="114" android:keyLabel="\u1165"/>
+    <Key android:codes="101" android:keyLabel="\u11bd"/>
+    <Key android:codes="114" android:keyLabel="\u11be"/>
     <Key android:codes="116" android:keyLabel="\u1164"/>
     <Key android:codes="121" android:keyLabel="5"/>
     <Key android:codes="117" android:keyLabel="6"/>
@@ -36,11 +36,11 @@
   <Row>
     <Key android:codes="97" android:keyLabel="\u11b4" android:keyEdgeFlags="left"/>
     <Key android:codes="115" android:keyLabel="\u11ad"/>
-    <Key android:codes="100" android:keyLabel="\u1175"/>
-    <Key android:codes="102" android:keyLabel="\u1161"/>
+    <Key android:codes="100" android:keyLabel="\u11c2"/>
+    <Key android:codes="102" android:keyLabel="\u11c1"/>
     <Key android:codes="103" android:keyLabel="\u003a"/>
     <Key android:codes="104" android:keyLabel="0"/>
-    <Key android:codes="106" android:keyLabel="1"/>
+    <Key android:codes="106" android:keyLabel="1"/>                                  r
     <Key android:codes="107" android:keyLabel="2"/>
     <Key android:codes="108" android:keyLabel="3"/>
     <Key android:codes="59" android:keyLabel="4" android:keyEdgeFlags="right"/>
@@ -49,8 +49,8 @@
   <Row>
     <Key android:codes="122" android:keyLabel="\u11b3" android:keyEdgeFlags="left"/>
     <Key android:codes="120" android:keyLabel="\u11b9"/>
-    <Key android:codes="99" android:keyLabel="\u1166"/>
-    <Key android:codes="118" android:keyLabel="\u1169"/>
+    <Key android:codes="99" android:keyLabel="\u11c0"/>
+    <Key android:codes="118" android:keyLabel="\u11bf"/>
     <Key android:codes="98" android:keyLabel="\u003b"/>
     <Key android:codes="110" android:keyLabel="\u0027"/>
     <Key android:codes="109" android:keyLabel="\u0022"/>

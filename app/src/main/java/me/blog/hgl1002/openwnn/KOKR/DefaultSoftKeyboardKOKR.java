@@ -1023,9 +1023,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			
 			case "keyboard_sebul_3_2015": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojong);
+				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojong);
 				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjong);
+				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjong);
 				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjung);
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;

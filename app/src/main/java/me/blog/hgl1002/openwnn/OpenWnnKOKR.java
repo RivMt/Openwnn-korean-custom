@@ -1020,7 +1020,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{119, 0x11af, 0x11b0},		// w
 			{101, 0x11bd, 0x1167},		// e
 			{114, 0x11be, 0x1162},		// r
-			{116, 0x1164, 0x1165},		// t
+			{116, 0x1165, 0x1164},		// t
 			{121, 0x1105, 0x35},		// y
 			{117, 0x1103, 0x36},		// u
 			{105, 0x1106, 0x37},		// i
@@ -1126,7 +1126,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{119, 0x11af, 0x11b0},		// w
 			{101, 0x11bd, 0x1167},		// e
 			{114, 0x11be, 0x1165},		// r
-			{116, 0x1164, 0x1162},		// t
+			{116, 0x1162, 0x1164},		// t
 			{121, 0x1105, 0x35},		// y
 			{117, 0x1103, 0x36},		// u
 			{105, 0x1106, 0x37},		// i
@@ -1352,7 +1352,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{119, 0x11af, 0x11b0},		// w
 			{101, 0x11c0, 0x1167},		// e
 			{114, 0x11be, 0x1165},		// r
-			{116, 0x1164, 0x1162},		// t
+			{116, 0x1162, 0x1164},		// t
 			{121, 0x1105, 0x2f},		// y
 			{117, 0x1103, 0x37},		// u
 			{105, 0x1106, 0x38},		// i
@@ -3468,6 +3468,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_2015M);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_3_2015);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
 	
 		case ENGINE_MODE_SEBUL_3_2015:
@@ -3475,6 +3476,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_2015);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_3_2015);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;	
 			
 		case ENGINE_MODE_SEBUL_3_2015Y:
@@ -3482,6 +3484,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_3_2015Y);
 			mHangulEngine.setCombinationTable(COMB_FULL);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;	
 	
 		case ENGINE_MODE_SEBUL_3_P3:
@@ -3489,6 +3492,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = false;
 			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_P3);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_3_P3);
+			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;	
 	
 		case ENGINE_MODE_SEBUL_DANMOEUM:

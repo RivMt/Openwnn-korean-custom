@@ -25,7 +25,7 @@
     <Key android:codes="119" android:keyLabel="\u11af"/>
     <Key android:codes="101" android:keyLabel="\u11bd"/>
     <Key android:codes="114" android:keyLabel="\u11be"/>
-    <Key android:codes="116" android:keyLabel="\u1164"/>
+    <Key android:codes="116" android:keyLabel="\u1165"/>
     <Key android:codes="121" android:keyLabel="\u1105"/>
     <Key android:codes="117" android:keyLabel="\u1103"/>
     <Key android:codes="105" android:keyLabel="\u1106"/>
