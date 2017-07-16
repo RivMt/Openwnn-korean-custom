@@ -951,22 +951,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	private void shinShift() {
 		int type = mHangulEngine.getLastInputType();
 		switch(mCurrentEngineMode) {
-		/* case ENGINE_MODE_SEBUL_SHIN_M:
-		case ENGINE_MODE_SEBUL_SHIN_P2:
-		case ENGINE_MODE_SEBUL_3_2015M:
-		case ENGINE_MODE_SEBUL_3_2015:
-		case ENGINE_MODE_SEBUL_3_P3:
-			if(type == HangulEngine.INPUT_CHO3) {
-				((DefaultSoftKeyboardKOKR) mInputViewManager).mShiftOn = DefaultSoftKeyboard.KEYBOARD_SHIFT_OFF;
-				((DefaultSoftKeyboardKOKR) mInputViewManager).onKey(DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT, new int[] {});
-				mHardShift = 2;
-			} else if(type == HangulEngine.INPUT_JUNG3 || type == 0) {
-				((DefaultSoftKeyboardKOKR) mInputViewManager).mShiftOn = DefaultSoftKeyboard.KEYBOARD_SHIFT_ON;
-				((DefaultSoftKeyboardKOKR) mInputViewManager).onKey(DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT, new int[] {});
-				mHardShift = 0;
-			}
-			break;
-		*/
 		case ENGINE_MODE_SEBUL_SHIN_ORIGINAL:
 		case ENGINE_MODE_SEBUL_SHIN_EDIT:
 		case ENGINE_MODE_SEBUL_SHIN_M:
