@@ -93,8 +93,8 @@
     <string name="preference_keyboard_timeout_delay_title">자동 조합 종료 타이머</string>
     <string name="preference_keyboard_timeout_delay_summary">단모음 자판 등에서 사용할 자동 조합 타이머를 설정합니다. 기본값은 500입니다.</string>
     
-    <string name="preference_keyboard_use_moachigi_title">모아치기 사용</string>
-    <string name="preference_keyboard_use_moachigi_summary">모아치기(세벌식 배열에서 초-중-종성 순서를 자동으로 고쳐주는 기능)를 사용합니다.</string>
+    <string name="preference_keyboard_use_moachigi_title">모아주기 사용</string>
+    <string name="preference_keyboard_use_moachigi_summary">모아주기(세벌식 배열에서 초-중-종성 순서를 자동으로 고쳐주는 기능)를 사용합니다.</string>
     
     
     <string name="preference_hardware_setting_menu">하드웨어 키보드</string>
@@ -111,11 +111,11 @@
     <string name="preference_hardware_use_numkeyboard_title">숫자 키보드 사용</string>
     <string name="preference_hardware_use_numkeyboard_summary">하드웨어 키보드 사용시 숫자 키보드를 표시합니다.</string>
 
-    <string name="preference_hardware_use_moachigi_title">모아치기 사용</string>
-    <string name="preference_hardware_use_moachigi_summary">하드웨어 키보드 사용시 모아치기를 사용합니다.</string>
+    <string name="preference_hardware_use_moachigi_title">모아주기 사용</string>
+    <string name="preference_hardware_use_moachigi_summary">하드웨어 키보드 사용시 모아주기를 사용합니다.</string>
 
     <string name="preference_hardware_full_moachigi_title">한 번에 모아치기</string>
-    <string name="preference_hardware_full_moachigi_summary">모아치기 자판에서 한 번에 모아치기를 사용합니다..</string>
+    <string name="preference_hardware_full_moachigi_summary">모아치기 자판에서 한 번에 모아치기를 사용합니다.</string>
 
     <string name="preference_hardware_full_moachigi_delay_title">한 번에 모아치기 대기 시간</string>
     <string name="preference_hardware_full_moachigi_delay_summary">한 번에 모아치기 사용 시 조합 종료 대기 시간을 정합니다. 기본값은 100입니다.</string>
