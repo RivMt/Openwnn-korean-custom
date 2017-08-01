@@ -567,10 +567,18 @@ public class HangulEngine {
 		jong = getVirtualJong(jong);
 		// 옛한글 성분이 포함된 경우 첫가끝으로 조합한다.
 		if(cho > 0x12 || jung > 0x14 || jong > 0x1b) {
-			if(cho == -1) cho = 0x5f;
-			visible = new String(new char[] {(char) (cho + 0x1100)})
-					+ new String(new char[] {(char) (jung + 0x1161)});
-			if(jong != -1) visible += new String(new char[] {(char) (jong + 0x11a8 - 1)});
+			if(cho != -1 && jung == -1 && jong == -1) {
+				visible = new String(new char[] {(char) (cho + 0x1100)});
+			} else if(cho == -1 && jung != -1 && jong == -1) {
+				visible = new String(new char[] {(char) (jung + 0x1161)});
+			} else if(cho == -1 && jung == -1 && jong != -1) {
+				visible = new String(new char[] {(char) (jong + 0x11a8 - 1)});
+			} else {
+				if(cho == -1) cho = 0x5f;
+				visible = new String(new char[] {(char) (cho + 0x1100)})
+						+ new String(new char[] {(char) (jung + 0x1161)});
+				if(jong != -1) visible += new String(new char[] {(char) (jong + 0x11a8 - 1)});
+			}
 		// 초성 + 중성 + 종성
 		} else if(cho != -1 && jung != -1 && jong != -1) {
 			visible = String.valueOf((char) combineHangul(cho, jung, jong));
