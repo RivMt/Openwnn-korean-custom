@@ -970,6 +970,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case ENGINE_MODE_SEBUL_3_2015:
 		case ENGINE_MODE_SEBUL_3_P3:
 			DefaultSoftKeyboardKOKR kokr = (DefaultSoftKeyboardKOKR) mInputViewManager;
+			boolean capsLock = kokr.isCapsLock();
 			if(type == HangulEngine.INPUT_CHO3) {
 				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_CHO);
 			} else if(type == HangulEngine.INPUT_JUNG3) {
@@ -978,6 +979,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_JONG);
 			} else {
 				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL);
+			}
+			if(capsLock) {
+				kokr.setCapsLock(capsLock);
+				kokr.setShiftState(1);
+				mHardShift = 1;
+				mShiftPressing = true;
 			}
 			break;
 
