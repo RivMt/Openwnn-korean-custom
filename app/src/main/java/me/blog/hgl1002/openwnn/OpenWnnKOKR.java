@@ -192,6 +192,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mHardwareMoachigi;
 	boolean mFullMoachigi = true;
 	int mMoachigiDelay;
+	boolean mQuickPeriod;
 
 	boolean mStandardJamo;
 
@@ -199,6 +200,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	boolean selectionMode;
 	int selectionStart, selectionEnd;
+
+	boolean mSpace, mCharInput;
 
 	Handler mTimeOutHandler;
 
@@ -264,6 +267,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
 		mFullMoachigi = pref.getBoolean("hardware_full_moachigi", mFullMoachigi);
 		mMoachigiDelay = pref.getInt("hardware_full_moachigi_delay", 100);
+		mQuickPeriod = pref.getBoolean("keyboard_quick_period", false);
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
@@ -273,7 +277,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
 		mAltDirect = pref.getBoolean("hardware_alt_direct", true);
-		
+
+
+		mCharInput = false;
+
 	}
 
 	@Override
@@ -354,6 +361,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					((TwelveHangulEngine) mHangulEngine).forceResetJohab();
 					((TwelveHangulEngine) mHangulEngine).resetCycle();
 				}
+			}
+			if(mQuickPeriod) {
+				mSpace = false;
 			}
 			break;
 			
@@ -468,6 +478,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			inputChar(code);
 			shinShift();
 			ret = true;
+			mCharInput = true;
+			mSpace = false;
 			break;
 			
 		case OpenWnnEvent.INPUT_KEY:
@@ -550,7 +562,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				}
 			case KeyEvent.KEYCODE_SPACE:
 				mHangulEngine.resetJohab();
-				mInputConnection.commitText(" ", 1);
+				if(mQuickPeriod && mSpace && mCharInput) {
+					mInputConnection.deleteSurroundingText(1, 0);
+					mInputConnection.commitText(". ", 1);
+					mSpace = false;
+					mCharInput = false;
+				} else {
+					mInputConnection.commitText(" ", 1);
+					mSpace = true;
+				}
 				shinShift();
 				return true;
 			}

@@ -347,8 +347,11 @@
     
     <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moajugi. (Fix jamo order automatically when using sebeol layouts)</string>
-    
-    
+
+    <string name="preference_keyboard_quick_period_title">Quick Period Input</string>
+    <string name="preference_keyboard_quick_period_summary">Double-press spacebar to input period.</string>
+
+
     <string name="preference_hardware_setting_menu">Hardware Keyboard</string>
     
     <string name="preference_hardware_hangul_title">Hardware Hangul keyboard type</string>

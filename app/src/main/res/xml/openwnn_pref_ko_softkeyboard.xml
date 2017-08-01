@@ -48,6 +48,10 @@
 			android:title="@string/preference_keyboard_use_moachigi_title"
 			android:summary="@string/preference_keyboard_use_moachigi_summary"
 			android:defaultValue="true" />
+		<CheckBoxPreference android:key="keyboard_quick_period"
+			android:title="@string/preference_keyboard_quick_period_title"
+			android:summary="@string/preference_keyboard_quick_period_summary"
+			android:defaultValue="false" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

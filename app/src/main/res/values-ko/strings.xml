@@ -95,8 +95,11 @@
     
     <string name="preference_keyboard_use_moachigi_title">모아주기 사용</string>
     <string name="preference_keyboard_use_moachigi_summary">모아주기(세벌식 배열에서 초-중-종성 순서를 자동으로 고쳐주는 기능)를 사용합니다.</string>
-    
-    
+
+    <string name="preference_keyboard_quick_period_title">빠른 마침표 입력</string>
+    <string name="preference_keyboard_quick_period_summary">스페이스바를 두 번 눌러서 마침표를 입력합니다.</string>
+
+
     <string name="preference_hardware_setting_menu">하드웨어 키보드</string>
     
     <string name="preference_hardware_hangul_title">하드웨어 한글 키보드 종류</string>
