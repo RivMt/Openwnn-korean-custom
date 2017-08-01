@@ -110,6 +110,10 @@ public class HangulEngine {
 	 */
 	int last;
 	/**
+	 * 이전까지 조합 중이던 한글 종성. (도깨비불 발생시 필요)
+	 */
+	 int beforeJong;
+	/**
 	 * 화면에 표시되는 조합 중인 글자.
 	 */
 	String composing;
@@ -126,14 +130,16 @@ public class HangulEngine {
 	private static class History {
 		int cho, jung, jong;
 		int last;
+		int beforeJong;
 		String composing;
 		int lastInputType;
-		public History(int cho, int jung, int jong, int last, String composing, int lastInputType) {
+		public History(int cho, int jung, int jong, int last, int beforeJong, String composing, int lastInputType) {
 			super();
 			this.cho = cho;
 			this.jung = jung;
 			this.jong = jong;
 			this.last = last;
+			this.beforeJong = beforeJong;
 			this.composing = composing;
 			this.lastInputType = lastInputType;
 		}
@@ -192,6 +198,7 @@ public class HangulEngine {
 			this.jung = history.jung;
 			this.jong = history.jong;
 			this.last = history.last;
+			this.beforeJong = history.beforeJong;
 			this.composing = history.composing;
 			this.lastInputType = history.lastInputType;
 			
@@ -240,7 +247,7 @@ public class HangulEngine {
 
 		// 입력 기록을 업데이트한다.
 		if(composing == "") histories.clear();
-		else histories.push(new History(cho, jung, jong, last, composing, lastInputType));
+		else histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 
 		// -4000 이하일 경우 상태를 변환하지 않는다.
 		boolean virtual = false;
@@ -341,10 +348,12 @@ public class HangulEngine {
 				if(isJong(last) && this.jong != -1) {
 					// 이미 있는 종성과 낱자 조합을 시도.
 					if((combination = getCombination(this.jong+0x11a7, jongCode+0x11a7)) != -1) {
+						this.beforeJong = this.jong;
 						this.jong = combination - 0x11a7;
 						last = jongCode + 0x11a7;
 					// 낱자 조합 불가/실패시
 					} else {
+						this.beforeJong = 0;
 						resetJohab();
 						this.cho = CHO_CONVERT[code - 0x3131] - 0x1100;
 						// 대응하는 초성이 존재하지 않을 경우 비운다.
@@ -362,8 +371,9 @@ public class HangulEngine {
 						last = CHO_CONVERT[code - 0x3131];
 					// 해당하는 종성이 있을 경우, 종성을 조합한다.
 					} else {
+						this.beforeJong = 0;
 						this.jong = jongCode;
-						last = jongCode + 0x11a7;						
+						last = jongCode + 0x11a7;
 					}
 				}
 			// 조/중성이 없을 경우
@@ -382,7 +392,7 @@ public class HangulEngine {
 					}
 				// 초성이 없을 경우, 새로운 초성으로 조합 시작.
 				} else {
-					resetJohab();
+					if(!moachigi) resetJohab();
 					this.cho = choCode;
 				}
 				last = choCode + 0x1100;
@@ -410,6 +420,7 @@ public class HangulEngine {
 					}
 				} else {
 					// 조합 중인 중성이 없을 경우 새로운 중성으로 조합을 시작한다.
+					if(this.jung != -1) resetJohab();
 					this.jung = jungCode;
 				}
 				last = jungCode + 0x1161;
@@ -418,20 +429,19 @@ public class HangulEngine {
 				int jungCode = code - 0x314f;
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
 				if(this.jong != -1 && this.cho != -1) {
-					Disassembled dis;
 					// 낱자 결합 규칙을 역행하여 종성을 분해해 본다.
-					if((dis = getDisassembled(this.jong + 0x11a7)) != null) {
+					if(beforeJong != 0) {
 						// 분해 성공시, 앞 종성만 남긴다.
-						this.jong = dis.jong - 0x11a7;
+						this.jong = beforeJong;
 						this.composing = getVisible(this.cho, this.jung, this.jong);
 						if(listener != null) listener.onEvent(new SetComposingEvent(composing));
 						// 그리고 조합을 종료한 뒤,
 						resetJohab();
 						// 뒷 종성을 초성으로 변환하여 적용한다.
-						this.cho = dis.cho - 0x1100;
+						this.cho = convertToCho(last) - 0x1100;
 						composing = getVisible(this.cho, this.jung, this.jong);
 						// 도깨비불이 일어났으므로 기록을 하나 더 남긴다.
-						histories.push(new History(cho, jung, jong, last, composing, lastInputType));
+						histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 						this.jung = jungCode;
 					// 분해할 수 없을 경우 (결합된 종성이 아니었을 경우)
 					} else {
@@ -444,7 +454,7 @@ public class HangulEngine {
 							resetJohab();
 							this.cho = convertedCho - 0x1100;
 							composing = getVisible(this.cho, this.jung, this.jong);
-							histories.push(new History(cho, jung, jong, last, composing, lastInputType));
+							histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 							this.jung = jungCode;
 						}
 					}
