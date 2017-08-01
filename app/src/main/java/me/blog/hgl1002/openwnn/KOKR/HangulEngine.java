@@ -363,7 +363,7 @@ public class HangulEngine {
 					// 해당하는 종성이 있을 경우, 종성을 조합한다.
 					} else {
 						this.jong = jongCode;
-						last = jongCode + 0x11a7;						
+						last = jongCode + 0x11a7;
 					}
 				}
 			// 조/중성이 없을 경우
@@ -382,11 +382,11 @@ public class HangulEngine {
 					}
 				// 초성이 없을 경우, 새로운 초성으로 조합 시작.
 				} else {
-					resetJohab();
+					if(!moachigi) resetJohab();
 					this.cho = choCode;
 				}
 				last = choCode + 0x1100;
-				// 해당하는 초성이 없을 경우 초성을 비운다.
+				// 해당하는 초성이 없을 lt경우 초성을 비운다.
 				if(this.cho == -0x1100) this.cho = -1;
 			}
 			result = INPUT_CHO2;
@@ -410,6 +410,7 @@ public class HangulEngine {
 					}
 				} else {
 					// 조합 중인 중성이 없을 경우 새로운 중성으로 조합을 시작한다.
+					if(this.jung != -1) resetJohab();
 					this.jung = jungCode;
 				}
 				last = jungCode + 0x1161;
