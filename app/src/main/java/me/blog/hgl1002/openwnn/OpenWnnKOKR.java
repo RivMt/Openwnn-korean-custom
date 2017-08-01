@@ -276,6 +276,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mQwertyEngine.setFirstMidEnd(mStandardJamo);
 		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
+		// [2017/7/24 ykhong] : 한글 Moachigi 설정 적용
+		if(hardKeyboardHidden)
+			m12keyEngine.setMoachigi(mMoachigi);
+
 		mAltDirect = pref.getBoolean("hardware_alt_direct", true);
 
 
