@@ -35,6 +35,8 @@ public class TwelveHangulEngine extends HangulEngine {
 				ret = item[cycleIndex];
 				if(firstJamo != DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE)
 					lastCycleJamo = item[cycleIndex];
+				if(false == cycled)
+					break; // [2017/7/16 ykhong] : table 에서 매칭되는 것을 찾았으면 for 문을 그만한다.
 			}
 		}
 		if(lastCode != code) cycled = false;
