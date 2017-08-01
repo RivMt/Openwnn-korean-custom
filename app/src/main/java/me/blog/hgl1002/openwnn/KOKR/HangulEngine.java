@@ -429,9 +429,9 @@ public class HangulEngine {
 				int jungCode = code - 0x314f;
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
 				if(this.jong != -1 && this.cho != -1) {
-					// 낱자 결합 규칙을 역행하여 종성을 분해해 본다.
+					// 종성이 두 개 이상 결합되었을 경우
 					if(beforeJong != 0) {
-						// 분해 성공시, 앞 종성만 남긴다.
+						// 앞 종성을 앞 글자의 종성으로 한다.
 						this.jong = beforeJong;
 						this.composing = getVisible(this.cho, this.jung, this.jong);
 						if(listener != null) listener.onEvent(new SetComposingEvent(composing));
@@ -443,7 +443,7 @@ public class HangulEngine {
 						// 도깨비불이 일어났으므로 기록을 하나 더 남긴다.
 						histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 						this.jung = jungCode;
-					// 분해할 수 없을 경우 (결합된 종성이 아니었을 경우)
+					// 결합된 종성이 아니었을 경우
 					} else {
 						// 종성을 초성으로 변환해서 적용한다.
 						int convertedCho;
