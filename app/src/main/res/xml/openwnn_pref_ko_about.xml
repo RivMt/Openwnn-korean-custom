@@ -7,6 +7,10 @@
 			style="?android:preferenceInformationStyle"
 			android:title="@string/openwnn_korean"
 			android:summary="@string/openwnn_korean_copyright" />
+		<Preference android:key="donate_info"
+			style="?android:preferenceInformationStyle"
+			android:title="@string/openwnn_korean_donate_title"
+			android:summary="@string/openwnn_korean_donate_summary" />
 	</PreferenceCategory>
 
 </PreferenceScreen>

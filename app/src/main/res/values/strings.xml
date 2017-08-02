@@ -148,6 +148,9 @@
     <string name="openwnn_korean_copyright">hgl1002@naver.com</string>
     <string name="openwnn_korean">OpenWnn Korean</string>
 
+    <string name="openwnn_korean_donate_title">앱 후원</string>
+    <string name="openwnn_korean_donate_summary">개발을 계속할 수 있도록 후원해 주시면 정말 감사하겠습니다. 후원 문의는 hgl1002@naver.com으로 부탁드립니다.</string>
+
 <!-- After Config Change -->
     <string name="openwnn_china_writable_dictionary">/data/data/me.blog.hgl1002.openwnn/writableZHCN.dic</string>
     <string name="cn_word_separators">.,;:!?</string>
