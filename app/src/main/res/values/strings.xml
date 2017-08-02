@@ -394,4 +394,7 @@
      <string name="preference_system_switch_next_method">Switch to Next Method</string>
      <string name="preference_system_list_methods">List Input Methods</string>
 
+     <string name="preference_system_force_hangul_title">Force Hangeul Keyboard</string>
+	 <string name="preference_system_force_hangul_summary">Set default keyboard language to Hangeul and force it to be shown first.</string>
+
 </resources>

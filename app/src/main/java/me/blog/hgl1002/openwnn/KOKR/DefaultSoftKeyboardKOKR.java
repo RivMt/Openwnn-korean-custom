@@ -124,6 +124,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected boolean mShowNumKeyboardViewLandscape = true;
 
 	protected boolean mShowKeyPreview = false;
+
+	protected boolean mForceHangul;
 	
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
@@ -462,6 +464,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	public void setDefaultKeyboard() {
+		if(mForceHangul) {
+			mCurrentLanguage = LANG_KO;
+			mCurrentLanguageIndex = 1;
+			changeKeyMode(KEYMODE_HANGUL);
+			return;
+		}
 		Locale locale = Locale.getDefault();
 		int language = mCurrentLanguage;
 		
@@ -860,6 +868,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
 		mShowKeyPreview = pref.getBoolean("popup_preview", true);
+
+		mForceHangul = pref.getBoolean("system_force_hangul", false);
 		
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {

@@ -142,4 +142,7 @@
     <string name="preference_system_switch_next_method">다음 입력기로 전환</string>
     <string name="preference_system_list_methods">입력기 목록 표시</string>
 
+    <string name="preference_system_force_hangul_title">한글 키보드 강제</string>
+    <string name="preference_system_force_hangul_summary">입력 상황에 관계없이 한글 키보드를 항상 먼저 보여줍니다.</string>
+
 </resources>
