@@ -387,4 +387,17 @@
     <string name="preference_system_use_standard_jamo_title">Use standard Hangul jamo</string>
     <string name="preference_system_use_standard_jamo_summary">Use First-Mid-End Hangul code with standard hangul jamo when required.</string>
 
+    <string name="preference_system_lang_key_press_title">Action on Language Key Press</string>
+    <string name="preference_system_lang_key_press_summary">Choose action on language key press.</string>
+
+    <string name="preference_system_lang_key_long_press_title">Action on Language Key Long-Press</string>
+    <string name="preference_system_lang_key_long_press_summary">Choose action on language key long-press.</string>
+
+     <string name="preference_system_switch_kor_eng">Switch Korean/English Mode</string>
+     <string name="preference_system_switch_next_method">Switch to Next Method</string>
+     <string name="preference_system_list_methods">List Input Methods</string>
+
+     <string name="preference_system_force_hangul_title">Force Hangeul Keyboard</string>
+	 <string name="preference_system_force_hangul_summary">Set default keyboard language to Hangeul and force it to be shown first.</string>
+
 </resources>

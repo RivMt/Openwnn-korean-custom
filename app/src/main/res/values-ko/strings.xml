@@ -132,4 +132,17 @@
     <string name="preference_system_use_standard_jamo_title">표준 한글 자모 사용</string>
     <string name="preference_system_use_standard_jamo_summary">필요할 경우 표준 한글 자모로 첫가끝 한글 조합을 합니다.</string>
 
+    <string name="preference_system_lang_key_press_title">언어 키 행동</string>
+    <string name="preference_system_lang_key_press_summary">언어키를 누를 때 실행할 행동을 정합니다.</string>
+
+    <string name="preference_system_lang_key_long_press_title">언어 키 롱클릭 행동</string>
+    <string name="preference_system_lang_key_long_press_summary">언어키를 길게 누를 때 실행할 행동을 정합니다.</string>
+
+    <string name="preference_system_switch_kor_eng">한/영 전환</string>
+    <string name="preference_system_switch_next_method">다음 입력기로 전환</string>
+    <string name="preference_system_list_methods">입력기 목록 표시</string>
+
+    <string name="preference_system_force_hangul_title">한글 키보드 강제</string>
+    <string name="preference_system_force_hangul_summary">입력 상황에 관계없이 한글 키보드를 항상 먼저 보여줍니다.</string>
+
 </resources>

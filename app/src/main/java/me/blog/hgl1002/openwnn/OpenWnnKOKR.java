@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
@@ -167,6 +168,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int FLICK_RIGHT_EVENT = 0xFF000104;
 
 	public static final int TIMEOUT_EVENT = 0xFF00001;
+
+	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
+	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
+	public static final String LANGKEY_LIST_METHODS = "list_methods";
 	
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -195,6 +200,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mQuickPeriod;
 
 	boolean mStandardJamo;
+	String mLangKeyAction;
+	String mLangKeyLongAction;
 
 	boolean mAltDirect;
 	
@@ -202,6 +209,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	int selectionStart, selectionEnd;
 
 	boolean mSpace, mCharInput;
+	boolean mInput;
 
 	Handler mTimeOutHandler;
 
@@ -268,7 +276,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFullMoachigi = pref.getBoolean("hardware_full_moachigi", mFullMoachigi);
 		mMoachigiDelay = pref.getInt("hardware_full_moachigi_delay", 100);
 		mQuickPeriod = pref.getBoolean("keyboard_quick_period", false);
+
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
+		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
+		mLangKeyLongAction = pref.getString("system_action_on_lang_key_long_press", LANGKEY_LIST_METHODS);
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
@@ -397,8 +408,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					break;
 					
 				case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
-					InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.showInputMethodPicker();
+					onLangKey(mLangKeyLongAction);
 					break;
 				}
 			} else {
@@ -483,6 +493,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			shinShift();
 			ret = true;
 			mCharInput = true;
+			mInput = true;
 			mSpace = false;
 			break;
 			
@@ -550,6 +561,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			
 		case OpenWnnEvent.INPUT_SOFT_KEY:
 			switch(keyCode) {
+			case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
+				onLangKey(mLangKeyAction);
+				return true;
+
 			case KeyEvent.KEYCODE_SHIFT_LEFT:
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
 				switch(keyEvent.getAction()) {
@@ -627,6 +642,31 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		} else {
 			mHangulEngine.resetJohab();
 			sendKeyChar(originalCode);
+		}
+	}
+
+	private void onLangKey(String action) {
+		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		IBinder token = getWindow().getWindow().getAttributes().token;
+		switch(action) {
+		case LANGKEY_SWITCH_KOR_ENG:
+			((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
+			break;
+
+		case LANGKEY_SWITCH_NEXT_METHOD:
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+				if (mInput) {
+					mInput = false;
+					imm.switchToLastInputMethod(token);
+				} else {
+					imm.switchToNextInputMethod(token, false);
+				}
+			}
+			break;
+
+		case LANGKEY_LIST_METHODS:
+			imm.showInputMethodPicker();
+			break;
 		}
 	}
 	

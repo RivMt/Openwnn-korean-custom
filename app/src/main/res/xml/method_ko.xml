@@ -19,4 +19,5 @@
 
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
               android:settingsActivity="me.blog.hgl1002.openwnn.OpenWnnControlPanelKOKR"
+			  android:supportsSwitchingToNextInputMethod="true"
 />

@@ -6,6 +6,22 @@
 			android:title="@string/preference_system_use_standard_jamo_title"
 			android:summary="@string/preference_system_use_standard_jamo_summary"
 			android:defaultValue="false" />
+		<ListPreference android:key="system_action_on_lang_key_press"
+			android:title="@string/preference_system_lang_key_press_title"
+			android:summary="@string/preference_system_lang_key_press_summary"
+			android:entries="@array/lang_key_actions"
+			android:entryValues="@array/lang_key_actions_id"
+			android:defaultValue="switch_kor_eng" />
+		<ListPreference android:key="system_action_on_lang_key_long_press"
+			android:title="@string/preference_system_lang_key_long_press_title"
+			android:summary="@string/preference_system_lang_key_long_press_summary"
+			android:entries="@array/lang_key_actions"
+			android:entryValues="@array/lang_key_actions_id"
+			android:defaultValue="list_methods" />
+		<CheckBoxPreference android:key="system_force_hangul"
+			android:title="@string/preference_system_force_hangul_title"
+			android:summary="@string/preference_system_force_hangul_summary"
+			android:defaultValue="false" />
 	</PreferenceCategory>
 
 </PreferenceScreen>
