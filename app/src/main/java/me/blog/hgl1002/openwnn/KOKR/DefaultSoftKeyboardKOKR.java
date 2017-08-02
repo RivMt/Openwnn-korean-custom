@@ -574,7 +574,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mIgnoreCode = KEYCODE_NOP;
 				return;
 			}
-			nextLanguage();
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_CHANGE_LANG)));
 			break;
 			
 		case KEYCODE_JP12_BACKSPACE:

@@ -103,5 +103,17 @@
     	<item>keyboard_alphabet_dvorak</item>
     	<item>keyboard_alphabet_colemak</item>
     </string-array>
+
+	<string-array name="lang_key_actions">
+		<item>@string/preference_system_switch_kor_eng</item>
+		<item>@string/preference_system_switch_next_method</item>
+		<item>@string/preference_system_list_methods</item>
+	</string-array>
+
+	<string-array name="lang_key_actions_id">
+	    <item>switch_kor_eng</item>
+	    <item>switch_next_method</item>
+	    <item>list_methods</item>
+    </string-array>
 	
 </resources>
