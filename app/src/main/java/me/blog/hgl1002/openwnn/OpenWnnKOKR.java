@@ -161,13 +161,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_OPT_TYPE_QWERTY = 200;
 	public static final int ENGINE_MODE_OPT_TYPE_12KEY = 201;
 	
-	public static final int LONG_CLICK_EVENT = 0xFF000100;
-	public static final int FLICK_UP_EVENT = 0xFF000101;
-	public static final int FLICK_DOWN_EVENT = 0xFF000102;
-	public static final int FLICK_LEFT_EVENT = 0xFF000103;
-	public static final int FLICK_RIGHT_EVENT = 0xFF000104;
+	public static final int LONG_CLICK_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x100;
+	public static final int FLICK_UP_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x101;
+	public static final int FLICK_DOWN_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x102;
+	public static final int FLICK_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x103;
+	public static final int FLICK_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x104;
 
-	public static final int TIMEOUT_EVENT = 0xFF00001;
+	public static final int TIMEOUT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x1;
 
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
