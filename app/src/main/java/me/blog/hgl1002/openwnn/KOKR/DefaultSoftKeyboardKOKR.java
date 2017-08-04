@@ -71,6 +71,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
 
 	protected static final int SPACE_SLIDE_UNIT = 30;
+	protected static final int BACKSPACE_SLIDE_UNIT = 250;
 	
 	protected static final int KEYCODE_NOP = -310;
 	
@@ -210,7 +211,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		float beforeX, beforeY;
 		int space = -1;
 		int spaceDistance;
-		int beforeSpaceDistance;
+		int backspace = -1;
+		int backspaceDistance;
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			switch(event.getAction()) {
@@ -232,8 +234,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						if(Math.abs(dx) >= mSpaceSlideSensitivity) space = keyCode;
 						break;
 
+					case KEYCODE_JP12_BACKSPACE:
+					case KEYCODE_QWERTY_BACKSPACE:
+						if(Math.abs(dx) >= BACKSPACE_SLIDE_UNIT) {
+							backspace = keyCode;
+							mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
+						}
+						break;
+
 					default:
 						space = -1;
+						backspace = -1;
 						break;
 					}
 					if(dy > mFlickSensitivity || dy < -mFlickSensitivity
@@ -259,6 +270,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 								new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
 					}
 				}
+				if(backspace != -1) {
+					backspaceDistance += event.getX() - beforeX;
+					if(backspaceDistance < -BACKSPACE_SLIDE_UNIT) {
+						backspaceDistance = 0;
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_LEFT_EVENT));
+					}
+					if(backspaceDistance > +BACKSPACE_SLIDE_UNIT) {
+						backspaceDistance = 0;
+						mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_RIGHT_EVENT));
+					}
+				}
 				beforeX = event.getX();
 				beforeY = event.getY();
 				return true;
@@ -267,6 +289,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				if(space != -1) {
 					mIgnoreCode = space;
 					space = -1;
+					break;
+				}
+				if(backspace != -1) {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_COMMIT_EVENT));
+					mIgnoreCode = backspace;
+					backspace = -1;
 					break;
 				}
 				if(dy > mFlickSensitivity) {
@@ -604,6 +632,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			
 		case KEYCODE_JP12_BACKSPACE:
 		case KEYCODE_QWERTY_BACKSPACE:
+			if(primaryCode == mIgnoreCode) {
+				mIgnoreCode = KEYCODE_NOP;
+				return;
+			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)));
 			break;

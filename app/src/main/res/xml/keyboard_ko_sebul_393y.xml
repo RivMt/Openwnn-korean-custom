@@ -34,7 +34,7 @@
     <Key android:codes="112" android:keyLabel="\u1111"/> 
     <Key android:codes="-100"
      	 android:keyIcon="@drawable/key_qwerty_del"
-	 	 android:keyEdgeFlags="right" android:isRepeatable="true"/>
+	 	 android:keyEdgeFlags="right" android:isRepeatable="false"/>
   </Row>
   
   <Row>

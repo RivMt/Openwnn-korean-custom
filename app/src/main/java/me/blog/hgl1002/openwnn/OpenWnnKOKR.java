@@ -169,6 +169,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	public static final int TIMEOUT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x1;
 
+	public static final int BACKSPACE_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x211;
+	public static final int BACKSPACE_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x212;
+	public static final int BACKSPACE_COMMIT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x210;
+
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
 	public static final String LANGKEY_LIST_METHODS = "list_methods";
@@ -210,6 +214,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	boolean mSpace, mCharInput;
 	boolean mInput;
+
+	boolean mBackspaceSelectionMode;
+	int mBackspaceSelectionStart;
+	int mBackspaceSelectionEnd;
 
 	Handler mTimeOutHandler;
 
@@ -367,6 +375,48 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case OpenWnnEvent.CHANGE_INPUT_VIEW:
 			setInputView(onCreateInputView());
 			onStartInputView(getCurrentInputEditorInfo(), false);
+			return true;
+
+		case BACKSPACE_LEFT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				mBackspaceSelectionMode = true;
+				mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+				mBackspaceSelectionStart = mBackspaceSelectionEnd;
+				mHangulEngine.resetJohab();
+			}
+			while(true) {
+				mBackspaceSelectionStart--;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+					break;
+				}
+			}
+			return true;
+
+		case BACKSPACE_RIGHT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				return true;
+			}
+			while(true) {
+				mBackspaceSelectionStart++;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+					break;
+				}
+			}
+			return true;
+
+		case BACKSPACE_COMMIT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				return true;
+			}
+			mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
+			mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
+			mBackspaceSelectionMode = false;
 			return true;
 			
 		case TIMEOUT_EVENT:

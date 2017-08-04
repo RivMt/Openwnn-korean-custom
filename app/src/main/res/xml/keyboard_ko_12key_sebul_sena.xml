@@ -29,7 +29,7 @@
 		<Key android:codes="-2017" android:keyLabel="ㅅ" />
 		<Key android:codes="-214" 
 			 android:keyIcon="@drawable/key_12key_del"
-			 android:isRepeatable="true" android:keyEdgeFlags="right"/>
+			 android:isRepeatable="false" android:keyEdgeFlags="right"/>
 	</Row>
 
 	<Row>
@@ -42,7 +42,7 @@
 		<Key android:codes="-216" 
 			 android:keyIcon="@drawable/key_12key_enter"
 			 android:iconPreview="@drawable/key_12key_enter"
-			 android:isRepeatable="true" android:keyWidth="15%p"
+			 android:isRepeatable="false" android:keyWidth="15%p"
 			 android:keyEdgeFlags="right"/>
 	</Row>
 

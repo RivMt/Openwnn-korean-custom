@@ -11,7 +11,7 @@
 		<Key android:codes="-214" android:keyEdgeFlags="right"
 			android:keyIcon="@drawable/key_12key_del"
 			android:iconPreview="@drawable/key_12key_del"
-			android:isRepeatable="true" />
+			android:isRepeatable="false" />
 	</Row>
 
 	<Row>
