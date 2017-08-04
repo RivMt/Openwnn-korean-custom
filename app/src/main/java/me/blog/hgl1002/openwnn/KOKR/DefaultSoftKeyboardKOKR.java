@@ -75,6 +75,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected static final int KEYCODE_NOP = -310;
 	
 	public static final int KEYCODE_KR12_ADDSTROKE = -310;
+
+	public static final int KEYCODE_NON_SHIN_DEL = -510;
 	
 	protected static final int INVALID_KEYMODE = -1;
 	
@@ -180,11 +182,25 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCapsLock = true;
 				mIgnoreCode = keyCode;
 				return;
+
+			case KEYCODE_QWERTY_BACKSPACE:
+				mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
+				return;
 			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.LONG_CLICK_EVENT,
 					new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 			try { mVibrator.vibrate(mVibrateDuration*2); } catch (Exception ex) { }
 			mIgnoreCode = keyCode;
+		}
+	}
+
+	Handler mBackspaceLongClickHandler = new Handler();
+	class BackspaceLongClickHandler implements Runnable {
+		@Override
+		public void run() {
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_NON_SHIN_DEL)));
+			mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
 		}
 	}
 	
@@ -691,6 +707,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			handler.removeCallbacksAndMessages(null);
 			mLongClickHandlers.remove(key);
 		}
+		mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
 	}
 
 	public void setPreviewEnabled(int x) {
