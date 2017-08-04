@@ -890,7 +890,7 @@ public class LayoutShinSebul {
 	};
 
 	public static final int[][][] JAMOSET_SHIN_M = {
-			JAMO_SEBUL_SHIN_M_CHOJONG,
+			JAMO_SEBUL_SHIN_M_CHOJUNG,
 			JAMO_SEBUL_SHIN_M_CHOJUNG,
 			JAMO_SEBUL_SHIN_M_CHOJONG,
 			JAMO_SEBUL_SHIN_M_CHOJONG
