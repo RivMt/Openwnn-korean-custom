@@ -161,13 +161,17 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_OPT_TYPE_QWERTY = 200;
 	public static final int ENGINE_MODE_OPT_TYPE_12KEY = 201;
 	
-	public static final int LONG_CLICK_EVENT = 0xFF000100;
-	public static final int FLICK_UP_EVENT = 0xFF000101;
-	public static final int FLICK_DOWN_EVENT = 0xFF000102;
-	public static final int FLICK_LEFT_EVENT = 0xFF000103;
-	public static final int FLICK_RIGHT_EVENT = 0xFF000104;
+	public static final int LONG_CLICK_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x100;
+	public static final int FLICK_UP_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x101;
+	public static final int FLICK_DOWN_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x102;
+	public static final int FLICK_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x103;
+	public static final int FLICK_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x104;
 
-	public static final int TIMEOUT_EVENT = 0xFF00001;
+	public static final int TIMEOUT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x1;
+
+	public static final int BACKSPACE_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x211;
+	public static final int BACKSPACE_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x212;
+	public static final int BACKSPACE_COMMIT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x210;
 
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
@@ -210,6 +214,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	boolean mSpace, mCharInput;
 	boolean mInput;
+
+	boolean mBackspaceSelectionMode;
+	int mBackspaceSelectionStart;
+	int mBackspaceSelectionEnd;
 
 	Handler mTimeOutHandler;
 
@@ -367,6 +375,48 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case OpenWnnEvent.CHANGE_INPUT_VIEW:
 			setInputView(onCreateInputView());
 			onStartInputView(getCurrentInputEditorInfo(), false);
+			return true;
+
+		case BACKSPACE_LEFT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				mBackspaceSelectionMode = true;
+				mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+				mBackspaceSelectionStart = mBackspaceSelectionEnd;
+				mHangulEngine.resetJohab();
+			}
+			while(true) {
+				mBackspaceSelectionStart--;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+					break;
+				}
+			}
+			return true;
+
+		case BACKSPACE_RIGHT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				return true;
+			}
+			while(true) {
+				mBackspaceSelectionStart++;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+					break;
+				}
+			}
+			return true;
+
+		case BACKSPACE_COMMIT_EVENT:
+			if(!mBackspaceSelectionMode) {
+				return true;
+			}
+			mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
+			mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
+			mBackspaceSelectionMode = false;
 			return true;
 			
 		case TIMEOUT_EVENT:
@@ -674,26 +724,26 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	private boolean processKeyEvent(KeyEvent ev) {
 		int key = ev.getKeyCode();
 
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			if(ev.isCtrlPressed()) return false;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (ev.isCtrlPressed()) return false;
 		}
-		
-		if(ev.isShiftPressed()) {
-			switch(key) {
+
+		if (ev.isShiftPressed()) {
+			switch (key) {
 			case KeyEvent.KEYCODE_DPAD_UP:
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				if(!selectionMode) {
+				if (!selectionMode) {
 					selectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
 					selectionStart = selectionEnd;
 					selectionMode = true;
 				}
-				if(selectionMode) {
-					if(key == KeyEvent.KEYCODE_DPAD_LEFT) selectionEnd--;
-					if(key == KeyEvent.KEYCODE_DPAD_RIGHT) selectionEnd++;
+				if (selectionMode) {
+					if (key == KeyEvent.KEYCODE_DPAD_LEFT) selectionEnd--;
+					if (key == KeyEvent.KEYCODE_DPAD_RIGHT) selectionEnd++;
 					int start = selectionStart, end = selectionEnd;
-					if(selectionStart > selectionEnd) {
+					if (selectionStart > selectionEnd) {
 						start = selectionEnd;
 						end = selectionStart;
 					}
@@ -703,7 +753,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					updateNumKeyboardShiftState();
 				}
 				return true;
-				
+
 			default:
 				selectionMode = false;
 				break;
@@ -711,33 +761,33 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		} else {
 			selectionMode = false;
 		}
-		
-		if((key <= -200 && key > -300) || (key <= -2000 && key > -3000)) {
+
+		if ((key <= -200 && key > -300) || (key <= -2000 && key > -3000)) {
 			int jamo = mHangulEngine.inputCode(key, mHardShift);
-			if(jamo != -1) {
-				if(mHardShift != 0) jamo = Character.toUpperCase(jamo);
-				if(mHangulEngine.inputJamo(jamo) != 0) {
+			if (jamo != -1) {
+				if (mHardShift != 0) jamo = Character.toUpperCase(jamo);
+				if (mHangulEngine.inputJamo(jamo) != 0) {
 					mInputConnection.setComposingText(mHangulEngine.getComposing(), 1);
 				}
 			}
 			return true;
 		}
-		
-		if(key >= KeyEvent.KEYCODE_NUMPAD_0 && key <= KeyEvent.KEYCODE_NUMPAD_RIGHT_PAREN) {
+
+		if (key >= KeyEvent.KEYCODE_NUMPAD_0 && key <= KeyEvent.KEYCODE_NUMPAD_RIGHT_PAREN) {
 			mHangulEngine.resetJohab();
 			return false;
 		}
-		
-		if(ev.isPrintingKey()) {
-			
+
+		if (ev.isPrintingKey()) {
+
 			int code = ev.getUnicodeChar(mShiftKeyToggle[mHardShift] | mAltKeyToggle[mHardAlt]);
 			this.inputChar((char) code, (mHardAlt != 0 && mAltDirect) ? true : false);
-			
-			if(mHardShift == 1){
+
+			if (mHardShift == 1) {
 				mShiftPressing = false;
 			}
-			if(mHardAlt == 1){
-				mAltPressing   = false;
+			if (mHardAlt == 1) {
+				mAltPressing = false;
 			}
 			if (!ev.isAltPressed()) {
 				if (mHardAlt == 1) {
@@ -754,10 +804,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				updateNumKeyboardShiftState();
 			}
 			return true;
-			
-		} else if(key == KeyEvent.KEYCODE_SPACE) {
+
+		} else if (key == KeyEvent.KEYCODE_SPACE) {
 			mHangulEngine.resetJohab();
-			if(mHardShift == 1) {
+			if (mHardShift == 1) {
 				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 				mHardShift = 0;
 				mShiftPressing = false;
@@ -767,13 +817,17 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 			mInputConnection.commitText(" ", 1);
 			return true;
-		} else if(key == KeyEvent.KEYCODE_DEL) {
-			if(!mHangulEngine.backspace()) {
+		} else if (key == KeyEvent.KEYCODE_DEL) {
+			if (!mHangulEngine.backspace()) {
 				mHangulEngine.resetJohab();
 				return false;
 			}
-			if(mHangulEngine.getComposing() == "")
+			if (mHangulEngine.getComposing() == "")
 				mHangulEngine.resetJohab();
+			return true;
+		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
+			mHangulEngine.resetJohab();
+			mInputConnection.deleteSurroundingText(1, 0);
 			return true;
 		} else if(key == KeyEvent.KEYCODE_ENTER) {
 			mHangulEngine.resetJohab();
