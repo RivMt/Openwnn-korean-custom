@@ -55,6 +55,8 @@
     <string name="preference_keyboard_dubul_nk">두벌식 북한 국규</string>
     <string name="preference_keyboard_sebul_390">세벌식 390</string>
     <string name="preference_keyboard_sebul_391">세벌식 최종</string>
+    <string name="preference_keyboard_sebul_390_10cols">세벌식 390 (10열 배열)</string>
+    <string name="preference_keyboard_sebul_391_10cols">세벌식 최종 (10열 배열)</string>
     <string name="preference_keyboard_sebul_danmoeum">세벌식 단모음</string>
     <string name="preference_keyboard_sebul_sun_2014">세벌식 순아래 2014 (안종혁)</string>
     <string name="preference_keyboard_sebul_3_2015m">세벌식 3-2015M (메탈리쟈)</string>

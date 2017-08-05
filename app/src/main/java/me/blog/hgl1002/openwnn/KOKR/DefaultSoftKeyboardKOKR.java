@@ -1028,7 +1028,19 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
 				break;
-				
+
+			case "keyboard_sebul_390_10cols":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
+				break;
+
+			case "keyboard_sebul_391_10cols":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
+				break;
+
 			case "keyboard_sebul_393y":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
@@ -1303,7 +1315,19 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
 				break;
-				
+
+			case "keyboard_sebul_390_10cols":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
+				break;
+
+			case "keyboard_sebul_391_10cols":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
+				break;
+
 			case "keyboard_sebul_393y":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
