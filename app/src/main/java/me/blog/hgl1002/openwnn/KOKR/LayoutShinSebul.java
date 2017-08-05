@@ -860,6 +860,45 @@ public class LayoutShinSebul {
 			{121, 0x1105, 0x201c},		// y
 			{117, 0x1103, 0x201d},		// u
 			{105, 0x1106, 0x203b},		// i
+			{111, 0x110e, 0x110e},		// o
+			{112, 0x1111, 0x1111},		// p
+
+			{97,  0x1172, 0x11bc},		// a
+			{115, 0x1174, 0x11ab},		// s
+			{100, 0x1175, 0x11bb},		// d
+			{102, 0x1161, 0x11c0},		// f
+			{103, 0x1173, 0x11ae},		// g
+			{104, 0x1102, 0x300a},		// h
+			{106, 0x110b, 0x300b},		// j
+			{107, 0x1100, 0xb7},		// k
+			{108, 0x110c, 0x3b},		// l
+			{59,  0x1107, 0x3a},		// ;
+			{39,  0x1110, 0x2f},		// '
+
+			{122, 0x1168, 0x11b7},		// z
+			{120, 0x116d, 0x11a8},		// x
+			{99,  0x1166, 0x11c2},		// c
+			{118, 0x1169, 0x11c1},		// v
+			{98,  0x116e, 0x11be},		// b
+			{110, 0x1109, 0x27},		// n
+			{109, 0x1112, 0x22},		// m
+			{44,    0x2c,   0x3c},		// ,
+			{46,    0x2e,   0x3e},		// .
+			{47,    0x110f,0x110f},		// /
+
+			{128, 0x2e, 0x2c},
+	};
+
+	public static final int[][] JAMO_SEBUL_SHIN_M_CHODJUNG = {
+
+			{113, 0x1164, 0x11ba},		// q
+			{119, 0x1163, 0x11af},		// w
+			{101, 0x1167, 0x11b8},		// e
+			{114, 0x1162, 0x11bd},		// r
+			{116, 0x1165, 0x11bf},		// t
+			{121, 0x1105, 0x201c},		// y
+			{117, 0x1103, 0x201d},		// u
+			{105, 0x1106, 0x203b},		// i
 			{111, -5001,  0x110e},		// o
 			{112, -5000,  0x1111},		// p
 
@@ -891,7 +930,7 @@ public class LayoutShinSebul {
 
 	public static final int[][][] JAMOSET_SHIN_M = {
 			JAMO_SEBUL_SHIN_M_CHOJUNG,
-			JAMO_SEBUL_SHIN_M_CHOJUNG,
+			JAMO_SEBUL_SHIN_M_CHODJUNG,
 			JAMO_SEBUL_SHIN_M_CHOJONG,
 			JAMO_SEBUL_SHIN_M_CHOJONG
 	};
