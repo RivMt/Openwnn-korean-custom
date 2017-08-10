@@ -836,11 +836,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			updateMetaKeyStateDisplay();
 			updateNumKeyboardShiftState();
 			EditorInfo editorInfo = getCurrentInputEditorInfo();
-			System.out.println(editorInfo.actionId);
 			switch(editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION) {
 			case EditorInfo.IME_ACTION_SEARCH:
 			case EditorInfo.IME_ACTION_GO:
-			case EditorInfo.IME_ACTION_SEND:
 				sendDefaultEditorAction(true);
 				return true;
 
