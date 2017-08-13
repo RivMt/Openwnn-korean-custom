@@ -1124,12 +1124,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojung);
 				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjong);
 				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
+				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symdjong);
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
