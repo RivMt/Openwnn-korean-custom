@@ -184,6 +184,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mIgnoreCode = keyCode;
 				return;
 
+			case KEYCODE_JP12_BACKSPACE:
 			case KEYCODE_QWERTY_BACKSPACE:
 				mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
 				return;
