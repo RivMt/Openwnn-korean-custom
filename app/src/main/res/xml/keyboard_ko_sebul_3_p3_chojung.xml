@@ -17,10 +17,7 @@
     <Key android:codes="55" android:keyLabel="\u1168"/>
     <Key android:codes="56" android:keyLabel="\u1173"/>
     <Key android:codes="57" android:keyLabel="\u116e"/>
-    <Key android:codes="48" android:keyLabel="\u110f"/> 
-    <Key android:codes="-100"
-     	 android:keyIcon="@drawable/key_qwerty_del"
-	 	 android:keyEdgeFlags="right" android:isRepeatable="false"/>
+    <Key android:codes="48" android:keyLabel="\u110f" android:keyEdgeFlags="right"/>
   </Row>
   
   <Row>
