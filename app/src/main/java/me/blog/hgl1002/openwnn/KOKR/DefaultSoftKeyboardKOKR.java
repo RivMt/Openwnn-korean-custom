@@ -611,16 +611,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mTimeoutHandler.removeCallbacksAndMessages(null);
 			mTimeoutHandler = null;
 		}
-		
-		if((primaryCode <= -200 && primaryCode > -300) || (primaryCode <= -2000 && primaryCode > -3000)) {
-			if(primaryCode == mIgnoreCode) {
-				mIgnoreCode = KEYCODE_NOP;
-			} else {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
-				mIgnoreCode = KEYCODE_NOP;
-			}
-		}
+
 		switch(primaryCode) {
 		case KEYCODE_CHANGE_LANG:
 			if(primaryCode == mIgnoreCode) {
@@ -674,7 +665,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			break;
 			
 		default:
-			if(primaryCode >= 0) {
+			if((primaryCode <= -200 && primaryCode > -300) || (primaryCode <= -2000 && primaryCode > -3000)) {
+				if(primaryCode == mIgnoreCode) {
+					mIgnoreCode = KEYCODE_NOP;
+				} else {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+							new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
+					mIgnoreCode = KEYCODE_NOP;
+				}
+			} else if(primaryCode >= 0) {
 				if(primaryCode == mIgnoreCode) {
 					mIgnoreCode = KEYCODE_NOP;
 					break;
