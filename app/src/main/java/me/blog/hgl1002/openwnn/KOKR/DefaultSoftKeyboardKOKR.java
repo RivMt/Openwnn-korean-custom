@@ -496,7 +496,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 		changeKeyboard(kbd);
-		changeNumKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][0][0]);
+		if(mNumKeyboard != null) {
+			changeNumKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][0][0]);
+		}
 
 		if(targetMode == KEYMODE_HANGUL_CHO || targetMode == KEYMODE_HANGUL_JUNG || targetMode == KEYMODE_HANGUL_JONG) {
 
