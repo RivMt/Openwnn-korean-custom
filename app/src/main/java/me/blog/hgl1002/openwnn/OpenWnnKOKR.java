@@ -1017,6 +1017,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		case ENGINE_MODE_SEBUL_SEMOE_2016:
 			mDirectInputMode = false;
+			mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
 			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE_2016);
