@@ -143,11 +143,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_SEBUL_SHIN_M = 113;
 	public static final int ENGINE_MODE_SEBUL_SHIN_P2 = 114;
 	public static final int ENGINE_MODE_SEBUL_AHNMATAE = 115;
-	public static final int ENGINE_MODE_SEBUL_SEMOE = 116;
+	public static final int ENGINE_MODE_SEBUL_SEMOE_2016 = 116;
+	public static final int ENGINE_MODE_SEBUL_SEMOE = 117;
 	
-	public static final int ENGINE_MODE_DUBULSIK_YET = 117;
-	public static final int ENGINE_MODE_SEBUL_393Y = 118;
-	public static final int ENGINE_MODE_SEBUL_3_2015Y = 119;	
+	public static final int ENGINE_MODE_DUBULSIK_YET = 118;
+	public static final int ENGINE_MODE_SEBUL_393Y = 119;
+	public static final int ENGINE_MODE_SEBUL_3_2015Y = 120;	
 	
 	public static final int ENGINE_MODE_12KEY_ALPHABET = 150;
 	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 151;
@@ -1012,6 +1013,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			else mEnableTimeout = false;
 			mHangulEngine.setJamoTable(JAMO_SEBUL_AHNMATAE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_AHNMATAE);
+			break;	
+		
+		case ENGINE_MODE_SEBUL_SEMOE_2016:
+			mDirectInputMode = false;
+			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
+			else mEnableTimeout = false;
+			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE_2016);
+			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
 			break;	
 		
 		case ENGINE_MODE_SEBUL_SEMOE:
