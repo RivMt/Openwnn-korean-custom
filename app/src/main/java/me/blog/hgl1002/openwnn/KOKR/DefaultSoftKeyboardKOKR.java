@@ -56,7 +56,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYBOARD_KO_SEBUL_SHIN_P2 = 17;
 	
 	public static final int KEYBOARD_KO_SEBUL_AHNMATAE = 18;
-	public static final int KEYBOARD_KO_SEBUL_SEMOE = 19;
+	public static final int KEYBOARD_KO_SEBUL_SEMOE_2016 = 19;
+	public static final int KEYBOARD_KO_SEBUL_SEMOE = 20;
 	
 	public static final int KEYBOARD_KO_DUBUL_YET = 22;
 	public static final int KEYBOARD_KO_SEBUL_393Y = 23;
@@ -445,6 +446,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_AHNMATAE;
 					break;					
 
+				case KEYBOARD_KO_SEBUL_SEMOE_2016:
+					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE_2016;
+					break;			
+				
 				case KEYBOARD_KO_SEBUL_SEMOE:
 					mode = OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE;
 					break;			
@@ -1214,6 +1219,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
 				break;
 			
+			case "keyboard_sebul_semoe_2016":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE_2016;
+				break;					
+			
 			case "keyboard_sebul_semoe":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
@@ -1501,6 +1512,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
 				break;	
 				
+			case "keyboard_sebul_semoe_2016":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE_2016;
+				break;	
+			
 			case "keyboard_sebul_semoe":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);

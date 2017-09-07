@@ -54,6 +54,7 @@
         <item>@string/preference_keyboard_sebul_shin_m</item>
         <item>@string/preference_keyboard_sebul_shin_p2</item>
         <item>@string/preference_keyboard_sebul_ahnmatae</item>
+		<item>@string/preference_keyboard_sebul_semoe_2016</item>
         <item>@string/preference_keyboard_sebul_semoe</item>
         <item>@string/preference_keyboard_dubul_yet</item>
         <item>@string/preference_keyboard_sebul_393y</item>
@@ -78,6 +79,7 @@
         <item>keyboard_sebul_shin_m</item>
         <item>keyboard_sebul_shin_p2</item>
         <item>keyboard_sebul_ahnmatae</item>
+		<item>keyboard_sebul_semoe_2016</item>
         <item>keyboard_sebul_semoe</item>
         <item>keyboard_dubul_yet</item>
         <item>keyboard_sebul_393y</item>
