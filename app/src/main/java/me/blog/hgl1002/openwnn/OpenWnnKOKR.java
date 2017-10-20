@@ -630,6 +630,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					return true;
 				}
 			case KeyEvent.KEYCODE_SPACE:
+				if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).forceResetJohab();
 				mHangulEngine.resetJohab();
 				if(mQuickPeriod && mSpace && mCharInput) {
 					mInputConnection.deleteSurroundingText(1, 0);
