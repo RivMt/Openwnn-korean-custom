@@ -210,9 +210,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	boolean mAltDirect;
 	
-	boolean selectionMode;
-	int selectionStart, selectionEnd;
-
 	boolean mSpace, mCharInput;
 	boolean mInput;
 
@@ -725,42 +722,19 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	private boolean processKeyEvent(KeyEvent ev) {
 		int key = ev.getKeyCode();
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			if (ev.isCtrlPressed()) return false;
-		}
-
 		if (ev.isShiftPressed()) {
 			switch (key) {
 			case KeyEvent.KEYCODE_DPAD_UP:
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				if (!selectionMode) {
-					selectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
-					selectionStart = selectionEnd;
-					selectionMode = true;
-				}
-				if (selectionMode) {
-					if (key == KeyEvent.KEYCODE_DPAD_LEFT) selectionEnd--;
-					if (key == KeyEvent.KEYCODE_DPAD_RIGHT) selectionEnd++;
-					int start = selectionStart, end = selectionEnd;
-					if (selectionStart > selectionEnd) {
-						start = selectionEnd;
-						end = selectionStart;
-					}
-					mInputConnection.setSelection(start, end);
-					mHardShift = 0;
-					updateMetaKeyStateDisplay();
-					updateNumKeyboardShiftState();
-				}
-				return true;
-
-			default:
-				selectionMode = false;
-				break;
+				mHardShift = 0;
+				return false;
 			}
-		} else {
-			selectionMode = false;
+		}
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (ev.isCtrlPressed()) return false;
 		}
 
 		if ((key <= -200 && key > -300) || (key <= -2000 && key > -3000)) {
@@ -804,6 +778,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				updateMetaKeyStateDisplay();
 				updateNumKeyboardShiftState();
 			}
+
 			return true;
 
 		} else if (key == KeyEvent.KEYCODE_SPACE) {
