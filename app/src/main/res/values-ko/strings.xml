@@ -94,8 +94,8 @@
     <string name="preference_keyboard_flick_sensitivity_summary">플릭 감도를 조정합니다. 기본값은 100입니다.</string>
     
     <string name="preference_keyboard_timeout_delay_title">자동 조합 종료 타이머</string>
-    <string name="preference_keyboard_timeout_delay_summary">단모음 자판 등에서 사용할 자동 조합 타이머를 설정합니다. 기본값은 500입니다.</string>
-    
+    <string name="preference_keyboard_timeout_delay_summary">단모음 자판 등에서 사용할 자동 조합 타이머를 설정합니다. 기본값은 500입니다. 0으로 설정하면 비활성화됩니다.</string>
+
     <string name="preference_keyboard_use_moachigi_title">모아주기 사용</string>
     <string name="preference_keyboard_use_moachigi_summary">모아주기(세벌식 배열에서 초-중-종성 순서를 자동으로 고쳐주는 기능)를 사용합니다.</string>
 

@@ -715,7 +715,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if (!mCapsLock && (primaryCode != DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT)) {
 			
 		}
-		if(mTimeoutHandler == null) {
+		if(mTimeoutHandler == null && mTimeoutDelay > 0) {
 			mTimeoutHandler = new Handler();
 			mTimeoutHandler.postDelayed(new TimeOutHandler(), mTimeoutDelay);
 		}

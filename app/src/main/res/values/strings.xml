@@ -349,7 +349,7 @@
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
     
     <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
-    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 500.</string>
+    <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 500. Value 0 disables the timer.</string>
     
     <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moajugi. (Fix jamo order automatically when using sebeol layouts)</string>
