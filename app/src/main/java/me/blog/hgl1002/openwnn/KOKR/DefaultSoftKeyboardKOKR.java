@@ -905,6 +905,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mKeyHeightLandscape = keyHeightLandscape;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
+		boolean use12Key = pref.getBoolean("keyboard_hangul_use_12key", false);
+		if(mUse12Key != use12Key) {
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+		}
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
