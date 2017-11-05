@@ -203,6 +203,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mFullMoachigi = true;
 	int mMoachigiDelay;
 	boolean mQuickPeriod;
+	boolean mSpaceResetJohab;
 
 	boolean mStandardJamo;
 	String mLangKeyAction;
@@ -282,6 +283,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFullMoachigi = pref.getBoolean("hardware_full_moachigi", mFullMoachigi);
 		mMoachigiDelay = pref.getInt("hardware_full_moachigi_delay", 100);
 		mQuickPeriod = pref.getBoolean("keyboard_quick_period", false);
+		mSpaceResetJohab = pref.getBoolean("keyboard_space_reset_composing", false);
 
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
@@ -627,6 +629,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					return true;
 				}
 			case KeyEvent.KEYCODE_SPACE:
+				// 두벌식 단모음 자판에서 스페이스바로 조합 끊기 옵션 적용시
+				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
+					switch(mCurrentEngineMode) {
+					case ENGINE_MODE_DUBUL_DANMOEUM:
+						mHangulEngine.resetJohab();
+						return true;
+					default:
+					}
+				}
 				if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).forceResetJohab();
 				mHangulEngine.resetJohab();
 				if(mQuickPeriod && mSpace && mCharInput) {
@@ -782,7 +793,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 
 		} else if (key == KeyEvent.KEYCODE_SPACE) {
+			// 한글 조합을 종료한다
 			mHangulEngine.resetJohab();
+			// Shift 조합과 함께 눌렀을 경우
 			if (mHardShift == 1) {
 				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 				mHardShift = 0;
