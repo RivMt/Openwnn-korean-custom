@@ -299,16 +299,16 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					backspace = -1;
 					break;
 				}
-				if(dy > mFlickSensitivity) {
+				if(dy > mFlickSensitivity && Math.abs(dx) < mFlickSensitivity) {
 					flickDown();
 				}
-				if(dy < -mFlickSensitivity) {
+				if(dy < -mFlickSensitivity && Math.abs(dx) < mFlickSensitivity) {
 					flickUp();
 				}
-				if(dx < -mFlickSensitivity) {
+				if(dx < -mFlickSensitivity && Math.abs(dy) < mFlickSensitivity) {
 					flickLeft();
 				}
-				if(dx > mFlickSensitivity) {
+				if(dx > mFlickSensitivity && Math.abs(dy) < mFlickSensitivity) {
 					flickRight();
 				}
 				break;
@@ -811,7 +811,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 		}
 	}
-	
+
 	public void nextLanguage() {
 		int language = mCurrentLanguage;
 		
