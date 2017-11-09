@@ -479,25 +479,26 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					
 				}
 			}
+
+			if(mCurrentLanguage == LANG_EN) {
+				switch(mCurrentKeyboards[mCurrentLanguage]) {
+				case KEYBOARD_EN_ALPHABET_QWERTY:
+					mode = OpenWnnEvent.Mode.DIRECT;
+					break;
+
+				case KEYBOARD_EN_ALPHABET_DVORAK:
+					mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
+					break;
+
+				case KEYBOARD_EN_ALPHABET_COLEMAK:
+					mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_COLEMAK;
+					break;
+
+				}
+			}
+
 		} else if(targetMode == KEYMODE_ALT_SYMBOLS) {
 			mode = OpenWnnEvent.Mode.DIRECT;
-		}
-		
-		if(mCurrentLanguage == LANG_EN) {
-			switch(mCurrentKeyboards[mCurrentLanguage]) {
-			case KEYBOARD_EN_ALPHABET_QWERTY:
-				mode = OpenWnnEvent.Mode.DIRECT;
-				break;
-				
-			case KEYBOARD_EN_ALPHABET_DVORAK:
-				mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
-				break;
-
-			case KEYBOARD_EN_ALPHABET_COLEMAK:
-				mode = OpenWnnKOKR.ENGINE_MODE_ENGLISH_COLEMAK;
-				break;
-				
-			}
 		}
 
 		changeKeyboard(kbd);
