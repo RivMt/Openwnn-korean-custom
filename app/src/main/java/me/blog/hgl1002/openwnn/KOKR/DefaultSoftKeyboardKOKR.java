@@ -299,17 +299,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					backspace = -1;
 					break;
 				}
-				if(dy > mFlickSensitivity && Math.abs(dx) < mFlickSensitivity) {
-					flickDown();
+				if(dy > mFlickSensitivity) {
+					if(Math.abs(dy) > Math.abs(dx)) flickDown();
 				}
-				if(dy < -mFlickSensitivity && Math.abs(dx) < mFlickSensitivity) {
-					flickUp();
+				if(dy < -mFlickSensitivity) {
+					if(Math.abs(dy) > Math.abs(dx)) flickUp();
 				}
-				if(dx < -mFlickSensitivity && Math.abs(dy) < mFlickSensitivity) {
-					flickLeft();
+				if(dx < -mFlickSensitivity) {
+					if(Math.abs(dx) > Math.abs(dy)) flickLeft();
 				}
-				if(dx > mFlickSensitivity && Math.abs(dy) < mFlickSensitivity) {
-					flickRight();
+				if(dx > mFlickSensitivity) {
+					if(Math.abs(dx) > Math.abs(dy)) flickRight();
 				}
 				break;
 				
