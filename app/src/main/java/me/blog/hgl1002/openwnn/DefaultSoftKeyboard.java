@@ -176,8 +176,10 @@ public class DefaultSoftKeyboard implements InputViewManager, KeyboardView.OnKey
     public static final int LANG_JA  = 1;
     /** Language (Chinese) */
     public static final int LANG_CN  = 2;
-    
+    /** Language (Korean - main) */
     public static final int LANG_KO = 3;
+    /** Language (Korean - sub) */
+    public static final int LANG_KO_SUB = 4;
 
     /* portrait/landscape */
     /** State of the display */

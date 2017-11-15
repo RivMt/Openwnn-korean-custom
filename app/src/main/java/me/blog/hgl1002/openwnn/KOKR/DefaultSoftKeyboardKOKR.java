@@ -99,7 +99,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mLastKeyMode = -1;
 	protected int mReturnLanguage = -1;
 	
-	protected int[] mCurrentKeyboards = new int[4];
+	protected int[] mCurrentKeyboards;
 	
 	protected int[] mLimitedKeyMode = null;
 	
@@ -331,6 +331,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		/* Keyboard[# of Languages][portrait/landscape][# of keyboard type][shift off/on][max # of key-modes][subkeyboard] */
 		mKeyboard = new Keyboard[4][2][4][2][KEYMODE_LENGTH][4];
 		mNumKeyboard = new Keyboard[4][2][4][2][1][4];
+
+		mCurrentKeyboards = new int[4];
 		
 		if(mHardKeyboardHidden) {
 			if(mDisplayMode == PORTRAIT) {
@@ -999,23 +1001,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			
 			mCurrentKeyboardType = KEYBOARD_12KEY;
 			String defaultLayout = pref.getString("keyboard_hangul_12key_layout", "keyboard_12key_sebul_munhwa");
-			switch(defaultLayout) {
-			case "keyboard_12key_sebul_munhwa":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_MUNHWA;
-				break;
-				
-			case "keyboard_12key_sebul_hanson":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_hanson);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_HANSON;
-				break;
-			
-			case "keyboard_12key_sebul_sena":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_sebul_sena);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SENA;
-				break;
-				
-			}
+
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
 		} else {
 
 			keyList = mKeyboard[LANG_KO][PORTRAIT][KEYBOARD_QWERTY];
@@ -1028,224 +1016,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
 			}
-			switch(defaultLayout) {
-			case "keyboard_sebul_390":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
-				break;
-				
-			case "keyboard_sebul_391":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
-				break;
-
-			case "keyboard_sebul_390_10cols":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
-				break;
-
-			case "keyboard_sebul_391_10cols":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
-				break;
-
-			case "keyboard_sebul_393y":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_393Y;
-				break;
-				
-			case "keyboard_sebul_danmoeum":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
-				break;
-				
-			case "keyboard_dubul_standard":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
-				break;
-			
-			case "keyboard_dubul_nk":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_NK;
-				break;
-				
-			case "keyboard_dubul_yet":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_yet);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_yet_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_YET;
-				break;
-			
-			case "keyboard_sebul_sun_2014":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SUN_2014;
-				break;
-				
-			case "keyboard_sebul_3_2015m": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjung);
-				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symdjong);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015M;
-				break;
-			}
-			
-			case "keyboard_sebul_3_2015": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjung);
-				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symdjong);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015;
-				break;
-			}
-
-			case "keyboard_sebul_3_2015y":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015y);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015y_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015Y;
-				break;	
-
-			case "keyboard_sebul_3_p3": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjung);
-				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symdjong);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
-				break;
-			}
-
-			case "keyboard_sebul_shin_original": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
-				break;
-			}
-				
-			case "keyboard_sebul_shin_edit": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
-				break;
-			}
-				
-			case "keyboard_sebul_shin_m": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjung);
-				Keyboard chodjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chodjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chodjung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_M;
-				break;
-			}
-								
-			case "keyboard_sebul_shin_p2": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_P2;
-				break;
-			}
-			
-			case "keyboard_sebul_ahnmatae":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
-				break;
-			
-			case "keyboard_sebul_semoe_2016":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE_2016;
-				break;					
-			
-			case "keyboard_sebul_semoe":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE;
-				break;					
-			
-			case "keyboard_dubul_danmoeum_google":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
-				break;
-				
-			}
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
 		}
 
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
 		if(mUseAlphabetQwerty) {
 			
@@ -1257,45 +1033,27 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_alphabet_layout", "keyboard_alphabet_qwerty");
 			}
-			switch(defaultLayout) {
-			case "keyboard_alphabet_qwerty":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
-				break;
-				
-			case "keyboard_alphabet_dvorak":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
-				break;
-				
-			case "keyboard_alphabet_colemak":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_COLEMAK;
-				break;	
-			
-			}
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
 		} else {
 			
 			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 			
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_english);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_12key_english_shift);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_shift);
 			mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_12KEY_ALPHABET;
 		}
 
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
 		keyList = mNumKeyboard[LANG_KO][PORTRAIT][mCurrentKeyboardType];
-		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
-		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number_shift);
 
 		keyList = mNumKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
-		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
-		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number_shift);
 
 	}
 
@@ -1322,223 +1080,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
 			}
-			switch(defaultLayout) {
-			case "keyboard_sebul_390":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
-				break;
-				
-			case "keyboard_sebul_391":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
-				break;
 
-			case "keyboard_sebul_390_10cols":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_390_10cols_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_390;
-				break;
-
-			case "keyboard_sebul_391_10cols":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_391_10cols_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_391;
-				break;
-
-			case "keyboard_sebul_393y":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_393Y;
-				break;
-				
-			case "keyboard_sebul_danmoeum":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_danmoeum_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_DANMOEUM;
-				break;
-				
-			case "keyboard_dubul_standard":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_STANDARD;
-				break;
-			
-			case "keyboard_dubul_nk":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_nk_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_NK;
-				break;	
-				
-			case "keyboard_dubul_yet":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_yet);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_yet_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_YET;
-				break;	
-			
-			case "keyboard_sebul_sun_2014":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_sun_2014_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SUN_2014;
-				break;
-
-			case "keyboard_sebul_3_2015m": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjung);
-				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symdjong);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015M;
-				break;
-			}
-
-			case "keyboard_sebul_3_2015": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjung);
-				Keyboard symdjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015_symdjong);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015;
-				break;
-			}
-
-			case "keyboard_sebul_3_2015y":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015y);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_2015y_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_2015Y;
-				break;
-
-			case "keyboard_sebul_3_p3": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_3_P3;
-				break;
-			}
-
-			case "keyboard_sebul_shin_original": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
-				break;
-			}
-
-			case "keyboard_sebul_shin_edit": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_EDIT;
-				break;
-			}
-
-			case "keyboard_sebul_shin_m": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjung);
-				Keyboard chodjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_m_chodjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chodjung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_M;
-				break;
-			}
-
-			case "keyboard_sebul_shin_p2": {
-				Keyboard chojong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojong);
-				Keyboard chojung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojung);
-				Keyboard symjong = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjong);
-				Keyboard symjung = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjung);
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SHIN_P2;
-				break;
-			}
-
-			case "keyboard_sebul_ahnmatae":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_ahnmatae_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_AHNMATAE;
-				break;	
-				
-			case "keyboard_sebul_semoe_2016":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE_2016;
-				break;	
-			
-			case "keyboard_sebul_semoe":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_SEBUL_SEMOE;
-				break;	
-			
-			case "keyboard_dubul_danmoeum_google":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
-				mCurrentKeyboards[LANG_KO] = KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
-				break;
-				
-			}
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
 		}
 
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
 		{
 			
@@ -1550,39 +1098,252 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_alphabet_layout", "keyboard_alphabet_qwerty");
 			}
-			switch(defaultLayout) {
-			case "keyboard_alphabet_qwerty":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_qwerty_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_QWERTY;
-				break;
-				
-			case "keyboard_alphabet_dvorak":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_DVORAK;
-				break;
-				
-			case "keyboard_alphabet_colemak":
-				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak);
-				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_english_colemak_shift);
-				mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_ALPHABET_COLEMAK;
-				break;	
-				
-			}
+
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
 		}
 
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
 
 		keyList = mNumKeyboard[LANG_KO][LANDSCAPE][mCurrentKeyboardType];
-		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
-		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number_shift);
 
 		keyList = mNumKeyboard[LANG_EN][LANDSCAPE][mCurrentKeyboardType];
-		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number);
-		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboard(mWnn, R.xml.keyboard_ko_special_number_shift);
+		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
+		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number_shift);
 
+	}
+
+	protected int loadKeyboard(Keyboard[][][] keyList, String defaultLayout) {
+		switch(defaultLayout) {
+
+		// Alphabet layouts
+
+		case "keyboard_alphabet_qwerty":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty_shift);
+			return KEYBOARD_EN_ALPHABET_QWERTY;
+
+		case "keyboard_alphabet_dvorak":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_dvorak);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_dvorak_shift);
+			return KEYBOARD_EN_ALPHABET_DVORAK;
+
+		case "keyboard_alphabet_colemak":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_colemak);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_colemak_shift);
+			return KEYBOARD_EN_ALPHABET_COLEMAK;
+
+		// Hangul layouts
+
+		case "keyboard_sebul_390":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_390);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_390_shift);
+			return KEYBOARD_KO_SEBUL_390;
+
+		case "keyboard_sebul_391":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_391);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_391_shift);
+			return KEYBOARD_KO_SEBUL_391;
+
+		case "keyboard_sebul_390_10cols":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_390_10cols);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_390_10cols_shift);
+			return KEYBOARD_KO_SEBUL_390;
+
+		case "keyboard_sebul_391_10cols":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_391_10cols);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_391_10cols_shift);
+			return KEYBOARD_KO_SEBUL_391;
+
+		case "keyboard_sebul_393y":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
+			return KEYBOARD_KO_SEBUL_393Y;
+
+		case "keyboard_sebul_danmoeum":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_danmoeum);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_danmoeum_shift);
+			return KEYBOARD_KO_SEBUL_DANMOEUM;
+
+		case "keyboard_dubul_standard":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_standard);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_standard_shift);
+			return KEYBOARD_KO_DUBUL_STANDARD;
+
+		case "keyboard_dubul_nk":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_nk);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_nk_shift);
+			return KEYBOARD_KO_DUBUL_NK;
+
+		case "keyboard_dubul_yet":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_yet);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_yet_shift);
+			return KEYBOARD_KO_DUBUL_YET;
+
+		case "keyboard_sebul_sun_2014":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_sun_2014);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_sun_2014_shift);
+			return KEYBOARD_KO_SEBUL_SUN_2014;
+
+		case "keyboard_sebul_3_2015m": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015m_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symjung);
+			Keyboard symdjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015m_symdjong);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_3_2015M;
+					}
+
+		case "keyboard_sebul_3_2015": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015_symjung);
+			Keyboard symdjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015_symdjong);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_3_2015;
+					}
+
+		case "keyboard_sebul_3_2015y":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015y);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_2015y_shift);
+			return KEYBOARD_KO_SEBUL_3_2015Y;
+
+		case "keyboard_sebul_3_p3": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_p3_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_p3_symjung);
+			Keyboard symdjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_3_p3_symdjong);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symdjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_3_P3;
+					}
+
+		case "keyboard_sebul_shin_original": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_original_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_original_symjung);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_SHIN_ORIGINAL;
+					}
+
+		case "keyboard_sebul_shin_edit": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_edit_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_edit_symjung);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_SHIN_EDIT;
+					}
+
+		case "keyboard_sebul_shin_m": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_m_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_m_symjung);
+			Keyboard chodjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_m_chodjung);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chodjung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_SHIN_M;
+					}
+
+		case "keyboard_sebul_shin_p2": {
+			Keyboard chojong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojong);
+			Keyboard chojung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_p2_chojung);
+			Keyboard symjong = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjong);
+			Keyboard symjung = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_shin_p2_symjung);
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_CHO][0] = chojung;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_CHO][0] = symjong;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JUNG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JUNG][0] = symjung;
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL_JONG][0] = chojong;
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL_JONG][0] = symjung;
+			return KEYBOARD_KO_SEBUL_SHIN_P2;
+					}
+
+		case "keyboard_sebul_ahnmatae":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_ahnmatae);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_ahnmatae_shift);
+			return KEYBOARD_KO_SEBUL_AHNMATAE;
+
+		case "keyboard_sebul_semoe_2016":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_semoe);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+			return KEYBOARD_KO_SEBUL_SEMOE_2016;
+
+		case "keyboard_sebul_semoe":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_semoe);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_semoe_shift);
+			return KEYBOARD_KO_SEBUL_SEMOE;
+
+		case "keyboard_dubul_danmoeum_google":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+			return KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+
+		// Hangul 12-key layouts
+
+		case "keyboard_12key_sebul_munhwa":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
+			return KEYBOARD_KO_SEBUL_MUNHWA;
+
+		case "keyboard_12key_sebul_hanson":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_hanson);
+			return KEYBOARD_KO_SEBUL_HANSON;
+
+		case "keyboard_12key_sebul_sena":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_sena);
+			return KEYBOARD_KO_SEBUL_SENA;
+
+		}
+		return -1;
 	}
 
 	protected void changeEngineOption() {
@@ -1597,7 +1358,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public Keyboard loadKeyboard(Context context, int xmlLayoutResId) {
+	public Keyboard loadKeyboardLayout(Context context, int xmlLayoutResId) {
 		KeyboardKOKR keyboard = new KeyboardKOKR(context, xmlLayoutResId);
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mWnn);
 		String skin = pref.getString("keyboard_skin",
