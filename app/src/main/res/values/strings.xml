@@ -326,6 +326,9 @@
     <string name="preference_keyboard_dubul_yet">Traditional Hangul Dubeolsik</string>
     <string name="preference_keyboard_sebul_393y">Traditional Hangul Sebeolsik 393 by Gim Gyeongseog</string>
     <string name="preference_keyboard_sebul_3_2015y">Traditional Hangul Sebeolsik 3-2015 by Soinbae</string>
+
+
+    <string name="preference_keyboard_nebul_1969">Nebeolsik Old Standard (1969)</string>
 	
     
     <string name="preference_keyboard_12key_sebul_munhwa">12-Key Sebeolsik by Hangul Munhwawon</string>
