@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+			android:key="openwnn_pref_ko">
+
+	<PreferenceCategory android:title="@string/preference_dev_softkeyboard">
+		<CheckBoxPreference android:key="keyboard_dev_use_hangul_soft"
+			android:title="@string/preference_dev_use_hangul_soft" />
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="keyboard_dev_soft_layout"
+			android:title="@string/preference_dev_hangul_soft_title"
+			android:entries="@array/keyboard_hangul_layout_dev"
+			android:entryValues="@array/keyboard_hangul_layout_dev_id"
+			android:defaultValue="keyboard_nebul_1969" />
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/preference_dev_hardkeyboard">
+		<CheckBoxPreference android:key="keyboard_dev_use_hangul_hard"
+			android:title="@string/preference_dev_use_hangul_hard" />
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="keyboard_dev_hard_layout"
+			android:title="@string/preference_dev_hangul_hard_title"
+			android:entries="@array/keyboard_hangul_layout_dev"
+			android:entryValues="@array/keyboard_hangul_layout_dev_id"
+			android:defaultValue="keyboard_nebul_1969" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

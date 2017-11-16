@@ -59,7 +59,6 @@
         <item>@string/preference_keyboard_dubul_yet</item>
         <item>@string/preference_keyboard_sebul_393y</item>
         <item>@string/preference_keyboard_sebul_3_2015y</item>
-        <item>@string/preference_keyboard_nebul_1969</item>
     </string-array>
 
     <string-array name="keyboard_hangul_layout_id">
@@ -85,7 +84,6 @@
         <item>keyboard_dubul_yet</item>
         <item>keyboard_sebul_393y</item>
         <item>keyboard_sebul_3_2015y</item>
-        <item>keyboard_nebul_1969</item>
     </string-array>
 
     <string-array name="keyboard_hangul_layout_dev">

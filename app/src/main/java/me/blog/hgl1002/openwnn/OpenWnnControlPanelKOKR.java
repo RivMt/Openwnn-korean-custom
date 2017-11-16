@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 import java.util.List;
 
@@ -29,13 +30,20 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_hardkeyboard);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_system);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
+			if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hidden_settings_revealed", false)) {
+				addPreferencesFromResource(R.xml.openwnn_pref_ko_developer);
+			}
 		}
 	}
 
 	@TargetApi(11)
 	@Override
 	public void onBuildHeaders(List<Header> target) {
-		loadHeadersFromResource(R.xml.openwnn_pref_ko_headers, target);
+		if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("reveal_dev_settings", false)) {
+			loadHeadersFromResource(R.xml.openwnn_pref_ko_headers_dev, target);
+		} else {
+			loadHeadersFromResource(R.xml.openwnn_pref_ko_headers, target);
+		}
 	}
 
 	@TargetApi(11)
@@ -95,6 +103,15 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
+		}
+	}
+
+	@TargetApi(11)
+	public static class DeveloperFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_developer);
 		}
 	}
 
