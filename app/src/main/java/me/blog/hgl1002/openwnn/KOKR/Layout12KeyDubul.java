@@ -13,7 +13,13 @@ public class Layout12KeyDubul {
 			{-2008, 0x3145, 0x314e, 0x3146},
 			{-2009, 0x3148, 0x314a, 0x3149},
 			{-2010, 0x3147, 0x3141},
-			{-2011, 0x2e, 0x2c, 0x3f, 0x21}
+			{-2011, 0x2e, 0x2c, 0x3f, 0x21},
+
+			// flick(플릭) 동작에 의한 자모 정의
+			{-2301, 0x1165},
+			{-2401, 0x1161},
+			{-2103, 0x1169},
+			{-2203, 0x116e},
 	};
 
 	public static final int[][] COMB_DUBUL_12KEY_CHEONJIIN = {
