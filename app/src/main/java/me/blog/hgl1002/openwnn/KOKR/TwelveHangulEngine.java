@@ -155,6 +155,7 @@ public class TwelveHangulEngine extends HangulEngine {
 	public void resetCycle() {
 		cycleIndex = 0;
 		addStrokeIndex = 0;
+		lastCode = 0;
 	}
 
 	@Override

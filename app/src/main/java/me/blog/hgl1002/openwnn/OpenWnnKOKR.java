@@ -422,8 +422,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(mEnableTimeout) {
 				resetJohab();
 				if(mHangulEngine instanceof TwelveHangulEngine) {
-					((TwelveHangulEngine) mHangulEngine).resetJohab();
-					((TwelveHangulEngine) mHangulEngine).resetCycle();
+					resetJohab();
 				}
 			}
 			if(mQuickPeriod) {
@@ -634,6 +633,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					switch(mCurrentEngineMode) {
 					case ENGINE_MODE_DUBUL_DANMOEUM:
 					case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
+					case ENGINE_MODE_12KEY_DUBUL_SKY2:
 						resetJohab();
 						return true;
 					default:
@@ -1048,6 +1048,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_NARATGEUL);
 			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_NARATGEUL);
 			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_DUBUL_12KEY_NARATGEUL);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_SKY2:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_SKY2);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_SKY2);
 			break;
 
 		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:

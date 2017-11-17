@@ -443,6 +443,8 @@ public class HangulEngine {
 						this.jong = beforeJong;
 						this.composing = getVisible(this.cho, this.jung, this.jong);
 						if(listener != null) listener.onEvent(new SetComposingEvent(composing));
+						// resetJohab시 last를 초기화하므로 백업한다.
+						int last = this.last;
 						// 그리고 조합을 종료한 뒤,
 						resetJohab();
 						// 뒷 종성을 초성으로 변환하여 적용한다.
