@@ -415,7 +415,6 @@ public class HangulEngine {
 					// 중성 낱자 결합을 시도한다.
 					int source = (this.jung >= 0) ? this.jung + 0x1161 : this.jung;
 					int with = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
-					System.out.println(source + " " + with);
 					if((combination = getCombination(source, with)) != -1) {
 						this.jung = combination;
 						if(combination >= 0x1161) this.jung -= 0x1161;
