@@ -1358,6 +1358,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_cheonjiin);
 			return KEYBOARD_KO_DUBUL_CHEONJIIN;
 
+		case "keyboard_12key_dubul_naratgeul":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_naratgeul);
+			return KEYBOARD_KO_DUBUL_NARATGEUL;
+
 		case "keyboard_12key_sebul_munhwa":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
 			return KEYBOARD_KO_SEBUL_MUNHWA;

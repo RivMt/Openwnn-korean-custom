@@ -323,6 +323,7 @@ public class HangulEngine {
 				int source = this.jong;
 				if(source >= 0) source += 0x11a7;
 				if((combination = getCombination(source, code)) != -1) {
+					this.beforeJong = jong;
 					jongCode = combination;
 					if(jongCode >= 0x11a8) jongCode -= 0x11a7;
 					this.jong = jongCode;
@@ -376,7 +377,7 @@ public class HangulEngine {
 						last = jongCode + 0x11a7;
 					}
 				}
-			// 조/중성이 없을 경우
+			// 초성이나 중성이 없을 경우
 			} else {
 				int choCode = CHO_CONVERT[code - 0x3131] - 0x1100;
 				// 초성이 이미 존재할 경우

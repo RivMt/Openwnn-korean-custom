@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+	android:keyWidth="25%p" android:horizontalGap="0px"
+	android:verticalGap="0px" android:keyHeight="54dip">
+
+	<Row>
+		<Key android:codes="-2001" android:keyLabel="ㄱ" android:keyEdgeFlags="left" />
+		<Key android:codes="-2002" android:keyLabel="ㄴ" />
+		<Key android:codes="-2003" android:keyLabel="ㅏㅓ" />
+		<Key android:codes="-214" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_del"
+			android:iconPreview="@drawable/key_12key_del"
+			android:isRepeatable="false" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-2004" android:keyLabel="ㄹ" android:keyEdgeFlags="left" />
+		<Key android:codes="-2005" android:keyLabel="ㅁ" />
+		<Key android:codes="-2006" android:keyLabel="ㅗㅜ" />
+		<Key android:codes="-500" android:keyLabel="ABC" android:keyWidth="12.5%p" />
+		<Key android:codes="-103" android:keyWidth="12.5%p" android:keyLabel="123" android:keyEdgeFlags="right" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-2007" android:keyLabel="ㅅ" android:keyEdgeFlags="left" />
+		<Key android:codes="-2008" android:keyLabel="ㅇ" />
+		<Key android:codes="-2009" android:keyLabel="ㅣ" />
+		<Key android:codes="-215" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_space"
+			android:iconPreview="@drawable/key_12key_space" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-2011" android:keyLabel="획추가" android:keyEdgeFlags="left" />
+		<Key android:codes="-2010" android:keyLabel="ㅡ" />
+		<Key android:codes="-2012" android:keyLabel="쌍자음" />
+		<Key android:codes="-216" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_enter"
+			android:iconPreview="@drawable/key_12key_enter" />
+	</Row>
+
+</Keyboard>

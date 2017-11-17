@@ -13,8 +13,6 @@ import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
@@ -1043,7 +1041,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_CHEONJIIN);
 			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_CHEONJIIN);
 			break;
-			
+
+		case ENGINE_MODE_12KEY_DUBUL_NARATGEUL:
+			mDirectInputMode = false;
+			mEnableTimeout = false;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_NARATGEUL);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_NARATGEUL);
+			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_DUBUL_12KEY_NARATGEUL);
+			break;
+
 		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:
 			mDirectInputMode = false;
 			mEnableTimeout = false;

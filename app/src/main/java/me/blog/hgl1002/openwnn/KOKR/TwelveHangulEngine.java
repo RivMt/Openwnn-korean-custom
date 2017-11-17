@@ -44,34 +44,10 @@ public class TwelveHangulEngine extends HangulEngine {
 	@Override
 	public int inputJamo(int jamo) {
 		if(cycled) composing = "";
+		// 획추가 키.
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
 			boolean found = false;
-//ykhong edit start			
-			int cc, c2;
-            switch(lastInputType) {
-			case INPUT_CHO2:
-			case INPUT_CHO3:
-				c2 = CHO_TABLE[this.cho];
-				cc = CHO_CONVERT[c2 - 0x3131];
-				break;
-
-			case INPUT_JUNG2:
-			case INPUT_JUNG3:
-				c2 = JUNG_TABLE[this.jung];
-				cc = c2 - 0x314f + 0x1161;
-				break;
-
-			case INPUT_JONG2:
-			case INPUT_JONG3:
-				c2 = JONG_TABLE[this.jong];
-				cc = JONG_CONVERT[c2 - 0x3131];
-				break;
-
-			default:
-				return 0;
-
-			}
-
+//ykhong edit start
 /* 
 			for(int[] item : addStrokeTable) {
 				int index = 0;
@@ -89,7 +65,7 @@ public class TwelveHangulEngine extends HangulEngine {
 				if(found)
 					break;
 				for(; index < item.length; index++) {
-					if(item[index] == cc) {
+					if(item[index] == last) {
 						addStrokeIndex = index;
 						if(++addStrokeIndex >= item.length)
 							continue;
@@ -104,9 +80,42 @@ public class TwelveHangulEngine extends HangulEngine {
 			}
 //ykhong edit end			
 			if(!found) return 0;
+		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1){
+			if((lastInputType == INPUT_CHO2 || lastInputType == INPUT_JONG3) && this.jong != -1) {
+				switch(this.jong) {
+				case 0x01:
+					super.backspace();
+					jamo = 0x11a9;
+					break;
+
+				case 0x11ba - 0x11a7:
+					super.backspace();
+					jamo = 0x11bb;
+					break;
+
+				default:
+					return 0;
+				}
+			} else if(lastInputType == INPUT_CHO3 || lastInputType == INPUT_CHO2) {
+				switch(this.cho) {
+				case 0x00:
+				case 0x03:
+				case 0x07:
+				case 0x09:
+				case 0x0c:
+					super.backspace();
+					jamo = this.cho + 0x1101;
+					break;
+
+				default:
+					return 0;
+				}
+			} else {
+				return 0;
+			}
 		}
 		int result = super.inputJamo(jamo);
-		
+
 		if(result == 0) {
 			resetJohab();
 			composing = String.valueOf((char) jamo);
