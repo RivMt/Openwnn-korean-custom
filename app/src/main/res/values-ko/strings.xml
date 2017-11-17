@@ -72,6 +72,7 @@
     <string name="preference_keyboard_dubul_yet">옛한글 두벌식</string>
     <string name="preference_keyboard_sebul_393y">옛한글 세벌식 393 (김경석)</string>
     <string name="preference_keyboard_sebul_3_2015y">옛한글 세벌식 3-2015 (소인배)</string>
+    <string name="preference_keyboard_sebul_393y_10cols">옛한글 세벌식 393 (10열 배열)</string>
     
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
