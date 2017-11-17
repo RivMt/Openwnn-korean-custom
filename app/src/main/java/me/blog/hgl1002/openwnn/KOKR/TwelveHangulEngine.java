@@ -27,6 +27,10 @@ public class TwelveHangulEngine extends HangulEngine {
 		if(table == null) return -1;
 		for(int[] item : table) {
 			if(item[0] == code) {
+				if(item.length == 2) {
+					ret = item[1];
+					break;
+				}
 				cycleIndex++;
 				if(cycleIndex >= item.length) cycleIndex = 1;
 				ret = item[cycleIndex];
@@ -140,10 +144,6 @@ public class TwelveHangulEngine extends HangulEngine {
 			return super.getVisible(cho, jung, jong);
 		}
 		return composing;
-	}
-
-	public void forceResetJohab() {
-		super.resetJohab();
 	}
 
 	public void resetCycle() {
