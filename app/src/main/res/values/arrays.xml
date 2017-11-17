@@ -89,12 +89,14 @@
     </string-array>
     
     <string-array name="keyboard_12key_layout">
+        <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>
         <item>@string/preference_keyboard_12key_sebul_munhwa</item>
         <item>@string/preference_keyboard_12key_sebul_hanson</item>
         <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
     
     <string-array name="keyboard_12key_layout_id">
+        <item>keyboard_12key_dubul_cheonjiin</item>
         <item>keyboard_12key_sebul_munhwa</item>
         <item>keyboard_12key_sebul_hanson</item>
         <item>keyboard_12key_sebul_sena</item>

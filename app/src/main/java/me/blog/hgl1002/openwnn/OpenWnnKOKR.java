@@ -27,6 +27,7 @@ import static me.blog.hgl1002.openwnn.KOKR.Layout12KeySebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutGongSebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutShinSebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutMoachigiSebul.*;
+import static me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
@@ -153,8 +154,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_12KEY_ALPHABET = 150;
 	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 151;
 	public static final int ENGINE_MODE_12KEY_SEBUL_HANSON = 153;
-	public static final int ENGINE_MODE_12KEY_DUBUL = 155;
-	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 156;
+	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 154;
+	public static final int ENGINE_MODE_12KEY_DUBUL_CHEONJIIN = 160;
+	public static final int ENGINE_MODE_12KEY_DUBUL_NARATGEUL = 161;
+	public static final int ENGINE_MODE_12KEY_DUBUL_SKY2 = 162;
 
 	public static final int ENGINE_MODE_ENGLISH_DVORAK = 192;
 	public static final int ENGINE_MODE_ENGLISH_COLEMAK = 193;
@@ -1033,6 +1036,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mDirectInputMode = false;
 			mEnableTimeout = true;
 			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_CHEONJIIN);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_CHEONJIIN);
 			break;
 			
 		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:

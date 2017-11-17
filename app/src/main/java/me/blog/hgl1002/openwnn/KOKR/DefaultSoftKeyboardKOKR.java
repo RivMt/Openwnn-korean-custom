@@ -62,11 +62,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYBOARD_KO_DUBUL_YET = 22;
 	public static final int KEYBOARD_KO_SEBUL_393Y = 23;
 	public static final int KEYBOARD_KO_SEBUL_3_2015Y = 24;
-	
+
+	// 12-Key layouts.
+
+	public static final int KEYBOARD_KO_DUBUL_CHEONJIIN = 10;
+	public static final int KEYBOARD_KO_DUBUL_NARATGEUL = 11;
+	public static final int KEYBOARD_KO_DUBUL_SKY2 = 12;
+
 	public static final int KEYBOARD_KO_SEBUL_MUNHWA = 20;
 	public static final int KEYBOARD_KO_SEBUL_SENA = 16;
 	public static final int KEYBOARD_KO_SEBUL_HANSON = 21;
-	
+
+
 	private static final int KEYMODE_LENGTH = 11;
 	
 	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
@@ -465,6 +472,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				switch(mCurrentKeyboards[mCurrentLanguage]) {
 				case KEYBOARD_EN_12KEY_ALPHABET:
 					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET;
+					break;
+
+				case KEYBOARD_KO_DUBUL_CHEONJIIN:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_CHEONJIIN;
+					break;
+
+				case KEYBOARD_KO_DUBUL_NARATGEUL:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_NARATGEUL;
+					break;
+
+				case KEYBOARD_KO_DUBUL_SKY2:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_SKY2;
 					break;
 					
 				case KEYBOARD_KO_SEBUL_MUNHWA:
@@ -1334,6 +1353,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			return KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 
 		// Hangul 12-key layouts
+
+		case "keyboard_12key_dubul_cheonjiin":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_cheonjiin);
+			return KEYBOARD_KO_DUBUL_CHEONJIIN;
 
 		case "keyboard_12key_sebul_munhwa":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);

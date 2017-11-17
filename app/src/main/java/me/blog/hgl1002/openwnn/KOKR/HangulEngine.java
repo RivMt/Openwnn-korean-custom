@@ -401,18 +401,24 @@ public class HangulEngine {
 			}
 			result = INPUT_CHO2;
 		// 두벌식 중성.
-		} else if(code >= 0x314f && code <= 0x3163 || code >= 0x3187 && code <= 0x318e) {
+		} else if(code >= 0x314f && code <= 0x3163 || code >= 0x3187 && code <= 0x318e || code == -100) {
 			// 조합 중인 종성이 없을 경우.
 			if(this.jong == -1) {
 				// 표준 한글 자모의 중성과 호환용 한글 자모의 중성은 배열 순서가 같음.
 				int jungCode = code - 0x314f;
 				// 옛한글 중성일 경우 따로 변환한다.
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
+				// 천지인 자판용 '천' 코드
+				if(code == -100) jungCode = -2003;
 				//조합 중인 중성이 존재할 경우.
 				if(isJung(last) && this.jung != -1) {
 					// 중성 낱자 결합을 시도한다.
-					if((combination = getCombination(this.jung+0x1161, jungCode+0x1161)) != -1) {
-						this.jung = combination - 0x1161;
+					int source = (this.jung >= 0) ? this.jung + 0x1161 : this.jung;
+					int with = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
+					System.out.println(source + " " + with);
+					if((combination = getCombination(source, with)) != -1) {
+						this.jung = combination;
+						if(combination >= 0x1161) this.jung -= 0x1161;
 					} else {
 						// 조합 불가 / 실패시 새로운 중성으로 조합 시도.
 						resetJohab();
@@ -423,11 +429,13 @@ public class HangulEngine {
 					if(this.jung != -1) resetJohab();
 					this.jung = jungCode;
 				}
-				last = jungCode + 0x1161;
+				last = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
 			// 조합 중인 종성이 존재할 경우 (도깨비불 발생)
 			} else {
 				int jungCode = code - 0x314f;
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
+				// 천지인 자판용 '천' 코드
+				if(code == -100) jungCode = -2003;
 				if(this.jong != -1 && this.cho != -1) {
 					// 종성이 두 개 이상 결합되었을 경우
 					if(beforeJong != 0) {
@@ -463,7 +471,7 @@ public class HangulEngine {
 					resetJohab();
 					this.jung = jungCode;
 				}
-				last = jungCode + 0x1161;
+				last = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
 			}
 			result = INPUT_JUNG2;
 		}

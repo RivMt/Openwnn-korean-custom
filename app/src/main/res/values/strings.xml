@@ -328,7 +328,10 @@
     <string name="preference_keyboard_sebul_3_2015y">Traditional Hangul Sebeolsik 3-2015 by Soinbae</string>
     <string name="preference_keyboard_sebul_393y_10cols">Traditional Hangul Sebeolsik 393 (10-Columns Layout)</string>
 	
-    
+
+    <string name="preference_keyboard_12key_dubul_cheonjiin">12-Key Dubeolsik Cheonjiin</string>
+    <string name="preference_keyboard_12key_dubul_naratgeul">12-Key Dubeolsik Naratgeul</string>
+    <string name="preference_keyboard_12key_dubul_sky2">12-Key Dubeolsik SKY 2</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12-Key Sebeolsik by Hangul Munhwawon</string>
     <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik (ZanNavi)</string>
     <string name="preference_keyboard_12key_sebul_sena">One-hand Sebeolsik (Sena)</string>
