@@ -6,7 +6,6 @@ public class TwelveHangulEngine extends HangulEngine {
 	
 	int lastCode;
 	
-	boolean cycled;
 	int cycleIndex;
 	int addStrokeIndex;
 	
@@ -43,23 +42,21 @@ public class TwelveHangulEngine extends HangulEngine {
 
 	@Override
 	public int inputJamo(int jamo) {
-		if(cycled) composing = "";
 		// 획추가 키.
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
 			boolean found = false;
 //ykhong edit start
-/* 
 			for(int[] item : addStrokeTable) {
 				int index = 0;
 				if(addStrokeIndex > 0 && addStrokeIndex < item.length) index = addStrokeIndex;
 				if(item[index] == last) {
 					if(++addStrokeIndex >= item.length) addStrokeIndex = 0;
 					jamo = item[addStrokeIndex];
-					cycled = true;
+					super.backspace();
 					found = true;
 				}
 			}
-*/
+			/*
 			for(int[] item : addStrokeTable) {
 				int index = 0;
 				if(found)
@@ -67,8 +64,7 @@ public class TwelveHangulEngine extends HangulEngine {
 				for(; index < item.length; index++) {
 					if(item[index] == last) {
 						addStrokeIndex = index;
-						if(++addStrokeIndex >= item.length)
-							continue;
+						if(++addStrokeIndex >= item.length) addStrokeIndex = 1;
 						jamo = item[addStrokeIndex];
 						super.backspace();
 						found = true;
@@ -78,6 +74,7 @@ public class TwelveHangulEngine extends HangulEngine {
 						break;
 				}
 			}
+			*/
 //ykhong edit end			
 			if(!found) return 0;
 		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1){

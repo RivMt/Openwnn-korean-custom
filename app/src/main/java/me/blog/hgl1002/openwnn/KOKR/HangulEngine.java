@@ -504,6 +504,7 @@ public class HangulEngine {
 		cho = jung = jong = -1;
 		composing = "";
 		lastInputType = 0;
+		last = 0;
 		histories.clear();
 	}
 
