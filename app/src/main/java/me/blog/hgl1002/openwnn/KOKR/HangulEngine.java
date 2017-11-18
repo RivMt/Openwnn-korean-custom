@@ -204,6 +204,7 @@ public class HangulEngine {
 			
 		} catch(EmptyStackException e) {
 			// 스택이 비었을 경우 (입력된 낱자가 없을 경우)
+			lastInputType = 0;
 			if(composing == "") {
 				// 일반적인 백스페이스로 동작.
 				return false;
