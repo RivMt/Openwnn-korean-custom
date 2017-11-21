@@ -43,30 +43,31 @@ public class TwelveHangulEngine extends HangulEngine {
 	@Override
 	public int inputJamo(int jamo) {
 
-		int search = 0;
-		if(isCho(last)) {
-			search = cho;
-			if(search >= 0) search += 0x1100;
-		} else if(isJung(last)) {
-			search = jung;
-			if(search >= 0) search += 0x1161;
-		} else if(isJong(last)) {
-			search = jong;
-			if(search >= 0) search += 0x11a7;
-		}
-
 		// 획추가 키.
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
+			int search = 0;
+			if(isCho(last)) {
+				search = cho;
+				if(search >= 0) search += 0x1100;
+			} else if(isJung(last)) {
+				search = jung;
+				if(search >= 0) search += 0x1161;
+			} else if(isJong(last)) {
+				search = jong;
+				if(search >= 0) search += 0x11a7;
+			}
 			boolean found = false;
 //ykhong edit start
 			for(int[] item : addStrokeTable) {
 				int index = 0;
 				if(addStrokeIndex > 0 && addStrokeIndex < item.length) index = addStrokeIndex;
-				if(item[index] == search) {
+				if(item[index] == search || item[index] == last) {
 					if(++addStrokeIndex >= item.length) addStrokeIndex = 0;
 					jamo = item[addStrokeIndex];
-					eraseJamo();
+					if(item[index] == last) super.backspace();
+					else eraseJamo();
 					found = true;
+					break;
 				}
 			}
 			/*
@@ -180,7 +181,6 @@ public class TwelveHangulEngine extends HangulEngine {
 	public void eraseJamo() {
 		int inputType = lastInputType;
 		while(lastInputType == inputType && lastInputType != 0) {
-			System.out.println(lastInputType);
 			super.backspace();
 		}
 	}
