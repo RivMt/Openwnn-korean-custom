@@ -17,18 +17,18 @@
 		<Key android:codes="-2004" android:keyLabel="ㄱㅋ" android:keyEdgeFlags="left" />
 		<Key android:codes="-2005" android:keyLabel="ㄴㄹ" />
 		<Key android:codes="-2006" android:keyLabel="ㄷㅌ" />
-		<Key android:codes="-2011" android:keyLabel=".,?!" android:keyEdgeFlags="right" />
+		<Key android:codes="-500" android:keyLabel="ABC" android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>
 		<Key android:codes="-2007" android:keyLabel="ㅂㅍ" android:keyEdgeFlags="left" />
 		<Key android:codes="-2008" android:keyLabel="ㅅㅎ" />
 		<Key android:codes="-2009" android:keyLabel="ㅈㅊ" />
-		<Key android:codes="-103" android:keyLabel="123" android:keyEdgeFlags="right" />
+		<Key android:codes="-2011" android:keyLabel=".,?!" android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>
-		<Key android:codes="-500" android:keyLabel="ABC" android:keyEdgeFlags="left" />
+		<Key android:codes="-103" android:keyLabel="123" android:keyEdgeFlags="left" />
 		<Key android:codes="-2010" android:keyLabel="ㅇㅁ" />
 		<Key android:codes="-215"
 			android:keyIcon="@drawable/key_12key_space"
