@@ -83,7 +83,15 @@
     
     <string name="preference_keyboard_alphabet_use_qwerty_title">항상 쿼티 기반 영문 키보드 사용</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">12키 한글 키보드를 사용할 때도 쿼티 기반(PC) 영문 키보드를 사용합니다.</string>
-    
+
+    <string name="preference_keyboard_12key_alphabet_title">12키 영문 키보드 종류</string>
+    <string name="preference_keyboard_12key_alphabet_summary">12키 영문 키보드 종류를 설정합니다.</string>
+
+    <string name="preference_keyboard_12key_alphabet_wide_a">Wide A</string>
+    <string name="preference_keyboard_12key_alphabet_wide_b">Wide B</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_a">Narrow A</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
+
     <string name="preference_keyboard_alphabet_title">영문 키보드 종류</string>
     <string name="preference_keyboard_alphabet_summary">영문 키보드 레이아웃을 설정합니다.</string>
     

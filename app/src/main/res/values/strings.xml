@@ -341,10 +341,18 @@
     
     <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
     <string name="preference_keyboard_alphabet_summary">Type of Alphabet keyboard.</string>
-    
+
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
     <string name="preference_keyboard_alphabet_dvorak">DVORAK</string>
     <string name="preference_keyboard_alphabet_colemak">COLEMAK</string>
+
+    <string name="preference_keyboard_12key_alphabet_title">12-Key Alphabet keyboard type</string>
+    <string name="preference_keyboard_12key_alphabet_summary">Type of 12-Key Alphabet keyboard.</string>
+
+    <string name="preference_keyboard_12key_alphabet_wide_a">Wide A</string>
+    <string name="preference_keyboard_12key_alphabet_wide_b">Wide B</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_a">Narrow A</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
     
     <string name="preference_keyboard_use_flick_title">Use Flick</string>
     <string name="preference_keyboard_use_flick_summary">Use flick (slide) function for keyboard.</string>

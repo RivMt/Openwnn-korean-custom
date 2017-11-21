@@ -149,8 +149,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_SEBUL_393Y = 119;
 	public static final int ENGINE_MODE_SEBUL_3_2015Y = 120;	
 	
-	public static final int ENGINE_MODE_12KEY_ALPHABET = 150;
-	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 151;
+	public static final int ENGINE_MODE_12KEY_ALPHABET_A = 150;
+	public static final int ENGINE_MODE_12KEY_ALPHABET_B = 151;
+	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 152;
 	public static final int ENGINE_MODE_12KEY_SEBUL_HANSON = 153;
 	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 154;
 	public static final int ENGINE_MODE_12KEY_DUBUL_CHEONJIIN = 160;
@@ -1028,11 +1029,17 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setJamoTable(JAMO_DUBUL_DANMOEUM_GOOGLE);
 			mHangulEngine.setCombinationTable(COMB_DUBUL_DANMOEUM_GOOGLE);
 			break;
-			
-		case ENGINE_MODE_12KEY_ALPHABET:
+
+		case ENGINE_MODE_12KEY_ALPHABET_A:
 			mDirectInputMode = false;
 			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET);
+			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_A);
+			break;
+
+		case ENGINE_MODE_12KEY_ALPHABET_B:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_B);
 			break;
 
 		case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
