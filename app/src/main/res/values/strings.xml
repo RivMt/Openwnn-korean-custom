@@ -370,7 +370,7 @@
     <string name="preference_keyboard_quick_period_summary">Double-press spacebar to input period.</string>
 
     <string name="preference_keyboard_space_reset_composing_title">Space to reset composing</string>
-    <string name="preference_keyboard_space_reset_composing_summary">Use space key to reset composing character on Dubeol Danmoeum layout.</string>
+    <string name="preference_keyboard_space_reset_composing_summary">Use space key to reset composing character on Dubeol Danmoeum layout, etc.</string>
 
 
     <string name="preference_hardware_setting_menu">Hardware Keyboard</string>

@@ -115,7 +115,7 @@
     <string name="preference_keyboard_quick_period_summary">스페이스바를 두 번 눌러서 마침표를 입력합니다.</string>
 
     <string name="preference_keyboard_space_reset_composing_title">스페이스바로 조합 종료</string>
-    <string name="preference_keyboard_space_reset_composing_summary">두벌식 단모음 배열에서 스페이스 키를 눌러서 조합을 종료할 수 있게 합니다.</string>
+    <string name="preference_keyboard_space_reset_composing_summary">두벌식 단모음 배열 등에서 스페이스 키를 눌러서 조합을 종료할 수 있게 합니다.</string>
 
 
     <string name="preference_hardware_setting_menu">하드웨어 키보드</string>

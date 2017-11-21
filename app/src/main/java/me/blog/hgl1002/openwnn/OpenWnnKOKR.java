@@ -629,12 +629,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					return true;
 				}
 			case KeyEvent.KEYCODE_SPACE:
-				// 두벌식 단모음 자판에서 스페이스바로 조합 끊기 옵션 적용시
+				// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
 				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
 					switch(mCurrentEngineMode) {
 					case ENGINE_MODE_DUBUL_DANMOEUM:
 					case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
 					case ENGINE_MODE_12KEY_DUBUL_SKY2:
+					case ENGINE_MODE_12KEY_ALPHABET_A:
+					case ENGINE_MODE_12KEY_ALPHABET_B:
 						resetJohab();
 						return true;
 					default:
