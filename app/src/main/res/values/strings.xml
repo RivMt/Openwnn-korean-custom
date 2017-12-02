@@ -414,6 +414,8 @@
 
      <string name="preference_dev_menu">Developer Settings</string>
 
+     <string name="preference_dev_show_dev_settings">Show Developer Settings</string>
+
      <string name="preference_dev_softkeyboard">Soft Keyboard</string>
      <string name="preference_dev_use_hangul_soft">Use Hangul Soft</string>
      <string name="preference_dev_hangul_soft_title">Hangul Soft Layout</string>
