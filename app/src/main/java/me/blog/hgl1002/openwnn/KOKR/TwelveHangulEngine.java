@@ -5,9 +5,7 @@ public class TwelveHangulEngine extends HangulEngine {
 	int[][] addStrokeTable;
 	
 	int lastCode;
-	int firstJamo, lastCycleJamo;
 	
-	boolean cycled;
 	int cycleIndex;
 	int addStrokeIndex;
 	
@@ -28,65 +26,61 @@ public class TwelveHangulEngine extends HangulEngine {
 		if(table == null) return -1;
 		for(int[] item : table) {
 			if(item[0] == code) {
-				cycled = true;
-				if(item.length == 2) cycled = false;
-				firstJamo = item[1];
-				if(++cycleIndex >= item.length) cycleIndex = 1;
+				if(item.length == 2) {
+					ret = item[1];
+					break;
+				}
+				cycleIndex++;
+				if(cycleIndex >= item.length) cycleIndex = 1;
 				ret = item[cycleIndex];
-				if(firstJamo != DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE)
-					lastCycleJamo = item[cycleIndex];
-				if(false == cycled)
-					break; // [2017/7/16 ykhong] : table 에서 매칭되는 것을 찾았으면 for 문을 그만한다.
+				if(lastCode == code) super.backspace();
 			}
 		}
-		if(lastCode != code) cycled = false;
 		lastCode = code;
 		return ret;
 	}
 
 	@Override
 	public int inputJamo(int jamo) {
-		if(cycled) composing = "";
-		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
-			boolean found = false;
-//ykhong edit start			
-			int cc, c2;
-            if(INPUT_CHO3 == lastInputType) {
-				c2 = CHO_TABLE[this.cho];
-				cc = CHO_CONVERT[c2 - 0x3131];
-			} else if(INPUT_JUNG3 == lastInputType) {
-                c2 = JUNG_TABLE[this.jung];
-				cc = c2 - 0x314f + 0x1161;
-			} else if(INPUT_JONG3 == lastInputType) {
-                c2 = JONG_TABLE[this.jong];
-				cc = JONG_CONVERT[c2 - 0x3131];
-            } else {
-                return 0;
-            }
 
-/* 
+		// 획추가 키.
+		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
+			int search = 0;
+			if(isCho(last)) {
+				search = cho;
+				if(search >= 0) search += 0x1100;
+			} else if(isJung(last)) {
+				search = jung;
+				if(search >= 0) search += 0x1161;
+			} else if(isJong(last)) {
+				search = jong;
+				if(search >= 0) search += 0x11a7;
+			}
+			boolean found = false;
+//ykhong edit start
 			for(int[] item : addStrokeTable) {
 				int index = 0;
 				if(addStrokeIndex > 0 && addStrokeIndex < item.length) index = addStrokeIndex;
-				if(item[index] == last) {
+				if(item[index] == search || item[index] == last) {
 					if(++addStrokeIndex >= item.length) addStrokeIndex = 0;
 					jamo = item[addStrokeIndex];
-					cycled = true;
+					if(item[index] == last) super.backspace();
+					else eraseJamo();
 					found = true;
+					break;
 				}
 			}
-*/
+			/*
 			for(int[] item : addStrokeTable) {
 				int index = 0;
-				if(true == found)
+				if(found)
 					break;
 				for(; index < item.length; index++) {
-					if(item[index] == cc) {
+					if(item[index] == last) {
 						addStrokeIndex = index;
-						if(++addStrokeIndex >= item.length)
-							continue;
+						if(++addStrokeIndex >= item.length) addStrokeIndex = 1;
 						jamo = item[addStrokeIndex];
-						cycled = true; // ??
+						super.backspace();
 						found = true;
 						break; // 원하는 STROKE 으로 변환했다면 그만한다.
 					}
@@ -94,11 +88,45 @@ public class TwelveHangulEngine extends HangulEngine {
 						break;
 				}
 			}
+			*/
 //ykhong edit end			
 			if(!found) return 0;
+		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1){
+			if((lastInputType == INPUT_CHO2 || lastInputType == INPUT_JONG3) && this.jong != -1) {
+				switch(this.jong) {
+				case 0x01:
+					super.backspace();
+					jamo = 0x11a9;
+					break;
+
+				case 0x11ba - 0x11a7:
+					super.backspace();
+					jamo = 0x11bb;
+					break;
+
+				default:
+					return 0;
+				}
+			} else if(lastInputType == INPUT_CHO3 || lastInputType == INPUT_CHO2) {
+				switch(this.cho) {
+				case 0x00:
+				case 0x03:
+				case 0x07:
+				case 0x09:
+				case 0x0c:
+					super.backspace();
+					jamo = this.cho + 0x1101;
+					break;
+
+				default:
+					return 0;
+				}
+			} else {
+				return 0;
+			}
 		}
 		int result = super.inputJamo(jamo);
-		
+
 		if(result == 0) {
 			resetJohab();
 			composing = String.valueOf((char) jamo);
@@ -138,27 +166,23 @@ public class TwelveHangulEngine extends HangulEngine {
 		return composing;
 	}
 
-	@Override
-	public void resetJohab() {
-		if(cycled) return;
-		super.resetJohab();
-	}
-	
-	public void forceResetJohab() {
-		super.resetJohab();
-	}
-
 	public void resetCycle() {
 		cycleIndex = 0;
 		addStrokeIndex = 0;
+		lastCode = 0;
 	}
 
 	@Override
 	public boolean backspace() {
-		cycleIndex = 0;
-		addStrokeIndex = 0;
-		lastCycleJamo = 0;
+		resetCycle();
 		return super.backspace();
+	}
+
+	public void eraseJamo() {
+		int inputType = lastInputType;
+		while(lastInputType == inputType && lastInputType != 0) {
+			super.backspace();
+		}
 	}
 
 	public int[][] getAddStrokeTable() {

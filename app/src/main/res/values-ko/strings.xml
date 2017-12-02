@@ -72,14 +72,26 @@
     <string name="preference_keyboard_dubul_yet">옛한글 두벌식</string>
     <string name="preference_keyboard_sebul_393y">옛한글 세벌식 393 (김경석)</string>
     <string name="preference_keyboard_sebul_3_2015y">옛한글 세벌식 3-2015 (소인배)</string>
-    
+    <string name="preference_keyboard_sebul_393y_10cols">옛한글 세벌식 393 (10열 배열)</string>
+
+    <string name="preference_keyboard_12key_dubul_cheonjiin">12키 두벌식 천지인</string>
+    <string name="preference_keyboard_12key_dubul_naratgeul">12키  두벌식 나랏글</string>
+    <string name="preference_keyboard_12key_dubul_sky2">12키 두벌식 SKY2</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
     <string name="preference_keyboard_12key_sebul_sena">한손 세벌식 (세나 배열)</string>
     
     <string name="preference_keyboard_alphabet_use_qwerty_title">항상 쿼티 기반 영문 키보드 사용</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">12키 한글 키보드를 사용할 때도 쿼티 기반(PC) 영문 키보드를 사용합니다.</string>
-    
+
+    <string name="preference_keyboard_12key_alphabet_title">12키 영문 키보드 종류</string>
+    <string name="preference_keyboard_12key_alphabet_summary">12키 영문 키보드 종류를 설정합니다.</string>
+
+    <string name="preference_keyboard_12key_alphabet_wide_a">Wide A</string>
+    <string name="preference_keyboard_12key_alphabet_wide_b">Wide B</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_a">Narrow A</string>
+    <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
+
     <string name="preference_keyboard_alphabet_title">영문 키보드 종류</string>
     <string name="preference_keyboard_alphabet_summary">영문 키보드 레이아웃을 설정합니다.</string>
     
@@ -103,7 +115,7 @@
     <string name="preference_keyboard_quick_period_summary">스페이스바를 두 번 눌러서 마침표를 입력합니다.</string>
 
     <string name="preference_keyboard_space_reset_composing_title">스페이스바로 조합 종료</string>
-    <string name="preference_keyboard_space_reset_composing_summary">두벌식 단모음 배열에서 스페이스 키를 눌러서 조합을 종료할 수 있게 합니다.</string>
+    <string name="preference_keyboard_space_reset_composing_summary">두벌식 단모음 배열 등에서 스페이스 키를 눌러서 조합을 종료할 수 있게 합니다.</string>
 
 
     <string name="preference_hardware_setting_menu">하드웨어 키보드</string>

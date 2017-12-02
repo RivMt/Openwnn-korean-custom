@@ -59,6 +59,7 @@
         <item>@string/preference_keyboard_dubul_yet</item>
         <item>@string/preference_keyboard_sebul_393y</item>
         <item>@string/preference_keyboard_sebul_3_2015y</item>
+        <item>@string/preference_keyboard_sebul_393y_10cols</item>
     </string-array>
 
     <string-array name="keyboard_hangul_layout_id">
@@ -84,15 +85,22 @@
         <item>keyboard_dubul_yet</item>
         <item>keyboard_sebul_393y</item>
         <item>keyboard_sebul_3_2015y</item>
+        <item>keyboard_sebul_393y_10cols</item>
     </string-array>
     
     <string-array name="keyboard_12key_layout">
+        <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>
+        <item>@string/preference_keyboard_12key_dubul_naratgeul</item>
+	    <item>@string/preference_keyboard_12key_dubul_sky2</item>
         <item>@string/preference_keyboard_12key_sebul_munhwa</item>
         <item>@string/preference_keyboard_12key_sebul_hanson</item>
         <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
     
     <string-array name="keyboard_12key_layout_id">
+        <item>keyboard_12key_dubul_cheonjiin</item>
+        <item>keyboard_12key_dubul_naratgeul</item>
+        <item>keyboard_12key_dubul_sky2</item>
         <item>keyboard_12key_sebul_munhwa</item>
         <item>keyboard_12key_sebul_hanson</item>
         <item>keyboard_12key_sebul_sena</item>
@@ -108,6 +116,20 @@
     	<item>keyboard_alphabet_qwerty</item>
     	<item>keyboard_alphabet_dvorak</item>
     	<item>keyboard_alphabet_colemak</item>
+    </string-array>
+
+    <string-array name="keyboard_12key_alphabet_layout">
+        <item>@string/preference_keyboard_12key_alphabet_wide_a</item>
+	    <item>@string/preference_keyboard_12key_alphabet_wide_b</item>
+	    <item>@string/preference_keyboard_12key_alphabet_narrow_a</item>
+	    <item>@string/preference_keyboard_12key_alphabet_narrow_b</item>
+    </string-array>
+
+    <string-array name="keyboard_12key_alphabet_layout_id">
+	    <item>keyboard_12key_alphabet_wide_a</item>
+	    <item>keyboard_12key_alphabet_wide_b</item>
+	    <item>keyboard_12key_alphabet_narrow_a</item>
+	    <item>keyboard_12key_alphabet_narrow_b</item>
     </string-array>
 
 	<string-array name="lang_key_actions">

@@ -35,7 +35,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYBOARD_EN_ALPHABET_DVORAK = 1;
 	public static final int KEYBOARD_EN_ALPHABET_COLEMAK = 2;
 
-	public static final int KEYBOARD_EN_12KEY_ALPHABET = 4;
+	public static final int KEYBOARD_EN_12KEY_ALPHABET_WIDE_A = 4;
+	public static final int KEYBOARD_EN_12KEY_ALPHABET_WIDE_B = 5;
+	public static final int KEYBOARD_EN_12KEY_ALPHABET_NARROW_A = 6;
+	public static final int KEYBOARD_EN_12KEY_ALPHABET_NARROW_B = 7;
 	
 	public static final int KEYBOARD_KO_DUBUL_STANDARD = 2;
 	public static final int KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE = 3;
@@ -62,11 +65,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYBOARD_KO_DUBUL_YET = 22;
 	public static final int KEYBOARD_KO_SEBUL_393Y = 23;
 	public static final int KEYBOARD_KO_SEBUL_3_2015Y = 24;
-	
+
+	// 12-Key layouts.
+
+	public static final int KEYBOARD_KO_DUBUL_CHEONJIIN = 10;
+	public static final int KEYBOARD_KO_DUBUL_NARATGEUL = 11;
+	public static final int KEYBOARD_KO_DUBUL_SKY2 = 12;
+
 	public static final int KEYBOARD_KO_SEBUL_MUNHWA = 20;
 	public static final int KEYBOARD_KO_SEBUL_SENA = 16;
 	public static final int KEYBOARD_KO_SEBUL_HANSON = 21;
-	
+
+
 	private static final int KEYMODE_LENGTH = 11;
 	
 	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
@@ -463,8 +473,26 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				}
 			} else {
 				switch(mCurrentKeyboards[mCurrentLanguage]) {
-				case KEYBOARD_EN_12KEY_ALPHABET:
-					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET;
+				case KEYBOARD_EN_12KEY_ALPHABET_NARROW_A:
+				case KEYBOARD_EN_12KEY_ALPHABET_WIDE_A:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_A;
+					break;
+
+				case KEYBOARD_EN_12KEY_ALPHABET_NARROW_B:
+				case KEYBOARD_EN_12KEY_ALPHABET_WIDE_B:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_B;
+					break;
+
+				case KEYBOARD_KO_DUBUL_CHEONJIIN:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_CHEONJIIN;
+					break;
+
+				case KEYBOARD_KO_DUBUL_NARATGEUL:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_NARATGEUL;
+					break;
+
+				case KEYBOARD_KO_DUBUL_SKY2:
+					mode = OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_SKY2;
 					break;
 					
 				case KEYBOARD_KO_SEBUL_MUNHWA:
@@ -1038,10 +1066,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		} else {
 			
 			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
-			
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_shift);
-			mCurrentKeyboards[LANG_EN] = KEYBOARD_EN_12KEY_ALPHABET;
+
+			String defaultLayout = pref.getString("keyboard_alphabet_12key_layout", "keyboard_12key_alphabet_narrow_a");
+			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
+			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
+
 		}
 
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
@@ -1136,6 +1165,28 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_colemak_shift);
 			return KEYBOARD_EN_ALPHABET_COLEMAK;
 
+		// Alphabet 12-Key layouts
+
+		case "keyboard_12key_alphabet_wide_a":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_a);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_a_shift);
+			return KEYBOARD_EN_12KEY_ALPHABET_WIDE_A;
+
+		case "keyboard_12key_alphabet_wide_b":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_b);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_b_shift);
+			return KEYBOARD_EN_12KEY_ALPHABET_WIDE_B;
+
+		case "keyboard_12key_alphabet_narrow_a":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_a);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_a_shift);
+			return KEYBOARD_EN_12KEY_ALPHABET_NARROW_A;
+
+		case "keyboard_12key_alphabet_narrow_b":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_b);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_b_shift);
+			return KEYBOARD_EN_12KEY_ALPHABET_NARROW_B;
+
 		// Hangul layouts
 
 		case "keyboard_sebul_390":
@@ -1161,6 +1212,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case "keyboard_sebul_393y":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y);
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y_shift);
+			return KEYBOARD_KO_SEBUL_393Y;
+
+		case "keyboard_sebul_393y_10cols":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y_10cols);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_sebul_393y_10cols_shift);
 			return KEYBOARD_KO_SEBUL_393Y;
 
 		case "keyboard_sebul_danmoeum":
@@ -1329,6 +1385,18 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			return KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
 
 		// Hangul 12-key layouts
+
+		case "keyboard_12key_dubul_cheonjiin":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_cheonjiin);
+			return KEYBOARD_KO_DUBUL_CHEONJIIN;
+
+		case "keyboard_12key_dubul_naratgeul":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_naratgeul);
+			return KEYBOARD_KO_DUBUL_NARATGEUL;
+
+		case "keyboard_12key_dubul_sky2":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_sky2);
+			return KEYBOARD_KO_DUBUL_SKY2;
 
 		case "keyboard_12key_sebul_munhwa":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);

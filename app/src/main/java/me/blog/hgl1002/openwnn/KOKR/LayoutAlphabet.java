@@ -100,7 +100,7 @@ public class LayoutAlphabet {
 			{0x2f, 0x2f, 0x3f},
 	};
 
-	public static final int[][] CYCLE_12KEY_ALPHABET = {
+	public static final int[][] CYCLE_12KEY_ALPHABET_A = {
 			{-201, '.', '@'},
 			{-202, 'a', 'b', 'c'},
 			{-203, 'd', 'e', 'f'},
@@ -111,7 +111,20 @@ public class LayoutAlphabet {
 			{-208, 't', 'u', 'v'},
 			{-209, 'w', 'x', 'y', 'z'},
 			{-210, '-'},
-			{-211, '.', ','},
+			{-211, ',', '?', '!'},
+	};
+	public static final int[][] CYCLE_12KEY_ALPHABET_B = {
+			{-201, '.', 'q', 'z'},
+			{-202, 'a', 'b', 'c'},
+			{-203, 'd', 'e', 'f'},
+			{-204, 'g', 'h', 'i'},
+			{-205, 'j', 'k', 'l'},
+			{-206, 'm', 'n', 'o'},
+			{-207, 'p', 'r', 's'},
+			{-208, 't', 'u', 'v'},
+			{-209, 'w', 'x', 'y'},
+			{-210, '-'},
+			{-211, ',', '?', '!'},
 	};
 
 }

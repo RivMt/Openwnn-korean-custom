@@ -13,8 +13,6 @@ import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
@@ -27,6 +25,7 @@ import static me.blog.hgl1002.openwnn.KOKR.Layout12KeySebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutGongSebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutShinSebul.*;
 import static me.blog.hgl1002.openwnn.KOKR.LayoutMoachigiSebul.*;
+import static me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
@@ -150,11 +149,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_SEBUL_393Y = 119;
 	public static final int ENGINE_MODE_SEBUL_3_2015Y = 120;	
 	
-	public static final int ENGINE_MODE_12KEY_ALPHABET = 150;
-	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 151;
+	public static final int ENGINE_MODE_12KEY_ALPHABET_A = 150;
+	public static final int ENGINE_MODE_12KEY_ALPHABET_B = 151;
+	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 152;
 	public static final int ENGINE_MODE_12KEY_SEBUL_HANSON = 153;
-	public static final int ENGINE_MODE_12KEY_DUBUL = 155;
-	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 156;
+	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 154;
+	public static final int ENGINE_MODE_12KEY_DUBUL_CHEONJIIN = 160;
+	public static final int ENGINE_MODE_12KEY_DUBUL_NARATGEUL = 161;
+	public static final int ENGINE_MODE_12KEY_DUBUL_SKY2 = 162;
 
 	public static final int ENGINE_MODE_ENGLISH_DVORAK = 192;
 	public static final int ENGINE_MODE_ENGLISH_COLEMAK = 193;
@@ -217,9 +219,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mSpace, mCharInput;
 	boolean mInput;
 
-	boolean mBackspacemSelectionMode;
-	int mBackspacemSelectionStart;
-	int mBackspacemSelectionEnd;
+	boolean mBackspaceSelectionMode;
+	int mBackspaceSelectionStart;
+	int mBackspaceSelectionEnd;
 
 	Handler mTimeOutHandler;
 
@@ -261,8 +263,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).forceResetJohab();
-		mHangulEngine.resetJohab();
+		resetJohab();
 		if(restarting) {
 			super.onStartInputView(attribute, restarting);
 		} else {
@@ -336,7 +337,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onFinishInput() {
-		mHangulEngine.resetJohab();
+		resetJohab();
 		super.onFinishInput();
 	}
 
@@ -346,7 +347,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mInputConnection.finishComposingText();
 		super.onViewClicked(focusChanged);
 		mHangulEngine.setComposing("");
-		mHangulEngine.resetJohab();
+		resetJohab();
 	}
 
 	@Override
@@ -370,7 +371,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 			
 		case OpenWnnEvent.CHANGE_MODE:
-			mHangulEngine.resetJohab();
+			resetJohab();
 			changeEngineMode(ev.mode);
 			return true;
 			
@@ -380,53 +381,52 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 
 		case BACKSPACE_LEFT_EVENT:
-			if(!mBackspacemSelectionMode) {
-				mBackspacemSelectionMode = true;
-				mBackspacemSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
-				mBackspacemSelectionStart = mBackspacemSelectionEnd;
-				mHangulEngine.resetJohab();
+			if(!mBackspaceSelectionMode) {
+				mBackspaceSelectionMode = true;
+				mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+				mBackspaceSelectionStart = mBackspaceSelectionEnd;
+				resetJohab();
 			}
 			while(true) {
-				mBackspacemSelectionStart--;
-				mInputConnection.setSelection(mBackspacemSelectionStart, mBackspacemSelectionEnd);
+				mBackspaceSelectionStart--;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
 				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspacemSelectionStart <= 0
-						|| mBackspacemSelectionStart >= mBackspacemSelectionEnd) {
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
 					break;
 				}
 			}
 			return true;
 
 		case BACKSPACE_RIGHT_EVENT:
-			if(!mBackspacemSelectionMode) {
+			if(!mBackspaceSelectionMode) {
 				return true;
 			}
 			while(true) {
-				mBackspacemSelectionStart++;
-				mInputConnection.setSelection(mBackspacemSelectionStart, mBackspacemSelectionEnd);
+				mBackspaceSelectionStart++;
+				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
 				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspacemSelectionStart <= 0
-						|| mBackspacemSelectionStart >= mBackspacemSelectionEnd) {
+						|| mBackspaceSelectionStart <= 0
+						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
 					break;
 				}
 			}
 			return true;
 
 		case BACKSPACE_COMMIT_EVENT:
-			if(!mBackspacemSelectionMode) {
+			if(!mBackspaceSelectionMode) {
 				return true;
 			}
-			mInputConnection.setSelection(mBackspacemSelectionEnd, mBackspacemSelectionEnd);
-			mInputConnection.deleteSurroundingText(mBackspacemSelectionEnd - mBackspacemSelectionStart, 0);
-			mBackspacemSelectionMode = false;
+			mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
+			mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
+			mBackspaceSelectionMode = false;
 			return true;
 			
 		case TIMEOUT_EVENT:
 			if(mEnableTimeout) {
-				mHangulEngine.resetJohab();
+				resetJohab();
 				if(mHangulEngine instanceof TwelveHangulEngine) {
-					((TwelveHangulEngine) mHangulEngine).forceResetJohab();
-					((TwelveHangulEngine) mHangulEngine).resetCycle();
+					resetJohab();
 				}
 			}
 			if(mQuickPeriod) {
@@ -632,17 +632,20 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					return true;
 				}
 			case KeyEvent.KEYCODE_SPACE:
-				// 두벌식 단모음 자판에서 스페이스바로 조합 끊기 옵션 적용시
+				// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
 				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
 					switch(mCurrentEngineMode) {
 					case ENGINE_MODE_DUBUL_DANMOEUM:
-						mHangulEngine.resetJohab();
+					case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
+					case ENGINE_MODE_12KEY_DUBUL_SKY2:
+					case ENGINE_MODE_12KEY_ALPHABET_A:
+					case ENGINE_MODE_12KEY_ALPHABET_B:
+						resetJohab();
 						return true;
 					default:
 					}
 				}
-				if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).forceResetJohab();
-				mHangulEngine.resetJohab();
+				resetJohab();
 				if(mQuickPeriod && mSpace && mCharInput) {
 					mInputConnection.deleteSurroundingText(1, 0);
 					mInputConnection.commitText(". ", 1);
@@ -688,7 +691,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 		if(mDirectInputMode || direct) {
 			code = originalCode;
-			mHangulEngine.resetJohab();
+			resetJohab();
 			code = (shift == 0) ? code : Character.toUpperCase(code);
 			mInputConnection.commitText(String.valueOf(code), 1);
 			return;
@@ -698,11 +701,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(mHangulEngine.inputJamo(jamo) != 0) {
 				mInputConnection.setComposingText(mHangulEngine.getComposing(), 1);
 			} else {
-				mHangulEngine.resetJohab();
+				resetJohab();
 				sendKeyChar((char) jamo);
 			}
 		} else {
-			mHangulEngine.resetJohab();
+			resetJohab();
 			sendKeyChar(originalCode);
 		}
 	}
@@ -802,7 +805,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 
 		if (key >= KeyEvent.KEYCODE_NUMPAD_0 && key <= KeyEvent.KEYCODE_NUMPAD_RIGHT_PAREN) {
-			mHangulEngine.resetJohab();
+			resetJohab();
 			return false;
 		}
 
@@ -836,7 +839,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		} else if (key == KeyEvent.KEYCODE_SPACE) {
 			// 한글 조합을 종료한다
-			mHangulEngine.resetJohab();
+			resetJohab();
 			// Shift 조합과 함께 눌렀을 경우
 			if (mHardShift == 1) {
 				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
@@ -850,18 +853,18 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 		} else if (key == KeyEvent.KEYCODE_DEL) {
 			if (!mHangulEngine.backspace()) {
-				mHangulEngine.resetJohab();
+				resetJohab();
 				return false;
 			}
 			if (mHangulEngine.getComposing() == "")
-				mHangulEngine.resetJohab();
+				resetJohab();
 			return true;
 		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
-			mHangulEngine.resetJohab();
+			resetJohab();
 			mInputConnection.deleteSurroundingText(1, 0);
 			return true;
 		} else if(key == KeyEvent.KEYCODE_ENTER) {
-			mHangulEngine.resetJohab();
+			resetJohab();
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
@@ -877,7 +880,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				return false;
 			}
 		} else {
-			mHangulEngine.resetJohab();
+			resetJohab();
 		}
 		
 		return false;
@@ -1070,13 +1073,41 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setJamoTable(JAMO_DUBUL_DANMOEUM_GOOGLE);
 			mHangulEngine.setCombinationTable(COMB_DUBUL_DANMOEUM_GOOGLE);
 			break;
-			
-		case ENGINE_MODE_12KEY_ALPHABET:
+
+		case ENGINE_MODE_12KEY_ALPHABET_A:
 			mDirectInputMode = false;
 			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET);
+			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_A);
 			break;
-			
+
+		case ENGINE_MODE_12KEY_ALPHABET_B:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_B);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_CHEONJIIN);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_CHEONJIIN);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_NARATGEUL:
+			mDirectInputMode = false;
+			mEnableTimeout = false;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_NARATGEUL);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_NARATGEUL);
+			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_DUBUL_12KEY_NARATGEUL);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_SKY2:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_SKY2);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_SKY2);
+			break;
+
 		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:
 			mDirectInputMode = false;
 			mEnableTimeout = false;
@@ -1198,6 +1229,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mode = DefaultSoftKeyboardKOKR.HARD_KEYMODE_LANG
 				+ ((DefaultSoftKeyboard) mInputViewManager).mCurrentLanguage;
 		((DefaultSoftKeyboard) mInputViewManager).updateIndicator(mode);
+	}
+
+	private void resetJohab() {
+		mHangulEngine.resetJohab();
+		if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).resetCycle();
 	}
 
 	private void updateNumKeyboardShiftState() {

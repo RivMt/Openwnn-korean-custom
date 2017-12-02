@@ -24,6 +24,13 @@
 			android:title="@string/preference_keyboard_alphabet_use_qwerty_title"
 			android:summary="@string/preference_keyboard_alphabet_use_qwerty_summary" />
 		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="keyboard_alphabet_12key_layout"
+			android:title="@string/preference_keyboard_12key_alphabet_title"
+			android:summary="@string/preference_keyboard_12key_alphabet_summary"
+			android:entries="@array/keyboard_12key_alphabet_layout"
+			android:entryValues="@array/keyboard_12key_alphabet_layout_id"
+			android:defaultValue="keyboard_12key_alphabet_narrow_a" />
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
 			android:key="keyboard_alphabet_layout"
 			android:title="@string/preference_keyboard_alphabet_title"
 			android:summary="@string/preference_keyboard_alphabet_summary"

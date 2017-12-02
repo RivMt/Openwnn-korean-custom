@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+	android:keyWidth="20%p" android:horizontalGap="0px"
+	android:verticalGap="0px" android:keyHeight="54dip">
+
+	<Row>
+		<Key android:codes="-215" android:keyLabel=" " android:keyEdgeFlags="left" />
+		<Key android:codes="-201" android:keyLabel=". @" />
+		<Key android:codes="-202" android:keyLabel="ABC" />
+		<Key android:codes="-203" android:keyLabel="DEF" />
+		<Key android:codes="-214" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_del"
+			android:iconPreview="@drawable/key_12key_del"
+			android:isRepeatable="false" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-215" android:keyLabel=" " android:keyEdgeFlags="left" />
+		<Key android:codes="-204" android:keyLabel="GHI" />
+		<Key android:codes="-205" android:keyLabel="JKL" />
+		<Key android:codes="-206" android:keyLabel="MNO" />
+		<Key android:codes="-215" android:keyLabel=" " android:keyEdgeFlags="right" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-103" android:keyLabel="123" android:keyEdgeFlags="left" />
+		<Key android:codes="-207" android:keyLabel="PQRS" />
+		<Key android:codes="-208" android:keyLabel="TUV" />
+		<Key android:codes="-209" android:keyLabel="WXYZ" />
+		<Key android:codes="-215" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_space"
+			android:iconPreview="@drawable/key_12key_space" />
+	</Row>
+
+	<Row>
+		<Key android:codes="-500" android:keyLabel="가" android:keyEdgeFlags="left" />
+		<Key android:codes="-1" android:keyLabel="A a" />
+		<Key android:codes="-210" android:keyLabel="-" />
+		<Key android:codes="-211" android:keyLabel=", ? !" />
+		<Key android:codes="-216" android:keyEdgeFlags="right"
+			android:keyIcon="@drawable/key_12key_enter"
+			android:iconPreview="@drawable/key_12key_enter" />
+	</Row>
+
+</Keyboard>
