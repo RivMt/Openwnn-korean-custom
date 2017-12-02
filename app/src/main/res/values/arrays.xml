@@ -87,6 +87,14 @@
         <item>keyboard_sebul_3_2015y</item>
         <item>keyboard_sebul_393y_10cols</item>
     </string-array>
+
+    <string-array name="keyboard_hangul_layout_dev">
+        <item>@string/preference_keyboard_nebul_1969</item>
+    </string-array>
+
+    <string-array name="keyboard_hangul_layout_dev_id">
+        <item>keyboard_nebul_1969</item>
+    </string-array>
     
     <string-array name="keyboard_12key_layout">
         <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>

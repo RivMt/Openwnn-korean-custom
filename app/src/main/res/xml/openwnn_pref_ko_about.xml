@@ -3,8 +3,7 @@
 			android:key="openwnn_pref_ko">
 
 	<PreferenceCategory android:title="@string/preference_aboutime_menu">
-		<Preference android:key="openwnn_version"
-			style="?android:preferenceInformationStyle"
+		<me.blog.hgl1002.openwnn.KOKR.RevealHiddenPreference android:key="reveal_dev_settings"
 			android:title="@string/openwnn_korean"
 			android:summary="@string/openwnn_korean_copyright" />
 		<Preference android:key="donate_info"

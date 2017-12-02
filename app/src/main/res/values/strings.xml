@@ -327,7 +327,9 @@
     <string name="preference_keyboard_sebul_393y">Traditional Hangul Sebeolsik 393 by Gim Gyeongseog</string>
     <string name="preference_keyboard_sebul_3_2015y">Traditional Hangul Sebeolsik 3-2015 by Soinbae</string>
     <string name="preference_keyboard_sebul_393y_10cols">Traditional Hangul Sebeolsik 393 (10-Columns Layout)</string>
-	
+
+    <string name="preference_keyboard_nebul_1969">Nebeolsik Old Standard (1969)</string>
+
 
     <string name="preference_keyboard_12key_dubul_cheonjiin">12-Key Dubeolsik Cheonjiin</string>
     <string name="preference_keyboard_12key_dubul_naratgeul">12-Key Dubeolsik Naratgeul</string>
@@ -417,5 +419,20 @@
 
      <string name="preference_system_force_hangul_title">Force Hangeul Keyboard</string>
 	 <string name="preference_system_force_hangul_summary">Set default keyboard language to Hangeul and force it to be shown first.</string>
+
+
+     <string name="preference_reveal_hidden_msg">%d steps before revealing developer menu.</string>
+
+     <string name="preference_dev_menu">Developer Settings</string>
+
+     <string name="preference_dev_show_dev_settings">Show Developer Settings</string>
+
+     <string name="preference_dev_softkeyboard">Soft Keyboard</string>
+     <string name="preference_dev_use_hangul_soft">Use Hangul Soft</string>
+     <string name="preference_dev_hangul_soft_title">Hangul Soft Layout</string>
+
+      <string name="preference_dev_hardkeyboard">Hard Keyboard</string>
+      <string name="preference_dev_use_hangul_hard">Use Hangul Hard</string>
+      <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
 
 </resources>

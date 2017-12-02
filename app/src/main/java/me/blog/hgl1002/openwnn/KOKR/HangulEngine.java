@@ -176,6 +176,7 @@ public class HangulEngine {
 	 * 마이너스 코드를 임의의 한글 낱자로 사용한다.
 	 * -1000, -2000, -3000대: 가상 낱자 초성, 중성, 종성
 	 * -4000, -5000, -6000대: 현재 입력 상태를 변화시키지 않는 가상 낱자 초성, 중성, 종성.
+	 * -5100대: 받침을 허용하지 않는 가상 낱자 중성.
 	 */
 	int[][] virtualJamoTable;
 	
@@ -320,6 +321,7 @@ public class HangulEngine {
 			int jongCode = code;
 			if(jongCode >= 0x11a8) jongCode -= 0x11a7;
 			if(!moachigi && !isJung(last) && !isJong(last)) resetJohab();
+			if(last <= -5100 && last >= -5199) resetJohab();
 			if(isJong(last) || fullMoachigi && this.jong != -1) {
 				int source = this.jong;
 				if(source >= 0) source += 0x11a7;

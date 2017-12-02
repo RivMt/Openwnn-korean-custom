@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
+import me.blog.hgl1002.openwnn.KOKR.LayoutDev;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 
@@ -144,6 +145,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_SEBUL_AHNMATAE = 115;
 	public static final int ENGINE_MODE_SEBUL_SEMOE_2016 = 116;
 	public static final int ENGINE_MODE_SEBUL_SEMOE = 117;
+
+	public static final int ENGINE_MODE_NEBUL_1969 = 901;
 	
 	public static final int ENGINE_MODE_DUBULSIK_YET = 118;
 	public static final int ENGINE_MODE_SEBUL_393Y = 119;
@@ -1131,7 +1134,17 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setCombinationTable(COMB_SEBUL_12KEY_SENA);
 			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_SEBUL_12KEY_SENA);
 			break;
-			
+
+			// Developer layouts
+
+		case ENGINE_MODE_NEBUL_1969:
+			mDirectInputMode = false;
+			mEnableTimeout = false;
+			mHangulEngine.setJamoTable(LayoutDev.JAMO_NEBUL_1969);
+			mHangulEngine.setCombinationTable(LayoutDev.COMB_NEBUL_1969);
+			mHangulEngine.setVirtualJamoTable(LayoutDev.VIRTUAL_NEBUL_1969);
+			break;
+
 		}
 	}
 	

@@ -76,6 +76,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYBOARD_KO_SEBUL_SENA = 16;
 	public static final int KEYBOARD_KO_SEBUL_HANSON = 21;
 
+	public static final int KEYBOARD_KO_NEBUL_1969 = 101;
 
 	private static final int KEYMODE_LENGTH = 11;
 	
@@ -469,7 +470,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				case KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE:
 					mode = OpenWnnKOKR.ENGINE_MODE_DUBUL_DANMOEUM;
 					break;
-					
+
+					// Developer layouts
+
+				case KEYBOARD_KO_NEBUL_1969:
+					mode = OpenWnnKOKR.ENGINE_MODE_NEBUL_1969;
+					break;
+
 				}
 			} else {
 				switch(mCurrentKeyboards[mCurrentLanguage]) {
@@ -1040,9 +1047,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mUseAlphabetQwerty = true;
 			String defaultLayout = "keyboard_sebul_391";
 			if(!mHardKeyboardHidden) {
-				defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+				if(pref.getBoolean("keyboard_dev_use_hangul_hard", false)) {
+					defaultLayout = pref.getString("keyboard_dev_hard_layout", "keyboard_sebul_391");
+				} else {
+					defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+				}
 			} else {
-				defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+				if(pref.getBoolean("keyboard_dev_use_hangul_soft", false)) {
+					defaultLayout = pref.getString("keyboard_dev_soft_layout", "keyboard_sebul_391");
+				} else {
+					defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+				}
 			}
 			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
 			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
@@ -1105,9 +1120,17 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mCurrentKeyboardType = KEYBOARD_QWERTY;
 			String defaultLayout = "keyboard_sebul_391";
 			if(!mHardKeyboardHidden) {
-				defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+				if(pref.getBoolean("keyboard_dev_use_hangul_hard", false)) {
+					defaultLayout = pref.getString("keyboard_dev_hard_layout", "keyboard_sebul_391");
+				} else {
+					defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+				}
 			} else {
-				defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+				if(pref.getBoolean("keyboard_dev_use_hangul_soft", false)) {
+					defaultLayout = pref.getString("keyboard_dev_soft_layout", "keyboard_sebul_391");
+				} else {
+					defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+				}
 			}
 
 			int currentKeyboard = loadKeyboard(keyList, defaultLayout);
@@ -1383,6 +1406,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case "keyboard_dubul_danmoeum_google":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
 			return KEYBOARD_KO_DUBUL_DANMOEUM_GOOGLE;
+
+		// Hangul developer layouts
+
+		case "keyboard_nebul_1969":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_nebul_1969);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_nebul_1969_shift);
+			return KEYBOARD_KO_NEBUL_1969;
+
 
 		// Hangul 12-key layouts
 
