@@ -14,6 +14,7 @@ public class RevealHiddenPreference extends Preference {
 
 	Context context;
 	int clickCount;
+	Toast showingToast;
 
 	public RevealHiddenPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -27,7 +28,9 @@ public class RevealHiddenPreference extends Preference {
 			persistBoolean(true);
 		} else if(clickCount >= ALERT) {
 			String message = String.format(context.getString(R.string.preference_reveal_hidden_msg), REVEAL - clickCount);
-			Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+			if(showingToast != null) showingToast.cancel();
+			showingToast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+			showingToast.show();
 		}
 		super.onClick();
 	}
