@@ -210,13 +210,16 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	String mLangKeyLongAction;
 
 	boolean mAltDirect;
+
+	boolean mSelectionMode;
+	int mSelectionStart, mSelectionEnd;
 	
 	boolean mSpace, mCharInput;
 	boolean mInput;
 
-	boolean mBackspaceSelectionMode;
-	int mBackspaceSelectionStart;
-	int mBackspaceSelectionEnd;
+	boolean mBackspacemSelectionMode;
+	int mBackspacemSelectionStart;
+	int mBackspacemSelectionEnd;
 
 	Handler mTimeOutHandler;
 
@@ -377,45 +380,45 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 
 		case BACKSPACE_LEFT_EVENT:
-			if(!mBackspaceSelectionMode) {
-				mBackspaceSelectionMode = true;
-				mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
-				mBackspaceSelectionStart = mBackspaceSelectionEnd;
+			if(!mBackspacemSelectionMode) {
+				mBackspacemSelectionMode = true;
+				mBackspacemSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+				mBackspacemSelectionStart = mBackspacemSelectionEnd;
 				mHangulEngine.resetJohab();
 			}
 			while(true) {
-				mBackspaceSelectionStart--;
-				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				mBackspacemSelectionStart--;
+				mInputConnection.setSelection(mBackspacemSelectionStart, mBackspacemSelectionEnd);
 				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspaceSelectionStart <= 0
-						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+						|| mBackspacemSelectionStart <= 0
+						|| mBackspacemSelectionStart >= mBackspacemSelectionEnd) {
 					break;
 				}
 			}
 			return true;
 
 		case BACKSPACE_RIGHT_EVENT:
-			if(!mBackspaceSelectionMode) {
+			if(!mBackspacemSelectionMode) {
 				return true;
 			}
 			while(true) {
-				mBackspaceSelectionStart++;
-				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+				mBackspacemSelectionStart++;
+				mInputConnection.setSelection(mBackspacemSelectionStart, mBackspacemSelectionEnd);
 				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspaceSelectionStart <= 0
-						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+						|| mBackspacemSelectionStart <= 0
+						|| mBackspacemSelectionStart >= mBackspacemSelectionEnd) {
 					break;
 				}
 			}
 			return true;
 
 		case BACKSPACE_COMMIT_EVENT:
-			if(!mBackspaceSelectionMode) {
+			if(!mBackspacemSelectionMode) {
 				return true;
 			}
-			mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
-			mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
-			mBackspaceSelectionMode = false;
+			mInputConnection.setSelection(mBackspacemSelectionEnd, mBackspacemSelectionEnd);
+			mInputConnection.deleteSurroundingText(mBackspacemSelectionEnd - mBackspacemSelectionStart, 0);
+			mBackspacemSelectionMode = false;
 			return true;
 			
 		case TIMEOUT_EVENT:
@@ -739,9 +742,48 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			case KeyEvent.KEYCODE_DPAD_DOWN:
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				mHardShift = 0;
-				return false;
+				if (!mSelectionMode) {
+					mSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+					mSelectionStart = mSelectionEnd;
+					mSelectionMode = true;
+				}
+				if (mSelectionMode) {
+					if (key == KeyEvent.KEYCODE_DPAD_LEFT) mSelectionEnd--;
+					if (key == KeyEvent.KEYCODE_DPAD_RIGHT) mSelectionEnd++;
+					if (key == KeyEvent.KEYCODE_DPAD_UP) {
+						int i = 1;
+						CharSequence text = "";
+						boolean end;
+						while(!(end = mInputConnection.getTextBeforeCursor(i, 0).equals(text)) && (text = mInputConnection.getTextBeforeCursor(i, 0)).charAt(0) != '\n') i++;
+						if(end) mSelectionEnd -= mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+						else mSelectionEnd -= i;
+					}
+					if (key == KeyEvent.KEYCODE_DPAD_DOWN) {
+						int i = 1;
+						CharSequence text = "";
+						boolean end;
+						while(!(end = mInputConnection.getTextAfterCursor(i, 0).equals(text)) && (text = mInputConnection.getTextAfterCursor(i, 0)).charAt(text.length()-1) != '\n') i++;
+						if(end) mSelectionEnd += mInputConnection.getTextAfterCursor(Character.MAX_VALUE, 0).length();
+						else mSelectionEnd += i;
+					}
+					int start = mSelectionStart, end = mSelectionEnd;
+					if (mSelectionStart > mSelectionEnd) {
+							start = mSelectionEnd;
+							end = mSelectionStart;
+						}
+					mInputConnection.setSelection(start, end);
+					mHardShift = 0;
+					updateMetaKeyStateDisplay();
+					updateNumKeyboardShiftState();
+				}
+				return true;
+
+			default:
+				mSelectionMode = false;
+				break;
 			}
+		} else {
+			mSelectionMode = false;
 		}
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
