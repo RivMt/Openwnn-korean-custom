@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="preference_ime_setting_app">OpenWnn 설정</string>
-    
+
+    <!-- Dialog Messages -->
+    <string name="dialog_button_ok">확인</string>
+    <string name="dialog_button_cancel">취소</string>
+    <string name="dialog_button_close">닫기</string>
+
     <string name="preference_method_setting_menu">입력 방식</string>
     
     <string name="preference_method_enabler_title">입력 방식 활성화 창 열기</string>
@@ -159,6 +164,9 @@
     <string name="preference_system_switch_kor_eng">한/영 전환</string>
     <string name="preference_system_switch_next_method">다음 입력기로 전환</string>
     <string name="preference_system_list_methods">입력기 목록 표시</string>
+
+    <string name="preference_hardware_lang_key_title">하드웨어 키보드 한영 키</string>
+    <string name="preference_hardware_lang_key_summary">하드웨어 키보드 사용시 한영 키를 설정합니다. Shift, Alt 조합을 사용할 수 있습니다.</string>
 
     <string name="preference_system_force_hangul_title">한글 키보드 강제</string>
     <string name="preference_system_force_hangul_summary">입력 상황에 관계없이 한글 키보드를 항상 먼저 보여줍니다.</string>

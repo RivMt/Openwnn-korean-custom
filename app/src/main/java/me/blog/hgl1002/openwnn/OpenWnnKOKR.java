@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.LayoutDev;
+import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 
@@ -228,6 +229,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	Handler mTimeOutHandler;
 
+	KeystrokePreference.KeyStroke mHardLangKey;
+
 	private static OpenWnnKOKR mSelf;
 	public static OpenWnnKOKR getInstance() {
 		return mSelf;
@@ -295,6 +298,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
 		mLangKeyLongAction = pref.getString("system_action_on_lang_key_long_press", LANGKEY_LIST_METHODS);
+		mHardLangKey = KeystrokePreference.parseKeyStroke(pref.getString("system_hardware_lang_key_stroke", "---s62"));
 		
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
@@ -812,6 +816,24 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return false;
 		}
 
+		if(mHardLangKey != null && key == mHardLangKey.getKeyCode()) {
+			if((mHardShift == 1) == mHardLangKey.isShift()
+					&& ((mHardAlt == 1) == mHardLangKey.isAlt())
+					&& ev.isCtrlPressed() == mHardLangKey.isControl()
+					&& ev.isMetaPressed() == mHardLangKey.isWin()) {
+
+				mHangulEngine.resetJohab();
+				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
+				mHardShift = 0;
+				mShiftPressing = false;
+				mHardAlt = 0;
+				mAltPressing = false;
+				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
+				return true;
+			}
+		}
+
 		if (ev.isPrintingKey()) {
 
 			int code = ev.getUnicodeChar(mShiftKeyToggle[mHardShift] | mAltKeyToggle[mHardAlt]);
@@ -843,15 +865,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		} else if (key == KeyEvent.KEYCODE_SPACE) {
 			// 한글 조합을 종료한다
 			resetJohab();
-			// Shift 조합과 함께 눌렀을 경우
-			if (mHardShift == 1) {
-				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
-				mHardShift = 0;
-				mShiftPressing = false;
-				updateMetaKeyStateDisplay();
-				updateNumKeyboardShiftState();
-				return true;
-			}
+			mHangulEngine.resetJohab();
 			mInputConnection.commitText(" ", 1);
 			return true;
 		} else if (key == KeyEvent.KEYCODE_DEL) {
