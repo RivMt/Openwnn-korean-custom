@@ -134,7 +134,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_SEBUL_DANMOEUM = 103;
 	public static final int ENGINE_MODE_DUBULSIK = 104;
 	public static final int ENGINE_MODE_DUBULSIK_NK = 105;
-	public static final int ENGINE_MODE_DUBUL_DANMOEUM = 106;
+
 	public static final int ENGINE_MODE_SEBUL_SUN_2014 = 107;
 	public static final int ENGINE_MODE_SEBUL_3_2015M = 108;	
 	public static final int ENGINE_MODE_SEBUL_3_2015 = 109;	
@@ -161,6 +161,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final int ENGINE_MODE_12KEY_DUBUL_CHEONJIIN = 160;
 	public static final int ENGINE_MODE_12KEY_DUBUL_NARATGEUL = 161;
 	public static final int ENGINE_MODE_12KEY_DUBUL_SKY2 = 162;
+	public static final int ENGINE_MODE_12KEY_DUBUL_DANMOEUM = 169;
 
 	public static final int ENGINE_MODE_ENGLISH_DVORAK = 192;
 	public static final int ENGINE_MODE_ENGLISH_COLEMAK = 193;
@@ -642,7 +643,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
 				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
 					switch(mCurrentEngineMode) {
-					case ENGINE_MODE_DUBUL_DANMOEUM:
+					case ENGINE_MODE_12KEY_DUBUL_DANMOEUM:
 					case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
 					case ENGINE_MODE_12KEY_DUBUL_SKY2:
 					case ENGINE_MODE_12KEY_ALPHABET_A:
@@ -1087,13 +1088,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE);
 			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
 			break;	
-	
-		case ENGINE_MODE_DUBUL_DANMOEUM:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(JAMO_DUBUL_DANMOEUM_GOOGLE);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_DANMOEUM_GOOGLE);
-			break;
 
 		case ENGINE_MODE_12KEY_ALPHABET_A:
 			mDirectInputMode = false;
@@ -1127,6 +1121,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = true;
 			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_SKY2);
 			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_SKY2);
+			break;
+
+		case ENGINE_MODE_12KEY_DUBUL_DANMOEUM:
+			mDirectInputMode = false;
+			mEnableTimeout = true;
+			mHangulEngine.setJamoTable(JAMO_DUBUL_DANMOEUM_GOOGLE);
+			mHangulEngine.setCombinationTable(COMB_DUBUL_DANMOEUM_GOOGLE);
 			break;
 
 		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:

@@ -848,6 +848,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_sky2);
 				break;
 
+			case "keyboard_dubul_danmoeum_google":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_dubul_danmoeum_google);
+				break;
+
 			case "keyboard_12key_sebul_munhwa":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
 				break;
@@ -1176,9 +1180,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case "keyboard_sebul_semoe":
 			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE;
 
-		case "keyboard_dubul_danmoeum_google":
-			return OpenWnnKOKR.ENGINE_MODE_DUBUL_DANMOEUM;
-
 			// Hangul developer layouts
 
 		case "keyboard_nebul_1969":
@@ -1194,6 +1195,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		case "keyboard_12key_dubul_sky2":
 			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_SKY2;
+
+		case "keyboard_dubul_danmoeum_google":
+			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_DANMOEUM;
 
 		case "keyboard_12key_sebul_munhwa":
 			return OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_MUNHWA;
