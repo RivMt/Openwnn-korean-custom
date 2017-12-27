@@ -722,8 +722,8 @@ public class HangulEngine {
 	}
 
 	public int[][] getJamoTable() {
-		if(jamoTable != null) return jamoTable;
 		if(currentJamoTable != null) return currentJamoTable;
+		if(jamoTable != null) return jamoTable;
 		return null;
 	}
 

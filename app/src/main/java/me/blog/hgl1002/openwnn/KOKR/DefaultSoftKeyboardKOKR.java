@@ -1252,8 +1252,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	public void updateKeyLabels() {
-		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS)
+		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) {
 			updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0]);
+			mKeyboardView.invalidateAllKeys();
+			mKeyboardView.requestLayout();
+		}
 	}
 
 	protected void updateLabels(Keyboard kbd) {
@@ -1265,12 +1268,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		virtual = hangulEngine.getVirtualJamoTable();
 		if(layout == null) {
 			for(Keyboard.Key key : kbd.getKeys()) {
-				int code = key.codes[0];
-				if(code >= 0) key.label = String.valueOf(Character.toChars(code));
+				String label = getKeyLabel(key.codes[0]);
+				if(label != null) key.label = label;
 			}
 			return;
 		}
 		for(Keyboard.Key key : kbd.getKeys()) {
+			boolean found = false;
 			for(int i = 0 ; i < layout.length ; i++) {
 				if(key.codes[0] == layout[i][0]) {
 					int code = layout[i][mShiftOn + 1];
@@ -1282,10 +1286,27 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 							}
 						}
 					}
-					if(code >= 0) key.label = String.valueOf(Character.toChars(code));
+					String label = getKeyLabel(code);
+					if(label != null) key.label = label;
+					found = true;
 					break;
 				}
 			}
+			if(!found) {
+				String label = getKeyLabel(key.codes[0]);
+				if(label != null) key.label = label;
+			}
+		}
+	}
+
+	private String getKeyLabel(int code) {
+		switch(code) {
+		case KEYCODE_CHANGE_LANG:
+			return mCurrentLanguage == LANG_KO ? "A" : "가";
+
+		default:
+			if(code >= 0) return String.valueOf(Character.toChars(code));
+			else return null;
 		}
 	}
 
