@@ -51,7 +51,20 @@
     
     <string name="preference_keyboard_hangul_12key_title">12키 한글 키보드 종류</string>
     <string name="preference_keyboard_hangul_12key_summary">12키 한글 키보드 레이아웃을 설정합니다.</string>
-    
+
+    <string name="preference_keyboard_hangul_soft_portrait_title">한글 화면 키보드 레이아웃 (세로화면)</string>
+    <string name="preference_keyboard_hangul_soft_landscape_title">한글 화면 키보드 레이아웃 (가로화면)</string>
+    <string name="preference_keyboard_hangul_soft_summary">한글 화면 키보드 레이아웃을 설정합니다. 한글 키보드 종류보다 높은 레벨로 설정하심을 권장합니다.</string>
+
+    <string name="preference_keyboard_l1_0">L1.0 모바일</string>
+    <string name="preference_keyboard_l1_1">L1.1 숫자열 있는 모바일</string>
+    <string name="preference_keyboard_l1_2">L1.2 따옴표 위치 변형</string>
+    <string name="preference_keyboard_l1_3">L1.3 마침표, 쉼표, Grave</string>
+    <string name="preference_keyboard_l1_9">L1.9 Colemak</string>
+    <string name="preference_keyboard_l1_10">L1.10 Dvorak</string>
+    <string name="preference_keyboard_l2_0">L2.0 11열</string>
+    <string name="preference_keyboard_pc1">PC1 알파벳, 숫자열</string>
+
     <string name="preference_keyboard_hangul_title">한글 키보드 종류</string>
     <string name="preference_keyboard_hangul_summary">한글 키보드 레이아웃을 설정합니다.</string>
     
@@ -88,6 +101,10 @@
     
     <string name="preference_keyboard_alphabet_use_qwerty_title">항상 쿼티 기반 영문 키보드 사용</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">12키 한글 키보드를 사용할 때도 쿼티 기반(PC) 영문 키보드를 사용합니다.</string>
+
+    <string name="preference_keyboard_alphabet_soft_portrait_title">영문 화면 키보드 레이아웃 (세로 화면)</string>
+    <string name="preference_keyboard_alphabet_soft_landscape_title">영문 화면 키보드 레이아웃 (가로 화면)</string>
+    <string name="preference_keyboard_alphabet_soft_summary">영문 화면 키보드 레이아웃을 설정합니다. 영문 키보드 종류보다 높은 레벨로 설정하심을 권장합니다.</string>
 
     <string name="preference_keyboard_12key_alphabet_title">12키 영문 키보드 종류</string>
     <string name="preference_keyboard_12key_alphabet_summary">12키 영문 키보드 종류를 설정합니다.</string>
