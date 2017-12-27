@@ -1,8 +1,10 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.preference.Preference;
 import android.util.AttributeSet;
@@ -19,9 +21,7 @@ import me.blog.hgl1002.openwnn.R;
 
 public class KeystrokePreference extends Preference {
 
-	public KeystrokePreference(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-	}
+	private String defaultValue;
 
 	public KeystrokePreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -49,7 +49,7 @@ public class KeystrokePreference extends Preference {
 		final CheckBox shift = (CheckBox) view.findViewById(R.id.key_shift);
 		final AtomicInteger code = new AtomicInteger(0);
 
-		KeyStroke stroke = parseKeyStroke(getPersistedString("----0"));
+		KeyStroke stroke = parseKeyStroke(getPersistedString(defaultValue == null ? "----0" : defaultValue));
 		control.setChecked(stroke.control);
 		alt.setChecked(stroke.alt);
 		win.setChecked(stroke.win);
@@ -107,6 +107,17 @@ public class KeystrokePreference extends Preference {
 		boolean win = keyStrokeStr.charAt(2) == 'w';
 		boolean shift = keyStrokeStr.charAt(3) == 's';
 		return new KeyStroke(control, alt, win, shift, keyCode);
+	}
+
+	@Override
+	protected Object onGetDefaultValue(TypedArray a, int index) {
+		return a.getString(index);
+	}
+
+	@Override
+	protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+		super.onSetInitialValue(restorePersistedValue, defaultValue);
+		if(!restorePersistedValue) this.defaultValue = (String) defaultValue;
 	}
 
 	public static class KeyStroke {
