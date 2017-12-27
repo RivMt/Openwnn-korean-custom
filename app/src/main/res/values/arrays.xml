@@ -63,8 +63,6 @@
         <item>@string/preference_keyboard_dubul_nk</item>
         <item>@string/preference_keyboard_sebul_390</item>
         <item>@string/preference_keyboard_sebul_391</item>
-        <item>@string/preference_keyboard_sebul_390_10cols</item>
-        <item>@string/preference_keyboard_sebul_391_10cols</item>
         <item>@string/preference_keyboard_sebul_danmoeum</item>
         <item>@string/preference_keyboard_sebul_sun_2014</item>
         <item>@string/preference_keyboard_sebul_3_2015m</item>
@@ -80,7 +78,6 @@
         <item>@string/preference_keyboard_dubul_yet</item>
         <item>@string/preference_keyboard_sebul_393y</item>
         <item>@string/preference_keyboard_sebul_3_2015y</item>
-        <item>@string/preference_keyboard_sebul_393y_10cols</item>
     </string-array>
 
     <string-array name="keyboard_hangul_layout_id">
@@ -88,8 +85,6 @@
         <item>keyboard_dubul_nk</item>
         <item>keyboard_sebul_390</item>
         <item>keyboard_sebul_391</item>
-        <item>keyboard_sebul_390_10cols</item>
-        <item>keyboard_sebul_391_10cols</item>
         <item>keyboard_sebul_danmoeum</item>
         <item>keyboard_sebul_sun_2014</item>
         <item>keyboard_sebul_3_2015m</item>
@@ -105,7 +100,6 @@
         <item>keyboard_dubul_yet</item>
         <item>keyboard_sebul_393y</item>
         <item>keyboard_sebul_3_2015y</item>
-        <item>keyboard_sebul_393y_10cols</item>
     </string-array>
 
     <string-array name="keyboard_hangul_layout_dev">
