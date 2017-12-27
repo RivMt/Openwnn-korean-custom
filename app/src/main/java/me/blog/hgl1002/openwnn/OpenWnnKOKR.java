@@ -277,7 +277,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			((DefaultSoftKeyboard) mInputViewManager).resetCurrentKeyboard();
 			
 			super.onStartInputView(attribute, restarting);
-			
+
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
@@ -916,6 +916,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 		
 		mCurrentEngineMode = mode;
+
+		mHangulEngine.setJamoTable(null);
+		mHangulEngine.setCombinationTable(null);
+		mHangulEngine.setVirtualJamoTable(null);
 		
 		switch(mode) {
 		case OpenWnnEvent.Mode.DIRECT:
@@ -993,7 +997,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHangulEngine.setCombinationTable(COMB_SEBUL_3_2015);
 			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
 			break;
-	
+
 		case ENGINE_MODE_SEBUL_3_2015:
 			mDirectInputMode = false;
 			mEnableTimeout = false;
@@ -1187,7 +1191,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void shinShift() {
-		int type = mHangulEngine.getLastInputType();
 		switch(mCurrentEngineMode) {
 		case ENGINE_MODE_SEBUL_SHIN_ORIGINAL:
 		case ENGINE_MODE_SEBUL_SHIN_EDIT:
@@ -1200,15 +1203,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			boolean capsLock = kokr.isCapsLock();
 			if(mHardShift == 2) capsLock = true;
 			boolean shift = !kokr.mHardKeyboardHidden && mHardShift == 1;
-			if(type == HangulEngine.INPUT_CHO3) {
-				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_CHO);
-			} else if(type == HangulEngine.INPUT_JUNG3) {
-				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_JUNG);
-			} else if(type == HangulEngine.INPUT_JONG3) {
-				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL_JONG);
-			} else {
-				kokr.changeKeyMode(DefaultSoftKeyboardKOKR.KEYMODE_HANGUL);
-			}
+			kokr.updateKeyLabels();
 			if(capsLock) {
 				kokr.setCapsLock(capsLock);
 				kokr.setShiftState(1);
@@ -1311,4 +1306,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mShiftPressing = false;
 	}
 
+	public HangulEngine getHangulEngine() {
+		return mHangulEngine;
+	}
 }

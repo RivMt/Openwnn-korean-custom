@@ -722,12 +722,15 @@ public class HangulEngine {
 	}
 
 	public int[][] getJamoTable() {
-		return jamoTable;
+		if(jamoTable != null) return jamoTable;
+		if(currentJamoTable != null) return currentJamoTable;
+		return null;
 	}
 
 	public void setJamoTable(int[][] jamoTable) {
 		this.jamoTable = jamoTable;
 		this.jamoSet = null;
+		this.currentJamoTable = null;
 	}
 
 	public int[][][] getJamoSet() {
