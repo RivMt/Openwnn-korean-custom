@@ -35,6 +35,28 @@
         <item>keyboard_white</item>
         <item>keyboard_dark</item>
     </string-array>
+
+    <string-array name="keyboard_soft_layout">
+	    <item>@string/preference_keyboard_l1_0</item>
+	    <item>@string/preference_keyboard_l1_1</item>
+	    <item>@string/preference_keyboard_l1_2</item>
+	    <item>@string/preference_keyboard_l1_3</item>>
+	    <item>@string/preference_keyboard_l1_9</item>>
+	    <item>@string/preference_keyboard_l1_10</item>
+	    <item>@string/preference_keyboard_l2_0</item>
+	    <item>@string/preference_keyboard_pc1</item>
+    </string-array>
+
+    <string-array name="keyboard_soft_layout_id">
+	    <item>l1.0</item>
+	    <item>l1.1</item>
+	    <item>l1.2</item>
+	    <item>l1.3</item>
+	    <item>l1.9</item>
+	    <item>l1.10</item>
+	    <item>l2.0</item>
+	    <item>pc1</item>
+    </string-array>
     
     <string-array name="keyboard_hangul_layout">
         <item>@string/preference_keyboard_dubul_standard</item>

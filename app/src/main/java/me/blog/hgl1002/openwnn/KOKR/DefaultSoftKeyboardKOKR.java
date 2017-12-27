@@ -874,22 +874,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			String defaultLayout = "keyboard_sebul_391";
 			if(!mHardKeyboardHidden) {
 				if(pref.getBoolean("keyboard_dev_use_hangul_hard", false)) {
-					defaultLayout = pref.getString("keyboard_dev_hard_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_dev_hard_layout", defaultLayout);
 				} else {
-					defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("hardware_hangul_layout", defaultLayout);
 				}
 			} else {
 				if(pref.getBoolean("keyboard_dev_use_hangul_soft", false)) {
-					defaultLayout = pref.getString("keyboard_dev_soft_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_dev_soft_layout", defaultLayout);
 				} else {
-					defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_hangul_layout", defaultLayout);
 				}
 			}
 			int currentKeyboard = getEngineMode(defaultLayout);
 			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
 
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty);
+			String softLayout = "l1.0";
+			softLayout = pref.getString("keyboard_hangul_soft_layout_portrait", softLayout);
+			loadSoftLayout(keyList, softLayout);
 
 		}
 
@@ -910,11 +911,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			int currentKeyboard = getEngineMode(defaultLayout);
 			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
 
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_english_qwerty);
+			String softLayout = "l1.0";
+			softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
+			loadSoftLayout(keyList, softLayout);
 
 		} else {
-			
+
 			keyList = mKeyboard[LANG_EN][PORTRAIT][mCurrentKeyboardType];
 
 			String defaultLayout = pref.getString("keyboard_alphabet_12key_layout", "keyboard_12key_alphabet_narrow_a");
@@ -982,20 +984,25 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			String defaultLayout = "keyboard_sebul_391";
 			if(!mHardKeyboardHidden) {
 				if(pref.getBoolean("keyboard_dev_use_hangul_hard", false)) {
-					defaultLayout = pref.getString("keyboard_dev_hard_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_dev_hard_layout", defaultLayout);
 				} else {
-					defaultLayout = pref.getString("hardware_hangul_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("hardware_hangul_layout", defaultLayout);
 				}
 			} else {
 				if(pref.getBoolean("keyboard_dev_use_hangul_soft", false)) {
-					defaultLayout = pref.getString("keyboard_dev_soft_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_dev_soft_layout", defaultLayout);
 				} else {
-					defaultLayout = pref.getString("keyboard_hangul_layout", "keyboard_sebul_391");
+					defaultLayout = pref.getString("keyboard_hangul_layout", defaultLayout);
 				}
 			}
 
 			int currentKeyboard = getEngineMode(defaultLayout);
 			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
+
+			String softLayout = "l1.0";
+			softLayout = pref.getString("keyboard_hangul_soft_layout_landscape", softLayout);
+			loadSoftLayout(keyList, softLayout);
+
 		}
 
 		//TODO: load these somewhere else
@@ -1015,6 +1022,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 			int currentKeyboard = getEngineMode(defaultLayout);
 			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
+
+			String softLayout = "l1.0";
+			softLayout = pref.getString("keyboard_alphabet_soft_layout_landscape", softLayout);
+			loadSoftLayout(keyList, softLayout);
+
 		}
 
 		//TODO: load these somewhere else
@@ -1029,6 +1041,51 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
 		keyList[KEYBOARD_SHIFT_ON][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number_shift);
 
+	}
+
+	protected void loadSoftLayout(Keyboard[][][] keyList, String softLayout) {
+		switch(softLayout) {
+		case "l1.0":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
+			break;
+
+		case "l1.1":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+			break;
+
+		case "l1.2":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
+			break;
+
+		case "l1.3":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
+			break;
+
+		case "l1.9":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
+			break;
+
+		case "l1.10":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
+			break;
+
+		case "l2.0":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
+			break;
+
+		case "pc1":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
+			break;
+
+		}
 	}
 
 	protected int getEngineMode(String defaultLayout) {
