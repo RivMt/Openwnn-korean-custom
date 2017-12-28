@@ -55,7 +55,7 @@
 	<Row android:rowEdgeFlags="bottom">
 		<Key android:codes="-1" android:keyIcon="@drawable/key_qwerty_shift"
 			android:keyWidth="11.5%p" android:keyEdgeFlags="left"/>
-		<Key android:codes="122" android:keyLabel="z" android:keyEdgeFlags="left"/>
+		<Key android:codes="122" android:keyLabel="z"/>
 		<Key android:codes="120" android:keyLabel="x"/>
 		<Key android:codes="99" android:keyLabel="c"/>
 		<Key android:codes="118" android:keyLabel="v"/>

@@ -483,7 +483,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)));
 			break;
-			
+
 		case KEYCODE_QWERTY_SHIFT:
 			mCapsLock = false;
 			toggleShiftLock();
