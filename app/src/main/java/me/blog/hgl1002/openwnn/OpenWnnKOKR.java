@@ -49,7 +49,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x5b, 0x7b},
 			{0x5d, 0x7d},
 			{0x5c, 0x7c},
-			
+
 			{0x3b, 0x3a},
 			{0x27, 0x22},
 			
@@ -706,16 +706,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mDirectInputMode || direct) {
 			code = originalCode;
 			resetJohab();
-			if(shift > 0) {
-				code = Character.toUpperCase(code);
-				for(int[] item : SHIFT_CONVERT) {
-					if(code == item[0]) {
-						code = (char) item[1];
-						break;
-					}
-				}
-			}
-			mInputConnection.commitText(String.valueOf(code), 1);
+			directInput(code, shift > 0);
 			return;
 		}
 		int jamo = mHangulEngine.inputCode(Character.toLowerCase(code), shift);
@@ -728,8 +719,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 		} else {
 			resetJohab();
-			sendKeyChar(originalCode);
+			directInput(originalCode, shift > 0);
 		}
+	}
+
+	private void directInput(char code, boolean shift) {
+		if(shift) {
+			code = Character.toUpperCase(code);
+			for(int[] item : SHIFT_CONVERT) {
+				if(code == item[0]) {
+					code = (char) item[1];
+					break;
+				}
+			}
+		}
+		mInputConnection.commitText(String.valueOf(code), 1);
 	}
 
 	private void onLangKey(String action) {
