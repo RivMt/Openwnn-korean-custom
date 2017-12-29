@@ -17,6 +17,7 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import me.blog.hgl1002.openwnn.*;
@@ -29,8 +30,12 @@ import me.blog.hgl1002.openwnn.*;
  */
 public class KeyboardListPreferenceKOKR extends ListPreference {
 
+	String[] keys;
+
 	public KeyboardListPreferenceKOKR(Context context, AttributeSet attrs) {
         super(context, attrs);
+        String key = attrs.getAttributeValue(null, "softLayoutKey");
+        if(key != null) keys = key.split(",");
     }
     
     public KeyboardListPreferenceKOKR(Context context) {
@@ -42,13 +47,20 @@ public class KeyboardListPreferenceKOKR extends ListPreference {
     	super.onDialogClosed(positiveResult);
     	
     	if (positiveResult) {
+			if(keys != null) {
+				SharedPreferences pref = getPreferenceManager().getSharedPreferences();
+				SharedPreferences.Editor editor = pref.edit();
+				String value = getContext().getResources().getStringArray(SoftLayoutPreference.getEntryValues(pref.getString(this.getKey(), "")))[0];
+				for(String key : keys) editor.putString(key, value);
+				editor.commit();
+			}
     		OpenWnnKOKR wnn = OpenWnnKOKR.getInstance();
         	int code = OpenWnnEvent.CHANGE_INPUT_VIEW;
         	OpenWnnEvent ev = new OpenWnnEvent(code);
         	try {
         		wnn.onEvent(ev);
         	} catch (Exception ex) {
-        	}   		
+			}
     	}
     }
 }

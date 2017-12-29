@@ -7,6 +7,8 @@ import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.View;
 
+import me.blog.hgl1002.openwnn.OpenWnnEvent;
+import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.R;
 
 public class SoftLayoutPreference extends ListPreference {
@@ -21,10 +23,25 @@ public class SoftLayoutPreference extends ListPreference {
 	}
 
 	@Override
+	protected void onDialogClosed(boolean positiveResult) {
+		super.onDialogClosed(positiveResult);
+		if (positiveResult) {
+			OpenWnnKOKR wnn = OpenWnnKOKR.getInstance();
+			int code = OpenWnnEvent.CHANGE_INPUT_VIEW;
+			OpenWnnEvent ev = new OpenWnnEvent(code);
+			try {
+				wnn.onEvent(ev);
+			} catch (Exception ex) {
+			}
+		}
+	}
+
+	@Override
 	protected View onCreateDialogView() {
-		System.out.println("asdf");
 
 		SharedPreferences pref = getPreferenceManager().getSharedPreferences();
+
+		this.setValue(pref.getString(this.getKey(), this.getValue()));
 
 		if(key != null) {
 			String layout = pref.getString(key, "");

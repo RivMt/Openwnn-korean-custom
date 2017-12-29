@@ -19,6 +19,7 @@
 			android:summary="@string/preference_keyboard_hangul_summary"
 			android:entries="@array/keyboard_hangul_layout"
 			android:entryValues="@array/keyboard_hangul_layout_id"
+			softLayoutKey="keyboard_hangul_soft_layout_portrait,keyboard_hangul_soft_layout_landscape"
 			android:defaultValue="keyboard_sebul_391" />
 		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_hangul_soft_layout_portrait"
@@ -52,6 +53,7 @@
 			android:summary="@string/preference_keyboard_alphabet_summary"
 			android:entries="@array/keyboard_alphabet_layout"
 			android:entryValues="@array/keyboard_alphabet_layout_id"
+			softLayoutKey="keyboard_alphabet_soft_layout_portrait,keyboard_alphabet_soft_layout_landscape"
 			android:defaultValue="keyboard_alphabet_qwerty" />
 		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_alphabet_soft_layout_portrait"
