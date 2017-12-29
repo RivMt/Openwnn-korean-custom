@@ -690,6 +690,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	private void inputChar(char code, boolean direct) {
 		int shift = mHardShift;
+
+		if(code == 128) {
+			code = (char) ((shift > 0) ? 0x2c : 0x2e);
+			shift = 0;
+		}
+
 		char originalCode = code;
 		for(int[] item : SHIFT_CONVERT) {
 			if(code == item[1]) {
@@ -700,7 +706,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mDirectInputMode || direct) {
 			code = originalCode;
 			resetJohab();
-			code = (shift == 0) ? code : Character.toUpperCase(code);
+			if(shift > 0) {
+				code = Character.toUpperCase(code);
+				for(int[] item : SHIFT_CONVERT) {
+					if(code == item[0]) {
+						code = (char) item[1];
+						break;
+					}
+				}
+			}
 			mInputConnection.commitText(String.valueOf(code), 1);
 			return;
 		}

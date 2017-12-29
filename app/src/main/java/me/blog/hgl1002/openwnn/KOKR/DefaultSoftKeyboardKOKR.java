@@ -1335,7 +1335,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		virtual = hangulEngine.getVirtualJamoTable();
 		if(layout == null) {
 			for(Keyboard.Key key : kbd.getKeys()) {
-				String label = getKeyLabel(key.codes[0]);
+				String label = getKeyLabel(key.codes[0], mShiftOn > 0);
 				if(label != null) key.label = label;
 			}
 			return;
@@ -1343,6 +1343,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		for(Keyboard.Key key : kbd.getKeys()) {
 			boolean found = false;
 			for(int i = 0 ; i < layout.length ; i++) {
+				if(key.codes[0] == 128) break;
 				if(key.codes[0] == layout[i][0]) {
 					int code = layout[i][mShiftOn + 1];
 					if(code < 0 && virtual != null) {
@@ -1353,26 +1354,39 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 							}
 						}
 					}
-					String label = getKeyLabel(code);
+					String label = getKeyLabel(code, false);
 					if(label != null) key.label = label;
 					found = true;
 					break;
 				}
 			}
 			if(!found) {
-				String label = getKeyLabel(key.codes[0]);
+				String label = getKeyLabel(key.codes[0], mShiftOn > 0);
 				if(label != null) key.label = label;
 			}
 		}
 	}
 
-	private String getKeyLabel(int code) {
+	private String getKeyLabel(int code, boolean shift) {
 		switch(code) {
 		case KEYCODE_CHANGE_LANG:
 			return mCurrentLanguage == LANG_KO ? "A" : "가";
 
+		case 128:
+			return (shift) ? "," : ". ,";
+
 		default:
-			if(code >= 0) return String.valueOf(Character.toChars(code));
+			if(code >= 0) {
+				if(shift) {
+					for (int[] item : OpenWnnKOKR.SHIFT_CONVERT) {
+						if(item[0] == code) {
+							code = item[1];
+							break;
+						}
+					}
+				}
+				return String.valueOf(Character.toChars(code));
+			}
 			else return null;
 		}
 	}
