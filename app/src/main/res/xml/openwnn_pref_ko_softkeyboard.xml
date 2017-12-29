@@ -20,19 +20,21 @@
 			android:entries="@array/keyboard_hangul_layout"
 			android:entryValues="@array/keyboard_hangul_layout_id"
 			android:defaultValue="keyboard_sebul_391" />
-		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_hangul_soft_layout_portrait"
 			android:title="@string/preference_keyboard_hangul_soft_portrait_title"
 			android:summary="@string/preference_keyboard_hangul_soft_summary"
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_hangul_layout"
 			android:defaultValue="l1.0" />
-		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_hangul_soft_layout_landscape"
 			android:title="@string/preference_keyboard_hangul_soft_landscape_title"
 			android:summary="@string/preference_keyboard_hangul_soft_summary"
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_hangul_layout"
 			android:defaultValue="l1.0" />
 		<CheckBoxPreference android:key="keyboard_alphabet_use_qwerty"
 			android:title="@string/preference_keyboard_alphabet_use_qwerty_title"
@@ -51,19 +53,21 @@
 			android:entries="@array/keyboard_alphabet_layout"
 			android:entryValues="@array/keyboard_alphabet_layout_id"
 			android:defaultValue="keyboard_alphabet_qwerty" />
-		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_alphabet_soft_layout_portrait"
 			android:title="@string/preference_keyboard_alphabet_soft_portrait_title"
 			android:summary="@string/preference_keyboard_alphabet_soft_summary"
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_alphabet_layout"
 			android:defaultValue="l1.0" />
-		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_alphabet_soft_layout_landscape"
 			android:title="@string/preference_keyboard_alphabet_soft_landscape_title"
 			android:summary="@string/preference_keyboard_alphabet_soft_summary"
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_alphabet_layout"
 			android:defaultValue="l1.0" />
 		<CheckBoxPreference android:key="keyboard_use_flick"
 			android:title="@string/preference_keyboard_use_flick_title"

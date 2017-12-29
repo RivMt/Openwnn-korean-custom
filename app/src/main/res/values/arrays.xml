@@ -43,7 +43,6 @@
 	    <item>@string/preference_keyboard_l1_3</item>
 	    <item>@string/preference_keyboard_l1_4</item>
 	    <item>@string/preference_keyboard_l1_9</item>
-	    <item>@string/preference_keyboard_l1_10</item>
 	    <item>@string/preference_keyboard_l2_0</item>
 	    <item>@string/preference_keyboard_pc1</item>
     </string-array>
@@ -55,12 +54,83 @@
 	    <item>l1.3</item>
 	    <item>l1.4</item>
 	    <item>l1.9</item>
-	    <item>l1.10</item>
 	    <item>l2.0</item>
 	    <item>pc1</item>
     </string-array>
-    
-    <string-array name="keyboard_hangul_layout">
+
+	<string-array name="keyboard_soft_layout_l1_2">
+		<item>@string/preference_keyboard_l1_2</item>
+		<item>@string/preference_keyboard_l1_3</item>
+		<item>@string/preference_keyboard_l1_4</item>
+		<item>@string/preference_keyboard_l2_0</item>
+		<item>@string/preference_keyboard_pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_2_id">
+		<item>l1.2</item>
+		<item>l1.3</item>
+		<item>l1.4</item>
+		<item>l2.0</item>
+		<item>pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_3">
+		<item>@string/preference_keyboard_l1_3</item>
+		<item>@string/preference_keyboard_l2_0</item>
+		<item>@string/preference_keyboard_pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_3_id">
+		<item>l1.3</item>
+		<item>l2.0</item>
+		<item>pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_4">
+		<item>@string/preference_keyboard_l1_4</item>
+		<item>@string/preference_keyboard_l2_0</item>
+		<item>@string/preference_keyboard_pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_4_id">
+		<item>l1.4</item>
+		<item>l2.0</item>
+		<item>pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_9">
+		<item>@string/preference_keyboard_l1_2</item>
+		<item>@string/preference_keyboard_l1_3</item>
+		<item>@string/preference_keyboard_l1_4</item>
+		<item>@string/preference_keyboard_l1_9</item>
+		<item>@string/preference_keyboard_l2_0</item>
+		<item>@string/preference_keyboard_pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_l1_9_id">
+		<item>l1.2</item>
+		<item>l1.3</item>
+		<item>l1.4</item>
+		<item>l1.9</item>
+		<item>l2.0</item>
+		<item>pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_dvorak">
+		<item>@string/preference_keyboard_l1_4</item>
+		<item>@string/preference_keyboard_l1_10</item>
+		<item>@string/preference_keyboard_l2_0</item>
+		<item>@string/preference_keyboard_pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_soft_layout_dvorak_id">
+		<item>l1.4</item>
+		<item>l1.10</item>
+		<item>l2.0</item>
+		<item>pc1</item>
+	</string-array>
+
+	<string-array name="keyboard_hangul_layout">
         <item>@string/preference_keyboard_dubul_standard</item>
         <item>@string/preference_keyboard_dubul_nk</item>
         <item>@string/preference_keyboard_sebul_390</item>
