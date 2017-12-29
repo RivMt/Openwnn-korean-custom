@@ -42,6 +42,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
 	public static final int KEYCODE_KR12_ADDSTROKE = -310;
 
+	public static final int KEYCODE_RIGHT = -217;
+	public static final int KEYCODE_LEFT = -218;
+	public static final int KEYCODE_DOWN = -219;
+	public static final int KEYCODE_UP = -220;
+
 	public static final int KEYCODE_NON_SHIN_DEL = -510;
 	
 	protected static final int INVALID_KEYMODE = -1;
@@ -474,7 +479,27 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_CHANGE_LANG)));
 			break;
-			
+
+		case KEYCODE_UP:
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP)));
+			break;
+
+		case KEYCODE_DOWN:
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN)));
+			break;
+
+		case KEYCODE_LEFT:
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
+			break;
+
+		case KEYCODE_RIGHT:
+			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
+			break;
+
 		case KEYCODE_JP12_BACKSPACE:
 		case KEYCODE_QWERTY_BACKSPACE:
 			if(primaryCode == mIgnoreCode) {
