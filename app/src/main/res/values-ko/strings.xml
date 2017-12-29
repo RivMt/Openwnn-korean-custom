@@ -54,7 +54,7 @@
 
     <string name="preference_keyboard_hangul_soft_portrait_title">한글 화면 키보드 레이아웃 (세로화면)</string>
     <string name="preference_keyboard_hangul_soft_landscape_title">한글 화면 키보드 레이아웃 (가로화면)</string>
-    <string name="preference_keyboard_hangul_soft_summary">한글 화면 키보드 레이아웃을 설정합니다. 한글 키보드 종류보다 높은 레벨로 설정하심을 권장합니다.</string>
+    <string name="preference_keyboard_hangul_soft_summary">한글 화면 키보드 레이아웃을 설정합니다.</string>
 
     <string name="preference_keyboard_l1_0">L1.0 모바일</string>
     <string name="preference_keyboard_l1_1">L1.1 숫자열 있는 모바일</string>
@@ -105,7 +105,7 @@
 
     <string name="preference_keyboard_alphabet_soft_portrait_title">영문 화면 키보드 레이아웃 (세로 화면)</string>
     <string name="preference_keyboard_alphabet_soft_landscape_title">영문 화면 키보드 레이아웃 (가로 화면)</string>
-    <string name="preference_keyboard_alphabet_soft_summary">영문 화면 키보드 레이아웃을 설정합니다. 영문 키보드 종류보다 높은 레벨로 설정하심을 권장합니다.</string>
+    <string name="preference_keyboard_alphabet_soft_summary">영문 화면 키보드 레이아웃을 설정합니다.</string>
 
     <string name="preference_keyboard_12key_alphabet_title">12키 영문 키보드 종류</string>
     <string name="preference_keyboard_12key_alphabet_summary">12키 영문 키보드 종류를 설정합니다.</string>

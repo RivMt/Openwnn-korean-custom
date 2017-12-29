@@ -306,7 +306,7 @@
 
     <string name="preference_keyboard_hangul_soft_portrait_title">Hangul Soft Layout (Portrait)</string>
     <string name="preference_keyboard_hangul_soft_landscape_title">Hangul Soft Layout (Landscape)</string>
-    <string name="preference_keyboard_hangul_soft_summary">Type of Hangul Soft Layout. It is recommended to set level above from hangul keyboard type.</string>
+    <string name="preference_keyboard_hangul_soft_summary">Type of Hangul Soft Layout.</string>
 
     <string name="preference_keyboard_l1_0">L1.0 Mobile</string>
     <string name="preference_keyboard_l1_1">L1.1 Mobile with Numeric</string>
@@ -357,7 +357,7 @@
 
     <string name="preference_keyboard_alphabet_soft_portrait_title">Alphabet Soft Layout (Portrait)</string>
     <string name="preference_keyboard_alphabet_soft_landscape_title">Alphabet Soft Layout (Landscape)</string>
-    <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout. It is recommended to set level above from alphabet keyboard type.</string>
+    <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout.</string>
 
    <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
     <string name="preference_keyboard_alphabet_summary">Type of Alphabet keyboard.</string>
