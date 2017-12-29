@@ -1069,6 +1069,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
 			break;
 
+		case "l1.4":
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
+			break;
+
 		case "l1.9":
 			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
 			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);

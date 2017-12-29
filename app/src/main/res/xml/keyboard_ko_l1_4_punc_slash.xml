@@ -55,7 +55,7 @@
     <Key android:codes="109" android:keyLabel="m"/>
     <Key android:codes="44" android:keyLabel=","/>
     <Key android:codes="46" android:keyLabel="."/>
-    <Key android:codes="39" android:keyLabel="'" android:keyEdgeFlags="right"/>
+    <Key android:codes="47" android:keyLabel="/" android:keyEdgeFlags="right"/>
   </Row>
 
   <Row android:rowEdgeFlags="bottom">
@@ -67,7 +67,7 @@
     <Key android:codes="-10"
         android:keyIcon="@drawable/key_qwerty_space"
         android:keyWidth="35%p" android:isRepeatable="false"/>
-    <Key android:codes="96" android:keyLabel="`" android:keyWidth="10%p"/>
+    <Key android:codes="128" android:keyLabel=". ," android:keyWidth="10%p"/>
     <Key android:codes="-101"
         android:keyIcon="@drawable/key_qwerty_enter"
         android:keyWidth="15%p"/>

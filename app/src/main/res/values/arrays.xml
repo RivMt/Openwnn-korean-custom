@@ -40,8 +40,9 @@
 	    <item>@string/preference_keyboard_l1_0</item>
 	    <item>@string/preference_keyboard_l1_1</item>
 	    <item>@string/preference_keyboard_l1_2</item>
-	    <item>@string/preference_keyboard_l1_3</item>>
-	    <item>@string/preference_keyboard_l1_9</item>>
+	    <item>@string/preference_keyboard_l1_3</item>
+	    <item>@string/preference_keyboard_l1_4</item>
+	    <item>@string/preference_keyboard_l1_9</item>
 	    <item>@string/preference_keyboard_l1_10</item>
 	    <item>@string/preference_keyboard_l2_0</item>
 	    <item>@string/preference_keyboard_pc1</item>
@@ -52,6 +53,7 @@
 	    <item>l1.1</item>
 	    <item>l1.2</item>
 	    <item>l1.3</item>
+	    <item>l1.4</item>
 	    <item>l1.9</item>
 	    <item>l1.10</item>
 	    <item>l2.0</item>
