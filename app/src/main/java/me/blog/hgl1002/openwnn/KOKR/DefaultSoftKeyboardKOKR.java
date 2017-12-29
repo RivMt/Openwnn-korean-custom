@@ -147,6 +147,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
 				mCapsLock = true;
 				mIgnoreCode = keyCode;
+				updateKeyLabels();
 				return;
 
 			case KEYCODE_JP12_BACKSPACE:
