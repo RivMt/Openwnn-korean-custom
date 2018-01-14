@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -137,7 +138,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	int mIgnoreCode = KEYCODE_NOP;
 	int mLongPressTimeout = 500;
 	
-	SparseArray<Handler> mLongClickHandlers = new SparseArray<>();
 	class LongClickHandler implements Runnable {
 		int keyCode;
 		public LongClickHandler(int keyCode) {
@@ -177,6 +177,133 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
 		}
 	}
+
+	private SparseArray<TouchPoint> mTouchPoints = new SparseArray<>();
+	class TouchPoint {
+		int keyCode;
+
+		float downX, downY;
+		float dx, dy;
+		float beforeX, beforeY;
+		int space = -1;
+		int spaceDistance;
+		int backspace = -1;
+		int backspaceDistance;
+
+		Handler longClickHandler;
+
+		public TouchPoint(int keyCode, float downX, float downY) {
+			this.keyCode = keyCode;
+			this.downX = downX;
+			this.downY = downY;
+			longClickHandler = new Handler();
+			longClickHandler.postDelayed(new LongClickHandler(keyCode), mLongPressTimeout);
+		}
+
+		public boolean onMove(float x, float y) {
+			dx = x - downX;
+			dy = y - downY;
+			switch(keyCode) {
+			case KEYCODE_JP12_SPACE:
+			case -10:
+				if(Math.abs(dx) >= mSpaceSlideSensitivity) space = keyCode;
+				break;
+
+			case KEYCODE_JP12_BACKSPACE:
+			case KEYCODE_QWERTY_BACKSPACE:
+				if(Math.abs(dx) >= BACKSPACE_SLIDE_UNIT) {
+					backspace = keyCode;
+					mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
+				}
+				break;
+
+			default:
+				space = -1;
+				backspace = -1;
+				break;
+			}
+			if(dy > mFlickSensitivity || dy < -mFlickSensitivity
+					|| dx < -mFlickSensitivity || dx > mFlickSensitivity || space != -1) {
+				longClickHandler.removeCallbacksAndMessages(null);
+			}
+			if(space != -1) {
+				spaceDistance += x - beforeX;
+				if(spaceDistance < -SPACE_SLIDE_UNIT) {
+					spaceDistance = 0;
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+							new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+							new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT)));
+				}
+				if(spaceDistance > +SPACE_SLIDE_UNIT) {
+					spaceDistance = 0;
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+							new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+							new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
+				}
+			}
+			if(backspace != -1) {
+				backspaceDistance += x - beforeX;
+				if(backspaceDistance < -BACKSPACE_SLIDE_UNIT) {
+					backspaceDistance = 0;
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_LEFT_EVENT));
+				}
+				if(backspaceDistance > +BACKSPACE_SLIDE_UNIT) {
+					backspaceDistance = 0;
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_RIGHT_EVENT));
+				}
+			}
+			beforeX = x;
+			beforeY = y;
+			return true;
+		}
+
+		public boolean onUp() {
+			longClickHandler.removeCallbacksAndMessages(null);
+			if(space != -1) {
+				mIgnoreCode = space;
+				space = -1;
+				return false;
+			}
+			if(backspace != -1) {
+				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_COMMIT_EVENT));
+				mIgnoreCode = backspace;
+				backspace = -1;
+				return false;
+			}
+			if(dy > mFlickSensitivity) {
+				if(Math.abs(dy) > Math.abs(dx)) {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_DOWN_EVENT,
+							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+				}
+				mIgnoreCode = keyCode;
+			}
+			if(dy < -mFlickSensitivity) {
+				if(Math.abs(dy) > Math.abs(dx)) {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_UP_EVENT,
+							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+				}
+				mIgnoreCode = keyCode;
+			}
+			if(dx < -mFlickSensitivity) {
+				if(Math.abs(dx) > Math.abs(dy)) {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_LEFT_EVENT,
+							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+				}
+				mIgnoreCode = keyCode;
+			}
+			if(dx > mFlickSensitivity) {
+				if(Math.abs(dx) > Math.abs(dy)) {
+					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_RIGHT_EVENT,
+							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+				}
+				mIgnoreCode = keyCode;
+			}
+			return false;
+		}
+
+	}
 	
 	class OnKeyboardViewTouchListener implements View.OnTouchListener {
 		float downX, downY;
@@ -188,105 +315,56 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int backspaceDistance;
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			switch(event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				downX = event.getX();
-				downY = event.getY();
-				dx = 0;
-				dy = 0;
-				break;
+			if(Build.VERSION.SDK_INT >= 8) {
+				int pointerIndex = event.getActionIndex();
+				int pointerId = event.getPointerId(pointerIndex);
+				int action = event.getActionMasked();
+				float x = event.getX(pointerIndex), y = event.getY(pointerIndex);
+				switch(action) {
+				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_POINTER_DOWN:
+					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y).codes[0], x, y);
+					mTouchPoints.put(pointerId, point);
+					return false;
 
-			case MotionEvent.ACTION_MOVE:
-				dx = event.getX() - downX;
-				dy = event.getY() - downY;
-				for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-					int keyCode = mLongClickHandlers.keyAt(i);
-					switch(keyCode) {
-					case KEYCODE_JP12_SPACE:
-					case -10:
-						if(Math.abs(dx) >= mSpaceSlideSensitivity) space = keyCode;
-						break;
+				case MotionEvent.ACTION_MOVE:
+					return mTouchPoints.get(pointerId).onMove(x, y);
 
-					case KEYCODE_JP12_BACKSPACE:
-					case KEYCODE_QWERTY_BACKSPACE:
-						if(Math.abs(dx) >= BACKSPACE_SLIDE_UNIT) {
-							backspace = keyCode;
-							mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
-						}
-						break;
+				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_POINTER_UP:
+					boolean result = mTouchPoints.get(pointerId).onUp();
+					mTouchPoints.remove(pointerId);
+					return result;
 
-					default:
-						space = -1;
-						backspace = -1;
-						break;
-					}
-					if(dy > mFlickSensitivity || dy < -mFlickSensitivity
-							|| dx < -mFlickSensitivity || dx > mFlickSensitivity || space != -1) {
-						Handler handler = mLongClickHandlers.get(keyCode);
-						handler.removeCallbacksAndMessages(null);
-					}
 				}
-				if(space != -1) {
-					spaceDistance += event.getX() - beforeX;
-					if(spaceDistance < -SPACE_SLIDE_UNIT) {
-						spaceDistance = 0;
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-								new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-								new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT)));
-					}
-					if(spaceDistance > +SPACE_SLIDE_UNIT) {
-						spaceDistance = 0;
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-								new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-								new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
-					}
-				}
-				if(backspace != -1) {
-					backspaceDistance += event.getX() - beforeX;
-					if(backspaceDistance < -BACKSPACE_SLIDE_UNIT) {
-						backspaceDistance = 0;
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_LEFT_EVENT));
-					}
-					if(backspaceDistance > +BACKSPACE_SLIDE_UNIT) {
-						backspaceDistance = 0;
-						mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_RIGHT_EVENT));
-					}
-				}
-				beforeX = event.getX();
-				beforeY = event.getY();
-				return true;
-				
-			case MotionEvent.ACTION_UP:
-				if(space != -1) {
-					mIgnoreCode = space;
-					space = -1;
+			} else {
+				float x = event.getX(), y = event.getY();
+				switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y).codes[0], x, y);
+					mTouchPoints.put(0, point);
 					break;
+
+				case MotionEvent.ACTION_MOVE:
+					return mTouchPoints.get(0).onMove(x, y);
+
+				case MotionEvent.ACTION_UP:
+					boolean result = mTouchPoints.get(0).onUp();
+					mTouchPoints.remove(0);
+					return result;
+
 				}
-				if(backspace != -1) {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_COMMIT_EVENT));
-					mIgnoreCode = backspace;
-					backspace = -1;
-					break;
-				}
-				if(dy > mFlickSensitivity) {
-					if(Math.abs(dy) > Math.abs(dx)) flickDown();
-				}
-				if(dy < -mFlickSensitivity) {
-					if(Math.abs(dy) > Math.abs(dx)) flickUp();
-				}
-				if(dx < -mFlickSensitivity) {
-					if(Math.abs(dx) > Math.abs(dy)) flickLeft();
-				}
-				if(dx > mFlickSensitivity) {
-					if(Math.abs(dx) > Math.abs(dy)) flickRight();
-				}
-				break;
-				
 			}
 			return false;
 		}
+
+		private Keyboard.Key findKey(Keyboard keyboard, int x, int y) {
+			for(Keyboard.Key key : keyboard.getKeys()) {
+				if(key.isInside(x, y)) return key;
+			}
+			return null;
+		}
+
 	}
 
 	public DefaultSoftKeyboardKOKR(OpenWnn parent) {
@@ -582,12 +660,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	protected boolean changeKeyboard(Keyboard keyboard) {
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			Handler handler = mLongClickHandlers.get(key);
-			handler.removeCallbacksAndMessages(null);
-			mLongClickHandlers.remove(key);
-		}
+		clearTouchPoints();
 		return super.changeKeyboard(keyboard);
 	}
 
@@ -732,20 +805,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
             try { mSound.seekTo(0); mSound.start(); } catch (Exception ex) { }
         }
 		if(mCapsLock) return;
-		mLongClickHandlers.put(x, new Handler());
-		mLongClickHandlers.get(x).postDelayed(new LongClickHandler(x), mLongPressTimeout);
 	}
 
 	@Override
 	public void onRelease(int x) {
 		mKeyboardView.setPreviewEnabled(false);
 		super.onRelease(x);
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			Handler handler = mLongClickHandlers.get(key);
-			handler.removeCallbacksAndMessages(null);
-			mLongClickHandlers.remove(key);
-		}
 		mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
 	}
 
@@ -761,54 +826,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			break;
 		default:
 			mKeyboardView.setPreviewEnabled(mShowKeyPreview);
-		}
-	}
-
-	public void flickUp() {
-		if(!mUseFlick) return;
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			if(mLongClickHandlers.get(key) != null) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_UP_EVENT,
-						new KeyEvent(KeyEvent.ACTION_DOWN, key)));
-				mIgnoreCode = key;
-			}
-		}
-	}
-	
-	public void flickDown() {
-		if(!mUseFlick) return;
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			if(mLongClickHandlers.get(key) != null) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_DOWN_EVENT,
-						new KeyEvent(KeyEvent.ACTION_DOWN, key)));
-				mIgnoreCode = key;
-			}
-		}
-	}
-	
-	public void flickLeft() {
-		if(!mUseFlick) return;
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			if(mLongClickHandlers.get(key) != null) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_LEFT_EVENT,
-						new KeyEvent(KeyEvent.ACTION_DOWN, key)));
-				mIgnoreCode = key;
-			}
-		}
-	}
-	
-	public void flickRight() {
-		if(!mUseFlick) return;
-		for(int i = 0 ; i < mLongClickHandlers.size() ; i++) {
-			int key = mLongClickHandlers.keyAt(i);
-			if(mLongClickHandlers.get(key) != null) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_RIGHT_EVENT,
-						new KeyEvent(KeyEvent.ACTION_DOWN, key)));
-				mIgnoreCode = key;
-			}
 		}
 	}
 
@@ -1315,6 +1332,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				return String.valueOf(Character.toChars(code));
 			}
 			else return null;
+		}
+	}
+
+	private void clearTouchPoints() {
+		for(int i = 0 ; i < mTouchPoints.size() ; i++) {
+			int key = mTouchPoints.keyAt(i);
+			Handler handler = mTouchPoints.get(key).longClickHandler;
+			handler.removeCallbacksAndMessages(null);
+			mTouchPoints.remove(key);
 		}
 	}
 
