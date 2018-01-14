@@ -50,7 +50,7 @@
   <Row>
     <Key android:codes="0x203b" android:keyLabel="\u203b" android:horizontalGap="5%p"
          android:keyEdgeFlags="left"/>
-    <Key android:codes="0x60" android:keyLabel="\u0060"/>
+    <Key android:codes="0xb7" android:keyLabel="\u00b7"/>
     <Key android:codes="0x7b" android:keyLabel="\u007b"/>
     <Key android:codes="0x7d" android:keyLabel="\u007d"/>
     <Key android:codes="0x5c" android:keyLabel="\u005c"/>
