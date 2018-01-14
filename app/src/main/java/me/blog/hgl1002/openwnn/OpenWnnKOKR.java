@@ -184,7 +184,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
 	public static final String LANGKEY_LIST_METHODS = "list_methods";
-	
+
+	public static final String FLICK_NONE = "none";
+	public static final String FLICK_SHIFT = "shift";
+	public static final String FLICK_SYMBOL = "symbol";
+	public static final String FLICK_SYMBOL_SHIFT = "symbol_shift";
+
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
 	
@@ -215,6 +220,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mStandardJamo;
 	String mLangKeyAction;
 	String mLangKeyLongAction;
+
+	String mFlickUpAction;
+	String mFlickDownAction;
+	String mFlickLeftAction;
+	String mFlickRightAction;
+	String mLongPressAction;
 
 	boolean mAltDirect;
 
@@ -300,7 +311,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
 		mLangKeyLongAction = pref.getString("system_action_on_lang_key_long_press", LANGKEY_LIST_METHODS);
 		mHardLangKey = KeystrokePreference.parseKeyStroke(pref.getString("system_hardware_lang_key_stroke", "---s62"));
-		
+
+		mFlickUpAction = pref.getString("keyboard_action_on_flick_up", FLICK_SHIFT);
+		mFlickDownAction = pref.getString("keyboard_action_on_flick_down", FLICK_SYMBOL);
+		mFlickLeftAction = pref.getString("keyboard_action_on_flick_left", FLICK_NONE);
+		mFlickRightAction = pref.getString("keyboard_action_on_flick_right", FLICK_NONE);
+		mLongPressAction = pref.getString("system_action_on_long_press", FLICK_SHIFT);
+
 		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
 		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
 		mQwertyEngine.setFirstMidEnd(mStandardJamo);
@@ -472,9 +489,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					break;
 				}
 			} else {
-				mHardShift = 1;
-				this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char) keyCode));
-				mHardShift = 0;
+				flickAction(mLongPressAction, keyCode);
 			}
 			break;
 			
@@ -492,36 +507,16 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					}
 				}
 			} else {
-				switch(keyCode) {
-				case DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT:
-					break;
-					
-				default:
-					this.mHardShift = 1;
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char) keyCode));
-					this.mHardShift = 0;
-					break;
-					
-				}
+				flickAction(mFlickUpAction, keyCode);
 			}
 			break;
 			
 		case FLICK_DOWN_EVENT:
-			boolean alt = true;
-			if(keyCode < 0) {
-				if(keyCode <= -2000) {
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 200)));
-					alt = false;
-				}
-			}
-			if(alt) {
-				for(int[] item : ALT_SYMBOLS_TABLE) {
-					if(item[0] == keyCode) {
-						this.inputChar((char) item[1], true);
-						break;
-					}
-				}
+			if(keyCode <= -2000) {
+				this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+						new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 200)));
+			} else {
+				flickAction(mFlickDownAction, keyCode);
 			}
 			break;
 			
@@ -532,7 +527,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 300)));
 				}
 			} else {
-				
+				flickAction(mFlickLeftAction, keyCode);
 			}
 			break;
 			
@@ -543,7 +538,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 400)));
 				}
 			} else {
-				
+				flickAction(mFlickRightAction, keyCode);
 			}
 			break;
 			
@@ -1240,8 +1235,38 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		updateNumKeyboardShiftState();
 	}
 
-	protected int getShiftKeyState(EditorInfo editor) {
-		return (getCurrentInputConnection().getCursorCapsMode(editor.inputType) == 0) ? 0 : 1;
+	private void flickAction(String flickAction, int keyCode) {
+		switch(flickAction) {
+		case FLICK_NONE:
+			break;
+
+		case FLICK_SHIFT: {
+			switch(keyCode) {
+			case DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT:
+				break;
+
+			default:
+				this.mHardShift = 1;
+				this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char) keyCode));
+				this.mHardShift = 0;
+				break;
+
+			}
+			break;
+		}
+		case FLICK_SYMBOL: {
+			for(int[] item : ALT_SYMBOLS_TABLE) {
+				if(item[0] == keyCode) {
+					this.inputChar((char) item[1], true);
+					break;
+				}
+			}
+			break;
+		}
+		case FLICK_SYMBOL_SHIFT: {
+			break;
+		}
+		}
 	}
 
 	public void updateMetaKeyStateDisplay() {

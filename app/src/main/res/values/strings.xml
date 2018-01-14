@@ -392,6 +392,26 @@
     <string name="preference_keyboard_space_reset_composing_title">Space to reset composing</string>
     <string name="preference_keyboard_space_reset_composing_summary">Use space key to reset composing character on Dubeol Danmoeum layout, etc.</string>
 
+    <string name="preference_keyboard_flick_up_title">Action on Flick Up</string>
+    <string name="preference_keyboard_flick_up_summary">Choose action to perform on flicking up. Default value is Input Shifted.</string>
+
+    <string name="preference_keyboard_flick_down_title">Action on Flick Down</string>
+    <string name="preference_keyboard_flick_down_summary">Choose action to perform on flicking down. Default value is Input Symbol.</string>
+
+    <string name="preference_keyboard_flick_left_title">Action on Flick Left</string>
+    <string name="preference_keyboard_flick_left_summary">Choose action to perform on flicking left. Default value is None.</string>
+
+    <string name="preference_keyboard_flick_right_title">Action on Flick Right</string>
+    <string name="preference_keyboard_flick_right_summary">Choose action to perform on flicking right. Default value is None.</string>
+
+    <string name="preference_keyboard_long_press_title">Action on Long Press</string>
+    <string name="preference_keyboard_long_press_summary">Choose action to perform on long press. Default value is Input Shifted.</string>
+
+    <string name="preference_keyboard_flick_none">None</string>
+    <string name="preference_keyboard_flick_shift">Input Shifted</string>
+    <string name="preference_keyboard_flick_symbol">Input Symbol</string>
+    <string name="preference_keyboard_flick_symbol_shift">Input Shifted Symbol</string>
+
 
     <string name="preference_hardware_setting_menu">Hardware Keyboard</string>
     
@@ -426,7 +446,7 @@
     <string name="preference_system_use_standard_jamo_summary">Use First-Mid-End Hangul code with standard hangul jamo when required.</string>
 
     <string name="preference_system_lang_key_press_title">Action on Language Key Press</string>
-    <string name="preference_system_lang_key_press_summary">Choose action on language key press.</string>
+    <string name="preference_system_lang_key_press_summary">Choose action to perform on language key press.</string>
 
     <string name="preference_system_lang_key_long_press_title">Action on Language Key Long-Press</string>
     <string name="preference_system_lang_key_long_press_summary">Choose action on language key long-press.</string>

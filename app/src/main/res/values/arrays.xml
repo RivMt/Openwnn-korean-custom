@@ -239,5 +239,19 @@
 	    <item>switch_next_method</item>
 	    <item>list_methods</item>
     </string-array>
+
+	<string-array name="flick_actions">
+		<item>@string/preference_keyboard_flick_none</item>
+		<item>@string/preference_keyboard_flick_shift</item>
+		<item>@string/preference_keyboard_flick_symbol</item>
+		<item>@string/preference_keyboard_flick_symbol_shift</item>
+	</string-array>
+
+	<string-array name="flick_actions_id">
+        <item>none</item>
+	    <item>shift</item>
+	    <item>symbol</item>
+	    <item>symbol_shift</item>
+    </string-array>
 	
 </resources>
