@@ -134,12 +134,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.TIMEOUT_EVENT));
 		}
 	}
-	
-	int mIgnoreCode = KEYCODE_NOP;
+
 	int mLongPressTimeout = 500;
 	
 	class LongClickHandler implements Runnable {
 		int keyCode;
+		boolean performed = false;
 		public LongClickHandler(int keyCode) {
 			this.keyCode = keyCode;
 		}
@@ -152,7 +152,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
 				mCapsLock = true;
-				mIgnoreCode = keyCode;
+				performed = true;
 				updateKeyLabels();
 				return;
 
@@ -164,7 +164,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.LONG_CLICK_EVENT,
 					new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 			try { mVibrator.vibrate(mVibrateDuration*2); } catch (Exception ex) { }
-			mIgnoreCode = keyCode;
+			performed = true;
 		}
 	}
 
@@ -190,14 +190,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int backspace = -1;
 		int backspaceDistance;
 
-		Handler longClickHandler;
+		LongClickHandler longClickHandler;
+		Handler handler;
 
 		public TouchPoint(int keyCode, float downX, float downY) {
 			this.keyCode = keyCode;
 			this.downX = downX;
 			this.downY = downY;
-			longClickHandler = new Handler();
-			longClickHandler.postDelayed(new LongClickHandler(keyCode), mLongPressTimeout);
+			handler = new Handler();
+			handler.postDelayed(longClickHandler = new LongClickHandler(keyCode), mLongPressTimeout);
+
+			/* key click sound & vibration */
+			if (mVibrator != null) {
+				try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
+			}
+			if (mSound != null) {
+				try { mSound.seekTo(0); mSound.start(); } catch (Exception ex) { }
+			}
 		}
 
 		public boolean onMove(float x, float y) {
@@ -224,7 +233,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			if(dy > mFlickSensitivity || dy < -mFlickSensitivity
 					|| dx < -mFlickSensitivity || dx > mFlickSensitivity || space != -1) {
-				longClickHandler.removeCallbacksAndMessages(null);
+				handler.removeCallbacksAndMessages(null);
 			}
 			if(space != -1) {
 				spaceDistance += x - beforeX;
@@ -260,15 +269,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 		public boolean onUp() {
-			longClickHandler.removeCallbacksAndMessages(null);
+			handler.removeCallbacksAndMessages(null);
 			if(space != -1) {
-				mIgnoreCode = space;
 				space = -1;
 				return false;
 			}
 			if(backspace != -1) {
 				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_COMMIT_EVENT));
-				mIgnoreCode = backspace;
 				backspace = -1;
 				return false;
 			}
@@ -277,29 +284,30 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_DOWN_EVENT,
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 				}
-				mIgnoreCode = keyCode;
+				return false;
 			}
 			if(dy < -mFlickSensitivity) {
 				if(Math.abs(dy) > Math.abs(dx)) {
 					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_UP_EVENT,
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 				}
-				mIgnoreCode = keyCode;
+				return false;
 			}
 			if(dx < -mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
 					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_LEFT_EVENT,
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 				}
-				mIgnoreCode = keyCode;
+				return false;
 			}
 			if(dx > mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
 					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_RIGHT_EVENT,
 							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
 				}
-				mIgnoreCode = keyCode;
+				return false;
 			}
+			if(!longClickHandler.performed) onKey(keyCode);
 			return false;
 		}
 
@@ -671,10 +679,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
+		return;
+	}
+
+	public void onKey(int primaryCode) {
 		if(mDisableKeyInput) {
 			return;
 		}
-		
+
 		if(mTimeoutHandler != null) {
 			mTimeoutHandler.removeCallbacksAndMessages(null);
 			mTimeoutHandler = null;
@@ -682,10 +694,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		switch(primaryCode) {
 		case KEYCODE_CHANGE_LANG:
-			if(primaryCode == mIgnoreCode) {
-				mIgnoreCode = KEYCODE_NOP;
-				return;
-			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_CHANGE_LANG)));
 			break;
@@ -712,10 +720,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		case KEYCODE_JP12_BACKSPACE:
 		case KEYCODE_QWERTY_BACKSPACE:
-			if(primaryCode == mIgnoreCode) {
-				mIgnoreCode = KEYCODE_NOP;
-				return;
-			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)));
 			break;
@@ -732,42 +736,28 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
 			}
 			break;
-			
+
 		case KEYCODE_QWERTY_ALT:
 			processAltKey();
 			break;
-			
+
 		case KEYCODE_JP12_ENTER:
 		case KEYCODE_QWERTY_ENTER:
-			if(mIgnoreCode == KEYCODE_QWERTY_ENTER) break;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER)));
 			break;
-			
+
 		case KEYCODE_JP12_SPACE:
 		case -10:
-			if(mIgnoreCode == primaryCode) {
-				mIgnoreCode = KEYCODE_NOP;
-				break;
-			}
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE)));
 			break;
-			
+
 		default:
 			if((primaryCode <= -200 && primaryCode > -300) || (primaryCode <= -2000 && primaryCode > -3000)) {
-				if(primaryCode == mIgnoreCode) {
-					mIgnoreCode = KEYCODE_NOP;
-				} else {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
-					mIgnoreCode = KEYCODE_NOP;
-				}
+				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
+						new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
 			} else if(primaryCode >= 0) {
-				if(primaryCode == mIgnoreCode) {
-					mIgnoreCode = KEYCODE_NOP;
-					break;
-				}
 				if(mKeyboardView.isShifted()) {
 					primaryCode = Character.toUpperCase(primaryCode);
 				}
@@ -781,12 +771,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 						kokr.updateMetaKeyStateDisplay();
 					}
 				}
-				mIgnoreCode = KEYCODE_NOP;
 			}
 			break;
 		}
 		if (!mCapsLock && (primaryCode != DefaultSoftKeyboard.KEYCODE_QWERTY_SHIFT)) {
-			
+
 		}
 		if(mTimeoutHandler == null && mTimeoutDelay > 0) {
 			mTimeoutHandler = new Handler();
@@ -797,14 +786,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	@Override
 	public void onPress(int x) {
 		setPreviewEnabled(x);
-        /* key click sound & vibration */
-        if (mVibrator != null) {
-            try { mVibrator.vibrate(mVibrateDuration); } catch (Exception ex) { }
-        }
-        if (mSound != null) {
-            try { mSound.seekTo(0); mSound.start(); } catch (Exception ex) { }
-        }
-		if(mCapsLock) return;
 	}
 
 	@Override
@@ -1338,7 +1319,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	private void clearTouchPoints() {
 		for(int i = 0 ; i < mTouchPoints.size() ; i++) {
 			int key = mTouchPoints.keyAt(i);
-			Handler handler = mTouchPoints.get(key).longClickHandler;
+			Handler handler = mTouchPoints.get(key).handler;
 			handler.removeCallbacksAndMessages(null);
 			mTouchPoints.remove(key);
 		}
