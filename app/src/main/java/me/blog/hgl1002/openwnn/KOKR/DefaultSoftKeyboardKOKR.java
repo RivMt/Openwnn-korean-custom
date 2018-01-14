@@ -668,7 +668,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	@Override
 	protected boolean changeKeyboard(Keyboard keyboard) {
-		clearTouchPoints();
 		return super.changeKeyboard(keyboard);
 	}
 
@@ -765,7 +764,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 				if(mKeyboardView.isShifted()) {
 					if(!mCapsLock) {
-						onKey(KEYCODE_QWERTY_SHIFT, new int[]{KEYCODE_QWERTY_SHIFT});
+						onKey(KEYCODE_QWERTY_SHIFT);
 						OpenWnnKOKR kokr = (OpenWnnKOKR) mWnn;
 						if(!mHardKeyboardHidden) kokr.resetHardShift(false);
 						kokr.updateMetaKeyStateDisplay();
@@ -1313,15 +1312,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				return String.valueOf(Character.toChars(code));
 			}
 			else return null;
-		}
-	}
-
-	private void clearTouchPoints() {
-		for(int i = 0 ; i < mTouchPoints.size() ; i++) {
-			int key = mTouchPoints.keyAt(i);
-			Handler handler = mTouchPoints.get(key).handler;
-			handler.removeCallbacksAndMessages(null);
-			mTouchPoints.remove(key);
 		}
 	}
 
