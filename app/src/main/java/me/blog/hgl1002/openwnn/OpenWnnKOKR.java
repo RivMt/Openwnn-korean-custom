@@ -939,7 +939,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mHangulEngine.setJamoTable(null);
 		mHangulEngine.setCombinationTable(null);
 		mHangulEngine.setVirtualJamoTable(null);
-		
+
 		switch(mode) {
 		case OpenWnnEvent.Mode.DIRECT:
 			mDirectInputMode = true;
