@@ -147,6 +147,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			setPreviewEnabled(keyCode);
 			switch(keyCode) {
 			case KEYCODE_QWERTY_SHIFT:
+				if(mShiftOn > 0) return;
 				toggleShiftLock();
 				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
@@ -665,6 +666,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			
 		case KEYCODE_JP12_ENTER:
 		case KEYCODE_QWERTY_ENTER:
+			if(mIgnoreCode == KEYCODE_QWERTY_ENTER) break;
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
 					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER)));
 			break;
