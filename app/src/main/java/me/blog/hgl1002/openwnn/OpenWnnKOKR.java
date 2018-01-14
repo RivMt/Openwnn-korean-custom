@@ -694,6 +694,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(code == 128) {
 			code = (char) ((shift > 0) ? 0x2c : 0x2e);
 			shift = 0;
+			direct = true;
 		}
 
 		char originalCode = code;
