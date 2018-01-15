@@ -19,6 +19,8 @@ package me.blog.hgl1002.openwnn;
 import android.view.KeyEvent;
 import java.util.*;
 
+import me.blog.hgl1002.openwnn.KOKR.EngineMode;
+
 /**
  * The definition class of event message used by OpenWnn framework.
  *
@@ -227,7 +229,8 @@ public class OpenWnnEvent {
     /** Event code */
     public int code = UNDEFINED;
     /** Detail mode of the event */
-    public int mode = 0;
+    public int modeCode = Mode.DIRECT;
+    public EngineMode mode = EngineMode.DIRECT;
     /** Type of dictionary */
     public int dictionaryType = 0;
     /** Input character(s) */
@@ -257,9 +260,19 @@ public class OpenWnnEvent {
      * @param code      The code
      * @param mode      The mode
      */
-    public OpenWnnEvent(int code, int mode) {
+    public OpenWnnEvent(int code, EngineMode mode) {
         this.code = code;       
         this.mode = mode;
+    }
+    /**
+     * Generate {@link OpenWnnEvent} for changing the mode
+     *
+     * @param code      The code
+     * @param modeCode      The mode
+     */
+    public OpenWnnEvent(int code, int modeCode) {
+        this.code = code;
+        this.modeCode = modeCode;
     }
     /**
      * Generate {@link OpenWnnEvent} for a inputing character

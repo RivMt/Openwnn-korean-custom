@@ -68,9 +68,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mLastInputType = 0;
 	protected int mLastKeyMode = -1;
 	protected int mReturnLanguage = -1;
-	
-	protected int[] mCurrentKeyboards;
-	protected int mAltKeyMode;
+
+	protected EngineMode[] mCurrentKeyboards;
+	protected EngineMode mAltKeyMode;
 	
 	protected int[] mLimitedKeyMode = null;
 	
@@ -390,7 +390,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mKeyboard = new Keyboard[4][2][4][2][KEYMODE_LENGTH][4];
 		mNumKeyboard = new Keyboard[4][2][4][2][1][4];
 
-		mCurrentKeyboards = new int[4];
+		mCurrentKeyboards = new EngineMode[4];
 
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mWnn);
 
@@ -448,9 +448,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			}
-
-			int currentKeyboard = getEngineMode(defaultLayout);
-			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
+			mCurrentKeyboards[LANG_KO] = getEngineMode(defaultLayout);
 
 		} else {
 
@@ -472,8 +470,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					defaultLayout = pref.getString("keyboard_hangul_layout", defaultLayout);
 				}
 			}
-			int currentKeyboard = getEngineMode(defaultLayout);
-			if(currentKeyboard != -1) mCurrentKeyboards[LANG_KO] = currentKeyboard;
+			mCurrentKeyboards[LANG_KO] = getEngineMode(defaultLayout);
 
 			String softLayout = "l1.0";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_hangul_soft_layout_portrait", softLayout);
@@ -485,7 +482,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		//TODO: load these somewhere else
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		mAltKeyMode = OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
+		mAltKeyMode = EngineMode.SYMBOL_B;
 
 		if(useAlphabetQwerty) {
 
@@ -497,8 +494,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_alphabet_layout", "keyboard_alphabet_qwerty");
 			}
-			int currentKeyboard = getEngineMode(defaultLayout);
-			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
+			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
 
 			String softLayout = "l1.0";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
@@ -533,16 +529,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			}
-
-			int currentKeyboard = getEngineMode(defaultLayout);
-			if(currentKeyboard != -1) mCurrentKeyboards[LANG_EN] = currentKeyboard;
+			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
 
 		}
 
 		//TODO: load these somewhere else
 		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
 		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		mAltKeyMode = OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
+		mAltKeyMode = EngineMode.SYMBOL_B;
 
 		keyList = mNumKeyboard[LANG_KO][mDisplayMode][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
@@ -570,7 +564,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		Keyboard kbd = getModeChangeKeyboard(targetMode);
 		mCurrentKeyMode = targetMode;
 
-		int mode = OpenWnnEvent.Mode.DIRECT;
+		EngineMode mode = EngineMode.DIRECT;
 		
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
 			mode = mCurrentKeyboards[mCurrentLanguage];
@@ -578,7 +572,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mode = mAltKeyMode;
 		}
 
-		changeEngineOption();
+//		changeEngineOption();
 		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
 
 		changeKeyboard(kbd);
@@ -1027,145 +1021,19 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 	}
 
-	protected int getEngineMode(String defaultLayout) {
+	protected EngineMode getEngineMode(String defaultLayout) {
 
-		switch(defaultLayout) {
-
-		// Alphabet layouts
-
-		case "keyboard_alphabet_qwerty":
-			return OpenWnnEvent.Mode.DIRECT;
-
-		case "keyboard_alphabet_dvorak":
-			return OpenWnnKOKR.ENGINE_MODE_ENGLISH_DVORAK;
-
-		case "keyboard_alphabet_colemak":
-			return OpenWnnKOKR.ENGINE_MODE_ENGLISH_COLEMAK;
-
-			// Alphabet 12-Key layouts
-
-		case "keyboard_12key_alphabet_wide_a":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_A;
-
-		case "keyboard_12key_alphabet_wide_b":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_B;
-
-		case "keyboard_12key_alphabet_narrow_a":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_A;
-
-		case "keyboard_12key_alphabet_narrow_b":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_ALPHABET_B;
-
-			// Hangul layouts
-
-		case "keyboard_sebul_390":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_390;
-
-		case "keyboard_sebul_391":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_391;
-
-		case "keyboard_sebul_393y":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_393Y;
-
-		case "keyboard_sebul_danmoeum":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_DANMOEUM;
-
-		case "keyboard_dubul_standard":
-			return OpenWnnKOKR.ENGINE_MODE_DUBULSIK;
-
-		case "keyboard_dubul_nk":
-			return OpenWnnKOKR.ENGINE_MODE_DUBULSIK_NK;
-
-		case "keyboard_dubul_yet":
-			return OpenWnnKOKR.ENGINE_MODE_DUBULSIK_YET;
-
-		case "keyboard_sebul_sun_2014":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SUN_2014;
-
-		case "keyboard_sebul_3_2015m":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_3_2015M;
-
-		case "keyboard_sebul_3_2015":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_3_2015;
-
-		case "keyboard_sebul_3_2015y":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_3_2015Y;
-
-		case "keyboard_sebul_3_p3":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_3_P3;
-
-		case "keyboard_sebul_shin_original":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_ORIGINAL;
-
-		case "keyboard_sebul_shin_edit":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_EDIT;
-
-		case "keyboard_sebul_shin_m":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_M;
-
-		case "keyboard_sebul_shin_p2":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SHIN_P2;
-
-		case "keyboard_sebul_ahnmatae":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_AHNMATAE;
-
-		case "keyboard_sebul_semoe_2016":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE_2016;
-
-		case "keyboard_sebul_semoe":
-			return OpenWnnKOKR.ENGINE_MODE_SEBUL_SEMOE;
-
-			// Hangul developer layouts
-
-		case "keyboard_nebul_1969":
-			return OpenWnnKOKR.ENGINE_MODE_NEBUL_1969;
-
-			// Hangul 12-key layouts
-
-		case "keyboard_12key_dubul_cheonjiin":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_CHEONJIIN;
-
-		case "keyboard_12key_dubul_naratgeul":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_NARATGEUL;
-
-		case "keyboard_12key_dubul_sky2":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_SKY2;
-
-		case "keyboard_dubul_danmoeum_google":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_DUBUL_DANMOEUM;
-
-		case "keyboard_12key_sebul_munhwa":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_MUNHWA;
-
-		case "keyboard_12key_sebul_hanson":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_HANSON;
-
-		case "keyboard_12key_sebul_sena":
-			return OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_SENA;
-
-			// ALT Symbols layouts
-
-		case "keyboard_symbol_a":
-			return OpenWnnKOKR.ENGINE_MODE_SYMBOL_A;
-
-		case "keyboard_symbol_b":
-			return OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
-
+		for(EngineMode mode : EngineMode.values()) {
+			if(mode.getPrefValues() == null) continue;
+			for(String prefValue : mode.getPrefValues()) {
+				if(prefValue.equals(defaultLayout)) {
+					return mode;
+				}
+			}
 		}
-		return OpenWnnEvent.Mode.DIRECT;
+		return EngineMode.DIRECT;
 	}
 
-	protected void changeEngineOption() {
-		int option;
-		if(mCurrentKeyboardType == KEYBOARD_12KEY) {
-			if(mUseAlphabetQwerty && mCurrentLanguage == LANG_EN) option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY;
-			else option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_12KEY;
-		} else {
-			option = OpenWnnKOKR.ENGINE_MODE_OPT_TYPE_QWERTY;
-		}
-		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, option));
-	}
-	
 	@SuppressWarnings("deprecation")
 	public Keyboard loadKeyboardLayout(Context context, int xmlLayoutResId) {
 		KeyboardKOKR keyboard = new KeyboardKOKR(context, xmlLayoutResId);

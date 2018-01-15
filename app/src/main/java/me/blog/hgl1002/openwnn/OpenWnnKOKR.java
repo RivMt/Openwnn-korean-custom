@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
+import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.LayoutDev;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
@@ -152,7 +153,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mShiftPressing;
 	boolean mAltPressing;
 	
-	int mCurrentEngineMode;
+	EngineMode mCurrentEngineMode;
 	
 	private static final int[] mShiftKeyToggle = {0, MetaKeyKeyListener.META_SHIFT_ON, MetaKeyKeyListener.META_CAP_LOCKED};
 	
@@ -588,15 +589,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			case KeyEvent.KEYCODE_SPACE:
 				// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
 				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
-					switch(mCurrentEngineMode) {
-					case ENGINE_MODE_12KEY_DUBUL_DANMOEUM:
-					case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
-					case ENGINE_MODE_12KEY_DUBUL_SKY2:
-					case ENGINE_MODE_12KEY_ALPHABET_A:
-					case ENGINE_MODE_12KEY_ALPHABET_B:
+					if(mCurrentEngineMode.properties.timeout) {
 						resetJohab();
 						return true;
-					default:
 					}
 				}
 				resetJohab();
@@ -881,282 +876,47 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		return false;
 	}
 
-	private void changeEngineMode(int mode) {
+	private void changeEngineMode(EngineMode mode) {
 		boolean hardHidden = ((DefaultSoftKeyboardKOKR) mInputViewManager).mHardKeyboardHidden;
-		switch(mode) {
-		case ENGINE_MODE_OPT_TYPE_12KEY:
-			mHangulEngine = m12keyEngine;
-			return;
-		case ENGINE_MODE_OPT_TYPE_QWERTY:
-			mHangulEngine = mQwertyEngine;
-			return;
-		
-		}
-		
+
 		mCurrentEngineMode = mode;
 
-		mAltMode = false;
-		mHangulEngine.setJamoTable(null);
-		mHangulEngine.setCombinationTable(null);
-		mHangulEngine.setVirtualJamoTable(null);
-
-		switch(mode) {
-		case OpenWnnEvent.Mode.DIRECT:
+		if(mode == EngineMode.DIRECT) {
 			mDirectInputMode = true;
 			mEnableTimeout = false;
-			break;
-
-		case ENGINE_MODE_SYMBOL_A:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mAltSymbols = LayoutSymbol.SYMBOL_A;
-			mAltMode = true;
-			break;
-
-		case ENGINE_MODE_SYMBOL_B:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mAltSymbols = LayoutSymbol.SYMBOL_B;
-			mAltMode = true;
-			break;
-
-		case ENGINE_MODE_ENGLISH_DVORAK:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
+			mFullMoachigi = false;
+			mAltMode = false;
 			mHangulEngine = mQwertyEngine;
-			mHangulEngine.setJamoTable(CONVERT_ENGLISH_DVORAK);
-			break;
-			
-		case ENGINE_MODE_ENGLISH_COLEMAK:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine = mQwertyEngine;
-			mHangulEngine.setJamoTable(CONVERT_ENGLISH_COLEMAK);
-			break;
-			
-		case ENGINE_MODE_DUBULSIK:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_DUBUL_STANDARD);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_STANDARD);
-			break;
-			
-		case ENGINE_MODE_DUBULSIK_NK:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_DUBUL_NK);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_STANDARD);
-			break;
-			
-		case ENGINE_MODE_DUBULSIK_YET:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_DUBUL_YET);
-			mHangulEngine.setCombinationTable(COMB_FULL);
-			break;
-			
-		case ENGINE_MODE_SEBUL_390:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_390);
-			mHangulEngine.setCombinationTable(COMB_SEBULSIK);
-			break;
-			
-		case ENGINE_MODE_SEBUL_391:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_391);
-			mHangulEngine.setCombinationTable(COMB_SEBULSIK);
-			break;
-			
-		case ENGINE_MODE_SEBUL_393Y:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_393Y);
-			mHangulEngine.setCombinationTable(COMB_FULL);
-			break;
-	
-		case ENGINE_MODE_SEBUL_SUN_2014:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_SUN_2014);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SUN_2014);
-			break;
-	
-		case ENGINE_MODE_SEBUL_3_2015M:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_2015M);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_3_2015);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;
-
-		case ENGINE_MODE_SEBUL_3_2015:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_2015);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_3_2015);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;	
-			
-		case ENGINE_MODE_SEBUL_3_2015Y:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_3_2015Y);
-			mHangulEngine.setCombinationTable(COMB_FULL);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;	
-	
-		case ENGINE_MODE_SEBUL_3_P3:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SEBUL_3_P3);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_3_P3);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;	
-	
-		case ENGINE_MODE_SEBUL_DANMOEUM:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_DANMOEUM);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_DANMOEUM);
-			break;
-			
-		case ENGINE_MODE_SEBUL_SHIN_ORIGINAL:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SHIN_ORIGINAL);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;
-			
-		case ENGINE_MODE_SEBUL_SHIN_EDIT:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SHIN_EDIT);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;
-			
-		case ENGINE_MODE_SEBUL_SHIN_M:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SHIN_M);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SHIN_ORIGINAL);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;
-		
-		case ENGINE_MODE_SEBUL_SHIN_P2:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoSet(JAMOSET_SHIN_P2);
-			mHangulEngine.setCombinationTable(COMB_FULL);
-			mHangulEngine.setVirtualJamoTable(VIRTUAL_SEBUL_SHIN_ORIGINAL);
-			break;
-		
-		case ENGINE_MODE_SEBUL_AHNMATAE:
-			mDirectInputMode = false;
-			mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
-			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
-			else mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_AHNMATAE);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_AHNMATAE);
-			break;	
-		
-		case ENGINE_MODE_SEBUL_SEMOE_2016:
-			mDirectInputMode = false;
-			mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
-			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
-			else mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE_2016);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
-			break;	
-		
-		case ENGINE_MODE_SEBUL_SEMOE:
-			mDirectInputMode = false;
-			mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
-			if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
-			else mEnableTimeout = false;
-			mHangulEngine.setJamoTable(JAMO_SEBUL_SEMOE);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_SEMOE);
-			break;	
-
-		case ENGINE_MODE_12KEY_ALPHABET_A:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_A);
-			break;
-
-		case ENGINE_MODE_12KEY_ALPHABET_B:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_12KEY_ALPHABET_B);
-			break;
-
-		case ENGINE_MODE_12KEY_DUBUL_CHEONJIIN:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_CHEONJIIN);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_CHEONJIIN);
-			break;
-
-		case ENGINE_MODE_12KEY_DUBUL_NARATGEUL:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_NARATGEUL);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_NARATGEUL);
-			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_DUBUL_12KEY_NARATGEUL);
-			break;
-
-		case ENGINE_MODE_12KEY_DUBUL_SKY2:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(CYCLE_DUBUL_12KEY_SKY2);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_12KEY_SKY2);
-			break;
-
-		case ENGINE_MODE_12KEY_DUBUL_DANMOEUM:
-			mDirectInputMode = false;
-			mEnableTimeout = true;
-			mHangulEngine.setJamoTable(JAMO_DUBUL_DANMOEUM_GOOGLE);
-			mHangulEngine.setCombinationTable(COMB_DUBUL_DANMOEUM_GOOGLE);
-			break;
-
-		case ENGINE_MODE_12KEY_SEBUL_MUNHWA:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(CYCLE_SEBUL_12KEY_MUNHWA);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_12KEY_MUNHWA);
-			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_SEBUL_12KEY_MUNHWA);
-			break;
-			
-		case ENGINE_MODE_12KEY_SEBUL_HANSON:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(CYCLE_SEBUL_12KEY_HANSON);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_12KEY_HANSON);
-			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_SEBUL_12KEY_HANSON);
-			break;
-			
-		case ENGINE_MODE_12KEY_SEBUL_SENA:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(CYCLE_SEBUL_12KEY_SENA);
-			mHangulEngine.setCombinationTable(COMB_SEBUL_12KEY_SENA);
-			((TwelveHangulEngine) mHangulEngine).setAddStrokeTable(STROKE_SEBUL_12KEY_SENA);
-			break;
-
-			// Developer layouts
-
-		case ENGINE_MODE_NEBUL_1969:
-			mDirectInputMode = false;
-			mEnableTimeout = false;
-			mHangulEngine.setJamoTable(LayoutDev.JAMO_NEBUL_1969);
-			mHangulEngine.setCombinationTable(LayoutDev.COMB_NEBUL_1969);
-			mHangulEngine.setVirtualJamoTable(LayoutDev.VIRTUAL_NEBUL_1969);
-			break;
-
+			mHangulEngine.setJamoTable(null);
+			mHangulEngine.setCombinationTable(null);
+			mHangulEngine.setVirtualJamoTable(null);
+			return;
 		}
+
+		EngineMode.Properties prop = mode.properties;
+
+		if(prop.altMode) {
+			mAltMode = true;
+			mDirectInputMode = prop.direct;
+			mEnableTimeout = prop.timeout;
+			mFullMoachigi = prop.fullMoachigi;
+			mAltSymbols = mode.layout;
+			return;
+		}
+
+		mAltMode = false;
+		mDirectInputMode = prop.direct;
+		mEnableTimeout = prop.timeout;
+		mFullMoachigi = prop.fullMoachigi;
+		mHangulEngine = prop.twelveEngine ? m12keyEngine : mQwertyEngine;
+		if(mode.jamoset != null) mHangulEngine.setJamoSet(mode.jamoset);
+		else mHangulEngine.setJamoTable(mode.layout);
+		mHangulEngine.setCombinationTable(mode.combination);
+		mHangulEngine.setVirtualJamoTable(mode.virtual);
+
+		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
+		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
+
 	}
 	
 	private void onKeyUpEvent(KeyEvent ev) {
@@ -1184,14 +944,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void shinShift() {
-		switch(mCurrentEngineMode) {
-		case ENGINE_MODE_SEBUL_SHIN_ORIGINAL:
-		case ENGINE_MODE_SEBUL_SHIN_EDIT:
-		case ENGINE_MODE_SEBUL_SHIN_M:
-		case ENGINE_MODE_SEBUL_SHIN_P2:
-		case ENGINE_MODE_SEBUL_3_2015M:
-		case ENGINE_MODE_SEBUL_3_2015:
-		case ENGINE_MODE_SEBUL_3_P3:
+		if(mCurrentEngineMode.jamoset != null) {
 			DefaultSoftKeyboardKOKR kokr = (DefaultSoftKeyboardKOKR) mInputViewManager;
 			boolean capsLock = kokr.isCapsLock();
 			if(mHardShift == 2) capsLock = true;
@@ -1205,9 +958,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			} else if(shift) {
 				mHardShift = 1;
 			}
-			break;
-
-		default:
 		}
 		updateMetaKeyStateDisplay();
 		updateNumKeyboardShiftState();
