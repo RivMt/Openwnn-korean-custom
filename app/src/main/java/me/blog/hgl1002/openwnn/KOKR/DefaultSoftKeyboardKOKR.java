@@ -906,7 +906,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
 		boolean use12Key = pref.getBoolean("keyboard_hangul_use_12key", false);
-		if(mUse12Key != use12Key) {
+		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
+		if(mUse12Key != use12Key || useAlphabetQwerty != mUseAlphabetQwerty) {
 			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
 		}
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
