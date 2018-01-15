@@ -58,6 +58,16 @@
 	    <item>pc1</item>
     </string-array>
 
+    <string-array name="keyboard_soft_layout_alt">
+	    <item>@string/preference_keyboard_l1_0</item>
+	    <item>@string/preference_keyboard_l1_1</item>
+    </string-array>
+
+	<string-array name="keyboard_soft_layout_alt_id">
+		<item>l1.0</item>
+		<item>l1.1</item>
+	</string-array>
+
 	<string-array name="keyboard_soft_layout_l1_2">
 		<item>@string/preference_keyboard_l1_2</item>
 		<item>@string/preference_keyboard_l1_3</item>

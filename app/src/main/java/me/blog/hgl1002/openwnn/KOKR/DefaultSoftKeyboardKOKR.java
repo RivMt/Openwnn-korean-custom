@@ -483,8 +483,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 		//TODO: load these somewhere else
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+		mAltKeyMode = OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
 
 		if(useAlphabetQwerty) {
 
