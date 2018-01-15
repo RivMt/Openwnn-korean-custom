@@ -17,19 +17,9 @@ import android.view.inputmethod.InputMethodManager;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
-import me.blog.hgl1002.openwnn.KOKR.LayoutDev;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
-import me.blog.hgl1002.openwnn.KOKR.LayoutSymbol;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
-
-import static me.blog.hgl1002.openwnn.KOKR.LayoutAlphabet.*;
-import static me.blog.hgl1002.openwnn.KOKR.LayoutDubul.*;
-import static me.blog.hgl1002.openwnn.KOKR.Layout12KeySebul.*;
-import static me.blog.hgl1002.openwnn.KOKR.LayoutGongSebul.*;
-import static me.blog.hgl1002.openwnn.KOKR.LayoutShinSebul.*;
-import static me.blog.hgl1002.openwnn.KOKR.LayoutMoachigiSebul.*;
-import static me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
@@ -74,50 +64,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{-210, 0x30},
 			{-211, 0x21},
 	};
-	
-	public static final int ENGINE_MODE_SEBUL_390 = 101;
-	public static final int ENGINE_MODE_SEBUL_391 = 102;
-	public static final int ENGINE_MODE_SEBUL_DANMOEUM = 103;
-	public static final int ENGINE_MODE_DUBULSIK = 104;
-	public static final int ENGINE_MODE_DUBULSIK_NK = 105;
 
-	public static final int ENGINE_MODE_SEBUL_SUN_2014 = 107;
-	public static final int ENGINE_MODE_SEBUL_3_2015M = 108;	
-	public static final int ENGINE_MODE_SEBUL_3_2015 = 109;	
-	public static final int ENGINE_MODE_SEBUL_3_P3 = 110;	
-	public static final int ENGINE_MODE_SEBUL_SHIN_ORIGINAL = 111;
-	public static final int ENGINE_MODE_SEBUL_SHIN_EDIT = 112;
-	public static final int ENGINE_MODE_SEBUL_SHIN_M = 113;
-	public static final int ENGINE_MODE_SEBUL_SHIN_P2 = 114;
-	public static final int ENGINE_MODE_SEBUL_AHNMATAE = 115;
-	public static final int ENGINE_MODE_SEBUL_SEMOE_2016 = 116;
-	public static final int ENGINE_MODE_SEBUL_SEMOE = 117;
-
-	public static final int ENGINE_MODE_NEBUL_1969 = 901;
-	
-	public static final int ENGINE_MODE_DUBULSIK_YET = 118;
-	public static final int ENGINE_MODE_SEBUL_393Y = 119;
-	public static final int ENGINE_MODE_SEBUL_3_2015Y = 120;	
-	
-	public static final int ENGINE_MODE_12KEY_ALPHABET_A = 150;
-	public static final int ENGINE_MODE_12KEY_ALPHABET_B = 151;
-	public static final int ENGINE_MODE_12KEY_SEBUL_MUNHWA = 152;
-	public static final int ENGINE_MODE_12KEY_SEBUL_HANSON = 153;
-	public static final int ENGINE_MODE_12KEY_SEBUL_SENA = 154;
-	public static final int ENGINE_MODE_12KEY_DUBUL_CHEONJIIN = 160;
-	public static final int ENGINE_MODE_12KEY_DUBUL_NARATGEUL = 161;
-	public static final int ENGINE_MODE_12KEY_DUBUL_SKY2 = 162;
-	public static final int ENGINE_MODE_12KEY_DUBUL_DANMOEUM = 169;
-
-	public static final int ENGINE_MODE_ENGLISH_DVORAK = 192;
-	public static final int ENGINE_MODE_ENGLISH_COLEMAK = 193;
-	
-	public static final int ENGINE_MODE_OPT_TYPE_QWERTY = 200;
-	public static final int ENGINE_MODE_OPT_TYPE_12KEY = 201;
-
-	public static final int ENGINE_MODE_SYMBOL_A = 301;
-	public static final int ENGINE_MODE_SYMBOL_B = 302;
-	
 	public static final int LONG_CLICK_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x100;
 	public static final int FLICK_UP_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x101;
 	public static final int FLICK_DOWN_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x102;
