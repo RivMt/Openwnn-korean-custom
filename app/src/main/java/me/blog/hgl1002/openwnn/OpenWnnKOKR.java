@@ -18,6 +18,7 @@ import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.LayoutDev;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
+import me.blog.hgl1002.openwnn.KOKR.LayoutSymbol;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 
@@ -58,62 +59,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x2f, 0x3f},
 	};
 
-	public static final int[][] ALT_SYMBOLS_TABLE = {
-			{0x31, 0x31},
-			{0x32, 0x32},
-			{0x33, 0x33},
-			{0x34, 0x34},
-			{0x35, 0x35},
-			{0x36, 0x36},
-			{0x37, 0x37},
-			{0x38, 0x38},
-			{0x39, 0x39},
-			{0x30, 0x30},
-
-			{113, 0x21},		// q
-			{119, 0x40},		// w
-			{101, 0x23},		// e
-			{114, 0x24},		// r
-			{116, 0x25},		// t
-			{121, 0x5e},		// y
-			{117, 0x26},		// u
-			{105, 0x2a},		// i
-			{111, 0x28},		// o
-			{112, 0x29},		// p
-			
-			{97, 0x7e},			// a
-			{115, 0x27},		// s
-			{100, 0x5b},		// d
-			{102, 0x5d},		// f
-			{103, 0x2f},		// g
-			{104, 0x3c},		// h
-			{106, 0x3e},		// j
-			{107, 0x3a},		// k
-			{108, 0x3b},		// l
-			
-			{122, 0x5f},		// z
-			{120, 0xb7},		// x
-			{99, 0x3d},			// c
-			{118, 0x2b},		// v
-			{98, 0x3f},			// b
-			{110, 0x2d},		// n
-			{109, 0x22},		// m
-			
-			{-201, 0x31},
-			{-202, 0x32},
-			{-203, 0x33},
-			{-204, 0x34},
-			{-205, 0x35},
-			{-206, 0x36},
-			{-207, 0x37},
-			{-208, 0x38},
-			{-209, 0x39},
-			{-213, 0x2e},
-			{-210, 0x30},
-			{-211, 0x3f},
-			
-	};
-	
 	public static final int[][] FLICK_TABLE_12KEY = {
 			{-201, 0x31},
 			{-202, 0x32},
@@ -168,6 +113,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	public static final int ENGINE_MODE_OPT_TYPE_QWERTY = 200;
 	public static final int ENGINE_MODE_OPT_TYPE_12KEY = 201;
+
+	public static final int ENGINE_MODE_SYMBOL_A = 301;
+	public static final int ENGINE_MODE_SYMBOL_B = 302;
 	
 	public static final int LONG_CLICK_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x100;
 	public static final int FLICK_UP_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x101;
@@ -192,6 +140,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
+
+	int[][] mAltSymbols;
+	boolean mAltMode;
 	
 	int mHardShift;
 	int mHardAlt;
@@ -699,6 +650,18 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				shift = 1;
 			}
 		}
+
+		if(mAltMode) {
+			for(int[] item : mAltSymbols) {
+				code = Character.toLowerCase(code);
+				if(code == item[0]) {
+					resetJohab();
+					directInput((char) (shift == 0 ? item[1] : item[2]), false);
+					return;
+				}
+			}
+		}
+
 		if(mDirectInputMode || direct) {
 			code = originalCode;
 			resetJohab();
@@ -932,6 +895,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		
 		mCurrentEngineMode = mode;
 
+		mAltMode = false;
 		mHangulEngine.setJamoTable(null);
 		mHangulEngine.setCombinationTable(null);
 		mHangulEngine.setVirtualJamoTable(null);
@@ -941,7 +905,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mDirectInputMode = true;
 			mEnableTimeout = false;
 			break;
-			
+
+		case ENGINE_MODE_SYMBOL_A:
+			mDirectInputMode = false;
+			mEnableTimeout = false;
+			mAltSymbols = LayoutSymbol.SYMBOL_A;
+			mAltMode = true;
+			break;
+
+		case ENGINE_MODE_SYMBOL_B:
+			mDirectInputMode = false;
+			mEnableTimeout = false;
+			mAltSymbols = LayoutSymbol.SYMBOL_B;
+			mAltMode = true;
+			break;
+
 		case ENGINE_MODE_ENGLISH_DVORAK:
 			mDirectInputMode = false;
 			mEnableTimeout = false;
@@ -1255,7 +1233,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 		}
 		case FLICK_SYMBOL: {
-			for(int[] item : ALT_SYMBOLS_TABLE) {
+			for(int[] item : mAltSymbols) {
 				if(item[0] == keyCode) {
 					this.inputChar((char) item[1], true);
 					break;
@@ -1264,6 +1242,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 		}
 		case FLICK_SYMBOL_SHIFT: {
+			for(int[] item : mAltSymbols) {
+				if(item[0] == keyCode) {
+					this.inputChar((char) item[2], true);
+					break;
+				}
+			}
 			break;
 		}
 		}
@@ -1353,5 +1337,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	public HangulEngine getHangulEngine() {
 		return mHangulEngine;
+	}
+
+	public int[][] getmAltSymbols() {
+		return mAltSymbols;
 	}
 }

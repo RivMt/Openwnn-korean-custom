@@ -70,6 +70,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mReturnLanguage = -1;
 	
 	protected int[] mCurrentKeyboards;
+	protected int mAltKeyMode;
 	
 	protected int[] mLimitedKeyMode = null;
 	
@@ -538,8 +539,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 		//TODO: load these somewhere else
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_alt_symbols_shift);
+		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+		mAltKeyMode = OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
 
 		keyList = mNumKeyboard[LANG_KO][mDisplayMode][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
@@ -572,7 +574,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
 			mode = mCurrentKeyboards[mCurrentLanguage];
 		} else if(targetMode == KEYMODE_ALT_SYMBOLS) {
-			mode = OpenWnnEvent.Mode.DIRECT;
+			mode = mAltKeyMode;
 		}
 
 		changeEngineOption();
@@ -589,6 +591,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	public void setDefaultKeyboard() {
+		changeKeyMode(KEYMODE_ALT_SYMBOLS);
 		if(mForceHangul) {
 			mCurrentLanguage = LANG_KO;
 			mCurrentLanguageIndex = 1;
@@ -1138,6 +1141,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case "keyboard_12key_sebul_sena":
 			return OpenWnnKOKR.ENGINE_MODE_12KEY_SEBUL_SENA;
 
+			// ALT Symbols layouts
+
+		case "keyboard_symbol_a":
+			return OpenWnnKOKR.ENGINE_MODE_SYMBOL_A;
+
+		case "keyboard_symbol_b":
+			return OpenWnnKOKR.ENGINE_MODE_SYMBOL_B;
+
 		}
 		return OpenWnnEvent.Mode.DIRECT;
 	}
@@ -1243,20 +1254,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	public void updateKeyLabels() {
+		int[][] layout, virtual;
 		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) {
-			updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0]);
-			mKeyboardView.invalidateAllKeys();
-			mKeyboardView.requestLayout();
+			HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
+			layout = hangulEngine.getJamoTable();
+			virtual = hangulEngine.getVirtualJamoTable();
+		} else {
+			layout = ((OpenWnnKOKR) mWnn).getmAltSymbols();
+			virtual = null;
 		}
+		updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0], layout, virtual);
+		mKeyboardView.invalidateAllKeys();
+		mKeyboardView.requestLayout();
 	}
 
-	protected void updateLabels(Keyboard kbd) {
+	protected void updateLabels(Keyboard kbd, int[][] layout, int[][] virtual) {
 		if(!(kbd instanceof KeyboardKOKR)) return;
 		if(mCurrentKeyboardType == KEYBOARD_12KEY) return;
-		int[][] layout, virtual;
-		HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
-		layout = hangulEngine.getJamoTable();
-		virtual = hangulEngine.getVirtualJamoTable();
 		if(layout == null) {
 			for(Keyboard.Key key : kbd.getKeys()) {
 				String label = getKeyLabel(key.codes[0], mShiftOn > 0);
