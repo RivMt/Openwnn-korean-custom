@@ -148,7 +148,7 @@ public class HangulEngine {
 	/**
 	 * 한글 입력 기록을 저장하기 위한 스택. 백스페이스 처리에 이용된다.
 	 */
-	Stack<History> histories = new Stack<History>();
+	Stack<History> histories = new Stack<>();
 
 	/**
 	 * 자모 테이블.
@@ -170,7 +170,7 @@ public class HangulEngine {
 	 * 낱자 조합 테이블.
 	 * 한글 낱자를 어떻게 조합할지 정의한다. (예: 0x1100 + 0x1100 = 0x1101, ㄱ+ㄱ=ㄲ)
 	 */
-	int[][] combinationTable;
+    private int[][] combinationTable;
 	/**
 	 * 가상 낱자 테이블.
 	 * 마이너스 코드를 임의의 한글 낱자로 사용한다.
@@ -248,12 +248,11 @@ public class HangulEngine {
 	public int inputJamo(int code) {
 
 		// 입력 기록을 업데이트한다.
-		if(composing == "") histories.clear();
+		if(composing.equals("")) histories.clear();
 		else histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 
 		// -4000 이하일 경우 상태를 변환하지 않는다.
-		boolean virtual = false;
-		if(code <= -4000) virtual = true;
+		boolean virtual = code <= -4000;
 		int result;
 		int combination;
 		// 세벌식 한글 초성.
@@ -261,10 +260,7 @@ public class HangulEngine {
 			// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 			int choCode = code;
 			if(choCode >= 0x1100) choCode-= 0x1100;
-			if(!fullMoachigi) {
-				if (!moachigi && !isCho(last) && !isJung(last)) resetJohab();
-				if (!moachigi && !isCho(last)) resetJohab();
-			}
+			if(!fullMoachigi && !moachigi && !isCho(last) && !isJung(last)) resetJohab();
 			if(isCho(last) || fullMoachigi && this.cho != -1) {
 				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 				int source = this.cho;
@@ -274,17 +270,12 @@ public class HangulEngine {
 					// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
 					choCode = combination;
 					if(choCode >= 0) choCode-= 0x1100;
-					this.cho = choCode;
 				} else {
 					resetJohab();
-					this.cho = choCode;
 				}
-			// 낱자 조합 불가능 / 실패시
-			} else {
-				// 낱자 조합에 실패했을 경우 (이미 초성이 입력되어 있음) 조합을 종료한다.
-				if(this.cho != -1) resetJohab();
-				this.cho = choCode;
-			}
+            // 낱자 조합에 실패했을 경우 (이미 초성이 입력되어 있음) 조합을 종료한다.
+			} else if(this.cho != -1) resetJohab();
+            this.cho = choCode;
 			// -4000 이하일 경우 다음 상태로 넘기지 않는다.
 			if(lastInputType == 0) result = INPUT_CHO3;
 			else if(virtual) result = lastInputType;
@@ -520,7 +511,7 @@ public class HangulEngine {
 	 * @param b		종성 ㅅ.
 	 * @return		종성 ㄳ. 해당하는 조합이 없을 경우 {@code -1}.
 	 */
-	int getCombination(int a, int b) {
+    private int getCombination(int a, int b) {
 		for(int[] item : combinationTable) {
 			if(item[0] == a && item[1] == b) return item[2];
 		}
@@ -530,9 +521,9 @@ public class HangulEngine {
 	/**
 	 * {@link #combinationTable}의 규칙을 역행하여 결합된 낱자를 두 개로 분리한다.
 	 * @param jong		결합된 중성.
-	 * @return			분해된 {@link Disassembled}형 결과. 규칙이 없을 경우 {@code null}.
+	 * @return			분해된 {@link Pair}형 결과. 규칙이 없을 경우 {@code null}.
 	 */
-	Disassembled getDisassembled(int jong) {
+	Pair getJongseongPair(int jong) {
 		for(int[] item : combinationTable) {
 			if(item[2] == jong) {
 				int resultJong = item[0];
@@ -540,15 +531,15 @@ public class HangulEngine {
 				for(int i = 0 ; i < JONG_CONVERT.length ; i++) {
 					if(JONG_CONVERT[i] == item[1]) resultCho = CHO_CONVERT[i];
 				}
-				return new Disassembled(resultJong, resultCho);
+				return new Pair(resultJong, resultCho);
 			}
 		}
 		return null;
 	}
 	
-	private static class Disassembled {
+	private static class Pair {
 		int jong, cho;
-		public Disassembled(int jong, int cho) {
+		public Pair(int jong, int cho) {
 			this.jong = jong;
 			this.cho = cho;
 		}
