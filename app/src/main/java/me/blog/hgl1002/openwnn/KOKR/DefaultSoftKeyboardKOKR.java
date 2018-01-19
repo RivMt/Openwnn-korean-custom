@@ -204,6 +204,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			key.onPressed();
 			mKeyboardView.invalidateAllKeys();
 
+			setPreviewEnabled(keyCode);
+
 			handler = new Handler();
 			handler.postDelayed(longClickHandler = new LongClickHandler(keyCode), mLongPressTimeout);
 
@@ -277,6 +279,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		public boolean onUp() {
 			key.onReleased(true);
+			mKeyboardView.setPreviewEnabled(false);
+			mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
 			mKeyboardView.invalidateAllKeys();
 			handler.removeCallbacksAndMessages(null);
 			if(space != -1) {
@@ -779,18 +783,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mTimeoutHandler = new Handler();
 			mTimeoutHandler.postDelayed(new TimeOutHandler(), mTimeoutDelay);
 		}
-	}
-
-	@Override
-	public void onPress(int x) {
-		setPreviewEnabled(x);
-	}
-
-	@Override
-	public void onRelease(int x) {
-		mKeyboardView.setPreviewEnabled(false);
-		super.onRelease(x);
-		mBackspaceLongClickHandler.removeCallbacksAndMessages(null);
 	}
 
 	public void setPreviewEnabled(int x) {
