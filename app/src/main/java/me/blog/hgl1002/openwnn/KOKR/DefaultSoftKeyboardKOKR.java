@@ -181,6 +181,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	private SparseArray<TouchPoint> mTouchPoints = new SparseArray<>();
 	class TouchPoint {
+		Keyboard.Key key;
 		int keyCode;
 
 		float downX, downY;
@@ -194,10 +195,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		LongClickHandler longClickHandler;
 		Handler handler;
 
-		public TouchPoint(int keyCode, float downX, float downY) {
-			this.keyCode = keyCode;
+		public TouchPoint(Keyboard.Key key, float downX, float downY) {
+			this.key = key;
+			this.keyCode = key.codes[0];
 			this.downX = downX;
 			this.downY = downY;
+
+			key.onPressed();
+			mKeyboardView.invalidateAllKeys();
+
 			handler = new Handler();
 			handler.postDelayed(longClickHandler = new LongClickHandler(keyCode), mLongPressTimeout);
 
@@ -270,6 +276,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 		public boolean onUp() {
+			key.onReleased(true);
+			mKeyboardView.invalidateAllKeys();
 			handler.removeCallbacksAndMessages(null);
 			if(space != -1) {
 				space = -1;
@@ -315,13 +323,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	class OnKeyboardViewTouchListener implements View.OnTouchListener {
-		float downX, downY;
-		float dx, dy;
-		float beforeX, beforeY;
-		int space = -1;
-		int spaceDistance;
-		int backspace = -1;
-		int backspaceDistance;
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			if(Build.VERSION.SDK_INT >= 8) {
@@ -332,35 +333,35 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				switch(action) {
 				case MotionEvent.ACTION_DOWN:
 				case MotionEvent.ACTION_POINTER_DOWN:
-					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y).codes[0], x, y);
+					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y), x, y);
 					mTouchPoints.put(pointerId, point);
-					return false;
+					return true;
 
 				case MotionEvent.ACTION_MOVE:
 					return mTouchPoints.get(pointerId).onMove(x, y);
 
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_POINTER_UP:
-					boolean result = mTouchPoints.get(pointerId).onUp();
+					mTouchPoints.get(pointerId).onUp();
 					mTouchPoints.remove(pointerId);
-					return result;
+					return true;
 
 				}
 			} else {
 				float x = event.getX(), y = event.getY();
 				switch(event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
-					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y).codes[0], x, y);
+					TouchPoint point = new TouchPoint(findKey(mCurrentKeyboard, (int) x, (int) y), x, y);
 					mTouchPoints.put(0, point);
-					break;
+					return true;
 
 				case MotionEvent.ACTION_MOVE:
 					return mTouchPoints.get(0).onMove(x, y);
 
 				case MotionEvent.ACTION_UP:
-					boolean result = mTouchPoints.get(0).onUp();
+					mTouchPoints.get(0).onUp();
 					mTouchPoints.remove(0);
-					return result;
+					return true;
 
 				}
 			}
