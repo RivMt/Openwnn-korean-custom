@@ -15,8 +15,8 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionCode="18011900"
-      android:versionName="180119-00"
+      android:versionCode="18011901"
+      android:versionName="180119-01"
 	  package="me.blog.hgl1002.openwnn">
 
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.VIBRATE"/>
