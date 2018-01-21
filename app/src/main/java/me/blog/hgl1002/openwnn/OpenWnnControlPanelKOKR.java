@@ -8,11 +8,22 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.blog.hgl1002.openwnn.R;
 
 public class OpenWnnControlPanelKOKR extends PreferenceActivity {
+
+	private List<String> fragmentNames = new ArrayList<String>() {{
+		add(InputMethodFragment.class.getName());
+		add(KeyboardAppearanceFragment.class.getName());
+		add(SoftKeyboardFragment.class.getName());
+		add(HardKeyboardFragment.class.getName());
+		add(SystemFragment.class.getName());
+		add(AboutFragment.class.getName());
+		add(DeveloperFragment.class.getName());
+	}};
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -49,7 +60,7 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 	@TargetApi(11)
 	@Override
 	protected boolean isValidFragment(String fragmentName) {
-		return true;
+		return fragmentNames.contains(fragmentName);
 	}
 
 	@TargetApi(11)
