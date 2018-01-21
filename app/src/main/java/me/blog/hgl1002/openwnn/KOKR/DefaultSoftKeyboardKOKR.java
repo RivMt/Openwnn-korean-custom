@@ -651,6 +651,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mMainView.addView(mKeyboardView);
 		}
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
+		mNumKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		TextView langView = (TextView) mSubView.findViewById(R.id.lang);
 		langView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
