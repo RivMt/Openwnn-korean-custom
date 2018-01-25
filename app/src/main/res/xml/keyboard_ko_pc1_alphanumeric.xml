@@ -53,7 +53,7 @@
 			android:keyWidth="11.5%p" android:keyEdgeFlags="right"/>
 	</Row>
 
-	<Row android:rowEdgeFlags="bottom">
+	<Row>
 		<Key android:codes="-1" android:keyIcon="@drawable/key_qwerty_shift"
 			android:keyWidth="7.7%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="122" android:keyLabel="z"/>
