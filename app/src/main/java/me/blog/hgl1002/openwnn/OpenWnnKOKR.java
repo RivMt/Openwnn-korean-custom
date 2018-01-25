@@ -895,7 +895,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void shinShift() {
-		if(mCurrentEngineMode.jamoset != null) {
+		if(mCurrentEngineMode != null && mCurrentEngineMode.jamoset != null) {
 			DefaultSoftKeyboardKOKR kokr = (DefaultSoftKeyboardKOKR) mInputViewManager;
 			boolean capsLock = kokr.isCapsLock();
 			if(mHardShift == 2) capsLock = true;
