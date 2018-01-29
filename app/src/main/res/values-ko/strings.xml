@@ -199,6 +199,9 @@
     <string name="preference_system_lang_key_long_press_title">언어 키 롱클릭 행동</string>
     <string name="preference_system_lang_key_long_press_summary">언어키를 길게 누를 때 실행할 행동을 정합니다.</string>
 
+    <string name="preference_system_alt_key_long_press_title">ALT 키 롱클릭 행동</string>
+    <string name="preference_system_alt_key_long_press_summary">ALT 키를 길게 누를 때 실행할 행동을 정합니다.</string>
+
     <string name="preference_system_switch_kor_eng">한/영 전환</string>
     <string name="preference_system_switch_next_method">다음 입력기로 전환</string>
     <string name="preference_system_list_methods">입력기 목록 표시</string>
