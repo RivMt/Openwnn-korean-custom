@@ -242,12 +242,14 @@
 		<item>@string/preference_system_switch_kor_eng</item>
 		<item>@string/preference_system_switch_next_method</item>
 		<item>@string/preference_system_list_methods</item>
+		<item>@string/preference_system_toggle_12key_mode</item>
 	</string-array>
 
 	<string-array name="lang_key_actions_id">
 	    <item>switch_kor_eng</item>
 	    <item>switch_next_method</item>
 	    <item>list_methods</item>
+	    <item>toggle_12key_mode</item>
     </string-array>
 
 	<string-array name="flick_actions">

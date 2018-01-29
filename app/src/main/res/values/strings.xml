@@ -454,6 +454,7 @@
      <string name="preference_system_switch_kor_eng">Switch Korean/English Mode</string>
      <string name="preference_system_switch_next_method">Switch to Next Method</string>
      <string name="preference_system_list_methods">List Input Methods</string>
+     <string name="preference_system_toggle_12key_mode">Toggle 12-Key Layout</string>
 
      <string name="preference_hardware_lang_key_title">Hardware Keyboard Language Key</string>
      <string name="preference_hardware_lang_key_summary">Customize language key storke with shift, alt combinations.</string>
