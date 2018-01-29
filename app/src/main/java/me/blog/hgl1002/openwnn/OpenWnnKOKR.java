@@ -81,6 +81,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
 	public static final String LANGKEY_LIST_METHODS = "list_methods";
 	public static final String LANGKEY_TOGGLE_12KEY_MODE = "toggle_12key_mode";
+	public static final String LANGKEY_OPEN_SETTINGS = "open_settings";
 
 	public static final String FLICK_NONE = "none";
 	public static final String FLICK_SHIFT = "shift";
@@ -668,6 +669,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			editor.putBoolean("keyboard_hangul_use_12key", !use12key);
 			editor.commit();
 			this.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			break;
+
+		case LANGKEY_OPEN_SETTINGS:
+			Intent intent = new Intent(this, OpenWnnControlPanelKOKR.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
 			break;
 
 		}
