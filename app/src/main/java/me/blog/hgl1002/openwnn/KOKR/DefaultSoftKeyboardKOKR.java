@@ -1118,6 +1118,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	public void updateKeyLabels() {
+		if(mCurrentKeyboardType == KEYBOARD_12KEY && mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) return;
 		int[][] layout, virtual;
 		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) {
 			HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
@@ -1134,7 +1135,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	protected void updateLabels(Keyboard kbd, int[][] layout, int[][] virtual) {
 		if(!(kbd instanceof KeyboardKOKR)) return;
-		if(mCurrentKeyboardType == KEYBOARD_12KEY) return;
 		if(layout == null) {
 			for(Keyboard.Key key : kbd.getKeys()) {
 				String label = getKeyLabel(key.codes[0], mShiftOn > 0);
