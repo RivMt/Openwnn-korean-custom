@@ -16,7 +16,7 @@ public enum EngineMode {
 
 	SEBUL_390(new Properties(), JAMO_SEBUL_390, null, COMB_SEBULSIK, null, "keyboard_sebul_390"),
 	SEBUL_391(new Properties(), JAMO_SEBUL_391, null, COMB_SEBULSIK, null, "keyboard_sebul_391"),
-	SEBUL_DANMOEUM(new Properties(), JAMO_SEBUL_DANMOEUM, null, COMB_SEBULSIK, null, "keyboard_sebul_danmoeum"),
+	SEBUL_DANMOEUM(new Properties(), JAMO_SEBUL_DANMOEUM, null, COMB_SEBUL_DANMOEUM, null, "keyboard_sebul_danmoeum"),
 	DUBULSIK(new Properties(), JAMO_DUBUL_STANDARD, null, COMB_DUBUL_STANDARD, null, "keyboard_dubul_standard"),
 	DUBULSIK_NK(new Properties(), JAMO_DUBUL_NK, null, COMB_DUBUL_STANDARD, null, "keyboard_dubul_nk"),
 
