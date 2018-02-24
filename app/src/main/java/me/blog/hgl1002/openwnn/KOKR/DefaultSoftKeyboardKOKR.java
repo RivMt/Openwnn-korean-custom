@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.TextView;
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
 import me.blog.hgl1002.openwnn.OpenWnn;
@@ -629,7 +630,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
          */
 		createKeyboards(parent);
 
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
 		String skin = pref.getString("keyboard_skin",
 				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
 		int id = parent.getResources().getIdentifier(skin, "layout", "me.blog.hgl1002.openwnn");
@@ -643,6 +644,23 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		mMainView = (ViewGroup) parent.getLayoutInflater().inflate(R.layout.keyboard_default_main, null);
 		mSubView = (ViewGroup) parent.getLayoutInflater().inflate(R.layout.keyboard_default_sub, null);
+
+		boolean initialLaunch = pref.getBoolean("initial_launch", true);
+		if(initialLaunch) {
+			final View help = parent.getLayoutInflater().inflate(R.layout.initial_launch_helper, null);
+			mMainView.addView(help);
+			Button close = (Button) mMainView.findViewById(R.id.close);
+			close.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mMainView.removeView(help);
+					SharedPreferences.Editor editor = pref.edit();
+					editor.putBoolean("initial_launch", false);
+					editor.commit();
+				}
+			});
+		}
+
 		if (!mHardKeyboardHidden) {
 			if(mShowSubView) mMainView.addView(mSubView);
 			if(mShowNumKeyboardViewPortrait && mDisplayMode == PORTRAIT) mMainView.addView(mNumKeyboardView);

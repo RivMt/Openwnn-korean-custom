@@ -481,4 +481,6 @@
       <string name="preference_dev_use_hangul_hard">Use Hangul Hard</string>
       <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
 
+      <string name="initial_launch_help">Press ALT Key to open Settings.</string>
+
 </resources>
