@@ -28,7 +28,7 @@
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
 			layoutKey="keyboard_hangul_layout"
-			android:defaultValue="l1.0" />
+			android:defaultValue="l1.2" />
 		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
 			android:key="keyboard_hangul_soft_layout_landscape"
 			android:title="@string/preference_keyboard_hangul_soft_landscape_title"
@@ -36,7 +36,7 @@
 			android:entries="@array/keyboard_soft_layout"
 			android:entryValues="@array/keyboard_soft_layout_id"
 			layoutKey="keyboard_hangul_layout"
-			android:defaultValue="l1.0" />
+			android:defaultValue="l1.2" />
 		<CheckBoxPreference android:key="keyboard_alphabet_use_qwerty"
 			android:title="@string/preference_keyboard_alphabet_use_qwerty_title"
 			android:summary="@string/preference_keyboard_alphabet_use_qwerty_summary" />

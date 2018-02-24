@@ -477,7 +477,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			mCurrentKeyboards[LANG_KO] = getEngineMode(defaultLayout);
 
-			String softLayout = "l1.0";
+			String softLayout = "l1.2";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_hangul_soft_layout_portrait", softLayout);
 			else softLayout = pref.getString("keyboard_hangul_soft_layout_landscape", softLayout);
 			loadSoftLayout(keyList, softLayout);
@@ -501,7 +501,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
 
-			String softLayout = "l1.0";
+			String softLayout = "l1.2";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
 			else softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
 			loadSoftLayout(keyList, softLayout);
