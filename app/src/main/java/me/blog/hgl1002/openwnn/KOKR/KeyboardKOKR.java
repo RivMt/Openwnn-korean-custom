@@ -25,13 +25,11 @@ public class KeyboardKOKR extends Keyboard {
 		double heightModifier = 1;
 		int height = 0;
 		for(Key key : getKeys()) {
-			if(key.codes[0] == 0) System.out.println("-----\n" + key.height + "," + key.y);
 			int oldHeight = key.height;
 			heightModifier = (double) keyHeight / (double) oldHeight * (double) oldHeight / (double) getKeyHeight();
 			key.height *= heightModifier;
 			key.y *= heightModifier;
 			height = key.height;
-			if(key.codes[0] == 0) System.out.println(key.height + "," + key.y);
 		}
 		setKeyHeight(height);
 		mTotalHeight *= heightModifier;
