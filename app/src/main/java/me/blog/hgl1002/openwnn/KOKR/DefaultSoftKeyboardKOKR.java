@@ -502,7 +502,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
 
-			String softLayout = "l1.2";
+			String softLayout = "l1.0";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
 			else softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
 			loadSoftLayout(keyList, softLayout);
