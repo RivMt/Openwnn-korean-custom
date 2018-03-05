@@ -24,7 +24,7 @@
 		<Key android:codes="-2012" android:keyLabel="ㅅ" />
 		<Key android:codes="-2013" android:keyLabel="ㅡ" />
 		<Key android:codes="-2014" android:keyLabel="ㅅ" />
-		<Key android:codes="-2015" android:keyLabel=". ," android:keyEdgeFlags="right" />
+		<Key android:codes="-214" android:keyIcon="@drawable/key_12key_del" android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>
@@ -33,12 +33,11 @@
 		<Key android:codes="-500" android:keyLabel="ABC" />
 		<Key android:codes="-215" android:keyWidth="40%p"
 			 android:keyIcon="@drawable/key_12key_space" />
-		<Key android:codes="-216" 
+		<Key android:codes="-2015"
+			android:keyWidth="15%p" android:keyLabel=". ,"/>
+		<Key android:codes="-216" android:keyEdgeFlags="right"
 			 android:keyIcon="@drawable/key_12key_enter"
 			 android:iconPreview="@drawable/key_12key_enter"
-			 android:isRepeatable="false" android:keyWidth="15%p" />
-		<Key android:codes="-214" android:keyEdgeFlags="right"
-			 android:keyIcon="@drawable/key_12key_del"
 			 android:isRepeatable="false" android:keyWidth="15%p" />
 	</Row>
 
