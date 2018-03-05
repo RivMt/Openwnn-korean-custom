@@ -144,16 +144,16 @@
     <string name="preference_keyboard_flick_up_summary">위로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 윗글쇠 입력입니다.</string>
 
     <string name="preference_keyboard_flick_down_title">아래 플릭 동작</string>
-    <string name="preference_keyboard_flick_down_summary">위로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 기호 입력입니다.</string>
+    <string name="preference_keyboard_flick_down_summary">아래로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 기호 입력입니다.</string>
 
     <string name="preference_keyboard_flick_left_title">왼쪽 플릭 동작</string>
-    <string name="preference_keyboard_flick_left_summary">위로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 없음입니다.</string>
+    <string name="preference_keyboard_flick_left_summary">왼쪽으로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 없음입니다.</string>
 
     <string name="preference_keyboard_flick_right_title">오른쪽 플릭 동작</string>
-    <string name="preference_keyboard_flick_right_summary">위로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 없음입니다.</string>
+    <string name="preference_keyboard_flick_right_summary">오른쪽으로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 없음입니다.</string>
 
     <string name="preference_keyboard_long_press_title">롱클릭 동작</string>
-    <string name="preference_keyboard_long_press_summary">위로 플릭했을 때 실행할 동작을 선택합니다. 기본값은 윗글쇠 입력입니다.</string>
+    <string name="preference_keyboard_long_press_summary">키를 길게 눌렀을 때 실행할 동작을 선택합니다. 기본값은 윗글쇠 입력입니다.</string>
 
     <string name="preference_keyboard_flick_none">없음</string>
     <string name="preference_keyboard_flick_shift">윗글쇠 입력</string>
