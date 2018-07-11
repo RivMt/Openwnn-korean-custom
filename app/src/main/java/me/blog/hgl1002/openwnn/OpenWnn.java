@@ -21,16 +21,12 @@ import android.view.WindowManager;
 import android.content.Context;
 import android.view.View;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import android.util.Log;
-import android.os.*;
 import android.view.inputmethod.*;
-import android.content.res.Configuration;
-import android.graphics.*;
-import android.graphics.drawable.*;
+
+import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
 
 /**
  * The OpenWnn IME's base class.
@@ -116,26 +112,6 @@ public class OpenWnn extends InputMethodService {
         close();
     }
 
-    /** @see android.inputmethodservice.InputMethodService#onKeyDown */
-    @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-        mConsumeDownEvent = onEvent(new OpenWnnEvent(event));
-        if (!mConsumeDownEvent) {
-            return super.onKeyDown(keyCode, event);
-        }
-        return mConsumeDownEvent;
-    }
-
-    /** @see android.inputmethodservice.InputMethodService#onKeyUp */
-    @Override public boolean onKeyUp(int keyCode, KeyEvent event) {
-        boolean ret = mConsumeDownEvent;
-        if (!ret) {
-            ret = super.onKeyUp(keyCode, event);
-        }else{
-            onEvent(new OpenWnnEvent(event));
-        }
-        return ret;
-    }
-        
     /** @see android.inputmethodservice.InputMethodService#onStartInput */
     @Override public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);

@@ -20,7 +20,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
+
+import org.greenrobot.eventbus.EventBus;
+
 import me.blog.hgl1002.openwnn.*;
+import me.blog.hgl1002.openwnn.event.InputViewChangeEvent;
+import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
 
 /**
  * The preference class of keyboard image list for Japanese IME.
@@ -54,13 +59,7 @@ public class KeyboardListPreferenceKOKR extends ListPreference {
 				for(String key : keys) editor.putString(key, value);
 				editor.commit();
 			}
-    		OpenWnnKOKR wnn = OpenWnnKOKR.getInstance();
-        	int code = OpenWnnEvent.CHANGE_INPUT_VIEW;
-        	OpenWnnEvent ev = new OpenWnnEvent(code);
-        	try {
-        		wnn.onEvent(ev);
-        	} catch (Exception ex) {
-			}
+			EventBus.getDefault().post(new InputViewChangeEvent());
     	}
     }
 }

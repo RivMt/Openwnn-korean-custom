@@ -21,11 +21,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.greenrobot.eventbus.EventBus;
+
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
 import me.blog.hgl1002.openwnn.OpenWnn;
-import me.blog.hgl1002.openwnn.OpenWnnEvent;
+import me.blog.hgl1002.openwnn.event.*;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.R;
+import me.blog.hgl1002.openwnn.event.SoftKeyLongPressEvent;
 
 public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	
@@ -133,7 +137,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	class TimeOutHandler implements Runnable {
 		@Override
 		public void run() {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.TIMEOUT_EVENT));
+			EventBus.getDefault().post(new InputTimeoutEvent());
 		}
 	}
 
@@ -151,8 +155,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case KEYCODE_QWERTY_SHIFT:
 				if(mShiftOn > 0) return;
 				toggleShiftLock();
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
 				mCapsLock = true;
 				performed = true;
 				updateKeyLabels();
@@ -163,8 +166,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
 				return;
 			}
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.LONG_CLICK_EVENT,
-					new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+			EventBus.getDefault().post(new SoftKeyLongPressEvent(keyCode));
 			try { mVibrator.vibrate(mVibrateDuration*2); } catch (Exception ex) { }
 			performed = true;
 		}
@@ -174,8 +176,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	class BackspaceLongClickHandler implements Runnable {
 		@Override
 		public void run() {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_NON_SHIN_DEL)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_NON_SHIN_DEL)));
 			mBackspaceLongClickHandler.postDelayed(new BackspaceLongClickHandler(), 50);
 		}
 	}
@@ -249,28 +250,24 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				spaceDistance += x - beforeX;
 				if(spaceDistance < -SPACE_SLIDE_UNIT) {
 					spaceDistance = 0;
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT)));
+					EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
+					EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_LEFT)));
 				}
 				if(spaceDistance > +SPACE_SLIDE_UNIT) {
 					spaceDistance = 0;
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
+					EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
+					EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_RIGHT)));
 				}
 			}
 			if(backspace != -1) {
 				backspaceDistance += x - beforeX;
 				if(backspaceDistance < -BACKSPACE_SLIDE_UNIT) {
 					backspaceDistance = 0;
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_LEFT_EVENT));
+					EventBus.getDefault().post(new SoftKeyGestureEvent(KeyEvent.KEYCODE_DEL, SoftKeyGestureEvent.Type.SLIDE_LEFT));
 				}
 				if(backspaceDistance > +BACKSPACE_SLIDE_UNIT) {
 					backspaceDistance = 0;
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_RIGHT_EVENT));
+					EventBus.getDefault().post(new SoftKeyGestureEvent(KeyEvent.KEYCODE_DEL, SoftKeyGestureEvent.Type.SLIDE_RIGHT));
 				}
 			}
 			beforeX = x;
@@ -289,35 +286,31 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				return false;
 			}
 			if(backspace != -1) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.BACKSPACE_COMMIT_EVENT));
+				EventBus.getDefault().post(new SoftKeyGestureEvent(KeyEvent.KEYCODE_DEL, SoftKeyGestureEvent.Type.RELEASE));
 				backspace = -1;
 				return false;
 			}
 			if(dy > mFlickSensitivity) {
 				if(Math.abs(dy) > Math.abs(dx)) {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_DOWN_EVENT,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.DOWN));
 				}
 				return false;
 			}
 			if(dy < -mFlickSensitivity) {
 				if(Math.abs(dy) > Math.abs(dx)) {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_UP_EVENT,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.UP));
 				}
 				return false;
 			}
 			if(dx < -mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_LEFT_EVENT,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.RIGHT));
 				}
 				return false;
 			}
 			if(dx > mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
-					mWnn.onEvent(new OpenWnnEvent(OpenWnnKOKR.FLICK_RIGHT_EVENT,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode)));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.LEFT));
 				}
 				return false;
 			}
@@ -559,10 +552,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if(targetMode == INVALID_KEYMODE) {
 			return;
 		}
-		
-		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-				new KeyEvent(KeyEvent.ACTION_UP,
-						KeyEvent.KEYCODE_SHIFT_LEFT)));
+
+		EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT)));
 		if(mCapsLock) {
 			mCapsLock = false;
 		}
@@ -579,7 +570,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 //		changeEngineOption();
-		mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, mode));
+		EventBus.getDefault().post(new EngineModeChangeEvent(mode));
 
 		changeKeyboard(kbd);
 		if(mNumKeyboard != null) {
@@ -715,34 +706,28 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		switch(primaryCode) {
 		case KEYCODE_CHANGE_LANG:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_CHANGE_LANG)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KEYCODE_CHANGE_LANG)));
 			break;
 
 		case KEYCODE_UP:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_UP)));
 			break;
 
 		case KEYCODE_DOWN:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN)));
 			break;
 
 		case KEYCODE_LEFT:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT)));
 			break;
 
 		case KEYCODE_RIGHT:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT)));
 			break;
 
 		case KEYCODE_JP12_BACKSPACE:
 		case KEYCODE_QWERTY_BACKSPACE:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)));
 			break;
 
 		case KEYCODE_QWERTY_SHIFT:
@@ -750,11 +735,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			toggleShiftLock();
 			updateKeyLabels();
 			if(mShiftOn == 0) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT)));
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT)));
 			} else {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT)));
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_RIGHT)));;
 			}
 			break;
 
@@ -764,25 +747,22 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		case KEYCODE_JP12_ENTER:
 		case KEYCODE_QWERTY_ENTER:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER)));
 			break;
 
 		case KEYCODE_JP12_SPACE:
 		case -10:
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-					new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE)));
+			EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SPACE)));
 			break;
 
 		default:
 			if((primaryCode <= -200 && primaryCode > -300) || (primaryCode <= -2000 && primaryCode > -3000)) {
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode)));
 			} else if(primaryCode >= 0) {
 				if(mKeyboardView.isShifted()) {
 					primaryCode = Character.toUpperCase(primaryCode);
 				}
-				mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char)primaryCode));
+				EventBus.getDefault().post(new InputCharEvent((char) primaryCode));
 
 				if(mKeyboardView.isShifted()) {
 					if(!mCapsLock) {
@@ -910,12 +890,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		if(keyHeightPortrait != mKeyHeightPortrait || keyHeightLandscape != mKeyHeightLandscape) {
 			mKeyHeightPortrait = keyHeightPortrait;
 			mKeyHeightLandscape = keyHeightLandscape;
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 		boolean use12Key = pref.getBoolean("keyboard_hangul_use_12key", false);
 		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
 		if(mUse12Key != use12Key || useAlphabetQwerty != mUseAlphabetQwerty) {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
@@ -926,14 +906,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
 		if(showSubView != mShowSubView) {
 			mShowSubView = showSubView;
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 		mKeyboardView.setPreviewEnabled(false);
 		mNumKeyboardView.setPreviewEnabled(false);
 		boolean showNum = pref.getBoolean("hardware_use_numkeyboard", true);
 		if(showNum != mShowNumKeyboardViewPortrait || showNum != mShowNumKeyboardViewLandscape) {
 			mShowNumKeyboardViewLandscape = mShowNumKeyboardViewPortrait = showNum;
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 		mShowKeyPreview = pref.getBoolean("popup_preview", true);
 
@@ -1110,8 +1090,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	public void fixHardwareLayoutState() {
-		if(mHardwareLayout != !mHardKeyboardHidden) {
-			mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+		if(mHardwareLayout == mHardKeyboardHidden) {
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 	}
 

@@ -12,14 +12,20 @@ import android.preference.PreferenceManager;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
+import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
@@ -65,18 +71,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{-211, 0x21},
 	};
 
-	public static final int LONG_CLICK_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x100;
-	public static final int FLICK_UP_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x101;
-	public static final int FLICK_DOWN_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x102;
-	public static final int FLICK_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x103;
-	public static final int FLICK_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x104;
-
-	public static final int TIMEOUT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x1;
-
-	public static final int BACKSPACE_LEFT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x211;
-	public static final int BACKSPACE_RIGHT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x212;
-	public static final int BACKSPACE_COMMIT_EVENT = OpenWnnEvent.PRIVATE_EVENT_OFFSET | 0x210;
-
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
 	public static final String LANGKEY_LIST_METHODS = "list_methods";
@@ -101,7 +95,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	boolean mShiftPressing;
 	boolean mAltPressing;
-	
+
+	private boolean mConsumeDownEvent;
+
 	EngineMode mCurrentEngineMode;
 	
 	private static final int[] mShiftKeyToggle = {0, MetaKeyKeyListener.META_SHIFT_ON, MetaKeyKeyListener.META_CAP_LOCKED};
@@ -171,6 +167,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		EventBus.getDefault().register(this);
 	}
 
 	@Override
@@ -178,27 +175,35 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		int hiddenState = getResources().getConfiguration().hardKeyboardHidden;
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
-		return super.onCreateInputView();
+
+		if (mInputViewManager != null) {
+			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
+			return mInputViewManager.initView(this,
+					wm.getDefaultDisplay().getWidth(),
+					wm.getDefaultDisplay().getHeight());
+		} else {
+			return super.onCreateInputView();
+		}
 	}
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		resetJohab();
-		if(restarting) {
-			super.onStartInputView(attribute, restarting);
-		} else {
+		resetComposition();
+		if(!restarting) {
 			
 			((DefaultSoftKeyboard) mInputViewManager).resetCurrentKeyboard();
 			
-			super.onStartInputView(attribute, restarting);
-
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
 			updateNumKeyboardShiftState();
 		}
-		
+
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (mCandidatesViewManager != null) { mCandidatesViewManager.setPreferences(pref);  }
+		if (mInputViewManager != null) { mInputViewManager.setPreferences(pref, attribute);  }
+		if (mPreConverter != null) { mPreConverter.setPreferences(pref);  }
+		if (mConverter != null) { mConverter.setPreferences(pref);  }
 
 		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
 
@@ -265,7 +270,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onFinishInput() {
-		resetJohab();
+		resetComposition();
 		super.onFinishInput();
 	}
 
@@ -275,7 +280,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mInputConnection.finishComposingText();
 		super.onViewClicked(focusChanged);
 		mHangulEngine.setComposing("");
-		resetJohab();
+		resetComposition();
 	}
 
 	@Override
@@ -289,292 +294,349 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 	}
 
-	@Override
-	public boolean onEvent(OpenWnnEvent ev) {
-		if(mInputConnection == null) return false;
-		
-		switch(ev.code) {
-		case OpenWnnEvent.KEYUP:
-			onKeyUpEvent(ev.keyEvent);
-			return true;
-			
-		case OpenWnnEvent.CHANGE_MODE:
-			resetJohab();
-			changeEngineMode(ev.mode);
-			return true;
-			
-		case OpenWnnEvent.CHANGE_INPUT_VIEW:
-			setInputView(onCreateInputView());
-			onStartInputView(getCurrentInputEditorInfo(), false);
-			return true;
-
-		case BACKSPACE_LEFT_EVENT:
-			if(!mBackspaceSelectionMode) {
-				mBackspaceSelectionMode = true;
-				mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
-				mBackspaceSelectionStart = mBackspaceSelectionEnd;
-				resetJohab();
-			}
-			while(true) {
-				mBackspaceSelectionStart--;
-				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
-				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspaceSelectionStart <= 0
-						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
-					break;
+	@Subscribe
+	public void onKeyUp(KeyUpEvent event) {
+		int key = event.getKeyEvent().getKeyCode();
+		if(!mShiftPressing){
+			if(key == KeyEvent.KEYCODE_SHIFT_LEFT || key == KeyEvent.KEYCODE_SHIFT_RIGHT){
+				mHardShift = 0;
+				mShiftPressing = true;
+				if(mShiftOnCapsLock) {
+					mHardShift = 2;
+					mShiftPressing = true;
+					mShiftOnCapsLock = false;
 				}
+				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
 			}
-			return true;
-
-		case BACKSPACE_RIGHT_EVENT:
-			if(!mBackspaceSelectionMode) {
-				return true;
-			}
-			while(true) {
-				mBackspaceSelectionStart++;
-				mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
-				if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
-						|| mBackspaceSelectionStart <= 0
-						|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
-					break;
-				}
-			}
-			return true;
-
-		case BACKSPACE_COMMIT_EVENT:
-			if(!mBackspaceSelectionMode) {
-				return true;
-			}
-			mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
-			mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
-			mBackspaceSelectionMode = false;
-			return true;
-			
-		case TIMEOUT_EVENT:
-			if(mEnableTimeout) {
-				resetJohab();
-			}
-			if(mQuickPeriod) {
-				mSpace = false;
-			}
-			break;
-			
-		default:
-			break;
 		}
-		
-		KeyEvent keyEvent = ev.keyEvent;
-		int keyCode = 0;
-		if(keyEvent != null) {
-			keyCode = keyEvent.getKeyCode();
-		}
-		
-		boolean ret = false;
-		switch(ev.code) {
-		case LONG_CLICK_EVENT:
-			if(keyCode < 0) {
-				if(keyCode <= -2000) {
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 500)));
-				}
-				switch(keyCode) {
-				case DefaultSoftKeyboard.KEYCODE_QWERTY_ALT:
-					onLangKey(mAltKeyLongAction);
-					break;
-					
-				case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
-					onLangKey(mLangKeyLongAction);
-					break;
-				}
-			} else {
-				flickAction(mLongPressAction, keyCode);
-			}
-			break;
-			
-		case FLICK_UP_EVENT:
-			if(keyCode < 0) {
-				if(keyCode <= -2000) {
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 100)));
-				} else {
-					for(int[] item : FLICK_TABLE_12KEY) {
-						if(item[0] == keyCode) {
-							this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char) item[1]));
-							break;
-						}
-					}
-				}
-			} else {
-				flickAction(mFlickUpAction, keyCode);
-			}
-			break;
-			
-		case FLICK_DOWN_EVENT:
-			if(keyCode <= -2000) {
-				this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-						new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 200)));
-			} else {
-				flickAction(mFlickDownAction, keyCode);
-			}
-			break;
-			
-		case FLICK_LEFT_EVENT:
-			if(keyCode < 0) {
-				if(keyCode <= -2000) {
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 300)));
-				}
-			} else {
-				flickAction(mFlickLeftAction, keyCode);
-			}
-			break;
-			
-		case FLICK_RIGHT_EVENT:
-			if(keyCode < 0) {
-				if(keyCode <= -2000) {
-					this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_SOFT_KEY,
-							new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 400)));
-				}
-			} else {
-				flickAction(mFlickRightAction, keyCode);
-			}
-			break;
-			
-		case OpenWnnEvent.INPUT_CHAR:
-			char code = new String(ev.chars).charAt(0);
-			inputChar(code);
-			shinShift();
-			ret = true;
-			mCharInput = true;
-			mInput = true;
-			mSpace = false;
-			break;
-			
-		case OpenWnnEvent.INPUT_KEY:
-			switch(keyCode) {
-			case KeyEvent.KEYCODE_ALT_LEFT:
-			case KeyEvent.KEYCODE_ALT_RIGHT:
-				if (keyEvent.getRepeatCount() == 0) {
-					if (++mHardAlt > 2) { mHardAlt = 0; }
-				}
+		if(!mAltPressing ){
+			if(key == KeyEvent.KEYCODE_ALT_LEFT || key == KeyEvent.KEYCODE_ALT_RIGHT){
+				mHardAlt = 0;
 				mAltPressing   = true;
 				updateMetaKeyStateDisplay();
-				return true;
-				
-			case KeyEvent.KEYCODE_SHIFT_LEFT:
-			case KeyEvent.KEYCODE_SHIFT_RIGHT:
-				if (keyEvent.getRepeatCount() == 0) {
-					if (++mHardShift > 2) { mHardShift = 0; }
-				}
-				mShiftPressing = true;
-				if(mCapsLock) {
-					mHardShift = 0;
-					mShiftPressing = false;
-					mShiftOnCapsLock = true;
-				}
-				updateMetaKeyStateDisplay();
-				updateNumKeyboardShiftState();
-				return true;
-
-			case KeyEvent.KEYCODE_CAPS_LOCK:
-				mCapsLock = !mCapsLock;
-				if(mCapsLock) {
-					mHardShift = 2;
-					mShiftPressing = true;
-				} else {
-					mHardShift = 0;
-					mShiftPressing = false;
-				}
-				updateMetaKeyStateDisplay();
-				updateNumKeyboardShiftState();
-				return true;
-
 			}
-			if((keyEvent.getMetaState() & KeyEvent.META_CAPS_LOCK_ON) != 0) {
-				if(!mShiftOnCapsLock) {
-					mCapsLock = true;
-					mHardShift = 2;
-					mShiftPressing = true;
-					updateMetaKeyStateDisplay();
-					updateNumKeyboardShiftState();
-				}
-			} else {
-				if(mCapsLock == true) {
-					mCapsLock = false;
-					mHardShift = 0;
-					mShiftPressing = false;
-					updateMetaKeyStateDisplay();
-					updateNumKeyboardShiftState();
-				}
-			}
-			((DefaultSoftKeyboardKOKR) mInputViewManager).fixHardwareLayoutState();
-			ret = processKeyEvent(keyEvent);
-			shinShift();
-			break;
-			
-		case OpenWnnEvent.INPUT_SOFT_KEY:
-			switch(keyCode) {
-			case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
-				onLangKey(mLangKeyAction);
-				return true;
+		}
+	}
 
-			case KeyEvent.KEYCODE_SHIFT_LEFT:
-			case KeyEvent.KEYCODE_SHIFT_RIGHT:
-				switch(keyEvent.getAction()) {
-				case KeyEvent.ACTION_UP:
-					mHardShift = 0;
-					mShiftPressing = false;
-					updateMetaKeyStateDisplay();
-					return true;
-				case KeyEvent.ACTION_DOWN:
-					mHardShift = 1;
-					mShiftPressing = true;
-					updateMetaKeyStateDisplay();
-					return true;
+	@Subscribe
+	public void onEngineModeChange(EngineModeChangeEvent event) {
+		EngineMode mode = event.getEngineMode();
+
+		resetComposition();
+
+		boolean hardHidden = ((DefaultSoftKeyboardKOKR) mInputViewManager).mHardKeyboardHidden;
+
+		mCurrentEngineMode = mode;
+
+		if(mode == EngineMode.DIRECT) {
+			mDirectInputMode = true;
+			mEnableTimeout = false;
+			mFullMoachigi = false;
+			mAltMode = false;
+			mHangulEngine = mQwertyEngine;
+			mHangulEngine.setJamoTable(null);
+			mHangulEngine.setCombinationTable(null);
+			return;
+		}
+
+		EngineMode.Properties prop = mode.properties;
+
+		if(prop.altMode) {
+			mAltMode = true;
+			mDirectInputMode = prop.direct;
+			mEnableTimeout = prop.timeout;
+			mFullMoachigi = prop.fullMoachigi;
+			mAltSymbols = mode.layout;
+			return;
+		}
+
+		mAltMode = false;
+		mDirectInputMode = prop.direct;
+		mEnableTimeout = prop.timeout;
+		mFullMoachigi = prop.fullMoachigi;
+		mHangulEngine = prop.twelveEngine ? m12keyEngine : mQwertyEngine;
+		if(mode.jamoset != null) mHangulEngine.setJamoSet(mode.jamoset);
+		else mHangulEngine.setJamoTable(mode.layout);
+		mHangulEngine.setCombinationTable(mode.combination);
+		if(prop.twelveEngine) {
+			if(mode.addStroke != null) ((TwelveHangulEngine) m12keyEngine).setAddStrokeTable(mode.addStroke);
+		}
+
+		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
+		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
+
+	}
+
+	@Subscribe
+	public void onInputViewChange(InputViewChangeEvent event) {
+		setInputView(onCreateInputView());
+		onStartInputView(getCurrentInputEditorInfo(), false);
+	}
+
+	@Subscribe
+	public void onSoftKeyGesture(SoftKeyGestureEvent event) {
+		switch(event.getKeyCode()) {
+		case KeyEvent.KEYCODE_DEL:
+			switch(event.getType()) {
+			case SLIDE_LEFT:
+				if(!mBackspaceSelectionMode) {
+					mBackspaceSelectionMode = true;
+					mBackspaceSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
+					mBackspaceSelectionStart = mBackspaceSelectionEnd;
+					resetComposition();
 				}
-			case KeyEvent.KEYCODE_SPACE:
-				// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
-				if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
-					if(mCurrentEngineMode.properties.timeout) {
-						resetJohab();
-						return true;
+				while(true) {
+					mBackspaceSelectionStart--;
+					mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+					if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+							|| mBackspaceSelectionStart <= 0
+							|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+						break;
 					}
 				}
-				resetJohab();
-				if(mQuickPeriod && mSpace && mCharInput) {
-					mInputConnection.deleteSurroundingText(1, 0);
-					mInputConnection.commitText(". ", 1);
-					mSpace = false;
-					mCharInput = false;
-				} else {
-					mInputConnection.commitText(" ", 1);
-					mSpace = true;
+				break;
+
+			case SLIDE_RIGHT:
+				if(!mBackspaceSelectionMode) {
+					break;
 				}
-				shinShift();
-				return true;
+				while(true) {
+					mBackspaceSelectionStart++;
+					mInputConnection.setSelection(mBackspaceSelectionStart, mBackspaceSelectionEnd);
+					if(mInputConnection.getTextBeforeCursor(1, 0).equals(" ")
+							|| mBackspaceSelectionStart <= 0
+							|| mBackspaceSelectionStart >= mBackspaceSelectionEnd) {
+						break;
+					}
+				}
+				break;
+
+			case RELEASE:
+				if(!mBackspaceSelectionMode) {
+					break;
+				}
+				mInputConnection.setSelection(mBackspaceSelectionEnd, mBackspaceSelectionEnd);
+				mInputConnection.deleteSurroundingText(mBackspaceSelectionEnd - mBackspaceSelectionStart, 0);
+				mBackspaceSelectionMode = false;
+				break;
+
 			}
-			ret = processKeyEvent(keyEvent);
-			if(!ret) {
-				int c = keyEvent.getKeyCode();
-				mInputConnection.sendKeyEvent(keyEvent);
-				mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, c));
-				ret = true;
+			break;
+		}
+	}
+
+	@Subscribe
+	public void onInputTimeout(InputTimeoutEvent event) {
+		if(mEnableTimeout) {
+			resetComposition();
+		}
+		if(mQuickPeriod) {
+			mSpace = false;
+		}
+	}
+
+	@Subscribe
+	public void onSoftKeyLongPress(SoftKeyLongPressEvent event) {
+		int keyCode = event.getKeyCode();
+		if(keyCode < 0) {
+			if(keyCode <= -2000) {
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode - 500)));
+			}
+			switch(keyCode) {
+			case DefaultSoftKeyboard.KEYCODE_QWERTY_ALT:
+				onLangKey(mAltKeyLongAction);
+				break;
+
+			case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
+				onLangKey(mLangKeyLongAction);
+				break;
+			}
+		} else {
+			flickAction(mLongPressAction, keyCode);
+		}
+	}
+
+	@Subscribe
+	public void onSoftKeyFlick(SoftKeyFlickEvent event) {
+		int keyCode = event.getKeyCode();
+		if(keyCode < 0) {
+			if(keyCode <= -2000) {
+				EventBus.getDefault().post(new InputSoftKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyCode + event.getDirection().getTwelveKeyOffset())));
+			} else if(event.getDirection() == SoftKeyFlickEvent.Direction.UP) {
+				for(int[] item : FLICK_TABLE_12KEY) {
+					if(item[0] == keyCode) {
+						EventBus.getDefault().post(new InputCharEvent((char) item[1]));
+						break;
+					}
+				}
+			}
+		} else {
+			String action = null;
+			switch(event.getDirection()) {
+			case UP:
+				action = mFlickUpAction;
+				break;
+			case DOWN:
+				action = mFlickDownAction;
+				break;
+			case LEFT:
+				action = mFlickLeftAction;
+				break;
+			case RIGHT:
+				action = mFlickRightAction;
+				break;
+			}
+			if(action != null) {
+				flickAction(action, keyCode);
+			}
+		}
+	}
+
+	@Subscribe
+	public void onInputChar(InputCharEvent event) {
+		char code = event.getCode();
+
+		this.inputChar(code, false);
+
+		shinShift();
+
+		mCharInput = true;
+		mInput = true;
+		mSpace = false;
+	}
+
+	@Subscribe
+	public void onInputKey(InputKeyEvent event) {
+		KeyEvent keyEvent = event.getKeyEvent();
+		switch(keyEvent.getKeyCode()) {
+		case KeyEvent.KEYCODE_ALT_LEFT:
+		case KeyEvent.KEYCODE_ALT_RIGHT:
+			if (keyEvent.getRepeatCount() == 0) {
+				if (++mHardAlt > 2) { mHardAlt = 0; }
+			}
+			mAltPressing   = true;
+			updateMetaKeyStateDisplay();
+			return;
+
+		case KeyEvent.KEYCODE_SHIFT_LEFT:
+		case KeyEvent.KEYCODE_SHIFT_RIGHT:
+			if (keyEvent.getRepeatCount() == 0) {
+				if (++mHardShift > 2) { mHardShift = 0; }
+			}
+			mShiftPressing = true;
+			if(mCapsLock) {
+				mHardShift = 0;
+				mShiftPressing = false;
+				mShiftOnCapsLock = true;
+			}
+			updateMetaKeyStateDisplay();
+			updateNumKeyboardShiftState();
+			return;
+
+		case KeyEvent.KEYCODE_CAPS_LOCK:
+			mCapsLock = !mCapsLock;
+			if(mCapsLock) {
+				mHardShift = 2;
+				mShiftPressing = true;
+			} else {
+				mHardShift = 0;
+				mShiftPressing = false;
+			}
+			updateMetaKeyStateDisplay();
+			updateNumKeyboardShiftState();
+			return;
+
+		}
+		if((keyEvent.getMetaState() & KeyEvent.META_CAPS_LOCK_ON) != 0) {
+			if(!mShiftOnCapsLock) {
+				mCapsLock = true;
+				mHardShift = 2;
+				mShiftPressing = true;
+				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
+			}
+		} else {
+			if(mCapsLock == true) {
+				mCapsLock = false;
+				mHardShift = 0;
+				mShiftPressing = false;
+				updateMetaKeyStateDisplay();
+				updateNumKeyboardShiftState();
+			}
+		}
+		((DefaultSoftKeyboardKOKR) mInputViewManager).fixHardwareLayoutState();
+		boolean ret = processKeyEvent(keyEvent);
+		if(!ret) {
+			int c = keyEvent.getKeyCode();
+			mInputConnection.sendKeyEvent(keyEvent);
+			mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, c));
+		}
+		shinShift();
+	}
+
+	@Subscribe
+	public void onInputSoftKey(InputSoftKeyEvent event) {
+		KeyEvent keyEvent = event.getKeyEvent();
+		switch(keyEvent.getKeyCode()) {
+		case DefaultSoftKeyboard.KEYCODE_CHANGE_LANG:
+			onLangKey(mLangKeyAction);
+			return;
+
+		case KeyEvent.KEYCODE_SHIFT_LEFT:
+		case KeyEvent.KEYCODE_SHIFT_RIGHT:
+			switch(keyEvent.getAction()) {
+			case KeyEvent.ACTION_UP:
+				mHardShift = 0;
+				mShiftPressing = false;
+				updateMetaKeyStateDisplay();
+				return;
+			case KeyEvent.ACTION_DOWN:
+				mHardShift = 1;
+				mShiftPressing = true;
+				updateMetaKeyStateDisplay();
+				return;
+			}
+		case KeyEvent.KEYCODE_SPACE:
+			// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
+			if(mSpaceResetJohab && !mHangulEngine.getComposing().equals("")) {
+				if(mCurrentEngineMode.properties.timeout) {
+					resetComposition();
+					return;
+				}
+			}
+			resetComposition();
+			if(mQuickPeriod && mSpace && mCharInput) {
+				mInputConnection.deleteSurroundingText(1, 0);
+				mInputConnection.commitText(". ", 1);
+				mSpace = false;
+				mCharInput = false;
+			} else {
+				mInputConnection.commitText(" ", 1);
+				mSpace = true;
 			}
 			shinShift();
-			break;
-
-		case OpenWnnEvent.COMMIT_COMPOSING_TEXT:
-			mInputConnection.finishComposingText();
-			break;
-			
+			return;
 		}
-		return ret;
+		boolean ret = processKeyEvent(keyEvent);
+		if(!ret) {
+			int c = keyEvent.getKeyCode();
+			mInputConnection.sendKeyEvent(keyEvent);
+			mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, c));
+		}
+		shinShift();
 	}
-	
-	private void inputChar(char code) {
-		this.inputChar(code, false);
+
+	@Subscribe
+	public void onCommitComposingText(CommitComposingTextEvent event) {
+		getCurrentInputConnection().finishComposingText();
 	}
-	
+
+	@Override
+	public boolean onEvent(OpenWnnEvent ev) {
+		return false;
+	}
+
 	private void inputChar(char code, boolean direct) {
 		int shift = mHardShift;
 
@@ -596,7 +658,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			for(int[] item : mAltSymbols) {
 				code = Character.toLowerCase(code);
 				if(code == item[0]) {
-					resetJohab();
+					resetComposition();
 					directInput((char) (shift == 0 ? item[1] : item[2]), false);
 					return;
 				}
@@ -605,7 +667,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		if(mDirectInputMode || direct) {
 			code = originalCode;
-			resetJohab();
+			resetComposition();
 			directInput(code, shift > 0);
 			return;
 		}
@@ -614,11 +676,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(mHangulEngine.inputJamo(jamo) != 0) {
 				mInputConnection.setComposingText(mHangulEngine.getComposing(), 1);
 			} else {
-				resetJohab();
+				resetComposition();
 				sendKeyChar((char) jamo);
 			}
 		} else {
-			resetJohab();
+			resetComposition();
 			directInput(originalCode, shift > 0);
 		}
 	}
@@ -665,7 +727,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			boolean use12key = pref.getBoolean("keyboard_hangul_use_12key", false);
 			editor.putBoolean("keyboard_hangul_use_12key", !use12key);
 			editor.commit();
-			this.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_INPUT_VIEW));
+			EventBus.getDefault().post(new InputViewChangeEvent());
 			break;
 
 		case LANGKEY_OPEN_SETTINGS:
@@ -691,8 +753,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					mSelectionEnd = mInputConnection.getTextBeforeCursor(Integer.MAX_VALUE, 0).length();
 					mSelectionStart = mSelectionEnd;
 					mSelectionMode = true;
-				}
-				if (mSelectionMode) {
+				} else {
 					if (key == KeyEvent.KEYCODE_DPAD_LEFT) mSelectionEnd--;
 					if (key == KeyEvent.KEYCODE_DPAD_RIGHT) mSelectionEnd++;
 					if (key == KeyEvent.KEYCODE_DPAD_UP) {
@@ -747,7 +808,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 
 		if (key >= KeyEvent.KEYCODE_NUMPAD_0 && key <= KeyEvent.KEYCODE_NUMPAD_RIGHT_PAREN) {
-			resetJohab();
+			resetComposition();
 			return false;
 		}
 
@@ -757,7 +818,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					&& ev.isCtrlPressed() == mHardLangKey.isControl()
 					&& ev.isMetaPressed() == mHardLangKey.isWin()) {
 
-				resetJohab();
+				resetComposition();
 				((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 				mHardShift = 0;
 				mShiftPressing = false;
@@ -799,23 +860,23 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		} else if (key == KeyEvent.KEYCODE_SPACE) {
 			// 한글 조합을 종료한다
-			resetJohab();
+			resetComposition();
 			mInputConnection.commitText(" ", 1);
 			return true;
 		} else if (key == KeyEvent.KEYCODE_DEL) {
 			if (!mHangulEngine.backspace()) {
-				resetJohab();
+				resetComposition();
 				return false;
 			}
 			if (mHangulEngine.getComposing() == "")
-				resetJohab();
+				resetComposition();
 			return true;
 		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
-			resetJohab();
+			resetComposition();
 			mInputConnection.deleteSurroundingText(1, 0);
 			return true;
 		} else if(key == KeyEvent.KEYCODE_ENTER) {
-			resetJohab();
+			resetComposition();
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
@@ -831,78 +892,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				return false;
 			}
 		} else {
-			resetJohab();
+			resetComposition();
 		}
 		
 		return false;
-	}
-
-	private void changeEngineMode(EngineMode mode) {
-		boolean hardHidden = ((DefaultSoftKeyboardKOKR) mInputViewManager).mHardKeyboardHidden;
-
-		mCurrentEngineMode = mode;
-
-		if(mode == EngineMode.DIRECT) {
-			mDirectInputMode = true;
-			mEnableTimeout = false;
-			mFullMoachigi = false;
-			mAltMode = false;
-			mHangulEngine = mQwertyEngine;
-			mHangulEngine.setJamoTable(null);
-			mHangulEngine.setCombinationTable(null);
-			return;
-		}
-
-		EngineMode.Properties prop = mode.properties;
-
-		if(prop.altMode) {
-			mAltMode = true;
-			mDirectInputMode = prop.direct;
-			mEnableTimeout = prop.timeout;
-			mFullMoachigi = prop.fullMoachigi;
-			mAltSymbols = mode.layout;
-			return;
-		}
-
-		mAltMode = false;
-		mDirectInputMode = prop.direct;
-		mEnableTimeout = prop.timeout;
-		mFullMoachigi = prop.fullMoachigi;
-		mHangulEngine = prop.twelveEngine ? m12keyEngine : mQwertyEngine;
-		if(mode.jamoset != null) mHangulEngine.setJamoSet(mode.jamoset);
-		else mHangulEngine.setJamoTable(mode.layout);
-		mHangulEngine.setCombinationTable(mode.combination);
-		if(prop.twelveEngine) {
-			if(mode.addStroke != null) ((TwelveHangulEngine) m12keyEngine).setAddStrokeTable(mode.addStroke);
-		}
-
-		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
-		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
-
-	}
-	
-	private void onKeyUpEvent(KeyEvent ev) {
-		int key = ev.getKeyCode();
-		if(!mShiftPressing){
-			if(key == KeyEvent.KEYCODE_SHIFT_LEFT || key == KeyEvent.KEYCODE_SHIFT_RIGHT){
-				mHardShift = 0;
-				mShiftPressing = true;
-				if(mShiftOnCapsLock) {
-					mHardShift = 2;
-					mShiftPressing = true;
-					mShiftOnCapsLock = false;
-				}
-				updateMetaKeyStateDisplay();
-				updateNumKeyboardShiftState();
-			}
-		}
-		if(!mAltPressing ){
-			if(key == KeyEvent.KEYCODE_ALT_LEFT || key == KeyEvent.KEYCODE_ALT_RIGHT){
-				mHardAlt = 0;
-				mAltPressing   = true;
-				updateMetaKeyStateDisplay();
-			}
-		}
 	}
 
 	private void shinShift() {
@@ -937,7 +930,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 			default:
 				this.mHardShift = 1;
-				this.onEvent(new OpenWnnEvent(OpenWnnEvent.INPUT_CHAR, (char) keyCode));
+				EventBus.getDefault().post(new InputCharEvent((char) keyCode));
 				this.mHardShift = 0;
 				break;
 
@@ -994,8 +987,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		((DefaultSoftKeyboard) mInputViewManager).updateIndicator(mode);
 	}
 
-	private void resetJohab() {
-		mHangulEngine.resetJohab();
+	private void resetComposition() {
+		mHangulEngine.resetComposition();
 		if(mHangulEngine instanceof TwelveHangulEngine) ((TwelveHangulEngine) mHangulEngine).resetCycle();
 	}
 
@@ -1005,6 +998,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(softKeyboard.mHardKeyboardHidden) return;
 		softKeyboard.setShiftState(mHardShift);
 		softKeyboard.setCapsLock(mHardShift == 2);
+	}
+
+	public void resetHardShift(boolean force) {
+		if(mHardShift == 2 && !force) return;
+		mHardShift = 0;
+		mShiftPressing = false;
 	}
 
 	@Override
@@ -1022,12 +1021,18 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mTimeOutHandler.postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					onEvent(new OpenWnnEvent(OpenWnnKOKR.TIMEOUT_EVENT));
+					EventBus.getDefault().post(new InputTimeoutEvent());
 					mTimeOutHandler = null;
 				}
 			}, mMoachigiDelay);
 		}
-		return super.onKeyDown(keyCode, event);
+		EventBus.getDefault().post(new InputKeyEvent(event));
+		return true;
+	}
+
+	@Override public boolean onKeyUp(int keyCode, KeyEvent event) {
+		EventBus.getDefault().post(new KeyUpEvent(event));
+		return true;
 	}
 
 	@Override
@@ -1041,10 +1046,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		return true;
 	}
 
-	public void resetHardShift(boolean force) {
-		if(mHardShift == 2 && !force) return;
-		mHardShift = 0;
-		mShiftPressing = false;
+	@Override
+	public void requestHideSelf(int flag) {
+		super.requestHideSelf(flag);
+		if (mInputViewManager == null) {
+			hideWindow();
+		}
 	}
 
 	public HangulEngine getHangulEngine() {

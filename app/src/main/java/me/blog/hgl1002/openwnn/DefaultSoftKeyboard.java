@@ -16,12 +16,13 @@
 
 package me.blog.hgl1002.openwnn;
 
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-import me.blog.hgl1002.openwnn.R;
+
+import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
+
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.content.SharedPreferences;
@@ -401,8 +402,7 @@ public class DefaultSoftKeyboard implements InputViewManager, KeyboardView.OnKey
         }
         changeKeyboard(kbd);
 
-        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-                                      OpenWnnEvent.Mode.DEFAULT));
+//        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,OpenWnnEvent.Mode.DEFAULT));
     }
 
     /**
@@ -494,8 +494,7 @@ public class DefaultSoftKeyboard implements InputViewManager, KeyboardView.OnKey
         }
 
         /* notice that the keyboard is changed */
-        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE,
-                                      OpenWnnEvent.Mode.DEFAULT));
+//        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CHANGE_MODE, OpenWnnEvent.Mode.DEFAULT));
     }
 
     /**

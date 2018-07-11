@@ -174,7 +174,7 @@ public class HangulEngine {
 
 	public HangulEngine() {
 		// 한글 조합 상태를 초기화한다.
-		resetJohab();
+		resetComposition();
 	}
 	
 	public HangulEngine(boolean moachigi) {
@@ -251,17 +251,17 @@ public class HangulEngine {
 		// 세벌식 한글 초성.
 		if(filteredCode >= 0x1100 && filteredCode <= 0x115f) {
 			int choCode = code - 0x1100;
-			if(!fullMoachigi && !moachigi && !isCho(last) && !isJung(last)) resetJohab();
+			if(!fullMoachigi && !moachigi && !isCho(last) && !isJung(last)) resetComposition();
 			if(isCho(last) || fullMoachigi && this.cho != -1) {
 				int source = this.cho + 0x1100;
 				// 낱자 조합을 실햳한다.
 				if((combination = getCombination(source, code)) != -1) {
 					choCode = combination - 0x1100;
 				} else {
-					resetJohab();
+					resetComposition();
 				}
             // 낱자 조합에 실패했을 경우 (이미 초성이 입력되어 있음) 조합을 종료한다.
-			} else if(this.cho != -1) resetJohab();
+			} else if(this.cho != -1) resetComposition();
             this.cho = choCode;
 			// 가상 낱자일 경우 다음 상태로 넘기지 않는다.
 			if(lastInputType == 0) result = INPUT_CHO3;
@@ -271,18 +271,18 @@ public class HangulEngine {
 		// 세벌식 한글 중성.
 		} else if(filteredCode >= 0x1161 && filteredCode <= 0x11a7) {
 			int jungCode = code - 0x1161;
-			if(!moachigi && !isCho(last) && !isJung(last)) resetJohab();
+			if(!moachigi && !isCho(last) && !isJung(last)) resetComposition();
 			if(isJung(last) || fullMoachigi && this.jung != -1) {
 				int source = this.jung + 0x1161;
 				if((combination = getCombination(source, code)) != -1) {
 					jungCode = combination - 0x1161;
 					this.jung = jungCode;
 				} else {
-					resetJohab();
+					resetComposition();
 					this.jung = jungCode;
 				}
 			} else {
-				if(this.jung != -1) resetJohab();
+				if(this.jung != -1) resetComposition();
 				this.jung = jungCode;
 			}
 			if(lastInputType == 0) result = INPUT_JUNG3;
@@ -292,8 +292,8 @@ public class HangulEngine {
 		// 세벌식 한글 종성.
 		} else if(filteredCode >= 0x11a8 && filteredCode <= 0x11ff) {
 			int jongCode = code - 0x11a7;
-			if(!moachigi && !isJung(last) && !isJong(last)) resetJohab();
-//			if(last <= -5100 && last >= -5199) resetJohab();
+			if(!moachigi && !isJung(last) && !isJong(last)) resetComposition();
+//			if(last <= -5100 && last >= -5199) resetComposition();
 			if(isJong(last) || fullMoachigi && this.jong != -1) {
 				int source = this.jong + 0x11a7;
 				if((combination = getCombination(source, code)) != -1) {
@@ -301,11 +301,11 @@ public class HangulEngine {
 					jongCode = combination - 0x11a7;
 					this.jong = jongCode;
 				} else {
-					resetJohab();
+					resetComposition();
 					this.jong = jongCode;
 				}
 			} else {
-				if(this.jong != -1) resetJohab();
+				if(this.jong != -1) resetComposition();
 				this.jong = jongCode;
 			}
 			if(lastInputType == 0) result = INPUT_JONG3;
@@ -328,7 +328,7 @@ public class HangulEngine {
 					// 낱자 조합 불가/실패시
 					} else {
 						this.beforeJong = 0;
-						resetJohab();
+						resetComposition();
 						this.cho = CHO_CONVERT[code - 0x3131] - 0x1100;
 						// 대응하는 초성이 존재하지 않을 경우 비운다.
 						if(this.cho == -0x1100) this.cho = -1;
@@ -339,7 +339,7 @@ public class HangulEngine {
 					// 해당하는 종성이 없을 경우 (ㄸ, ㅉ, ㅃ 등)
 					if(jongCode == -0x11a7) {
 						// 조합을 종료하고 새로운 초성으로 조합을 시작한다.
-						resetJohab();
+						resetComposition();
 						this.cho = CHO_CONVERT[code - 0x3131] - 0x1100;
 						if(this.cho == -0x1100) this.cho = -1;
 						last = CHO_CONVERT[code - 0x3131];
@@ -360,13 +360,13 @@ public class HangulEngine {
 						this.cho = combination - 0x1100;
 					} else {
 						// 낱자 결합 불가 / 실패시 새로운 초성으로 조합 시작.
-						resetJohab();
+						resetComposition();
 						this.cho = choCode;
 						if(this.cho == -0x1100) this.cho = -1;
 					}
 				// 초성이 없을 경우, 새로운 초성으로 조합 시작.
 				} else {
-					if(!moachigi) resetJohab();
+					if(!moachigi) resetComposition();
 					this.cho = choCode;
 				}
 				last = choCode + 0x1100;
@@ -394,12 +394,12 @@ public class HangulEngine {
 						if(combination >= 0x1161) this.jung -= 0x1161;
 					} else {
 						// 조합 불가 / 실패시 새로운 중성으로 조합 시도.
-						resetJohab();
+						resetComposition();
 						this.jung = jungCode;
 					}
 				} else {
 					// 조합 중인 중성이 없을 경우 새로운 중성으로 조합을 시작한다.
-					if(this.jung != -1) resetJohab();
+					if(this.jung != -1) resetComposition();
 					this.jung = jungCode;
 				}
 				last = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
@@ -419,7 +419,7 @@ public class HangulEngine {
 						// resetJohab시 last를 초기화하므로 백업한다.
 						int last = this.last;
 						// 그리고 조합을 종료한 뒤,
-						resetJohab();
+						resetComposition();
 						// 뒷 종성을 초성으로 변환하여 적용한다.
 						this.cho = convertToCho(last) - 0x1100;
 						composing = getVisible(this.cho, this.jung, this.jong);
@@ -434,7 +434,7 @@ public class HangulEngine {
 							this.jong = -1;
 							this.composing = getVisible(this.cho, this.jung, this.jong);
 							if(listener != null) listener.onEvent(new SetComposingEvent(composing));
-							resetJohab();
+							resetComposition();
 							this.cho = convertedCho - 0x1100;
 							composing = getVisible(this.cho, this.jung, this.jong);
 							histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
@@ -443,7 +443,7 @@ public class HangulEngine {
 					}
 				// 예외 상황에는 조합을 종료하고 새로운 중성으로 조합을 시작한다.
 				} else {
-					resetJohab();
+					resetComposition();
 					this.jung = jungCode;
 				}
 				last = (jungCode >= 0) ? jungCode + 0x1161 : jungCode;
@@ -453,7 +453,7 @@ public class HangulEngine {
 		// 한글 낱자가 아닐 경우
 		else {
 			// 조합을 중단하고 처리 안함을 돌려준다.
-			resetJohab();
+			resetComposition();
 			result = INPUT_NON_HANGUL;
 			last = code;
 			return result;
@@ -474,7 +474,7 @@ public class HangulEngine {
 	/**
 	 * 조합을 종료하고 현재 상태를 초기화한다.
 	 */
-	public void resetJohab() {
+	public void resetComposition() {
 		if(listener != null) listener.onEvent(new FinishComposingEvent());
 		cho = jung = jong = -1;
 		composing = "";

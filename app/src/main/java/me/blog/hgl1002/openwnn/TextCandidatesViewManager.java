@@ -44,11 +44,19 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import me.blog.hgl1002.openwnn.R;
+
+import me.blog.hgl1002.openwnn.event.CandidateViewTouchEvent;
+import me.blog.hgl1002.openwnn.event.ListCandidatesEvent;
+import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
+import me.blog.hgl1002.openwnn.event.SelectCandidateEvent;
+import me.blog.hgl1002.openwnn.event.UpdateCandidateEvent;
+
 import android.widget.EditText;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.graphics.drawable.Drawable;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * The default candidates view manager class using {@link EditText}.
@@ -182,9 +190,10 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
                 }
 
                 mMotionEvent = event;
-                boolean ret = mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.CANDIDATE_VIEW_TOUCH));
+                CandidateViewTouchEvent candidateViewTouchEvent = new CandidateViewTouchEvent();
+                EventBus.getDefault().post(candidateViewTouchEvent);
                 mMotionEvent = null;
-                return ret;
+                return candidateViewTouchEvent.isCancelled();
             }
         };
     
@@ -320,10 +329,10 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
 
                     if (mIsFullView) {
                         mIsFullView = false;
-                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL));
+                        EventBus.getDefault().post(new ListCandidatesEvent(false));
                     } else {
                         mIsFullView = true;
-                        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL));
+                        EventBus.getDefault().post(new ListCandidatesEvent(true));
                     }
                 }
             });
@@ -348,7 +357,7 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
         b.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     setViewLayout(CandidatesViewManager.VIEW_TYPE_NORMAL);
-                    mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.UPDATE_CANDIDATE));
+                    EventBus.getDefault().post(new UpdateCandidateEvent());
                 }
             });
 
@@ -833,7 +842,7 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
         if (mSound != null) {
             try { mSound.seekTo(0); mSound.start(); } catch (Exception ex) { }
         }
-        mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.SELECT_CANDIDATE, word));
+        EventBus.getDefault().post(new SelectCandidateEvent(word));
     }
 
     /** @see android.view.GestureDetector.OnGestureListener#onDown */
@@ -854,7 +863,7 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
                     try { mVibrator.vibrate(30); } catch (Exception ex) { }
                 }
                 mIsFullView = true;
-                mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_FULL));
+                EventBus.getDefault().post(new ListCandidatesEvent(true));
                 consumed = true;
             }
         } else {
@@ -863,7 +872,7 @@ public class TextCandidatesViewManager implements CandidatesViewManager, Gesture
                     try { mVibrator.vibrate(30); } catch (Exception ex) { }
                 }
                 mIsFullView = false;
-                mWnn.onEvent(new OpenWnnEvent(OpenWnnEvent.LIST_CANDIDATES_NORMAL));
+                EventBus.getDefault().post(new ListCandidatesEvent(false));
                 consumed = true;
             }
         }

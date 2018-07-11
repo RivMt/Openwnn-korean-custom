@@ -2,12 +2,14 @@ package me.blog.hgl1002.openwnn.KOKR;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.view.View;
 
-import me.blog.hgl1002.openwnn.OpenWnnEvent;
+import org.greenrobot.eventbus.EventBus;
+
+import me.blog.hgl1002.openwnn.event.InputViewChangeEvent;
+import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.R;
 
@@ -26,13 +28,7 @@ public class SoftLayoutPreference extends ListPreference {
 	protected void onDialogClosed(boolean positiveResult) {
 		super.onDialogClosed(positiveResult);
 		if (positiveResult) {
-			OpenWnnKOKR wnn = OpenWnnKOKR.getInstance();
-			int code = OpenWnnEvent.CHANGE_INPUT_VIEW;
-			OpenWnnEvent ev = new OpenWnnEvent(code);
-			try {
-				wnn.onEvent(ev);
-			} catch (Exception ex) {
-			}
+			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
 	}
 

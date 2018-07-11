@@ -128,7 +128,7 @@ public class TwelveHangulEngine extends HangulEngine {
 		int result = super.inputJamo(jamo);
 
 		if(result == 0) {
-			resetJohab();
+			resetComposition();
 			composing = String.valueOf((char) jamo);
 			if(listener != null) listener.onEvent(new SetComposingEvent(composing));
 		}
