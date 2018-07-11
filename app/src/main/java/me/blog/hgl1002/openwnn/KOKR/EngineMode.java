@@ -21,22 +21,22 @@ public enum EngineMode {
 	DUBULSIK_NK(new Properties(), JAMO_DUBUL_NK, null, COMB_DUBUL_STANDARD, null, "keyboard_dubul_nk"),
 
 	SEBUL_SUN_2014(new Properties(), JAMO_SEBUL_SUN_2014, null, COMB_SEBUL_SUN_2014, null, "keyboard_sebul_sun_2014"),
-	SEBUL_3_2015M(new Properties(), null, JAMOSET_SEBUL_3_2015M, COMB_SEBUL_3_2015, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_3_2015m"),
-	SEBUL_3_2015(new Properties(), null, JAMOSET_SEBUL_3_2015, COMB_SEBUL_3_2015, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_3_2015"),
-	SEBUL_3_P3(new Properties(), null, JAMOSET_SEBUL_3_P3, COMB_SEBUL_3_P3, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_3_p3"),
-	SEBUL_SHIN_ORIGINAL(new Properties(), null, JAMOSET_SHIN_ORIGINAL, COMB_SEBUL_SHIN_ORIGINAL, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_shin_original"),
-	SEBUL_SHIN_EDIT(new Properties(), null, JAMOSET_SHIN_EDIT, COMB_SEBUL_SHIN_ORIGINAL, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_shin_edit"),
-	SEBUL_SHIN_M(new Properties(), null, JAMOSET_SHIN_M, COMB_SEBUL_SHIN_ORIGINAL, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_shin_m"),
-	SEBUL_SHIN_P2(new Properties(), null, JAMOSET_SHIN_P2, COMB_FULL, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_shin_p2"),
+	SEBUL_3_2015M(new Properties(), null, JAMOSET_SEBUL_3_2015M, COMB_SEBUL_3_2015, null, "keyboard_sebul_3_2015m"),
+	SEBUL_3_2015(new Properties(), null, JAMOSET_SEBUL_3_2015, COMB_SEBUL_3_2015, null, "keyboard_sebul_3_2015"),
+	SEBUL_3_P3(new Properties(), null, JAMOSET_SEBUL_3_P3, COMB_SEBUL_3_P3, null, "keyboard_sebul_3_p3"),
+	SEBUL_SHIN_ORIGINAL(new Properties(), null, JAMOSET_SHIN_ORIGINAL, COMB_SEBUL_SHIN_ORIGINAL, null, "keyboard_sebul_shin_original"),
+	SEBUL_SHIN_EDIT(new Properties(), null, JAMOSET_SHIN_EDIT, COMB_SEBUL_SHIN_ORIGINAL, null, "keyboard_sebul_shin_edit"),
+	SEBUL_SHIN_M(new Properties(), null, JAMOSET_SHIN_M, COMB_SEBUL_SHIN_ORIGINAL, null, "keyboard_sebul_shin_m"),
+	SEBUL_SHIN_P2(new Properties(), null, JAMOSET_SHIN_P2, COMB_FULL, null, "keyboard_sebul_shin_p2"),
 	SEBUL_AHNMATAE(new Properties(true, false, false), JAMO_SEBUL_AHNMATAE, null, COMB_SEBUL_AHNMATAE, null, "keyboard_sebul_ahnmatae"),
 	SEBUL_SEMOE_2016(new Properties(true, false, false), JAMO_SEBUL_SEMOE_2016, null, COMB_SEBUL_SEMOE, null, "keyboard_sebul_semoe_2016"),
 	SEBUL_SEMOE(new Properties(true, false, false), JAMO_SEBUL_SEMOE_2016, null, COMB_SEBUL_SEMOE, null, "keyboard_sebul_semoe"),
 
-	NEBUL_1969(new Properties(), JAMO_NEBUL_1969, null, COMB_NEBUL_1969, VIRTUAL_NEBUL_1969, "keyboard_nebul_1969"),
+	NEBUL_1969(new Properties(), JAMO_NEBUL_1969, null, COMB_NEBUL_1969, null, "keyboard_nebul_1969"),
 
 	DUBULSIK_YET(new Properties(), JAMO_DUBUL_YET, null, COMB_FULL, null, "keyboard_dubul_yet"),
 	SEBUL_393Y(new Properties(), JAMO_SEBUL_393Y, null, COMB_FULL, null, "keyboard_sebul_393y"),
-	SEBUL_3_2015Y(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, VIRTUAL_SEBUL_SHIN_ORIGINAL, "keyboard_sebul_3_2015y"),
+	SEBUL_3_2015Y(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "keyboard_sebul_3_2015y"),
 	TWELVE_ALPHABET_A(new Properties(true, true), CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a", "keyboard_12key_alphabet_narrow_a"),
 	TWELVE_ALPHABET_B(new Properties(true, true), CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b", "keyboard_12key_alphabet_narrow_b"),
 	TWELVE_SEBUL_MUNHWA(new Properties(true, false), CYCLE_SEBUL_12KEY_MUNHWA, null, COMB_SEBUL_12KEY_MUNHWA, STROKE_SEBUL_12KEY_MUNHWA, "keyboard_12key_sebul_munhwa"),
@@ -55,16 +55,16 @@ public enum EngineMode {
 	SYMBOL_B(new Properties(true, false, false, false, false), LayoutSymbol.SYMBOL_B, null, null, null, "keyboard_symbol_b");
 
 	public Properties properties;
-	public int[][] layout, combination, virtual;
+	public int[][] layout, combination, addStroke;
 	public int[][][] jamoset;
 	private String[] prefValues;
 
-	EngineMode(Properties properties, int[][] layout, int[][][] jamoset, int[][] combination, int[][] virtual, String... prefValues) {
+	EngineMode(Properties properties, int[][] layout, int[][][] jamoset, int[][] combination, int[][] addStroke, String... prefValues) {
 		this.properties = properties;
 		this.layout = layout;
 		this.jamoset = jamoset;
 		this.combination = combination;
-		this.virtual = virtual;
+		this.addStroke = addStroke;
 		this.prefValues = prefValues;
 	}
 

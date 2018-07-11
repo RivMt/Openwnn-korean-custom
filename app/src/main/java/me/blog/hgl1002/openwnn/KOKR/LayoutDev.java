@@ -30,21 +30,21 @@ public class LayoutDev {
 			{100, 0x110b, 0x110e},		// d
 			{102, 0x1105, 0x1111},		// f
 			{103, 0x1112, 0x2f},		// g
-			{104, -5100-0x09, -5100-0x0d},		// h
-			{106, -5100-0x05, -5100-0x07},		// j
-			{107, -5100-0x01, -5100-0x03},		// k
-			{108, -5100-0x15, -5100-0x02},		// l
-			{59, -5100-0x06, -5100-0x08},
+			{104, 0x021169, 0x02116d},		// h
+			{106, 0x021165, 0x021167},		// j
+			{107, 0x021161, 0x021163},		// k
+			{108, 0x021175, 0x021162},		// l
+			{59, 0x021166, 0x021168},
 			{39, 0x11b8, 0x11ae},
 
 			{122, 0x11b7, 0x11c2},		// z
 			{120, 0x11ab, 0x11c0},		// x
 			{99, 0x11bc, 0x11be},		// c
 			{118, 0x11af, 0x11c1},		// v
-			{98, -5100-0x0e, -5100-0x12},			// b
+			{98, 0x02116e, 0x021172},			// b
 			{110, 0x116e, 0x1172},		// n
 			{109, 0x1173, 0x2e},		// m
-			{44, -5100-0x13, 0x2c},
+			{44, 0x021173, 0x2c},
 			{46, 0x11ba, 0x11b9},
 			{47, 0x11bb, 0x11ad},
 
@@ -63,13 +63,13 @@ public class LayoutDev {
 			{0x116e, 0x1175, 0x1171},	// ㅟ
 			{0x1173, 0x1175, 0x1174},	// ㅢ
 
-			{0x1169, -5100-0x01, -5100-0x0a},	// ㅘ
-			{0x1169, -5100-0x02, -5100-0x0b},	// ㅙ
-			{0x1169, -5100-0x15, -5100-0x0c},	// ㅚ
-			{0x116e, -5100-0x05, -5100-0x0f},	// ㅝ
-			{0x116e, -5100-0x06, -5100-0x10},	// ㅞ
-			{0x116e, -5100-0x15, -5100-0x11},	// ㅟ
-			{0x1173, -5100-0x15, -5100-0x14},	// ㅢ
+			{0x1169, 0x021161, 0x02116a},	// ㅘ
+			{0x1169, 0x021162, 0x02116b},	// ㅙ
+			{0x1169, 0x021175, 0x02116c},	// ㅚ
+			{0x116e, 0x021165, 0x02116f},	// ㅝ
+			{0x116e, 0x021166, 0x021170},	// ㅞ
+			{0x116e, 0x021175, 0x021171},	// ㅟ
+			{0x1173, 0x021175, 0x021174},	// ㅢ
 
 			{0x11a8, 0x11a8, 0x11a9},	// ㄲ
 			{0x11a8, 0x11ba, 0x11aa},	// ㄳ
@@ -87,27 +87,27 @@ public class LayoutDev {
 	};
 
 	public static final int[][] VIRTUAL_NEBUL_1969 = {
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x01, 0x1161},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x02, 0x1162},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x03, 0x1163},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x04, 0x1164},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x05, 0x1165},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x06, 0x1166},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x07, 0x1167},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x08, 0x1168},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x09, 0x1169},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0a, 0x116a},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0b, 0x116b},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0c, 0x116c},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0d, 0x116d},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0e, 0x116e},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x0f, 0x116f},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x10, 0x1170},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x11, 0x1171},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x12, 0x1172},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x13, 0x1173},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x14, 0x1174},
-			{HangulEngine.VIRTUAL_JUNG, -5100-0x15, 0x1175},
+			{HangulEngine.VIRTUAL_JUNG, 0x021161, 0x1161},
+			{HangulEngine.VIRTUAL_JUNG, 0x021162, 0x1162},
+			{HangulEngine.VIRTUAL_JUNG, 0x021163, 0x1163},
+			{HangulEngine.VIRTUAL_JUNG, 0x021164, 0x1164},
+			{HangulEngine.VIRTUAL_JUNG, 0x021165, 0x1165},
+			{HangulEngine.VIRTUAL_JUNG, 0x021166, 0x1166},
+			{HangulEngine.VIRTUAL_JUNG, 0x021167, 0x1167},
+			{HangulEngine.VIRTUAL_JUNG, 0x021168, 0x1168},
+			{HangulEngine.VIRTUAL_JUNG, 0x021169, 0x1169},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116a, 0x116a},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116b, 0x116b},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116c, 0x116c},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116d, 0x116d},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116e, 0x116e},
+			{HangulEngine.VIRTUAL_JUNG, 0x02116f, 0x116f},
+			{HangulEngine.VIRTUAL_JUNG, 0x021170, 0x1170},
+			{HangulEngine.VIRTUAL_JUNG, 0x021171, 0x1171},
+			{HangulEngine.VIRTUAL_JUNG, 0x021172, 0x1172},
+			{HangulEngine.VIRTUAL_JUNG, 0x021173, 0x1173},
+			{HangulEngine.VIRTUAL_JUNG, 0x021174, 0x1174},
+			{HangulEngine.VIRTUAL_JUNG, 0x021175, 0x1175},
 	};
 
 }

@@ -251,49 +251,39 @@ public class HangulEngine {
 		if(composing.equals("")) histories.clear();
 		else histories.push(new History(cho, jung, jong, last, beforeJong, composing, lastInputType));
 
-		// -4000 이하일 경우 상태를 변환하지 않는다.
-		boolean virtual = code <= -4000;
+		// 상태를 변환하지 않는다.
+		boolean preserveState = (code & 0xffff0000) >> 16 == 1;
+		int filteredCode = code & 0xffff;
 		int result;
 		int combination;
 		// 세벌식 한글 초성.
-		if(code >= 0x1100 && code <= 0x115f || code <= -1000 && code > -2000 || code <= -4000 && code > -5000) {
-			// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-			int choCode = code;
-			if(choCode >= 0x1100) choCode-= 0x1100;
+		if(filteredCode >= 0x1100 && filteredCode <= 0x115f) {
+			int choCode = code - 0x1100;
 			if(!fullMoachigi && !moachigi && !isCho(last) && !isJung(last)) resetJohab();
 			if(isCho(last) || fullMoachigi && this.cho != -1) {
-				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-				int source = this.cho;
-				if(source >= 0) source += 0x1100;
+				int source = this.cho + 0x1100;
 				// 낱자 조합을 실햳한다.
 				if((combination = getCombination(source, code)) != -1) {
-					// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-					choCode = combination;
-					if(choCode >= 0) choCode-= 0x1100;
+					choCode = combination - 0x1100;
 				} else {
 					resetJohab();
 				}
             // 낱자 조합에 실패했을 경우 (이미 초성이 입력되어 있음) 조합을 종료한다.
 			} else if(this.cho != -1) resetJohab();
             this.cho = choCode;
-			// -4000 이하일 경우 다음 상태로 넘기지 않는다.
+			// 가상 낱자일 경우 다음 상태로 넘기지 않는다.
 			if(lastInputType == 0) result = INPUT_CHO3;
-			else if(virtual) result = lastInputType;
+			else if(preserveState) result = lastInputType;
 			else result = INPUT_CHO3;
 			last = code;
 		// 세벌식 한글 중성.
-		} else if(code >= 0x1161 && code <= 0x11a7 || code <= -2000 && code > -3000 || code <= -5000 && code > -6000) {
-			// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-			int jungCode = code;
-			if(jungCode >= 0x1161) jungCode -= 0x1161;
+		} else if(filteredCode >= 0x1161 && filteredCode <= 0x11a7) {
+			int jungCode = code - 0x1161;
 			if(!moachigi && !isCho(last) && !isJung(last)) resetJohab();
 			if(isJung(last) || fullMoachigi && this.jung != -1) {
-				// 마이너스 가상 낱자이면 코드를 그대로 넘긴다.
-				int source = this.jung;
-				if(source >= 0) source += 0x1161;
+				int source = this.jung + 0x1161;
 				if((combination = getCombination(source, code)) != -1) {
-					jungCode = combination;
-					if(jungCode >= 0x1161) jungCode -= 0x1161;
+					jungCode = combination - 0x1161;
 					this.jung = jungCode;
 				} else {
 					resetJohab();
@@ -304,22 +294,19 @@ public class HangulEngine {
 				this.jung = jungCode;
 			}
 			if(lastInputType == 0) result = INPUT_JUNG3;
-			else if(virtual) result = lastInputType;
+			else if(preserveState) result = lastInputType;
 			else result = INPUT_JUNG3;
 			last = code;
 		// 세벌식 한글 종성.
-		} else if(code >= 0x11a8 && code <= 0x11ff|| code <= -3000 && code > -4000 || code <= -6000 && code > -7000) {
-			int jongCode = code;
-			if(jongCode >= 0x11a8) jongCode -= 0x11a7;
+		} else if(filteredCode >= 0x11a8 && filteredCode <= 0x11ff) {
+			int jongCode = code - 0x11a7;
 			if(!moachigi && !isJung(last) && !isJong(last)) resetJohab();
-			if(last <= -5100 && last >= -5199) resetJohab();
+//			if(last <= -5100 && last >= -5199) resetJohab();
 			if(isJong(last) || fullMoachigi && this.jong != -1) {
-				int source = this.jong;
-				if(source >= 0) source += 0x11a7;
+				int source = this.jong + 0x11a7;
 				if((combination = getCombination(source, code)) != -1) {
 					this.beforeJong = jong;
-					jongCode = combination;
-					if(jongCode >= 0x11a8) jongCode -= 0x11a7;
+					jongCode = combination - 0x11a7;
 					this.jong = jongCode;
 				} else {
 					resetJohab();
@@ -330,7 +317,7 @@ public class HangulEngine {
 				this.jong = jongCode;
 			}
 			if(lastInputType == 0) result = INPUT_JONG3;
-			else if(virtual) result = lastInputType;
+			else if(preserveState) result = lastInputType;
 			else result = INPUT_JONG3;
 			last = code;
 		}
@@ -567,9 +554,6 @@ public class HangulEngine {
 	 */
 	String getVisible(int cho, int jung, int jong) {
 		String visible;
-		cho = getVirtualCho(cho);
-		jung = getVirtualJung(jung);
-		jong = getVirtualJong(jong);
 		// 옛한글 성분이 포함된 경우 첫가끝으로 조합한다.
 		if(cho > 0x12 || jung > 0x14 || jong > 0x1b) {
 			if(cho != -1 && jung == -1 && jong == -1) {
@@ -627,49 +611,25 @@ public class HangulEngine {
 		return visible;
 	}
 
-	public int getVirtualCho(int cho) {
-		if(virtualJamoTable == null) return cho;
-		for(int[] item : virtualJamoTable) {
-			if(item[0] == VIRTUAL_CHO && item[1] == cho) return item[2] - 0x1100;
-		}
-		return cho;
-	}
-
-	public int getVirtualJung(int jung) {
-		if(virtualJamoTable == null) return jung;
-		for(int[] item : virtualJamoTable) {
-			if(item[0] == VIRTUAL_JUNG&& item[1] == jung) return item[2] - 0x1161;
-		}
-		return jung;
-	}
-
-	public int getVirtualJong(int jong) {
-		if(virtualJamoTable == null) return jong;
-		for(int[] item : virtualJamoTable) {
-			if(item[0] == VIRTUAL_JONG && item[1] == jong) return item[2] - 0x11a7;
-		}
-		return jong;
-	}
-
 	/**
 	 * 유니코드 낱자가 한글 세벌식 초성 혹은 가상 낱자 초성인지 확인한다.
 	 */
 	public boolean isCho(int code) {
-		return code >= 0x1100 && code <= 0x115f || code <= -1000 && code > -2000 || code <= -4000 && code > -5000;
+		return code >= 0x1100 && code <= 0x115f;
 	}
 
 	/**
 	 * 유니코드 낱자가 한글 세벌식 중성 혹은 가상 낱자 중성인지 확인한다.
 	 */
 	public boolean isJung(int code) {
-		return code >= 0x1161 && code <= 0x11a7 || code <= -2000 && code > -3000 || code <= -5000 && code > -6000;
+		return code >= 0x1161 && code <= 0x11a7;
 	}
 
 	/**
 	 * 유니코드 낱자가 한글 세벌식 종성 혹은 가상 낱자 종성인지 확인한다.
 	 */
 	public boolean isJong(int code) {
-		return code >= 0x11a8 && code <= 0x11ff|| code <= -3000 && code > -4000 || code <= -6000 && code > -7000;
+		return code >= 0x11a8 && code <= 0x11ff;
 	}
 	
 	public boolean isMoachigi() {

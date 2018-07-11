@@ -1165,15 +1165,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			for(int i = 0 ; i < layout.length ; i++) {
 				if(key.codes[0] == 128) break;
 				if(key.codes[0] == layout[i][0]) {
-					int code = layout[i][mShiftOn + 1];
-					if(code < 0 && virtual != null) {
-						for(int[] item : virtual) {
-							if(item[1] == code) {
-								code = item[2];
-								break;
-							}
-						}
-					}
+					int code = layout[i][mShiftOn + 1] & 0xffff;
 					String label = getKeyLabel(code, false);
 					if(label != null) key.label = label;
 					found = true;

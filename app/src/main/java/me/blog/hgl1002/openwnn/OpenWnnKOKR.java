@@ -874,9 +874,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		else mHangulEngine.setJamoTable(mode.layout);
 		mHangulEngine.setCombinationTable(mode.combination);
 		if(prop.twelveEngine) {
-			if(mode.virtual != null) ((TwelveHangulEngine) m12keyEngine).setAddStrokeTable(mode.virtual);
+			if(mode.addStroke != null) ((TwelveHangulEngine) m12keyEngine).setAddStrokeTable(mode.addStroke);
 		} else {
-			mHangulEngine.setVirtualJamoTable(mode.virtual);
+			mHangulEngine.setVirtualJamoTable(mode.addStroke);
 		}
 
 		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
