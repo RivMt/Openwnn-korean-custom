@@ -1137,21 +1137,19 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	public void updateKeyLabels() {
 		if(mCurrentKeyboardType == KEYBOARD_12KEY && mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) return;
-		int[][] layout, virtual;
+		int[][] layout;
 		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) {
 			HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
 			layout = hangulEngine.getJamoTable();
-			virtual = hangulEngine.getVirtualJamoTable();
 		} else {
 			layout = ((OpenWnnKOKR) mWnn).getmAltSymbols();
-			virtual = null;
 		}
-		updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0], layout, virtual);
+		updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0], layout);
 		mKeyboardView.invalidateAllKeys();
 		mKeyboardView.requestLayout();
 	}
 
-	protected void updateLabels(Keyboard kbd, int[][] layout, int[][] virtual) {
+	protected void updateLabels(Keyboard kbd, int[][] layout) {
 		if(!(kbd instanceof KeyboardKOKR)) return;
 		if(layout == null) {
 			for(Keyboard.Key key : kbd.getKeys()) {

@@ -171,15 +171,7 @@ public class HangulEngine {
 	 * 한글 낱자를 어떻게 조합할지 정의한다. (예: 0x1100 + 0x1100 = 0x1101, ㄱ+ㄱ=ㄲ)
 	 */
     private int[][] combinationTable;
-	/**
-	 * 가상 낱자 테이블.
-	 * 마이너스 코드를 임의의 한글 낱자로 사용한다.
-	 * -1000, -2000, -3000대: 가상 낱자 초성, 중성, 종성
-	 * -4000, -5000, -6000대: 현재 입력 상태를 변화시키지 않는 가상 낱자 초성, 중성, 종성.
-	 * -5100대: 받침을 허용하지 않는 가상 낱자 중성.
-	 */
-	int[][] virtualJamoTable;
-	
+
 	public HangulEngine() {
 		// 한글 조합 상태를 초기화한다.
 		resetJohab();
@@ -322,7 +314,7 @@ public class HangulEngine {
 			last = code;
 		}
 		// 두벌식 한글 초/종성.
-		else if(code >= 0x3131 && code <= 0x314e || code >= 0x3165 && code <= 0x3186) {
+		else if(filteredCode >= 0x3131 && filteredCode <= 0x314e || filteredCode >= 0x3165 && filteredCode <= 0x3186) {
 			// 초, 중성이 모두 있을 경우
 			if(this.cho != -1 && this.jung != -1) {
 				int jongCode = JONG_CONVERT[code - 0x3131] - 0x11a7;
@@ -383,15 +375,15 @@ public class HangulEngine {
 			}
 			result = INPUT_CHO2;
 		// 두벌식 중성.
-		} else if(code >= 0x314f && code <= 0x3163 || code >= 0x3187 && code <= 0x318e || code == -100) {
+		} else if(filteredCode >= 0x314f && filteredCode <= 0x3163 || filteredCode >= 0x3187 && filteredCode <= 0x318e) {
 			// 조합 중인 종성이 없을 경우.
 			if(this.jong == -1) {
 				// 표준 한글 자모의 중성과 호환용 한글 자모의 중성은 배열 순서가 같음.
 				int jungCode = code - 0x314f;
+				// 천지인용 가상 낱자 '천'
+				if(code == 0x01318d) jungCode = 0x01119e - 0x1161;
 				// 옛한글 중성일 경우 따로 변환한다.
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
-				// 천지인 자판용 '천' 코드
-				if(code == -100) jungCode = -2003;
 				//조합 중인 중성이 존재할 경우.
 				if(isJung(last) && this.jung != -1) {
 					// 중성 낱자 결합을 시도한다.
@@ -415,9 +407,9 @@ public class HangulEngine {
 			} else {
 				int jungCode = code - 0x314f;
 				if(code >= 0x3187 && code <= 0x318e) jungCode = TRAD_JUNG_CONVERT[code - 0x3187] - 0x1161;
-				// 천지인 자판용 '천' 코드
-				if(code == -100) jungCode = -2003;
-				if(this.jong != -1 && this.cho != -1) {
+				// 천지인용 가상 낱자 '천'
+				if(code == 0x01318d) jungCode = 0x01119e - 0x1161;
+				if(this.cho != -1) {
 					// 종성이 두 개 이상 결합되었을 경우
 					if(beforeJong != 0) {
 						// 앞 종성을 앞 글자의 종성으로 한다.
@@ -615,21 +607,21 @@ public class HangulEngine {
 	 * 유니코드 낱자가 한글 세벌식 초성 혹은 가상 낱자 초성인지 확인한다.
 	 */
 	public boolean isCho(int code) {
-		return code >= 0x1100 && code <= 0x115f;
+		return (code & 0xffff) >= 0x1100 && (code & 0xffff) <= 0x115f;
 	}
 
 	/**
 	 * 유니코드 낱자가 한글 세벌식 중성 혹은 가상 낱자 중성인지 확인한다.
 	 */
 	public boolean isJung(int code) {
-		return code >= 0x1161 && code <= 0x11a7;
+		return (code & 0xffff) >= 0x1161 && (code & 0xffff) <= 0x11a7;
 	}
 
 	/**
 	 * 유니코드 낱자가 한글 세벌식 종성 혹은 가상 낱자 종성인지 확인한다.
 	 */
 	public boolean isJong(int code) {
-		return code >= 0x11a8 && code <= 0x11ff;
+		return (code & 0xffff) >= 0x11a8 && (code & 0xffff) <= 0x11ff;
 	}
 	
 	public boolean isMoachigi() {
@@ -707,14 +699,6 @@ public class HangulEngine {
 
 	public void setCombinationTable(int[][] combinations) {
 		this.combinationTable = combinations;
-	}
-
-	public int[][] getVirtualJamoTable() {
-		return virtualJamoTable;
-	}
-
-	public void setVirtualJamoTable(int[][] virtualJamoTable) {
-		this.virtualJamoTable = virtualJamoTable;
 	}
 
 	/**
