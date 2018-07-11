@@ -1142,7 +1142,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
 			layout = hangulEngine.getJamoTable();
 		} else {
-			layout = ((OpenWnnKOKR) mWnn).getmAltSymbols();
+			layout = ((OpenWnnKOKR) mWnn).getAltSymbols();
 		}
 		updateLabels(mKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][mCurrentKeyMode][0], layout);
 		mKeyboardView.invalidateAllKeys();

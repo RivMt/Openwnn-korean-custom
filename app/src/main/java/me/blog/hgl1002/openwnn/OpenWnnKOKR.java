@@ -1051,7 +1051,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		return mHangulEngine;
 	}
 
-	public int[][] getmAltSymbols() {
+	public int[][] getAltSymbols() {
 		return mAltSymbols;
 	}
 }

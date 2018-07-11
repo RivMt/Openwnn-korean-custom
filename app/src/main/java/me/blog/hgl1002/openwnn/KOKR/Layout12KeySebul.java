@@ -3,18 +3,18 @@ package me.blog.hgl1002.openwnn.KOKR;
 public class Layout12KeySebul {
 
 	public static final int[][] CYCLE_SEBUL_12KEY_MUNHWA = {
-			{-201, 0x11bb, 0x11bd},
-			{-202, 0x1169, 0x116e},
-			{-203, 0x1109, 0x110c},
-			{-204, 0x11ab, 0x11bc},
-			{-205, 0x1161, 0x1165},
-			{-206, 0x110b, 0x1106, 0x1107},
-			{-207, 0x11af, 0x11b7, 0x11ae},
-			{-208, 0x1175, 0x1173},
-			{-209, 0x1102, 0x1103},
-			{-213, 0x11a8, 0x11b8},
-			{-210, DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE},
-			{-211, 0x1100, 0x1105},
+			{-2001, 0x11bb, 0x11bd},
+			{-2002, 0x1169, 0x116e},
+			{-2003, 0x1109, 0x110c},
+			{-2004, 0x11ab, 0x11bc},
+			{-2005, 0x1161, 0x1165},
+			{-2006, 0x110b, 0x1106, 0x1107},
+			{-2007, 0x11af, 0x11b7, 0x11ae},
+			{-2008, 0x1175, 0x1173},
+			{-2009, 0x1102, 0x1103},
+			{-2011, 0x11a8, 0x11b8},
+			{-2010, DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE},
+			{-2012, 0x1100, 0x1105},
 	};
 
 	public static final int[][] COMB_SEBUL_12KEY_MUNHWA = {
