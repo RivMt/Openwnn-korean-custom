@@ -26,6 +26,10 @@ import android.preference.PreferenceManager;
 
 import android.view.inputmethod.*;
 
+import org.greenrobot.eventbus.EventBus;
+
+import me.blog.hgl1002.openwnn.event.InputKeyEvent;
+import me.blog.hgl1002.openwnn.event.KeyUpEvent;
 import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
 
 /**
@@ -172,8 +176,18 @@ public class OpenWnn extends InputMethodService {
         outInsets.contentTopInsets = outInsets.visibleTopInsets;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        EventBus.getDefault().post(new InputKeyEvent(event));
+        return true;
+    }
 
-    /**********************************************************************
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        EventBus.getDefault().post(new KeyUpEvent(event));
+        return true;
+    }
+/**********************************************************************
      * OpenWnn
      **********************************************************************/
     /**

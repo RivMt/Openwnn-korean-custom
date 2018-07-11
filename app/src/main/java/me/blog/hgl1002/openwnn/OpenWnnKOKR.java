@@ -96,8 +96,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mShiftPressing;
 	boolean mAltPressing;
 
-	private boolean mConsumeDownEvent;
-
 	EngineMode mCurrentEngineMode;
 	
 	private static final int[] mShiftKeyToggle = {0, MetaKeyKeyListener.META_SHIFT_ON, MetaKeyKeyListener.META_CAP_LOCKED};
@@ -226,20 +224,19 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFlickRightAction = pref.getString("keyboard_action_on_flick_right", FLICK_NONE);
 		mLongPressAction = pref.getString("system_action_on_long_press", FLICK_SHIFT);
 
-		if(hardKeyboardHidden) mQwertyEngine.setMoachigi(mMoachigi);
-		else mQwertyEngine.setMoachigi(mHardwareMoachigi);
+		if(hardKeyboardHidden) {
+			mQwertyEngine.setMoachigi(mMoachigi);
+			m12keyEngine.setMoachigi(mMoachigi);
+		}
+		else {
+			mQwertyEngine.setMoachigi(mHardwareMoachigi);
+		}
 		mQwertyEngine.setFirstMidEnd(mStandardJamo);
 		m12keyEngine.setFirstMidEnd(mStandardJamo);
 
-		// [2017/7/24 ykhong] : 한글 Moachigi 설정 적용
-		if(hardKeyboardHidden)
-			m12keyEngine.setMoachigi(mMoachigi);
-
 		mAltDirect = pref.getBoolean("hardware_alt_direct", true);
 
-
 		mCharInput = false;
-
 	}
 
 	@Override
@@ -1026,13 +1023,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				}
 			}, mMoachigiDelay);
 		}
-		EventBus.getDefault().post(new InputKeyEvent(event));
-		return true;
-	}
-
-	@Override public boolean onKeyUp(int keyCode, KeyEvent event) {
-		EventBus.getDefault().post(new KeyUpEvent(event));
-		return true;
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
