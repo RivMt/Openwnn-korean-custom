@@ -577,8 +577,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			changeNumKeyboard(mNumKeyboard[mCurrentLanguage][mDisplayMode][mCurrentKeyboardType][mShiftOn][0][0]);
 		}
 
-		updateKeyLabels();
-
 		mLastKeyMode = mCurrentKeyMode;
 	}
 	

@@ -363,6 +363,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
 		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 
+		((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
+
 	}
 
 	@Subscribe
@@ -927,7 +929,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 			default:
 				this.mHardShift = 1;
-				EventBus.getDefault().post(new InputCharEvent((char) keyCode));
+				this.inputChar((char) keyCode, false);
 				this.mHardShift = 0;
 				break;
 
