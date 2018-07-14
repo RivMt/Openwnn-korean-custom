@@ -178,14 +178,22 @@ public class OpenWnn extends InputMethodService {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        EventBus.getDefault().post(new InputKeyEvent(event));
-        return true;
+        InputKeyEvent inputKeyEvent = new InputKeyEvent(event);
+        EventBus.getDefault().post(inputKeyEvent);
+        mConsumeDownEvent = inputKeyEvent.isCancelled();
+        System.out.println(mConsumeDownEvent);
+        return mConsumeDownEvent;
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        EventBus.getDefault().post(new KeyUpEvent(event));
-        return true;
+        boolean ret = mConsumeDownEvent;
+        if(!ret) {
+            ret = super.onKeyUp(keyCode, event);
+        } else {
+            EventBus.getDefault().post(new KeyUpEvent(event));
+        }
+        return ret;
     }
 /**********************************************************************
      * OpenWnn

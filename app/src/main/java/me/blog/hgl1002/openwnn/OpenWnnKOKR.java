@@ -43,14 +43,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{0x30, 0x29},
 			{0x2d, 0x5f},
 			{0x3d, 0x2b},
-			
+
 			{0x5b, 0x7b},
 			{0x5d, 0x7d},
 			{0x5c, 0x7c},
 
 			{0x3b, 0x3a},
 			{0x27, 0x22},
-			
+
 			{0x2c, 0x3c},
 			{0x2e, 0x3e},
 			{0x2f, 0x3f},
@@ -566,11 +566,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 		((DefaultSoftKeyboardKOKR) mInputViewManager).fixHardwareLayoutState();
 		boolean ret = processKeyEvent(keyEvent);
-		if(!ret) {
-			int c = keyEvent.getKeyCode();
-			mInputConnection.sendKeyEvent(keyEvent);
-			mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, c));
-		}
+		event.setCancelled(ret);
 		shinShift();
 	}
 
