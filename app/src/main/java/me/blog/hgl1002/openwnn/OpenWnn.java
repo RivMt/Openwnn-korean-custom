@@ -181,7 +181,9 @@ public class OpenWnn extends InputMethodService {
         InputKeyEvent inputKeyEvent = new InputKeyEvent(event);
         EventBus.getDefault().post(inputKeyEvent);
         mConsumeDownEvent = inputKeyEvent.isCancelled();
-        System.out.println(mConsumeDownEvent);
+        if(!mConsumeDownEvent) {
+        	return super.onKeyDown(keyCode, event);
+		}
         return mConsumeDownEvent;
     }
 
