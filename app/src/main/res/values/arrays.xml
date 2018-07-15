@@ -16,6 +16,18 @@
 -->
 <resources>
 
+	<string-array name="keyboard_one_hand_mode">
+		<item>@string/preference_keyboard_one_hand_none</item>
+		<item>@string/preference_keyboard_one_hand_left</item>
+		<item>@string/preference_keyboard_one_hand_right</item>
+	</string-array>
+
+	<string-array name="keyboard_one_hand_mode_id">
+		<item>keyboard_one_hand_none</item>
+		<item>keyboard_one_hand_left</item>
+		<item>keyboard_one_hand_right</item>
+	</string-array>
+
     <string-array name="keyboard_skin">
         <item>@string/preference_keyboard_android_default</item>
         <item>@string/preference_keyboard_simple</item>

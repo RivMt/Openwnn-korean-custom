@@ -97,6 +97,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	protected int mKeyHeightPortrait = 50;
 	protected int mKeyHeightLandscape = 42;
+
+	protected String mOneHandedMode = "keyboard_one_hand_none";
+	protected int mOneHandedRatio;
 	
 	protected boolean mShowSubView = true;
 
@@ -890,6 +893,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mKeyHeightLandscape = keyHeightLandscape;
 			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
+		String oneHandedMode = pref.getString("keyboard_one_hand", "keyboard_one_hand_none");
+		int oneHandedRatio = pref.getInt("keyboard_one_hand_ratio", 100);
+		if(oneHandedMode != mOneHandedMode || oneHandedRatio != mOneHandedRatio) {
+			mOneHandedMode = oneHandedMode;
+			mOneHandedRatio = oneHandedRatio;
+			EventBus.getDefault().post(new InputViewChangeEvent());
+		}
+
 		boolean use12Key = pref.getBoolean("keyboard_hangul_use_12key", false);
 		boolean useAlphabetQwerty = pref.getBoolean("keyboard_alphabet_use_qwerty", true);
 		if(mUse12Key != use12Key || useAlphabetQwerty != mUseAlphabetQwerty) {
@@ -1043,6 +1054,16 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resizeHeight(height);
+		switch(mOneHandedMode) {
+		case "keyboard_one_hand_left":
+			keyboard.resizeWidth(mOneHandedRatio / 100d);
+			break;
+
+		case "keyboard_one_hand_right":
+			keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
+			break;
+
+		}
 		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			Integer keyIcon = keyIcons.get(key.codes[0]);

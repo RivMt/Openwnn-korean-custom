@@ -28,6 +28,18 @@
 			android:title="@string/preference_key_height_landscape_title"
 			android:summary="@string/preference_key_height_landscape_summary"
 			android:defaultValue="42"/>
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="keyboard_one_hand"
+			android:title="@string/preference_keyboard_one_hand_title"
+			android:summary="@string/preference_keyboard_one_hand_summary"
+			android:entries="@array/keyboard_one_hand_mode"
+			android:entryValues="@array/keyboard_one_hand_mode_id"
+			android:defaultValue="keyboard_one_hand_none"/>
+		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+			android:key="keyboard_one_hand_ratio"
+			android:title="@string/preference_keyboard_one_hand_ratio_title"
+			android:summary="@string/preference_keyboard_one_hand_ratio_summary"
+			android:defaultValue="90"/>
 		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
 			android:key="keyboard_long_press_timeout"
 			android:title="@string/preference_keyboard_long_press_timeout_title"
