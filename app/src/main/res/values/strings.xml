@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
  Copyright (C) 2008,2009  OMRON SOFTWARE Co., Ltd.
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +15,16 @@
 -->
 <resources>
   <!-- common part -->
-  	
-  	<string name="app_name">OpenWnn Korean</string>
-  	<string name="ime_name">OpenWnn Korean</string>
-  	
-    <!-- Preferences -->
+
+  <string name="app_name">OpenWnn Korean</string>
+  <string name="ime_name">OpenWnn Korean</string>
+
+  <!-- Preferences -->
     <string name="preference_ime_setting_app">OpenWnn Settings</string>
 
     <string name="preference_method_setting_menu">Input Method</string>
-    
-    <string name="preference_method_enabler_title">Enable / Disable Input Methods</string>
+
+  <string name="preference_method_enabler_title">Enable / Disable Input Methods</string>
     <string name="preference_method_enabler_summary">Please enable \'OpenWnn Korean\'.</string>
     <string name="preference_method_picker_title">Show Input Method Picker</string>
 
@@ -36,20 +35,20 @@
 
     <string name="preference_key_vibration_title"> Vibrate on Key Press </string>
     <string name="preference_key_vibration_summary"> Enable key click vibration. </string>
-    
-    <string name="preference_key_vibration_duration_title">Key Vibration Duration</string>
+
+  <string name="preference_key_vibration_duration_title">Key Vibration Duration</string>
     <string name="preference_key_vibration_duration_summary">Set key vibration duration. Default value is 30.</string>
-    
-    <string name="preference_preview_title"> Key Preview </string>
+
+  <string name="preference_preview_title"> Key Preview </string>
     <string name="preference_preview_summary"> Enable key preview. </string>
 
     <string name="preference_key_height_portrait_title">Key Height (Portrait)</string>
     <string name="preference_key_height_portrait_summary">Adjust key height in portrait engineMode. Default value is 50.</string>
-        
-    <string name="preference_key_height_landscape_title">Key Height (Landscape)</string>
+
+  <string name="preference_key_height_landscape_title">Key Height (Landscape)</string>
     <string name="preference_key_height_landscape_summary">Adjust key height in landscape engineMode. Default value is 42.</string>
-    
-    <string name="preference_auto_caps_title"> Auto Capitalization </string>
+
+  <string name="preference_auto_caps_title"> Auto Capitalization </string>
     <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet engineMode. </string>
 
     <string name="preference_keyboard_skin_title">Keyboard Image</string>
@@ -143,22 +142,22 @@
     <string name="openwnn_china_copyright">Ver.1.3.5\nOMRON SOFTWARE Co., Ltd.</string>
     <string name="openwnn_china">OpenWnn Chinese</string>
     <string name="openwnn_china_system_dictionary">/data/data/me.blog.hgl1002.openwnn/lib/libWnnZHCNDic.so</string>
-    
-    <!-- OpenWnn Korean -->
+
+  <!-- OpenWnn Korean -->
     <string name="openwnn_korean_copyright">hgl1002@naver.com</string>
     <string name="openwnn_korean">OpenWnn Korean</string>
 
     <string name="openwnn_korean_donate_title">앱 후원</string>
     <string name="openwnn_korean_donate_summary">개발을 계속할 수 있도록 후원해 주시면 정말 감사하겠습니다. 후원 문의는 hgl1002@naver.com으로 부탁드립니다.</string>
 
-<!-- After Config Change -->
+  <!-- After Config Change -->
     <string name="openwnn_china_writable_dictionary">/data/data/me.blog.hgl1002.openwnn/writableZHCN.dic</string>
     <string name="cn_word_separators">.,;:!?</string>
 
   <!-- Candidate Delete -->
-      <string name="button_candidate_select">Select</string>
-      <string name="button_candidate_delete">Delete learning?</string>
-      <string name="button_candidate_cancel">Close</string>
+  <string name="button_candidate_select">Select</string>
+  <string name="button_candidate_delete">Delete learning?</string>
+  <string name="button_candidate_cancel">Close</string>
 
 
   <!-- Key top -->
@@ -264,8 +263,8 @@
 
     <string name="indicator_caps">CAPS</string>
     <string name="indicator_alt">ALT</string>
-	<string name="indicator_lang_en">A</string>
-	<string name="indicator_lang_ko">가</string>
+  <string name="indicator_lang_en">A</string>
+  <string name="indicator_lang_ko">가</string>
 
 
     <!-- Tutorial -->
@@ -345,7 +344,7 @@
     <string name="preference_keyboard_sebul_shin_m">Shin Sebeolsik M by Metalliza</string>
     <string name="preference_keyboard_sebul_shin_p2">Shin Sebeolsik P2 by Pat-al (Traditional Hangul available)</string>
     <string name="preference_keyboard_sebul_ahnmatae">Moachigi Sebeolsik Ahnmatae Keyboard</string>
-	<string name="preference_keyboard_sebul_semoe_2016">Moachigi Sebeolsik Semo-e 2016 by Shin Segi</string>
+  <string name="preference_keyboard_sebul_semoe_2016">Moachigi Sebeolsik Semo-e 2016 by Shin Segi</string>
     <string name="preference_keyboard_sebul_semoe">Moachigi Sebeolsik Semo-e 2017 by Shin Segi</string>
     <string name="preference_keyboard_dubul_yet">Traditional Hangul Dubeolsik</string>
     <string name="preference_keyboard_sebul_393y">Traditional Hangul Sebeolsik 393 by Gim Gyeongseog</string>
@@ -361,15 +360,15 @@
     <string name="preference_keyboard_12key_sebul_munhwa">12-Key Sebeolsik by Hangul Munhwawon</string>
     <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik (ZanNavi)</string>
     <string name="preference_keyboard_12key_sebul_sena">One-hand Sebeolsik (Sena)</string>
-    
-    <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
+
+  <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">Use qwerty based Alphabet layout while using 12-key as Hangul.</string>
 
     <string name="preference_keyboard_alphabet_soft_portrait_title">Alphabet Soft Layout (Portrait)</string>
     <string name="preference_keyboard_alphabet_soft_landscape_title">Alphabet Soft Layout (Landscape)</string>
     <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout.</string>
 
-   <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
+  <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
     <string name="preference_keyboard_alphabet_summary">Type of Alphabet keyboard.</string>
 
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
@@ -383,17 +382,17 @@
     <string name="preference_keyboard_12key_alphabet_wide_b">Wide B</string>
     <string name="preference_keyboard_12key_alphabet_narrow_a">Narrow A</string>
     <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
-    
-    <string name="preference_keyboard_use_flick_title">Use Flick</string>
+
+  <string name="preference_keyboard_use_flick_title">Use Flick</string>
     <string name="preference_keyboard_use_flick_summary">Use flick (slide) function for keyboard.</string>
-    
-    <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
+
+  <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
-    
-    <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
+
+  <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
     <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Default value is 500. Value 0 disables the timer.</string>
-    
-    <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
+
+  <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moajugi. (Fix jamo order automatically when using sebeol layouts)</string>
 
     <string name="preference_keyboard_quick_period_title">Quick Period Input</string>
@@ -424,14 +423,14 @@
 
 
     <string name="preference_hardware_setting_menu">Hardware Keyboard</string>
-    
-    <string name="preference_hardware_hangul_title">Hardware Hangul keyboard type</string>
+
+  <string name="preference_hardware_hangul_title">Hardware Hangul keyboard type</string>
     <string name="preference_hardware_hangul_summary">Type of Hangul keyboard while using hardware keyboard.</string>
-    
-    <string name="preference_hardware_alphabet_title">Hardware Alphabet keyboard type</string>
+
+  <string name="preference_hardware_alphabet_title">Hardware Alphabet keyboard type</string>
     <string name="preference_hardware_alphabet_summary">Type of Alphabet keyboard while using hardware keyboard.</string>
-    
-    <string name="preference_hardware_use_subview_title">Show Sub View</string>
+
+  <string name="preference_hardware_use_subview_title">Show Sub View</string>
     <string name="preference_hardware_use_subview_summary">Show sub view when using hardware keyboard.</string>
 
     <string name="preference_hardware_use_numkeyboard_title">Show Num Keyboard</string>
@@ -464,33 +463,37 @@
     <string name="preference_system_alt_key_long_press_title">Action on Alt Key Long-Press</string>
     <string name="preference_system_alt_key_long_press_summary">Choose action on alt key long-press.</string>
 
-     <string name="preference_system_switch_kor_eng">Switch Korean/English Mode</string>
-     <string name="preference_system_switch_next_method">Switch to Next Method</string>
-     <string name="preference_system_list_methods">List Input Methods</string>
-     <string name="preference_system_toggle_12key_mode">Toggle 12-Key Layout</string>
-     <string name="preference_system_open_settings">Open Keyboard Settings</string>
+  <string name="preference_system_list_actions">List Actions</string>
+  <string name="preference_system_switch_kor_eng">Switch Korean/English Mode</string>
+  <string name="preference_system_switch_next_method">Switch to Next Method</string>
+  <string name="preference_system_list_methods">List Input Methods</string>
+  <string name="preference_system_toggle_12key_mode">Toggle 12-Key Layout</string>
+  <string name="preference_system_toggle_one_handed_mode">Toggle One-Handed Mode</string>
+  <string name="preference_system_open_settings">Open Keyboard Settings</string>
 
-     <string name="preference_hardware_lang_key_title">Hardware Keyboard Language Key</string>
-     <string name="preference_hardware_lang_key_summary">Customize language key storke with shift, alt combinations.</string>
+  <string name="preference_system_list_actions_title">Select Action</string>
 
-     <string name="preference_system_force_hangul_title">Force Hangeul Keyboard</string>
-	 <string name="preference_system_force_hangul_summary">Set default keyboard language to Hangeul and force it to be shown first.</string>
+  <string name="preference_hardware_lang_key_title">Hardware Keyboard Language Key</string>
+  <string name="preference_hardware_lang_key_summary">Customize language key storke with shift, alt combinations.</string>
+
+  <string name="preference_system_force_hangul_title">Force Hangeul Keyboard</string>
+  <string name="preference_system_force_hangul_summary">Set default keyboard language to Hangeul and force it to be shown first.</string>
 
 
-     <string name="preference_reveal_hidden_msg">%d steps before revealing developer menu.</string>
+  <string name="preference_reveal_hidden_msg">%d steps before revealing developer menu.</string>
 
-     <string name="preference_dev_menu">Developer Settings</string>
+  <string name="preference_dev_menu">Developer Settings</string>
 
-     <string name="preference_dev_show_dev_settings">Show Developer Settings</string>
+  <string name="preference_dev_show_dev_settings">Show Developer Settings</string>
 
-     <string name="preference_dev_softkeyboard">Soft Keyboard</string>
-     <string name="preference_dev_use_hangul_soft">Use Hangul Soft</string>
-     <string name="preference_dev_hangul_soft_title">Hangul Soft Layout</string>
+  <string name="preference_dev_softkeyboard">Soft Keyboard</string>
+  <string name="preference_dev_use_hangul_soft">Use Hangul Soft</string>
+  <string name="preference_dev_hangul_soft_title">Hangul Soft Layout</string>
 
-      <string name="preference_dev_hardkeyboard">Hard Keyboard</string>
-      <string name="preference_dev_use_hangul_hard">Use Hangul Hard</string>
-      <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
+  <string name="preference_dev_hardkeyboard">Hard Keyboard</string>
+  <string name="preference_dev_use_hangul_hard">Use Hangul Hard</string>
+  <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
 
-      <string name="initial_launch_help">Press ALT Key to open Settings.</string>
+  <string name="initial_launch_help">Press ALT Key to open Settings.</string>
 
 </resources>

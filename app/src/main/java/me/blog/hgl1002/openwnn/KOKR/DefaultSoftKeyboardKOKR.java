@@ -98,8 +98,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mKeyHeightPortrait = 50;
 	protected int mKeyHeightLandscape = 42;
 
-	protected String mOneHandedMode = "keyboard_one_hand_none";
+	protected boolean mOneHandedMode;
 	protected int mOneHandedRatio;
+	protected boolean mOneHandedDirection;
+
+	public static final boolean ONE_HAND_LEFT = false;
+	public static final boolean ONE_HAND_RIGHT = true;
 	
 	protected boolean mShowSubView = true;
 
@@ -893,7 +897,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mKeyHeightLandscape = keyHeightLandscape;
 			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
-		String oneHandedMode = pref.getString("keyboard_one_hand", "keyboard_one_hand_none");
+		boolean oneHandedMode = pref.getBoolean("keyboard_one_hand", false);
 		int oneHandedRatio = pref.getInt("keyboard_one_hand_ratio", 100);
 		if(oneHandedMode != mOneHandedMode || oneHandedRatio != mOneHandedRatio) {
 			mOneHandedMode = oneHandedMode;
@@ -1054,15 +1058,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resizeHeight(height);
-		switch(mOneHandedMode) {
-		case "keyboard_one_hand_left":
-			keyboard.resizeWidth(mOneHandedRatio / 100d);
-			break;
-
-		case "keyboard_one_hand_right":
-			keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
-			break;
-
+		if(mOneHandedMode) {
+			if(mOneHandedDirection == ONE_HAND_LEFT) {
+				keyboard.resizeWidth(mOneHandedRatio / 100d);
+			} else {
+				keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
+			}
 		}
 		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
 		for(Keyboard.Key key : keyboard.getKeys()) {

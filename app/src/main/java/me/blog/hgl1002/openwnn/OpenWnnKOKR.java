@@ -1,7 +1,9 @@
 package me.blog.hgl1002.openwnn;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -23,6 +25,7 @@ import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
+import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.event.*;
@@ -71,9 +74,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			{-211, 0x21},
 	};
 
+	public static final String LANGKEY_LIST_ACTIONS = "list_actions";
 	public static final String LANGKEY_SWITCH_KOR_ENG = "switch_kor_eng";
 	public static final String LANGKEY_SWITCH_NEXT_METHOD = "switch_next_method";
 	public static final String LANGKEY_LIST_METHODS = "list_methods";
+	public static final String LANGKEY_TOGGLE_ONE_HAND_MODE = "toggle_one_hand_mode";
 	public static final String LANGKEY_TOGGLE_12KEY_MODE = "toggle_12key_mode";
 	public static final String LANGKEY_OPEN_SETTINGS = "open_settings";
 
@@ -693,10 +698,20 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mInputConnection.commitText(String.valueOf(code), 1);
 	}
 
-	private void onLangKey(String action) {
+	public void onLangKey(String action) {
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		IBinder token = getWindow().getWindow().getAttributes().token;
+
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor editor = pref.edit();
+
 		switch(action) {
+		case LANGKEY_LIST_ACTIONS:
+			Intent intent = new Intent(this, ListLangKeyActionDialogActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+			break;
+
 		case LANGKEY_SWITCH_KOR_ENG:
 			((DefaultSoftKeyboardKOKR) mInputViewManager).nextLanguage();
 			break;
@@ -716,9 +731,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			imm.showInputMethodPicker();
 			break;
 
+		case LANGKEY_TOGGLE_ONE_HAND_MODE:
+			boolean oneHandedMode = pref.getBoolean("keyboard_one_hand", false);
+			editor.putBoolean("keyboard_one_hand", !oneHandedMode);
+			editor.commit();
+			EventBus.getDefault().post(new InputViewChangeEvent());
+			break;
+
 		case LANGKEY_TOGGLE_12KEY_MODE:
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-			SharedPreferences.Editor editor = pref.edit();
 			boolean use12key = pref.getBoolean("keyboard_hangul_use_12key", false);
 			editor.putBoolean("keyboard_hangul_use_12key", !use12key);
 			editor.commit();
@@ -726,7 +746,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		case LANGKEY_OPEN_SETTINGS:
-			Intent intent = new Intent(this, OpenWnnControlPanelKOKR.class);
+			intent = new Intent(this, OpenWnnControlPanelKOKR.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
 			break;

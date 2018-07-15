@@ -16,18 +16,6 @@
 -->
 <resources>
 
-	<string-array name="keyboard_one_hand_mode">
-		<item>@string/preference_keyboard_one_hand_none</item>
-		<item>@string/preference_keyboard_one_hand_left</item>
-		<item>@string/preference_keyboard_one_hand_right</item>
-	</string-array>
-
-	<string-array name="keyboard_one_hand_mode_id">
-		<item>keyboard_one_hand_none</item>
-		<item>keyboard_one_hand_left</item>
-		<item>keyboard_one_hand_right</item>
-	</string-array>
-
     <string-array name="keyboard_skin">
         <item>@string/preference_keyboard_android_default</item>
         <item>@string/preference_keyboard_simple</item>
@@ -251,6 +239,7 @@
     </string-array>
 
 	<string-array name="lang_key_actions">
+		<item>@string/preference_system_list_actions</item>
 		<item>@string/preference_system_switch_kor_eng</item>
 		<item>@string/preference_system_switch_next_method</item>
 		<item>@string/preference_system_list_methods</item>
@@ -259,6 +248,7 @@
 	</string-array>
 
 	<string-array name="lang_key_actions_id">
+		<item>list_actions</item>
 	    <item>switch_kor_eng</item>
 	    <item>switch_next_method</item>
 	    <item>list_methods</item>
