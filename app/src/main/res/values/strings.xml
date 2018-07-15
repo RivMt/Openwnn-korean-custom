@@ -289,15 +289,11 @@
 
     <!-- Korean-specific strings -->
 
-    <string name="preference_keyboard_one_hand_title">One-handed keyboard mode.</string>
-    <string name="preference_keyboard_one_hand_summary">Set one-handed keyboard mode.</string>
+    <string name="preference_keyboard_one_hand_title">One-handed keyboard mode</string>
+    <string name="preference_keyboard_one_hand_summary">Toggle one-handed keyboard mode.</string>
 
     <string name="preference_keyboard_one_hand_ratio_title">One-handed keyboard size</string>
-    <string name="preference_keyboard_one_hand_ratio_summary">Set one-handed keyboard size in percent.</string>
-
-    <string name="preference_keyboard_one_hand_none">None</string>
-    <string name="preference_keyboard_one_hand_left">Left</string>
-    <string name="preference_keyboard_one_hand_right">Right</string>
+    <string name="preference_keyboard_one_hand_ratio_summary">Set one-handed keyboard size in percent. Default value is 90.</string>
 
     <string name="preference_keyboard_long_press_timeout_title">Long-press timeout (ms)</string>
     <string name="preference_keyboard_long_press_timeout_summary">Set the timeout of long-press.</string>

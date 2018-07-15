@@ -34,6 +34,12 @@
     <string name="preference_key_height_landscape_title">키 높이 (가로 화면)</string>
     <string name="preference_key_height_landscape_summary">가로 화면에서의 키 높이를 조절합니다. 기본값은 42입니다.</string>
 
+    <string name="preference_keyboard_one_hand_title">한손 키보드 모드</string>
+    <string name="preference_keyboard_one_hand_summary">한손 키보드 모드를 설정합니다.</string>
+
+    <string name="preference_keyboard_one_hand_ratio_title">한손 키보드 크기</string>
+    <string name="preference_keyboard_one_hand_ratio_summary">한손 키보드 모드일 때 키보드 크기를 퍼센트 단위로 설정합니다 기본값은 90입니다.</string>
+
     <string name="preference_keyboard_long_press_timeout_title">길게 누르기 시간 (ms)</string>
     <string name="preference_keyboard_long_press_timeout_summary">키보드를 길게 누르는 대기 시간을 설정합니다.</string>
 
@@ -202,11 +208,15 @@
     <string name="preference_system_alt_key_long_press_title">ALT 키 롱클릭 행동</string>
     <string name="preference_system_alt_key_long_press_summary">ALT 키를 길게 누를 때 실행할 행동을 정합니다.</string>
 
+    <string name="preference_system_list_actions">작업 선택 창 표시</string>
     <string name="preference_system_switch_kor_eng">한/영 전환</string>
     <string name="preference_system_switch_next_method">다음 입력기로 전환</string>
     <string name="preference_system_list_methods">입력기 목록 표시</string>
     <string name="preference_system_toggle_12key_mode">12키/일반 배열 전환</string>
+    <string name="preference_system_toggle_one_handed_mode">한 손 모드 전환</string>
     <string name="preference_system_open_settings">키보드 설정 열기</string>
+
+    <string name="preference_system_list_actions_title">작업 선택</string>
 
     <string name="preference_hardware_lang_key_title">하드웨어 키보드 한영 키</string>
     <string name="preference_hardware_lang_key_summary">하드웨어 키보드 사용시 한영 키를 설정합니다. Shift, Alt 조합을 사용할 수 있습니다.</string>

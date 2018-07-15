@@ -23,7 +23,7 @@
 			android:summary="@string/preference_system_alt_key_long_press_summary"
 			android:entries="@array/lang_key_actions"
 			android:entryValues="@array/lang_key_actions_id"
-			android:defaultValue="open_settings" />
+			android:defaultValue="list_actions" />
 		<me.blog.hgl1002.openwnn.KOKR.KeystrokePreference
 			android:key="system_hardware_lang_key_stroke"
 			android:title="@string/preference_hardware_lang_key_title"
