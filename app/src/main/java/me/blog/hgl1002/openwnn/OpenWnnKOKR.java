@@ -350,6 +350,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mEnableTimeout = prop.timeout;
 			mFullMoachigi = prop.fullMoachigi;
 			mAltSymbols = mode.layout;
+
+			((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
+
 			return;
 		}
 
