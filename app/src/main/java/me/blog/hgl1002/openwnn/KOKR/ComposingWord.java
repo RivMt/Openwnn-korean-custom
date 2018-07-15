@@ -1,6 +1,6 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
-public class WordComposer {
+public class ComposingWord {
 
 	private StringBuilder composingWord = new StringBuilder();
 	private String composingChar = "";
@@ -38,6 +38,10 @@ public class WordComposer {
 
 	public void setComposingWord(String composingWord) {
 		this.composingWord = new StringBuilder(composingWord);
+	}
+
+	public String getEntireWord() {
+		return composingWord.toString() + composingChar;
 	}
 
 }

@@ -23,11 +23,12 @@ import me.blog.hgl1002.openwnn.KOKR.CandidatesViewManagerKOKR;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
+import me.blog.hgl1002.openwnn.KOKR.HanjaConverter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
-import me.blog.hgl1002.openwnn.KOKR.WordComposer;
+import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
@@ -89,10 +90,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 
+	HanjaConverter mHanjaConverter;
+
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
 
-	WordComposer mWordComposer;
+	ComposingWord mComposingWord;
 
 	int[][] mAltSymbols;
 	boolean mAltMode;
@@ -159,7 +162,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mInputViewManager = new DefaultSoftKeyboardKOKR(this);
 		mCandidatesViewManager = new CandidatesViewManagerKOKR();
 
-		mWordComposer = new WordComposer();
+		mComposingWord = new ComposingWord();
 
 		mQwertyEngine = new HangulEngine();
 		m12keyEngine = new TwelveHangulEngine();
@@ -179,6 +182,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public void onCreate() {
 		super.onCreate();
 		EventBus.getDefault().register(this);
+
+		HanjaConverter.copyDatabase(this);
+		mHanjaConverter = new HanjaConverter(this);
+
 	}
 
 	@Override
@@ -199,11 +206,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+		mComposingWord.composeChar("");
+		mComposingWord.setComposingWord("");
 		resetWordComposition();
 		if(!restarting) {
-			
 			((DefaultSoftKeyboard) mInputViewManager).resetCurrentKeyboard();
-			
 			mHardShift = 0;
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
@@ -259,7 +266,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
-		mHangulEngine.setComposing("");
 	}
 
 	@Override
@@ -308,11 +314,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Override
 	public void onEvent(HangulEngineEvent event) {
 		if(event instanceof FinishComposingEvent) {
-			mWordComposer.commitComposingChar();
+			mComposingWord.commitComposingChar();
 		}
 		if(event instanceof SetComposingEvent) {
 			SetComposingEvent composingEvent = (SetComposingEvent) event;
-			mWordComposer.composeChar(composingEvent.getComposing());
+			mComposingWord.composeChar(composingEvent.getComposing());
 		}
 		updateInputView();
 	}
@@ -683,7 +689,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				code = Character.toLowerCase(code);
 				if(code == item[0]) {
 					resetCharComposition();
-					mWordComposer.composeChar(new String(new char[] {(char) (shift == 0 ? item[1] : item[2])}));
+					mComposingWord.composeChar(new String(new char[] {(char) (shift == 0 ? item[1] : item[2])}));
 					resetCharComposition();
 					return;
 				}
@@ -697,7 +703,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return;
 		} else if(direct) {
 			resetCharComposition();
-			mWordComposer.composeChar(new String(new char[] {originalCode}));
+			mComposingWord.composeChar(new String(new char[] {originalCode}));
 			resetCharComposition();
 			return;
 		}
@@ -705,12 +711,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		int jamo = mHangulEngine.inputCode(Character.toLowerCase(code), shift);
 		if(jamo != -1) {
 			if(mHangulEngine.inputJamo(jamo) == 0) {
-				mWordComposer.composeChar(new String(new char[] {(char) jamo}));
+				mComposingWord.composeChar(new String(new char[] {(char) jamo}));
 				resetCharComposition();
 			}
 		} else {
 			resetCharComposition();
-			mWordComposer.composeChar(new String(new char[] {code}));
+			mComposingWord.composeChar(new String(new char[] {code}));
 			resetCharComposition();
 		}
 
@@ -731,7 +737,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	public void updateInputView() {
 		if(mInputConnection == null) return;
-		mInputConnection.setComposingText(mWordComposer.getComposingWord() + mWordComposer.getComposingChar(), 1);
+		mInputConnection.setComposingText(mComposingWord.getComposingWord() + mComposingWord.getComposingChar(), 1);
+
+		mCandidatesViewManager.displayCandidates(mHanjaConverter.convert(mComposingWord));
 
 	}
 
@@ -794,8 +802,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onCandidateSelect(SelectCandidateEvent event) {
 		String candiadte = event.getWord().candidate;
-		mWordComposer.commitComposingChar();
-		mWordComposer.setComposingWord(candiadte);
+		mComposingWord.commitComposingChar();
+		mComposingWord.setComposingWord(candiadte);
 		resetWordComposition();
 	}
 	
@@ -926,7 +934,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		} else if (key == KeyEvent.KEYCODE_DEL) {
 			if(!mHangulEngine.backspace()) {
 				resetCharComposition();
-				if(!mWordComposer.backspace()) {
+				if(!mComposingWord.backspace()) {
 					return false;
 				}
 			}
@@ -935,7 +943,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return true;
 		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
 			resetCharComposition();
-			if(!mWordComposer.backspace()) {
+			if(!mComposingWord.backspace()) {
 				mInputConnection.deleteSurroundingText(1, 0);
 			}
 			return true;
@@ -1058,7 +1066,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void resetWordComposition() {
 		resetCharComposition();
-		mWordComposer.commitComposingWord();
+		mComposingWord.commitComposingWord();
 		if(mInputConnection != null) mInputConnection.finishComposingText();
 		updateInputView();
 	}
