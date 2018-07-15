@@ -304,11 +304,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onViewClicked(boolean focusChanged) {
-		if(mInputConnection == null) return;
-		mInputConnection.finishComposingText();
-		super.onViewClicked(focusChanged);
-		mHangulEngine.setComposing("");
 		resetWordComposition();
+		super.onViewClicked(focusChanged);
 	}
 
 	@Override
