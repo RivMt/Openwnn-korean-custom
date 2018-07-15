@@ -32,7 +32,7 @@ import me.blog.hgl1002.openwnn.R;
 import me.blog.hgl1002.openwnn.event.SoftKeyLongPressEvent;
 
 public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
-	
+
 	public static final int HARD_KEYMODE_LANG = 10000;
 	public static final int HARD_KEYMODE_LANG_ENGLISH = HARD_KEYMODE_LANG + LANG_EN;
 	public static final int HARD_KEYMODE_LANG_KOREAN = HARD_KEYMODE_LANG + LANG_KO;
@@ -54,7 +54,8 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYCODE_UP = -220;
 
 	public static final int KEYCODE_NON_SHIN_DEL = -510;
-	
+	public static final int KEYCODE_TOGGLE_ONE_HAND_SIDE = -520;
+
 	protected static final int INVALID_KEYMODE = -1;
 	
 	public static final int KEYMODE_HANGUL = 1;
@@ -65,7 +66,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYMODE_ALT_SYMBOLS = 0;
 
 	protected KeyboardView mNumKeyboardView;
-
 	protected Keyboard[][][][][][] mNumKeyboard;
 
 	protected boolean mCapsLock;
@@ -100,7 +100,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	protected boolean mOneHandedMode;
 	protected int mOneHandedRatio;
-	protected boolean mOneHandedDirection;
+	protected boolean mOneHandedSide;
 
 	public static final boolean ONE_HAND_LEFT = false;
 	public static final boolean ONE_HAND_RIGHT = true;
@@ -297,6 +297,21 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				backspace = -1;
 				return false;
 			}
+			// Swipe Detection
+			if(dx < -mFlickSensitivity*5) {
+				if(Math.abs(dx) > Math.abs(dy)) {
+					swipeLeft();
+				}
+				return false;
+			}
+			if(dx > mFlickSensitivity*5) {
+				if(Math.abs(dx) > Math.abs(dy)) {
+					swipeRight();
+				}
+				return false;
+			}
+
+			//Flick detection
 			if(dy > mFlickSensitivity) {
 				if(Math.abs(dy) > Math.abs(dx)) {
 					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.DOWN));
@@ -311,13 +326,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			}
 			if(dx < -mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
-					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.RIGHT));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.LEFT));
 				}
 				return false;
 			}
 			if(dx > mFlickSensitivity) {
 				if(Math.abs(dx) > Math.abs(dy)) {
-					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.LEFT));
+					EventBus.getDefault().post(new SoftKeyFlickEvent(keyCode, SoftKeyFlickEvent.Direction.RIGHT));
 				}
 				return false;
 			}
@@ -695,6 +710,20 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	@Override
+	public void swipeRight() {
+		if(!mOneHandedMode) return;
+		this.mOneHandedSide = ONE_HAND_RIGHT;
+		EventBus.getDefault().post(new InputViewChangeEvent());
+	}
+
+	@Override
+	public void swipeLeft() {
+		if(!mOneHandedMode) return;
+		this.mOneHandedSide = ONE_HAND_LEFT;
+		EventBus.getDefault().post(new InputViewChangeEvent());
+	}
+
+	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
 		return;
 	}
@@ -1059,11 +1088,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resizeHeight(height);
 		if(mOneHandedMode) {
-			if(mOneHandedDirection == ONE_HAND_LEFT) {
-				keyboard.resizeWidth(mOneHandedRatio / 100d);
-			} else {
-				keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
-			}
+			keyboard.oneHandedMode(mWnn, mOneHandedSide, mOneHandedRatio / 100d);
+//			if(mOneHandedSide == ONE_HAND_LEFT) {
+//				keyboard.resizeWidth(mOneHandedRatio / 100d);
+//			} else {
+//				keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
+//			}
 		}
 		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
 		for(Keyboard.Key key : keyboard.getKeys()) {

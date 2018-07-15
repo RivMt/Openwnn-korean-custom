@@ -3,6 +3,8 @@ package me.blog.hgl1002.openwnn.KOKR;
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
 
+import me.blog.hgl1002.openwnn.R;
+
 public class KeyboardKOKR extends Keyboard {
 	
 	int mTotalWidth, mTotalHeight;
@@ -40,7 +42,6 @@ public class KeyboardKOKR extends Keyboard {
 		double heightModifier = 1;
 		int height = 0;
 		for(Key key : getKeys()) {
-			height = key.width;
 			int oldHeight = key.height;
 			heightModifier = (double) keyHeight / (double) oldHeight * (double) oldHeight / (double) getKeyHeight();
 			key.height *= heightModifier;
@@ -56,7 +57,6 @@ public class KeyboardKOKR extends Keyboard {
 		mTotalWidth = getWidth();
 		int width = 0;
 		for(Key key : getKeys()) {
-			int oldWidth = key.width;
 			key.width *= widthModifier;
 			key.x *= widthModifier;
 		}
@@ -70,7 +70,6 @@ public class KeyboardKOKR extends Keyboard {
 		int offX = (int) (mTotalWidth - mTotalWidth*widthModifier);
 		int width = 0;
 		for(Key key : getKeys()) {
-			int oldWidth = key.width;
 			key.width *= widthModifier;
 			key.x *= widthModifier;
 			key.x += offX;
@@ -78,6 +77,14 @@ public class KeyboardKOKR extends Keyboard {
 		setKeyWidth(width);
 		mTotalWidth *= widthModifier;
 		getNearestKeys(0, 0);
+	}
+
+	public void oneHandedMode(Context context, boolean direction, double ratio) {
+		if(direction == DefaultSoftKeyboardKOKR.ONE_HAND_LEFT) {
+			resizeWidth(ratio);
+		} else {
+			resizeWidthToRight(ratio);
+		}
 	}
 
 	public void resizeHeight(double heightModifier) {
