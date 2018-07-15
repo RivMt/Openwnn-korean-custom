@@ -659,7 +659,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		mNumKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
-		TextView langView = (TextView) mSubView.findViewById(R.id.lang);
+		TextView langView = mSubView.findViewById(R.id.lang);
 		langView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -1042,7 +1042,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		DisplayMetrics metrics = mWnn.getResources().getDisplayMetrics();
 		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
-		keyboard.resize(height);
+		keyboard.resizeHeight(height);
 		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			Integer keyIcon = keyIcons.get(key.codes[0]);
