@@ -47,7 +47,7 @@ public enum EngineMode {
 	TWELVE_DUBUL_SKY2(new Properties(true, true), CYCLE_DUBUL_12KEY_SKY2, null, COMB_DUBUL_12KEY_SKY2, null, "keyboard_12key_dubul_sky2"),
 	TWELVE_DUBUL_DANMOEUM(new Properties(true, true), JAMO_DUBUL_DANMOEUM_GOOGLE, null, COMB_DUBUL_DANMOEUM_GOOGLE, null, "keyboard_dubul_danmoeum_google"),
 
-	ENGLISH_QWERTY(new Properties(true, false, false, false), null, null, null, null, "keyboard_alphabet_qwerty"),
+	ENGLISH_QWERTY(new Properties(false, false, false, false), null, null, null, null, "keyboard_alphabet_qwerty"),
 	ENGLISH_DVORAK(new Properties(), CONVERT_ENGLISH_DVORAK, null, null, null, "keyboard_alphabet_dvorak"),
 	ENGLISH_COLEMAK(new Properties(), CONVERT_ENGLISH_COLEMAK, null, null, null, "keyboard_alphabet_colemak"),
 
