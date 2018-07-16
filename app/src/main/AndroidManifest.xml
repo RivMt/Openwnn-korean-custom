@@ -47,7 +47,8 @@
 
         <activity
             android:name=".OpenWnnControlPanelKOKR"
-            android:label="@string/preference_ime_setting_app">
+            android:label="@string/preference_ime_setting_app"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,6 +57,7 @@
         </activity>
         <activity android:name=".KOKR.ListLangKeyActionDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleInstance"
             android:excludeFromRecents="true"
             android:windowSoftInputMode="stateVisible"/>
     </application>
