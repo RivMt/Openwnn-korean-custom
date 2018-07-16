@@ -19,8 +19,11 @@ public class AutoTextConverter implements WordConverter {
 	@Override
 	public void convert(ComposingWord word) {
 		List<String> result = new ArrayList<>();
-		result.add(autoTexts.get(word.getEntireWord()));
-		EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
+		String str = autoTexts.get(word.getEntireWord());
+		if(str != null) {
+			result.add(str);
+			EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
+		}
 	}
 
 }

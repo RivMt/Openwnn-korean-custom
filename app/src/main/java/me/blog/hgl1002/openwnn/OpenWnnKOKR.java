@@ -38,6 +38,7 @@ import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
+import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
@@ -98,9 +99,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public static final String FLICK_SYMBOL_SHIFT = "symbol_shift";
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
-
-	AutoTextConverter mAutoTextConverter;
-	HanjaConverter mHanjaConverter;
+	List<WordConverter> converters = new ArrayList<>();
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -194,7 +193,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EventBus.getDefault().register(this);
 
 		HanjaConverter.copyDatabase(this);
-
 	}
 
 	@Override
@@ -218,6 +216,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mComposingWord.composeChar("");
 		mComposingWord.setComposingWord("");
 		resetWordComposition();
+
 		if(!restarting) {
 			((DefaultSoftKeyboard) mInputViewManager).resetCurrentKeyboard();
 			mHardShift = 0;
@@ -235,6 +234,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if (mConverter != null) { mConverter.setPreferences(pref);  }
 
 		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
+
+		setCandidatesViewShown(pref.getBoolean("conversion_show_candidates", false));
 
 		mMoachigi = pref.getBoolean("keyboard_use_moachigi", mMoachigi);
 		mHardwareMoachigi = pref.getBoolean("hardware_use_moachigi", mHardwareMoachigi);
@@ -254,31 +255,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFlickLeftAction = pref.getString("keyboard_action_on_flick_left", FLICK_NONE);
 		mFlickRightAction = pref.getString("keyboard_action_on_flick_right", FLICK_NONE);
 		mLongPressAction = pref.getString("system_action_on_long_press", FLICK_SHIFT);
-
-		mAutoTextConverter = null;
-		String rawTexts = pref.getString("autotexts", "{\"ㅎㅇ\":\"안녕하세요\"}");
-		Map<String, String> autoTexts = new HashMap<>();
-		try {
-			JSONObject object = new JSONObject(rawTexts);
-			Iterator<String> keys = object.keys();
-			while(keys.hasNext()) {
-				String key = keys.next();
-				autoTexts.put(key, object.getString(key));
-			}
-			mAutoTextConverter = new AutoTextConverter(autoTexts);
-		} catch(JSONException e) {
-			e.printStackTrace();
-		}
-
-		mHanjaConverter = null;
-		if(pref.getBoolean("conversion_show_candidates", false)) {
-			setCandidatesViewShown(true);
-			if(pref.getBoolean("conversion_use_hanja", false)) {
-				mHanjaConverter = new HanjaConverter(this);
-			}
-		} else {
-			setCandidatesViewShown(false);
-		}
 
 		if(hardKeyboardHidden) {
 			mQwertyEngine.setMoachigi(mMoachigi);
@@ -302,6 +278,32 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public View onCreateCandidatesView() {
+
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		converters = new ArrayList<>();
+		if(pref.getBoolean("conversion_show_candidates", false)) {
+			if (pref.getBoolean("conversion_use_hanja", false)) {
+				HanjaConverter hanjaConverter = new HanjaConverter(this);
+				converters.add(hanjaConverter);
+			}
+
+			String rawTexts = pref.getString("autotexts", "{\"ㅎㅇ\":\"안녕하세요\"}");
+			Map<String, String> autoTexts = new HashMap<>();
+			try {
+				JSONObject object = new JSONObject(rawTexts);
+				Iterator<String> keys = object.keys();
+				while (keys.hasNext()) {
+					String key = keys.next();
+					autoTexts.put(key, object.getString(key));
+				}
+				AutoTextConverter autoTextConverter = new AutoTextConverter(autoTexts);
+				converters.add(autoTextConverter);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
 		if (mCandidatesViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			View view = mCandidatesViewManager.initView(this,
@@ -849,6 +851,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	
 	@SuppressLint("NewApi")
 	private boolean processKeyEvent(KeyEvent ev) {
+		if(mInputConnection == null) return false;
 		int key = ev.getKeyCode();
 
 		if (ev.isShiftPressed()) {
@@ -986,7 +989,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				resetCharComposition();
 			return true;
 		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
-			resetCharComposition();
+			resetWordComposition();
 			if(!mComposingWord.backspace()) {
 				mInputConnection.deleteSurroundingText(1, 0);
 			}
@@ -1016,8 +1019,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(mAutoTextConverter != null) mAutoTextConverter.convert(mComposingWord);
-		if(mHanjaConverter != null) mHanjaConverter.convert(mComposingWord);
+		for(WordConverter converter : converters) {
+			converter.convert(mComposingWord);
+		}
+
 	}
 
 	private void shinShift() {
@@ -1138,10 +1143,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void hideWindow() {
-		
 		mInputViewManager.closing();
-		
 		super.hideWindow();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		EventBus.getDefault().unregister(this);
 	}
 
 	@Override

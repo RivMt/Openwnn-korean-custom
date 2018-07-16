@@ -69,7 +69,7 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 			task.cancel(true);
 		}
 		task = new HanjaConvertTask(getReadableDatabase(), word);
-		task.doInBackground();
+		task.execute();
 	}
 
 	static class HanjaConvertTask extends AsyncTask<Void, Integer, Integer> {
@@ -108,11 +108,16 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 			}
 			cursor.close();
 
-			EventBus.getDefault().post(new DisplayCandidatesEvent(result));
-
 			return 1;
 		}
 
+		@Override
+		protected void onPostExecute(Integer integer) {
+			super.onPostExecute(integer);
+			if(integer == 1 && !result.isEmpty()) {
+				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
+			}
+		}
 	}
 
 }
