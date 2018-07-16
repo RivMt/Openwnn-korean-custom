@@ -19,6 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+
 import me.blog.hgl1002.openwnn.KOKR.CandidatesViewManagerKOKR;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
@@ -646,7 +648,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return;
 		}
 		boolean ret = processKeyEvent(keyEvent);
-		if(!ret) {
+		if(!ret && mInputConnection != null) {
 			int c = keyEvent.getKeyCode();
 			mInputConnection.sendKeyEvent(keyEvent);
 			mInputConnection.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, c));
@@ -724,7 +726,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mComposingWord.composeChar(new String(new char[] {code}));
 			resetCharComposition();
 		}
-
+		mHanjaConverter.convert(mComposingWord);
 	}
 
 	private void directInput(char code, boolean shift) {
@@ -742,9 +744,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	public void updateInputView() {
 		if(mInputConnection == null) return;
-		mInputConnection.setComposingText(mComposingWord.getComposingWord() + mComposingWord.getComposingChar(), 1);
-
-		mCandidatesViewManager.displayCandidates(mHanjaConverter.convert(mComposingWord));
+		mInputConnection.setComposingText(mComposingWord.getEntireWord(), 1);
 
 	}
 
@@ -802,6 +802,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		}
+	}
+
+	@Subscribe
+	public void onDisplayCandidates(DisplayCandidatesEvent event) {
+		mCandidatesViewManager.displayCandidates(event.getCandidates());
 	}
 
 	@Subscribe
@@ -941,7 +946,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				resetCharComposition();
 				if(!mComposingWord.backspace()) {
 					return false;
+				} else {
+					mHanjaConverter.convert(mComposingWord);
 				}
+			} else {
+				mHanjaConverter.convert(mComposingWord);
 			}
 			if (mHangulEngine.getComposing().equals(""))
 				resetCharComposition();
@@ -1074,6 +1083,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mComposingWord.commitComposingWord();
 		if(mInputConnection != null) mInputConnection.finishComposingText();
 		updateInputView();
+		mCandidatesViewManager.displayCandidates(new ArrayList<>());
 	}
 
 	private void updateNumKeyboardShiftState() {

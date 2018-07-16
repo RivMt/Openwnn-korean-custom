@@ -32,7 +32,7 @@ public class CandidatesViewManagerKOKR {
 	}
 
 	public void displayCandidates(List<String> candidates) {
-		if(mainView == null) return;
+		if(mainView == null || candidates == null) return;
 		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
 		firstView.removeAllViews();
 		for(final String candidate : candidates) {

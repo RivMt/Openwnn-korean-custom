@@ -5,6 +5,9 @@ import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,12 +17,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
+import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
-	private Context context;
+public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 
 	public static final String DATABASE_NAME = "hanja.db";
 	public static final int DATABASE_VERSION = 1;
+
+	private Context context;
+
+	private HanjaConvertTask task;
 
 	public static void copyDatabase(Context context) {
 		File file = new File(new File(context.getFilesDir().getParentFile(), "databases"), DATABASE_NAME);
@@ -60,26 +67,60 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 
 	@Override
 	public List<String> convert(ComposingWord word) {
-		SQLiteDatabase db = getReadableDatabase();
-
-		StringBuilder sb = new StringBuilder();
-		sb.append(" select * from `hanja` ");
-		sb.append(" where reading = ? ");
-
-		Cursor cursor = db.rawQuery(sb.toString(),
-				new String[] {
-						word.getEntireWord()
-				}
-		);
-
-		List<String> result = new ArrayList<>();
-		int column = cursor.getColumnIndex("hanja");
-		while(cursor.moveToNext()) {
-			result.add(cursor.getString(column));
+		if(word.getEntireWord() == null) return null;
+		if(task != null) {
+			task.cancel(true);
 		}
-		cursor.close();
+		task = new HanjaConvertTask(getReadableDatabase(), word);
+		task.doInBackground();
+		return null;
+	}
 
-		return result;
+	static class HanjaConvertTask extends AsyncTask<Void, Integer, Integer> {
+
+		private SQLiteDatabase database;
+		private ComposingWord word;
+		private List<String> result = new ArrayList<>();
+
+		public HanjaConvertTask(SQLiteDatabase database, ComposingWord word) {
+			this.database = database;
+			this.word = word;
+		}
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(" select * from `hanja` ");
+			sb.append(" where reading = ? ");
+
+			Cursor cursor = database.rawQuery(sb.toString(),
+					new String[] {
+							word.getEntireWord()
+					}
+			);
+
+			if(isCancelled()) return null;
+
+			publishProgress(10);
+
+			int column = cursor.getColumnIndex("hanja");
+			int count = cursor.getCount();
+			while(cursor.moveToNext()) {
+				if(isCancelled()) return null;
+				result.add(cursor.getString(column));
+				publishProgress(10 + 90 / count);
+			}
+			cursor.close();
+
+			EventBus.getDefault().post(new DisplayCandidatesEvent(result));
+
+			return 1;
+		}
+
+		@Override
+		protected void onPostExecute(Integer integer) {
+			super.onPostExecute(integer);
+		}
 	}
 
 }
