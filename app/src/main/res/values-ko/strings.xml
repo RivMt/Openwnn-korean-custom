@@ -7,6 +7,7 @@
     <string name="dialog_button_ok">확인</string>
     <string name="dialog_button_cancel">취소</string>
     <string name="dialog_button_close">닫기</string>
+    <string name="dialog_button_add">추가</string>
 
     <string name="preference_method_setting_menu">입력 방식</string>
     
@@ -100,7 +101,8 @@
     <string name="preference_keyboard_sebul_393y_10cols">옛한글 세벌식 393 (10열 배열)</string>
 
     <string name="preference_keyboard_12key_dubul_cheonjiin">12키 두벌식 천지인</string>
-    <string name="preference_keyboard_12key_dubul_naratgeul">12키  두벌식 나랏글</string>
+    <string name="preference_keyboard_12key_dubul_naratgeul">12키 두벌식 나랏글</string>
+    <string name="preference_keyboard_12key_dubul_naratgeul_predictive">12키 두벌식 나랏글 Predictive</string>
     <string name="preference_keyboard_12key_dubul_sky2">12키 두벌식 SKY2</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
@@ -192,6 +194,23 @@
 
     <string name="preference_hardware_alt_direct_title">Alt키로 항상 기호 입력</string>
     <string name="preference_hardware_alt_direct_summary">하드웨어 Alt키 조합시 기호를 그대로 입력합니다.</string>
+
+
+    <string name="preference_conversion_setting_menu">변환과 추천</string>
+
+    <string name="preference_conversion_show_candidates_title">후보 창 표시</string>
+    <string name="preference_conversion_show_candidates_summary">단어 변환, 추천 기능을 사용하고 후보 창을 표시합니다.</string>
+
+    <string name="preference_conversion_use_hanja_title">한자 변환</string>
+    <string name="preference_conversion_use_hanja_summary">한자와 한자어 변환을 사용합니다.</string>
+
+    <string name="preference_conversion_use_autotext_title">상용구 변환</string>
+    <string name="preference_conversion_use_autotext_summary">상용구 변환 기능을 사용합니다.</string>
+
+    <string name="preference_conversion_autotext_edit_title">상용구 편집</string>
+
+    <string name="preference_conversion_autotext_dialog_title">상용구 목록</string>
+    <string name="preference_conversion_autotext_edit_dialog_title">새 상용구</string>
 
 
     <string name="preference_system_setting_menu">시스템 설정</string>

@@ -463,6 +463,7 @@
     <string name="preference_conversion_autotext_dialog_title">Autotext List</string>
     <string name="preference_conversion_autotext_edit_dialog_title">Edit new Autotext</string>
 
+
     <string name="preference_system_setting_menu">System Settings</string>
 
     <string name="preference_system_use_standard_jamo_title">Use standard Hangul jamo</string>
