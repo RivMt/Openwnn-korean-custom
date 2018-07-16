@@ -20,6 +20,7 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 		add(KeyboardAppearanceFragment.class.getName());
 		add(SoftKeyboardFragment.class.getName());
 		add(HardKeyboardFragment.class.getName());
+		add(ConversionFragment.class.getName());
 		add(SystemFragment.class.getName());
 		add(AboutFragment.class.getName());
 		add(DeveloperFragment.class.getName());
@@ -39,6 +40,7 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_appearance);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_softkeyboard);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_hardkeyboard);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_conversion);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_system);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
 			if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hidden_settings_revealed", false)) {
@@ -96,6 +98,15 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_hardkeyboard);
+		}
+	}
+
+	@TargetApi(11)
+	public static class ConversionFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.openwnn_pref_ko_conversion);
 		}
 	}
 

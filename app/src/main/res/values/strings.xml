@@ -445,6 +445,15 @@
     <string name="preference_hardware_alt_direct_summary">Always input literal chars on hard Alt combination.</string>
 
 
+    <string name="preference_conversion_setting_menu">Conversion &amp; Prediction</string>
+
+    <string name="preference_conversion_show_candidates_title">Show candidates window</string>
+    <string name="preference_conversion_show_candidates_summary">Show candidates window to use conversion and prediction features.</string>
+
+    <string name="preference_conversion_use_hanja_title">Hanja conversion</string>
+    <string name="preference_conversion_use_hanja_summary">Use Hangeul to Hanja (Chinese characters) conversion.</string>
+
+
     <string name="preference_system_setting_menu">System Settings</string>
 
     <string name="preference_system_use_standard_jamo_title">Use standard Hangul jamo</string>
