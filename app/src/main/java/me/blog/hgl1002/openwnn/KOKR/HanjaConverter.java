@@ -24,8 +24,6 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 	public static final String DATABASE_NAME = "hanja.db";
 	public static final int DATABASE_VERSION = 1;
 
-	private Context context;
-
 	private HanjaConvertTask task;
 
 	public static void copyDatabase(Context context) {
@@ -52,7 +50,6 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 
 	public HanjaConverter(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		this.context = context;
 	}
 
 	@Override
@@ -66,14 +63,13 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 	}
 
 	@Override
-	public List<String> convert(ComposingWord word) {
-		if(word.getEntireWord() == null) return null;
+	public void convert(ComposingWord word) {
+		if(word.getEntireWord() == null) return;
 		if(task != null) {
 			task.cancel(true);
 		}
 		task = new HanjaConvertTask(getReadableDatabase(), word);
 		task.doInBackground();
-		return null;
 	}
 
 	static class HanjaConvertTask extends AsyncTask<Void, Integer, Integer> {
@@ -117,10 +113,6 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 			return 1;
 		}
 
-		@Override
-		protected void onPostExecute(Integer integer) {
-			super.onPostExecute(integer);
-		}
 	}
 
 }

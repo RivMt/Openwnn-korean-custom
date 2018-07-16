@@ -38,6 +38,10 @@ public class CandidatesViewManagerKOKR {
 	}
 
 	public void displayCandidates(List<String> candidates) {
+		this.displayCandidates(candidates, -1);
+	}
+
+	public void displayCandidates(List<String> candidates, int position) {
 		if(mainView == null || candidates == null) return;
 		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
 		for(final String candidate : candidates) {
@@ -49,7 +53,8 @@ public class CandidatesViewManagerKOKR {
 					EventBus.getDefault().post(new SelectCandidateEvent(new WnnWord(candidate, "")));
 				}
 			});
-			firstView.addView(candidateView);
+			if(position < 0) firstView.addView(candidateView);
+			else firstView.addView(candidateView, position);
 		}
 	}
 

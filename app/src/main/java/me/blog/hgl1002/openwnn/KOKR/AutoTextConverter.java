@@ -1,8 +1,12 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class AutoTextConverter implements WordConverter {
 
@@ -13,10 +17,10 @@ public class AutoTextConverter implements WordConverter {
 	}
 
 	@Override
-	public List<String> convert(ComposingWord word) {
+	public void convert(ComposingWord word) {
 		List<String> result = new ArrayList<>();
 		result.add(autoTexts.get(word.getEntireWord()));
-		return result;
+		EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
 	}
 
 }

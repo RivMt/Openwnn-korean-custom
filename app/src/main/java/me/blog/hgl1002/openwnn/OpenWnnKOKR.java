@@ -836,7 +836,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onDisplayCandidates(DisplayCandidatesEvent event) {
-		mCandidatesViewManager.displayCandidates(event.getCandidates());
+		mCandidatesViewManager.displayCandidates(event.getCandidates(), event.getPosition());
 	}
 
 	@Subscribe
@@ -1016,7 +1016,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(mAutoTextConverter != null) mCandidatesViewManager.displayCandidates(mAutoTextConverter.convert(mComposingWord));
+		if(mAutoTextConverter != null) mAutoTextConverter.convert(mComposingWord);
 		if(mHanjaConverter != null) mHanjaConverter.convert(mComposingWord);
 	}
 

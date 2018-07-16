@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface WordConverter {
 
-	List<String> convert(ComposingWord word);
+	void convert(ComposingWord word);
 
 }
