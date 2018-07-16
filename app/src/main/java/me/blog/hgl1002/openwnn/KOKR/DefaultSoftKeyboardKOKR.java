@@ -445,6 +445,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			case "keyboard_12key_dubul_naratgeul":
+			case "keyboard_12key_dubul_naratgeul_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_naratgeul);
 				break;
 
@@ -1056,7 +1057,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	protected EngineMode getEngineMode(String defaultLayout) {
-
 		for(EngineMode mode : EngineMode.values()) {
 			if(mode.getPrefValues() == null) continue;
 			for(String prefValue : mode.getPrefValues()) {

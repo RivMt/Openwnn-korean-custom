@@ -353,6 +353,7 @@
 
     <string name="preference_keyboard_12key_dubul_cheonjiin">12-Key Dubeolsik Cheonjiin</string>
     <string name="preference_keyboard_12key_dubul_naratgeul">12-Key Dubeolsik Naratgeul</string>
+    <string name="preference_keyboard_12key_dubul_naratgeul_predictive">12-Key Dubeolsik Naratgeul Predictive</string>
     <string name="preference_keyboard_12key_dubul_sky2">12-Key Dubeolsik SKY 2</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12-Key Sebeolsik by Hangul Munhwawon</string>
     <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik (ZanNavi)</string>

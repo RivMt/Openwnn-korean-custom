@@ -142,6 +142,22 @@ public class Layout12KeyDubul {
 			{0x11ba, 0x11ba, 0x11bb},	// ㅆ
 	};
 
+	public static final int[][] CYCLE_DUBUL_12KEY_NARATGEUL_PREDICTIVE = {
+			{-2001, '1'},
+			{-2002, '2'},
+			{-2003, '3'},
+			{-2004, '4'},
+			{-2005, '5'},
+			{-2006, '6'},
+			{-2007, '7'},
+			{-2008, '8'},
+			{-2009, '9'},
+			{-2010, '0'},
+			{-2011, '*'},
+			{-2012, '#'},
+
+	};
+
 	public static final int[][] CYCLE_DUBUL_12KEY_SKY2 = {
 			{-2001, 0x3131, 0x314b, 0x3132},
 			{-2002, 0x3163, 0x3161, 0x3162},
