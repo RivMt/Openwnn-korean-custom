@@ -31,10 +31,15 @@ public class CandidatesViewManagerKOKR {
 		return mainView;
 	}
 
+	public void clearCandidates() {
+		if(mainView == null) return;
+		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
+		firstView.removeAllViews();
+	}
+
 	public void displayCandidates(List<String> candidates) {
 		if(mainView == null || candidates == null) return;
 		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
-		firstView.removeAllViews();
 		for(final String candidate : candidates) {
 			TextView candidateView = (TextView) parent.getLayoutInflater().inflate(R.layout.candidates_item, null);
 			candidateView.setText(candidate);

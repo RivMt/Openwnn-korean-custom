@@ -18,9 +18,16 @@ import android.view.inputmethod.InputMethodManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import me.blog.hgl1002.openwnn.KOKR.AutoTextConverter;
 import me.blog.hgl1002.openwnn.KOKR.CandidatesViewManagerKOKR;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
@@ -92,6 +99,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 
+	AutoTextConverter mAutoTextConverter;
 	HanjaConverter mHanjaConverter;
 
 	HangulEngine mHangulEngine;
@@ -246,6 +254,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFlickLeftAction = pref.getString("keyboard_action_on_flick_left", FLICK_NONE);
 		mFlickRightAction = pref.getString("keyboard_action_on_flick_right", FLICK_NONE);
 		mLongPressAction = pref.getString("system_action_on_long_press", FLICK_SHIFT);
+
+		mAutoTextConverter = null;
+		String rawTexts = pref.getString("autotexts", "{\"ㅎㅇ\":\"안녕하세요\"}");
+		Map<String, String> autoTexts = new HashMap<>();
+		try {
+			JSONObject object = new JSONObject(rawTexts);
+			Iterator<String> keys = object.keys();
+			while(keys.hasNext()) {
+				String key = keys.next();
+				autoTexts.put(key, object.getString(key));
+			}
+			mAutoTextConverter = new AutoTextConverter(autoTexts);
+		} catch(JSONException e) {
+			e.printStackTrace();
+		}
 
 		mHanjaConverter = null;
 		if(pref.getBoolean("conversion_show_candidates", false)) {
@@ -992,8 +1015,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void performConversion() {
-		if(mHanjaConverter == null) return;
-		mHanjaConverter.convert(mComposingWord);
+		mCandidatesViewManager.clearCandidates();
+		if(mAutoTextConverter != null) mCandidatesViewManager.displayCandidates(mAutoTextConverter.convert(mComposingWord));
+		if(mHanjaConverter != null) mHanjaConverter.convert(mComposingWord);
 	}
 
 	private void shinShift() {
@@ -1095,7 +1119,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mComposingWord.commitComposingWord();
 		if(mInputConnection != null) mInputConnection.finishComposingText();
 		updateInputView();
-		mCandidatesViewManager.displayCandidates(new ArrayList<>());
+		mCandidatesViewManager.clearCandidates();
 	}
 
 	private void updateNumKeyboardShiftState() {
