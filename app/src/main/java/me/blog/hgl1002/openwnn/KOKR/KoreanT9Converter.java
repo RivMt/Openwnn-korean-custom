@@ -22,7 +22,7 @@ import java.util.Map;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
-public class KT9Converter extends SQLiteOpenHelper implements WordConverter {
+public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter {
 
 	public static final String DATABASE_NAME = "naratgeul.db";
 	public static final int DATABASE_VERSION = 1;
@@ -66,9 +66,9 @@ public class KT9Converter extends SQLiteOpenHelper implements WordConverter {
 
 	private TwelveHangulEngine hangulEngine;
 
-	private KT9ConvertTask task;
+	private KoreanT9ConvertTask task;
 
-	public KT9Converter(Context context) {
+	public KoreanT9Converter(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_DUBUL_12KEY_NARATGEUL);
@@ -93,11 +93,11 @@ public class KT9Converter extends SQLiteOpenHelper implements WordConverter {
 		if(task != null) {
 			task.cancel(true);
 		}
-		task = new KT9ConvertTask(getReadableDatabase(), word, hangulEngine);
+		task = new KoreanT9ConvertTask(getReadableDatabase(), word, hangulEngine);
 		task.execute();
 	}
 
-	static class KT9ConvertTask extends AsyncTask<Void, Integer, Integer> implements HangulEngine.HangulEngineListener {
+	static class KoreanT9ConvertTask extends AsyncTask<Void, Integer, Integer> implements HangulEngine.HangulEngineListener {
 
 		private SQLiteDatabase database;
 		private ComposingWord word;
@@ -106,7 +106,7 @@ public class KT9Converter extends SQLiteOpenHelper implements WordConverter {
 
 		private String composing, composingWord;
 
-		public KT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine) {
+		public KoreanT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine) {
 			this.database = database;
 			this.word = word;
 			this.composing = "";

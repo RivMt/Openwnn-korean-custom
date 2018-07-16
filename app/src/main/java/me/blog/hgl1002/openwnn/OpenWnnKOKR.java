@@ -33,7 +33,7 @@ import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HanjaConverter;
-import me.blog.hgl1002.openwnn.KOKR.KT9Converter;
+import me.blog.hgl1002.openwnn.KOKR.KoreanT9Converter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
@@ -195,7 +195,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EventBus.getDefault().register(this);
 
 		HanjaConverter.copyDatabase(this);
-		KT9Converter.copyDatabase(this);
+		KoreanT9Converter.copyDatabase(this);
 	}
 
 	@Override
@@ -437,9 +437,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
 			for(WordConverter converter : converters) {
-				if(converter instanceof KT9Converter) converters.remove(converter);
+				if(converter instanceof KoreanT9Converter) converters.remove(converter);
 			}
-			converters.add(new KT9Converter(this));
+			converters.add(new KoreanT9Converter(this));
 		}
 
 		((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
