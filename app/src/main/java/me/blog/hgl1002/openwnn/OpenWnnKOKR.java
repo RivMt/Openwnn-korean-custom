@@ -713,6 +713,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 		} else {
 			resetCharComposition();
+			if(shift > 0) {
+				code = Character.toUpperCase(originalCode);
+				for(int[] item : SHIFT_CONVERT) {
+					if(code == item[0]) {
+						code = (char) item[1];
+					}
+				}
+			}
 			mComposingWord.composeChar(new String(new char[] {code}));
 			resetCharComposition();
 		}
