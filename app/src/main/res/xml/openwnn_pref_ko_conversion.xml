@@ -11,6 +11,14 @@
 			android:title="@string/preference_conversion_use_hanja_title"
 			android:summary="@string/preference_conversion_use_hanja_summary"
 			android:defaultValue="false" />
+        <CheckBoxPreference android:key="conversion_use_autotext"
+            android:title="@string/preference_conversion_use_autotext_title"
+            android:summary="@string/preference_conversion_use_autotext_summary"
+            android:defaultValue="false" />
+        <me.blog.hgl1002.openwnn.KOKR.EditAutotextPreference
+            android:key="autotexts"
+            android:title="@string/preference_conversion_autotext_edit_title" />
+
 	</PreferenceCategory>
 
 </PreferenceScreen>

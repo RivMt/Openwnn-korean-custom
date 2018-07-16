@@ -228,6 +228,33 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		super.onStartInputView(attribute, restarting);
 
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		if(!restarting) {
+			converters = new ArrayList<>();
+			if(pref.getBoolean("conversion_show_candidates", false)) {
+				if (pref.getBoolean("conversion_use_hanja", false)) {
+					HanjaConverter hanjaConverter = new HanjaConverter(this);
+					converters.add(hanjaConverter);
+				}
+				if(pref.getBoolean("conversion_use_autotext", false)) {
+					String rawTexts = pref.getString("autotexts", "");
+					Map<String, String> autoTexts = new HashMap<>();
+					try {
+						JSONObject object = new JSONObject(rawTexts);
+						Iterator<String> keys = object.keys();
+						while (keys.hasNext()) {
+							String key = keys.next();
+							autoTexts.put(key, object.getString(key));
+						}
+						AutoTextConverter autoTextConverter = new AutoTextConverter(autoTexts);
+						converters.add(autoTextConverter);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
 		if (mCandidatesViewManager != null) { mCandidatesViewManager.setPreferences(pref);  }
 		if (mInputViewManager != null) { mInputViewManager.setPreferences(pref, attribute);  }
 		if (mPreConverter != null) { mPreConverter.setPreferences(pref);  }
@@ -278,32 +305,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public View onCreateCandidatesView() {
-
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		converters = new ArrayList<>();
-		if(pref.getBoolean("conversion_show_candidates", false)) {
-			if (pref.getBoolean("conversion_use_hanja", false)) {
-				HanjaConverter hanjaConverter = new HanjaConverter(this);
-				converters.add(hanjaConverter);
-			}
-
-			String rawTexts = pref.getString("autotexts", "{\"ㅎㅇ\":\"안녕하세요\"}");
-			Map<String, String> autoTexts = new HashMap<>();
-			try {
-				JSONObject object = new JSONObject(rawTexts);
-				Iterator<String> keys = object.keys();
-				while (keys.hasNext()) {
-					String key = keys.next();
-					autoTexts.put(key, object.getString(key));
-				}
-				AutoTextConverter autoTextConverter = new AutoTextConverter(autoTexts);
-				converters.add(autoTextConverter);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-
 		if (mCandidatesViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			View view = mCandidatesViewManager.initView(this,

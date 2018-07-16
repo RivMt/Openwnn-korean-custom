@@ -97,6 +97,7 @@
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_cancel">Cancel</string>
     <string name="dialog_button_close">Close</string>
+    <string name="dialog_button_add">Add</string>
 
     <string name="dialog_clear_user_dictionary_message">Clear user dictionary?</string>
     <string name="dialog_clear_learning_dictionary_message">Clear learning dictionary?</string>
@@ -453,6 +454,13 @@
     <string name="preference_conversion_use_hanja_title">Hanja conversion</string>
     <string name="preference_conversion_use_hanja_summary">Use Hangeul to Hanja (Chinese characters) conversion.</string>
 
+    <string name="preference_conversion_use_autotext_title">Autotext conversion</string>
+    <string name="preference_conversion_use_autotext_summary">Use Autotext conversion.</string>
+
+    <string name="preference_conversion_autotext_edit_title">Edit Autotexts</string>
+
+    <string name="preference_conversion_autotext_dialog_title">Autotext List</string>
+    <string name="preference_conversion_autotext_edit_dialog_title">Edit new Autotext</string>
 
     <string name="preference_system_setting_menu">System Settings</string>
 
