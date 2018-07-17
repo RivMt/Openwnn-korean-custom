@@ -104,13 +104,14 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		private List<String> result = new ArrayList<>();
 		private HangulEngine hangulEngine;
 
-		private String composing, composingWord;
+		private String composing;
+		private StringBuilder composingWord;
 
 		public KoreanT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine) {
 			this.database = database;
 			this.word = word;
 			this.composing = "";
-			this.composingWord = "";
+			this.composingWord = new StringBuilder();
 			this.hangulEngine = hangulEngine;
 			hangulEngine.resetComposition();
 			hangulEngine.setListener(this);
@@ -121,7 +122,7 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 			if(event instanceof HangulEngine.SetComposingEvent) {
 				composing = ((HangulEngine.SetComposingEvent) event).getComposing();
 			} else if(event instanceof HangulEngine.FinishComposingEvent) {
-				composingWord += composing;
+				composingWord.append(composing);
 				composing = "";
 			}
 		}
@@ -159,7 +160,7 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 					int jamo = hangulEngine.inputCode(code, 0);
 					hangulEngine.inputJamo(jamo);
 				} else {
-					composingWord += ch;
+					composingWord.append(ch);
 				}
 			}
 			String word = composingWord + composing;

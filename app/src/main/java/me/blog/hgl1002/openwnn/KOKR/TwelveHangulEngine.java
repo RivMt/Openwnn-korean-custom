@@ -93,15 +93,30 @@ public class TwelveHangulEngine extends HangulEngine {
 			if(!found) return 0;
 		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1){
 			if((lastInputType == INPUT_CHO2 || lastInputType == INPUT_JONG3) && this.jong != -1) {
-				switch(this.jong) {
-				case 0x01:
+				switch(last) {
+				case 0x11a8:
 					super.backspace();
-					jamo = 0x11a9;
+					jamo = 0x3132;
 					break;
 
-				case 0x11ba - 0x11a7:
+				case 0x11ae:
 					super.backspace();
-					jamo = 0x11bb;
+					jamo = 0x3138;
+					break;
+
+				case 0x11b8:
+					super.backspace();
+					jamo = 0x3143;
+					break;
+
+				case 0x11ba:
+					super.backspace();
+					jamo = 0x3146;
+					break;
+
+				case 0x11bd:
+					super.backspace();
+					jamo = 0x3149;
 					break;
 
 				default:
