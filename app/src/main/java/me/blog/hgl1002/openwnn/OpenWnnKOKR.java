@@ -411,15 +411,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EngineMode.Properties prop = mode.properties;
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
+			String dictionary;
+			if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
+					|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE)
+				dictionary = "words/korean.txt";
+			else dictionary = "words/english.txt";
 			koreanT9Converter = new KoreanT9Converter(this, mode);
 			try {
 				if(!T9DatabaseHelper.getInstance().hasDictionary(mode))
-					koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
+					koreanT9Converter.generate(getAssets().open(dictionary), mode);
 			} catch(IOException ex) {
 				ex.printStackTrace();
 			}
-			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 		} else {
 			koreanT9Converter = null;
 		}
@@ -454,7 +460,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 		}
 

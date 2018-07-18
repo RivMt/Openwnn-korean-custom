@@ -3,6 +3,7 @@ package me.blog.hgl1002.openwnn.KOKR;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class T9DatabaseHelper extends SQLiteOpenHelper {
@@ -33,12 +34,15 @@ public class T9DatabaseHelper extends SQLiteOpenHelper {
 	public boolean hasDictionary(EngineMode mode) {
 		SQLiteDatabase database = getReadableDatabase();
 		String sql = "select * from `" + mode.getPrefValues()[0] + "`";
-		Cursor cursor = database.rawQuery(sql, new String[] {});
-		if(cursor.moveToNext()) {
+		try {
+			Cursor cursor = database.rawQuery(sql, new String[] {});
+			if(cursor.moveToNext()) {
+				cursor.close();
+				return true;
+			}
 			cursor.close();
-			return true;
+		} catch(SQLiteException notFound) {
 		}
-		cursor.close();
 		return false;
 	}
 

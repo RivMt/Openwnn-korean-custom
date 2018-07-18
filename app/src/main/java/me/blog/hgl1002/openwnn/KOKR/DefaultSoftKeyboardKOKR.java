@@ -532,21 +532,25 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 			switch(defaultLayout) {
 			case "keyboard_12key_alphabet_wide_a":
+			case "keyboard_12key_alphabet_wide_a_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_a);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_a_shift);
 				break;
 
 			case "keyboard_12key_alphabet_wide_b":
+			case "keyboard_12key_alphabet_wide_b_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_b);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_wide_b_shift);
 				break;
 
 			case "keyboard_12key_alphabet_narrow_a":
+			case "keyboard_12key_alphabet_narrow_a_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_a);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_a_shift);
 				break;
 
 			case "keyboard_12key_alphabet_narrow_b":
+			case "keyboard_12key_alphabet_narrow_b_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_b);
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_b_shift);
 				break;

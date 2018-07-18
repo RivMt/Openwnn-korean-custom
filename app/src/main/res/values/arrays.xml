@@ -233,6 +233,10 @@
 	    <item>@string/preference_keyboard_12key_alphabet_wide_b</item>
 	    <item>@string/preference_keyboard_12key_alphabet_narrow_a</item>
 	    <item>@string/preference_keyboard_12key_alphabet_narrow_b</item>
+		<item>@string/preference_keyboard_12key_alphabet_wide_a</item>
+		<item>@string/preference_keyboard_12key_alphabet_wide_b</item>
+		<item>@string/preference_keyboard_12key_alphabet_narrow_a</item>
+		<item>@string/preference_keyboard_12key_alphabet_narrow_b</item>
     </string-array>
 
     <string-array name="keyboard_12key_alphabet_layout_id">
@@ -240,6 +244,10 @@
 	    <item>keyboard_12key_alphabet_wide_b</item>
 	    <item>keyboard_12key_alphabet_narrow_a</item>
 	    <item>keyboard_12key_alphabet_narrow_b</item>
+		<item>keyboard_12key_alphabet_wide_a_predictive</item>
+		<item>keyboard_12key_alphabet_wide_b_predictive</item>
+		<item>keyboard_12key_alphabet_narrow_a_predictive</item>
+		<item>keyboard_12key_alphabet_narrow_b_predictive</item>
     </string-array>
 
 	<string-array name="lang_key_actions">
