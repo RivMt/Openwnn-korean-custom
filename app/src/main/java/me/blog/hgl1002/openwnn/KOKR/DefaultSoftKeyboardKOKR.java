@@ -441,6 +441,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 			switch(defaultLayout) {
 			case "keyboard_12key_dubul_cheonjiin":
+			case "keyboard_12key_dubul_cheonjiin_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_cheonjiin);
 				break;
 

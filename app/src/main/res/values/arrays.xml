@@ -194,6 +194,7 @@
     
     <string-array name="keyboard_12key_layout">
         <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>
+		<item>@string/preference_keyboard_12key_dubul_cheonjiin_predictive</item>
         <item>@string/preference_keyboard_12key_dubul_naratgeul</item>
 		<item>@string/preference_keyboard_12key_dubul_naratgeul_predictive</item>
 	    <item>@string/preference_keyboard_12key_dubul_sky2</item>
@@ -205,6 +206,7 @@
     
     <string-array name="keyboard_12key_layout_id">
         <item>keyboard_12key_dubul_cheonjiin</item>
+		<item>keyboard_12key_dubul_cheonjiin_predictive</item>
         <item>keyboard_12key_dubul_naratgeul</item>
 		<item>keyboard_12key_dubul_naratgeul_predictive</item>
         <item>keyboard_12key_dubul_sky2</item>

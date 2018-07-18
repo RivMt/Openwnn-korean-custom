@@ -35,6 +35,7 @@ import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HanjaConverter;
 import me.blog.hgl1002.openwnn.KOKR.KoreanT9Converter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
+import me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
@@ -435,8 +436,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
 		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 
-		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
-			koreanT9Converter = new KoreanT9Converter(this);
+		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+			koreanT9Converter = new KoreanT9Converter(this, mode);
+			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 		} else {
 			koreanT9Converter = null;
 		}
@@ -671,7 +674,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				return;
 			}
 		case KeyEvent.KEYCODE_SPACE:
-			if(mCurrentEngineMode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
+			if(koreanT9Converter != null) {
 				if(mComposingWord.getFixedWord() != null) {
 					resetCharComposition();
 					resetWordComposition();
@@ -1052,7 +1055,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(mCurrentEngineMode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
+		if(koreanT9Converter != null) {
 			koreanT9Converter.convert(mComposingWord);
 		}
 		for(WordConverter converter : converters) {

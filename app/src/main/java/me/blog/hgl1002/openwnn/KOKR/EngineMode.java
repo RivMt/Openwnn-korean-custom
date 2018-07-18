@@ -43,8 +43,9 @@ public enum EngineMode {
 	TWELVE_SEBUL_HANSON(new Properties(true, false), CYCLE_SEBUL_12KEY_HANSON, null, COMB_SEBUL_12KEY_HANSON, STROKE_SEBUL_12KEY_HANSON, "keyboard_12key_sebul_hanson"),
 	TWELVE_SEBUL_SENA(new Properties(true, false), CYCLE_SEBUL_12KEY_SENA, null, COMB_SEBUL_12KEY_SENA, STROKE_SEBUL_12KEY_SENA, "keyboard_12key_sebul_sena"),
 	TWELVE_DUBUL_CHEONJIIN(new Properties(true, true), CYCLE_DUBUL_12KEY_CHEONJIIN, null, COMB_DUBUL_12KEY_CHEONJIIN, null, "keyboard_12key_dubul_cheonjiin"),
+	TWELVE_DUBUL_CHEONJIIN_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_CHEONJIIN, null, COMB_DUBUL_12KEY_CHEONJIIN, null, "keyboard_12key_dubul_cheonjiin_predictive"),
 	TWELVE_DUBUL_NARATGEUL(new Properties(true, false), CYCLE_DUBUL_12KEY_NARATGEUL, null, COMB_DUBUL_12KEY_NARATGEUL, STROKE_DUBUL_12KEY_NARATGEUL, "keyboard_12key_dubul_naratgeul"),
-	TWELVE_DUBUL_NARATGEUL_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_NARATGEUL_PREDICTIVE, null, COMB_DUBUL_12KEY_NARATGEUL, STROKE_DUBUL_12KEY_NARATGEUL, "keyboard_12key_dubul_naratgeul_predictive"),
+	TWELVE_DUBUL_NARATGEUL_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_NARATGEUL, null, COMB_DUBUL_12KEY_NARATGEUL, STROKE_DUBUL_12KEY_NARATGEUL, "keyboard_12key_dubul_naratgeul_predictive"),
 	TWELVE_DUBUL_SKY2(new Properties(true, true), CYCLE_DUBUL_12KEY_SKY2, null, COMB_DUBUL_12KEY_SKY2, null, "keyboard_12key_dubul_sky2"),
 	TWELVE_DUBUL_DANMOEUM(new Properties(true, true), JAMO_DUBUL_DANMOEUM_GOOGLE, null, COMB_DUBUL_DANMOEUM_GOOGLE, null, "keyboard_dubul_danmoeum_google"),
 

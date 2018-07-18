@@ -24,7 +24,7 @@ import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter {
 
-	public static final String DATABASE_NAME = "naratgeul.db";
+	public static final String DATABASE_NAME = "kt9.db";
 	public static final int DATABASE_VERSION = 1;
 
 	public static void copyDatabase(Context context) {
@@ -66,14 +66,22 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 
 	private TwelveHangulEngine hangulEngine;
 
+	private String tableName, columnName;
+
 	private KoreanT9ConvertTask task;
 
-	public KoreanT9Converter(Context context) {
+	public KoreanT9Converter(Context context, EngineMode engineMode) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		hangulEngine = new TwelveHangulEngine();
-		hangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_DUBUL_12KEY_NARATGEUL);
-		hangulEngine.setAddStrokeTable(Layout12KeyDubul.STROKE_DUBUL_12KEY_NARATGEUL);
-		hangulEngine.setCombinationTable(Layout12KeyDubul.COMB_DUBUL_12KEY_NARATGEUL);
+		hangulEngine.setJamoTable(engineMode.layout);
+		hangulEngine.setAddStrokeTable(engineMode.addStroke);
+		hangulEngine.setCombinationTable(engineMode.combination);
+		tableName = "hangeul";
+		if(engineMode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
+			columnName = "naratgeul_keys";
+		} else if(engineMode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+			columnName = "cheonjiin_keys";
+		}
 		hangulEngine.setMoachigi(false);
 	}
 
@@ -93,7 +101,7 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		if(task != null) {
 			task.cancel(true);
 		}
-		task = new KoreanT9ConvertTask(getReadableDatabase(), word, hangulEngine);
+		task = new KoreanT9ConvertTask(getReadableDatabase(), word, hangulEngine, tableName, columnName);
 		task.execute();
 	}
 
@@ -104,15 +112,20 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		private List<String> result = new ArrayList<>();
 		private HangulEngine hangulEngine;
 
+		private String tableName;
+		private String columnName;
+
 		private String composing;
 		private StringBuilder composingWord;
 
-		public KoreanT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine) {
+		public KoreanT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine, String tableName, String columnName) {
 			this.database = database;
 			this.word = word;
 			this.composing = "";
 			this.composingWord = new StringBuilder();
 			this.hangulEngine = hangulEngine;
+			this.tableName = tableName;
+			this.columnName = columnName;
 			hangulEngine.resetComposition();
 			hangulEngine.setListener(this);
 		}
@@ -130,8 +143,8 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		@Override
 		protected Integer doInBackground(Void... params) {
 			StringBuilder sb = new StringBuilder();
-			sb.append(" select * from `words` ");
-			sb.append(" where keys = ? ");
+			sb.append(" select * from `" + tableName + "` ");
+			sb.append(" where `" + columnName + "` = ? ");
 
 			Cursor cursor = database.rawQuery(sb.toString(),
 					new String[] {

@@ -139,7 +139,7 @@ public class Layout12KeyDubul {
 			{0x11ba, 0x11ba, 0x11bb},	// ㅆ
 	};
 
-	public static final int[][] CYCLE_DUBUL_12KEY_NARATGEUL_PREDICTIVE = {
+	public static final int[][] CYCLE_PREDICTIVE = {
 			{-2001, '1'},
 			{-2002, '2'},
 			{-2003, '3'},
