@@ -7,6 +7,7 @@ public class TwelveHangulEngine extends HangulEngine {
 	int lastCode;
 	
 	int cycleIndex;
+	int addStrokeBase, addStrokeBaseCombined;
 	int addStrokeIndex;
 	
 	public TwelveHangulEngine() {
@@ -42,56 +43,21 @@ public class TwelveHangulEngine extends HangulEngine {
 
 	@Override
 	public int inputJamo(int jamo) {
-
 		// 획추가 키.
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
-			int search = 0;
-			if(isCho(last)) {
-				search = cho;
-				if(search >= 0) search += 0x1100;
-			} else if(isJung(last)) {
-				search = jung;
-				if(search >= 0) search += 0x1161;
-			} else if(isJong(last)) {
-				search = jong;
-				if(search >= 0) search += 0x11a7;
-			}
 			boolean found = false;
-//ykhong edit start
 			for(int[] item : addStrokeTable) {
-				int index = 0;
-				if(addStrokeIndex > 0 && addStrokeIndex < item.length) index = addStrokeIndex;
-				if(item[index] == search || item[index] == last) {
-					if(++addStrokeIndex >= item.length) addStrokeIndex = 0;
+				if(item[0] == addStrokeBase || item[0] == addStrokeBaseCombined) {
+					if(++addStrokeIndex >= item.length) addStrokeIndex = item.length-1;
 					jamo = item[addStrokeIndex];
-					if(item[index] == last) super.backspace();
-					else eraseJamo();
+					if(item[0] == addStrokeBaseCombined) eraseJamo();
+					else super.backspace();
 					found = true;
 					break;
 				}
 			}
-			/*
-			for(int[] item : addStrokeTable) {
-				int index = 0;
-				if(found)
-					break;
-				for(; index < item.length; index++) {
-					if(item[index] == last) {
-						addStrokeIndex = index;
-						if(++addStrokeIndex >= item.length) addStrokeIndex = 1;
-						jamo = item[addStrokeIndex];
-						super.backspace();
-						found = true;
-						break; // 원하는 STROKE 으로 변환했다면 그만한다.
-					}
-					if( (index + 1) >= (item.length - 1) )
-						break;
-				}
-			}
-			*/
-//ykhong edit end			
-			if(!found) return 0;
-		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1){
+			if(!found) return -1;
+		} else if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE-1) {
 			if((lastInputType == INPUT_CHO2 || lastInputType == INPUT_JONG3) && this.jong != -1) {
 				switch(last) {
 				case 0x11a8:
@@ -120,7 +86,7 @@ public class TwelveHangulEngine extends HangulEngine {
 					break;
 
 				default:
-					return 0;
+					return -1;
 				}
 			} else if(lastInputType == INPUT_CHO3 || lastInputType == INPUT_CHO2) {
 				switch(this.cho) {
@@ -134,13 +100,22 @@ public class TwelveHangulEngine extends HangulEngine {
 					break;
 
 				default:
-					return 0;
+					return -1;
 				}
 			} else {
-				return 0;
+				return -1;
 			}
+		} else {
+			addStrokeBase = 0;
+			addStrokeBaseCombined = 0;
 		}
+
 		int result = super.inputJamo(jamo);
+
+		if(addStrokeBase == 0) {
+			addStrokeBase = last;
+			addStrokeBaseCombined = isCho(last) ? cho + 0x1100 : isJung(last) ? jung + 0x1161 : isJong(last) ? jong + 0x11a7 : 0;
+		}
 
 		if(result == 0) {
 			resetComposition();

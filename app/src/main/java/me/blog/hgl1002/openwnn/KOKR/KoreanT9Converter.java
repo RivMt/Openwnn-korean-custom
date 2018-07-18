@@ -158,8 +158,9 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 				Integer code = KEY_MAP.get(ch);
 				if(code != null) {
 					int jamo = hangulEngine.inputCode(code, 0);
-					hangulEngine.inputJamo(jamo);
+					if(jamo != -1) hangulEngine.inputJamo(jamo);
 				} else {
+					hangulEngine.resetComposition();
 					composingWord.append(ch);
 				}
 			}
