@@ -1171,7 +1171,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	public void updateKeyLabels() {
-		if(mCurrentKeyboardType == KEYBOARD_12KEY && mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) return;
+		if(mCurrentKeyboardType == KEYBOARD_12KEY
+				&& mCurrentKeyMode != KEYMODE_ALT_SYMBOLS
+				&& !(mCurrentLanguage == LANG_EN && mUseAlphabetQwerty)) return;
 		int[][] layout;
 		if(mCurrentKeyMode != KEYMODE_ALT_SYMBOLS) {
 			HangulEngine hangulEngine = ((OpenWnnKOKR) mWnn).getHangulEngine();
