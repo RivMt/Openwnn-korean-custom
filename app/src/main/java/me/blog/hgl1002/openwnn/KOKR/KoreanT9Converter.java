@@ -23,10 +23,7 @@ import java.util.Map;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
-public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter {
-
-	public static final String DATABASE_NAME = "kt9.db";
-	public static final int DATABASE_VERSION = 1;
+public class KoreanT9Converter implements WordConverter {
 
 	private static final Map<Character, Integer> KEY_MAP = new HashMap<Character, Integer>() {{
 		put('1', -2001);
@@ -50,7 +47,6 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 	private KoreanT9ConvertTask task;
 
 	public KoreanT9Converter(Context context, EngineMode engineMode) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
@@ -60,18 +56,8 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		hangulEngine.setMoachigi(false);
 	}
 
-	@Override
-	public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
-	}
-
 	public void generate(InputStream is, EngineMode mode) {
-		T9DictionaryGenerator.generate(is, getWritableDatabase(), mode);
+		T9DictionaryGenerator.generate(is, T9DatabaseHelper.getInstance().getWritableDatabase(), mode);
 	}
 
 	@Override
@@ -80,7 +66,8 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		if(task != null) {
 			task.cancel(true);
 		}
-		task = new KoreanT9ConvertTask(getReadableDatabase(), word, hangulEngine, tableName, columnName);
+		hangulEngine.resetCycle();
+		task = new KoreanT9ConvertTask(T9DatabaseHelper.getInstance().getReadableDatabase(), word, hangulEngine, tableName, columnName);
 		task.execute();
 	}
 

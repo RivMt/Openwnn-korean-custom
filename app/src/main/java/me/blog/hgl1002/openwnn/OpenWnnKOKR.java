@@ -38,6 +38,7 @@ import me.blog.hgl1002.openwnn.KOKR.KoreanT9Converter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
+import me.blog.hgl1002.openwnn.KOKR.T9DatabaseHelper;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
@@ -195,6 +196,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public void onCreate() {
 		super.onCreate();
 		EventBus.getDefault().register(this);
+
+		new T9DatabaseHelper(this);
 
 		HanjaConverter.copyDatabase(this);
 	}
@@ -440,7 +443,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
 			koreanT9Converter = new KoreanT9Converter(this, mode);
 			try {
-				koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
+				if(!T9DatabaseHelper.getInstance().hasDictionary(mode))
+					koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
 			} catch(IOException ex) {
 				ex.printStackTrace();
 			}
