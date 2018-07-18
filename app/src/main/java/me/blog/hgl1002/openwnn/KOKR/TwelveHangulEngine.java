@@ -163,6 +163,12 @@ public class TwelveHangulEngine extends HangulEngine {
 	}
 
 	@Override
+	public void resetComposition() {
+		addStrokeBase = addStrokeBaseCombined = 0;
+		super.resetComposition();
+	}
+
+	@Override
 	public boolean backspace() {
 		resetCycle();
 		return super.backspace();

@@ -4,6 +4,7 @@ public class ComposingWord {
 
 	private StringBuilder composingWord = new StringBuilder();
 	private String composingChar = "";
+	private String fixedWord;
 
 	public void composeChar(String composingChar) {
 		this.composingChar = composingChar;
@@ -44,4 +45,11 @@ public class ComposingWord {
 		return composingWord.toString() + composingChar;
 	}
 
+	public String getFixedWord() {
+		return fixedWord;
+	}
+
+	public void setFixedWord(String fixedWord) {
+		this.fixedWord = fixedWord;
+	}
 }
