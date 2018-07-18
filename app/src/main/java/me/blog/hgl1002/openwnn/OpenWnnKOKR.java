@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -196,7 +197,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EventBus.getDefault().register(this);
 
 		HanjaConverter.copyDatabase(this);
-		KoreanT9Converter.copyDatabase(this);
 	}
 
 	@Override
@@ -439,6 +439,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
 				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
 			koreanT9Converter = new KoreanT9Converter(this, mode);
+			try {
+				koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 		} else {
 			koreanT9Converter = null;

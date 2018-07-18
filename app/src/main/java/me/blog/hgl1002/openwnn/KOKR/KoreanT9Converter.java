@@ -14,6 +14,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,28 +27,6 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 
 	public static final String DATABASE_NAME = "kt9.db";
 	public static final int DATABASE_VERSION = 1;
-
-	public static void copyDatabase(Context context) {
-		File file = new File(new File(context.getFilesDir().getParentFile(), "databases"), DATABASE_NAME);
-		if(!file.exists()) {
-			AssetManager assetManager = context.getAssets();
-			try {
-				BufferedInputStream bis = new BufferedInputStream(assetManager.open("db/" + DATABASE_NAME));
-				BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-				int read = -1;
-				byte[] buffer = new byte[1024];
-				while((read = bis.read(buffer, 0, 1024)) != -1) {
-					bos.write(buffer, 0, read);
-				}
-				bos.flush();
-
-				bos.close();
-				bis.close();
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	private static final Map<Character, Integer> KEY_MAP = new HashMap<Character, Integer>() {{
 		put('1', -2001);
@@ -76,12 +55,8 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
 		hangulEngine.setCombinationTable(engineMode.combination);
-		tableName = "hangeul";
-		if(engineMode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE) {
-			columnName = "naratgeul_keys";
-		} else if(engineMode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
-			columnName = "cheonjiin_keys";
-		}
+		tableName = engineMode.getPrefValues()[0];
+		columnName = "keys";
 		hangulEngine.setMoachigi(false);
 	}
 
@@ -93,6 +68,10 @@ public class KoreanT9Converter extends SQLiteOpenHelper implements WordConverter
 	@Override
 	public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+	}
+
+	public void generate(InputStream is, EngineMode mode) {
+		T9DictionaryGenerator.generate(is, getWritableDatabase(), mode);
 	}
 
 	@Override
