@@ -33,7 +33,7 @@ public class T9DatabaseHelper extends SQLiteOpenHelper {
 
 	public boolean hasDictionary(EngineMode mode) {
 		SQLiteDatabase database = getReadableDatabase();
-		String sql = "select * from `" + mode.getPrefValues()[0] + "`";
+		String sql = "select * from `" + mode.getPrefValues()[0] + "` limit 1";
 		try {
 			Cursor cursor = database.rawQuery(sql, new String[] {});
 			if(cursor.moveToNext()) {
