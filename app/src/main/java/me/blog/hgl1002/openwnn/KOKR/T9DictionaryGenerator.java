@@ -138,6 +138,7 @@ public class T9DictionaryGenerator {
 		} else if(jamo == '\u318d') {			// 아래아
 			map.put('\u119e', source);
 		} else {
+			if(jamo >= 'a' && jamo <= 'z') map.put(Character.toUpperCase(jamo), source);
 			map.put(jamo, source);
 		}
 	}
