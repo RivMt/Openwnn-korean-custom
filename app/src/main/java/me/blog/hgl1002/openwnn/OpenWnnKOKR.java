@@ -410,6 +410,20 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		EngineMode.Properties prop = mode.properties;
 
+		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+			koreanT9Converter = new KoreanT9Converter(this, mode);
+			try {
+				if(!T9DatabaseHelper.getInstance().hasDictionary(mode))
+					koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
+		} else {
+			koreanT9Converter = null;
+		}
+
 		if(prop.altMode) {
 			mAltMode = true;
 			mDirectInputMode = prop.direct;
@@ -441,16 +455,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
 				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
-			koreanT9Converter = new KoreanT9Converter(this, mode);
-			try {
-				if(!T9DatabaseHelper.getInstance().hasDictionary(mode))
-					koreanT9Converter.generate(getAssets().open("words/korean.txt"), mode);
-			} catch(IOException ex) {
-				ex.printStackTrace();
-			}
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
-		} else {
-			koreanT9Converter = null;
 		}
 
 		((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
@@ -682,6 +687,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				updateMetaKeyStateDisplay();
 				return;
 			}
+
+		case KeyEvent.KEYCODE_ENTER:
+			if(mComposingWord.getFixedWord() != null) {
+				resetCharComposition();
+				resetWordComposition();
+				updateInputView();
+			}
+			break;
+
 		case KeyEvent.KEYCODE_SPACE:
 			if(koreanT9Converter != null) {
 				if(mComposingWord.getFixedWord() != null) {

@@ -116,7 +116,7 @@ public class HangulEngine {
 	/**
 	 * 화면에 표시되는 조합 중인 글자.
 	 */
-	String composing;
+	String composing = "";
 
 	/**
 	 * 최근에 입력된 글자의 성분 정보. (예: 세벌식 초성 / 두벌식 중성 / 비한글 문자 등)
