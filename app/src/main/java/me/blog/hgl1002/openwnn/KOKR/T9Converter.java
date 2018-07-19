@@ -11,15 +11,19 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
@@ -52,6 +56,8 @@ public class T9Converter implements WordConverter {
 	private KoreanT9ConvertTask task;
 	private SQLiteDatabase database;
 
+	private TrieDictionary dictionary;
+
 	public T9Converter(Context context, EngineMode engineMode) {
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
@@ -61,6 +67,8 @@ public class T9Converter implements WordConverter {
 		columnName = "keys";
 		hangulEngine.setMoachigi(false);
 		this.database = T9DatabaseHelper.getInstance().getReadableDatabase();
+
+		dictionary = new TrieDictionary(engineMode);
 
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
@@ -84,12 +92,29 @@ public class T9Converter implements WordConverter {
 	}
 
 	public void generate(InputStream words, EngineMode mode) {
-		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
+		BufferedReader br = new BufferedReader(new InputStreamReader(words));
+		String line;
+		try {
+			int i = Integer.MAX_VALUE;
+			while((line = br.readLine()) != null) {
+				dictionary.insert(line, i--);
+			}
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void generate(InputStream words, InputStream trails, EngineMode mode) {
-		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
-		T9DictionaryGenerator.generate(trails, T9DatabaseHelper.getInstance().getWritableDatabase(), TRAILS, mode);
+		BufferedReader br = new BufferedReader(new InputStreamReader(words));
+		String line;
+		try {
+			int i = Integer.MAX_VALUE;
+			while((line = br.readLine()) != null) {
+				dictionary.insert(line, i--);
+			}
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
@@ -99,8 +124,17 @@ public class T9Converter implements WordConverter {
 			task.cancel(true);
 		}
 		hangulEngine.resetCycle();
-		task = new KoreanT9ConvertTask(this, word, tableName, columnName);
-		task.execute();
+//		task = new KoreanT9ConvertTask(this, word, tableName, columnName);
+//		task.execute();
+		List<TrieDictionary.Word> words = dictionary.searchStroke(word.getEntireWord());
+		List<String> result = new LinkedList<>();
+		for(TrieDictionary.Word w : words) {
+			result.add(w.getWord());
+		}
+
+		EventBus.getDefault().post(new DisplayCandidatesEvent(result));
+		if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
+
 	}
 
 	static class KoreanT9ConvertTask extends AsyncTask<Void, Integer, Integer> implements HangulEngine.HangulEngineListener {

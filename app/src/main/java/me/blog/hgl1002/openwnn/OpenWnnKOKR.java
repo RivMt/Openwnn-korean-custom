@@ -416,13 +416,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
 			t9Converter = new T9Converter(this, mode);
 			try {
-				if(!T9DatabaseHelper.getInstance().hasDictionary(mode)) {
-					if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-							|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE)
-						t9Converter.generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
-					else
-						t9Converter.generate(getAssets().open("words/english.txt"), mode);
-				}
+				if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
+						|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE)
+					t9Converter.generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
+				else
+					t9Converter.generate(getAssets().open("words/english.txt"), mode);
 			} catch(IOException ex) {
 				ex.printStackTrace();
 			}
