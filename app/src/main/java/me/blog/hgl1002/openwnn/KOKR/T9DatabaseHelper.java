@@ -31,9 +31,9 @@ public class T9DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public boolean hasDictionary(EngineMode mode) {
+	public boolean hasTable(String tableName) {
 		SQLiteDatabase database = getReadableDatabase();
-		String sql = "select * from `" + mode.getPrefValues()[0] + "` limit 1";
+		String sql = "select * from `" + tableName + "` limit 1";
 		try {
 			Cursor cursor = database.rawQuery(sql, new String[] {});
 			if(cursor.moveToNext()) {
@@ -44,6 +44,10 @@ public class T9DatabaseHelper extends SQLiteOpenHelper {
 		} catch(SQLiteException notFound) {
 		}
 		return false;
+	}
+
+	public boolean hasDictionary(EngineMode mode) {
+		return hasTable(mode.getPrefValues()[0]);
 	}
 
 	public void deleteDictionary(EngineMode mode) {

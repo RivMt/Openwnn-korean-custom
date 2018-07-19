@@ -25,6 +25,8 @@ import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class KoreanT9Converter implements WordConverter {
 
+	private static final String TRAILS = "_trails";
+
 	private static final Map<Character, Integer> KEY_MAP = new HashMap<Character, Integer>() {{
 		put('1', -2001);
 		put('2', -2002);
@@ -56,8 +58,13 @@ public class KoreanT9Converter implements WordConverter {
 		hangulEngine.setMoachigi(false);
 	}
 
-	public void generate(InputStream is, EngineMode mode) {
-		T9DictionaryGenerator.generate(is, T9DatabaseHelper.getInstance().getWritableDatabase(), mode);
+	public void generate(InputStream words, EngineMode mode) {
+		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
+	}
+
+	public void generate(InputStream words, InputStream trails, EngineMode mode) {
+		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
+		T9DictionaryGenerator.generate(trails, T9DatabaseHelper.getInstance().getWritableDatabase(), TRAILS, mode);
 	}
 
 	@Override
@@ -108,29 +115,25 @@ public class KoreanT9Converter implements WordConverter {
 
 		@Override
 		protected Integer doInBackground(Void... params) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(" select * from `" + tableName + "` ");
-			sb.append(" where `" + columnName + "` = ? ");
-
-			Cursor cursor = database.rawQuery(sb.toString(),
-					new String[] {
-							word.getEntireWord()
+			if(T9DatabaseHelper.getInstance().hasTable(tableName + TRAILS)) {
+				for(int i = 4 ; i >= 2; i--) {
+					List<String> trails = getTrails(i);
+					if(trails != null) {
+						String search = word.getEntireWord();
+						search = search.substring(0, search.length()-i);
+						List<String> words = getWords(search, 3);
+						for(String trail : trails) {
+							for(String word : words) {
+								result.add(word + trail);
+							}
+						}
 					}
-			);
+				}
+			}
 
 			if(isCancelled()) return null;
 
-			publishProgress(10);
-
-			int column = cursor.getColumnIndex("word");
-			int count = cursor.getCount();
-
-			while(cursor.moveToNext()) {
-				if(isCancelled()) return null;
-				result.add(cursor.getString(column));
-				publishProgress(10 + 90 / count);
-			}
-			cursor.close();
+			result.addAll(getWords(word.getEntireWord(), 0));
 
 			for(char ch : word.getEntireWord().toCharArray()) {
 				if(isCancelled()) return null;
@@ -147,6 +150,59 @@ public class KoreanT9Converter implements WordConverter {
 			if(!result.contains(word)) result.add(word);
 
 			return 1;
+		}
+
+		private List<String> getWords(String search, int limit) {
+			List<String> result = new ArrayList<>();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(" select * from `" + tableName + "` ");
+			sb.append(" where `" + columnName + "` = ? ");
+			if(limit > 0) sb.append(" limit " + limit + " ");
+
+			Cursor cursor = database.rawQuery(sb.toString(),
+					new String[] {
+							search
+					}
+			);
+
+			int column = cursor.getColumnIndex("word");
+			while(cursor.moveToNext()) {
+				result.add(cursor.getString(column));
+			}
+			cursor.close();
+
+			return result;
+		}
+
+		private List<String> getTrails(int length) {
+			List<String> result = new ArrayList<>();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(" select * from `" + tableName + TRAILS + "` ");
+			sb.append(" where `" + columnName + "` = ? ");
+			sb.append(" limit 3 ");
+
+			String search;
+			try {
+				search = word.getEntireWord();
+				search = search.substring(search.length() - length);
+			} catch(StringIndexOutOfBoundsException ex) {
+				return null;
+			}
+
+			Cursor cursor = database.rawQuery(sb.toString(),
+					new String[] {
+							search
+					}
+			);
+
+			int column = cursor.getColumnIndex("word");
+			if(cursor.moveToNext()) {
+				result.add(cursor.getString(column));
+			}
+			cursor.close();
+			return  result;
 		}
 
 		@Override

@@ -31,7 +31,7 @@ public class T9DictionaryGenerator {
 		add('ᅴ');
 	}};
 
-	public static void generate(InputStream is, SQLiteDatabase database, EngineMode mode) {
+	public static void generate(InputStream is, SQLiteDatabase database, String tableSuffix, EngineMode mode) {
 		String tableName = mode.getPrefValues()[0];
 
 		Map<Character, String> map = new HashMap<>();
@@ -77,15 +77,15 @@ public class T9DictionaryGenerator {
 			}
 		}
 
-		String query = "create table if not exists `" + tableName + "` ("
+		String query = "create table if not exists `" + tableName + tableSuffix + "` ("
 				+ "`word` text not null, "
 				+ "`keys` text not null)";
-
 		database.execSQL(query, new String[] {});
 
-		query = "select * from `" + tableName + "`";
+		query = "select * from `" + tableName + tableSuffix + "`";
 		Cursor cursor = database.rawQuery(query, new String[] {});
 		if(cursor.moveToNext()) return;
+		cursor.close();
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line;
@@ -100,7 +100,7 @@ public class T9DictionaryGenerator {
 					if(source != null) keys.append(source);
 				}
 				values.put("keys", keys.toString());
-				database.insertWithOnConflict(tableName, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+				database.insertWithOnConflict(tableName + tableSuffix, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 			}
 			database.setTransactionSuccessful();
 			database.endTransaction();
