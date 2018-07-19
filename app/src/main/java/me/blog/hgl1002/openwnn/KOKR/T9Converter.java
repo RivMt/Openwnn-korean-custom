@@ -23,7 +23,7 @@ import java.util.Map;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
-public class KoreanT9Converter implements WordConverter {
+public class T9Converter implements WordConverter {
 
 	private static final String TRAILS = "_trails";
 
@@ -48,7 +48,7 @@ public class KoreanT9Converter implements WordConverter {
 
 	private KoreanT9ConvertTask task;
 
-	public KoreanT9Converter(Context context, EngineMode engineMode) {
+	public T9Converter(Context context, EngineMode engineMode) {
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
@@ -117,11 +117,13 @@ public class KoreanT9Converter implements WordConverter {
 		protected Integer doInBackground(Void... params) {
 			if(T9DatabaseHelper.getInstance().hasTable(tableName + TRAILS)) {
 				for(int i = 4 ; i >= 2; i--) {
+					if(isCancelled()) return null;
 					List<String> trails = getTrails(i);
 					if(trails != null) {
+						if(isCancelled()) return null;
 						String search = word.getEntireWord();
 						search = search.substring(0, search.length()-i);
-						List<String> words = getWords(search, 3);
+						List<String> words = getWords(search, 10 - search.length());
 						for(String trail : trails) {
 							for(String word : words) {
 								result.add(word + trail);
@@ -166,6 +168,8 @@ public class KoreanT9Converter implements WordConverter {
 					}
 			);
 
+			if(cursor.getCount() == 0) return result;
+
 			int column = cursor.getColumnIndex("word");
 			while(cursor.moveToNext()) {
 				result.add(cursor.getString(column));
@@ -176,13 +180,6 @@ public class KoreanT9Converter implements WordConverter {
 		}
 
 		private List<String> getTrails(int length) {
-			List<String> result = new ArrayList<>();
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(" select * from `" + tableName + TRAILS + "` ");
-			sb.append(" where `" + columnName + "` = ? ");
-			sb.append(" limit 3 ");
-
 			String search;
 			try {
 				search = word.getEntireWord();
@@ -191,11 +188,20 @@ public class KoreanT9Converter implements WordConverter {
 				return null;
 			}
 
+			List<String> result = new ArrayList<>();
+
+			StringBuilder sb = new StringBuilder();
+			sb.append(" select * from `" + tableName + TRAILS + "` ");
+			sb.append(" where `" + columnName + "` = ? ");
+			sb.append(" limit 3 ");
+
 			Cursor cursor = database.rawQuery(sb.toString(),
 					new String[] {
 							search
 					}
 			);
+
+			if(cursor.getCount() == 0) return null;
 
 			int column = cursor.getColumnIndex("word");
 			if(cursor.moveToNext()) {
