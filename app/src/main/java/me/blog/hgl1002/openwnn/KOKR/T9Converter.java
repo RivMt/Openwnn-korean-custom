@@ -42,11 +42,15 @@ public class T9Converter implements WordConverter {
 		put('#', -2012);
 	}};
 
+	private List<Character> consonantList = new ArrayList<>();
+	private List<Character> vowelList = new ArrayList<>();
+
 	private TwelveHangulEngine hangulEngine;
 
 	private String tableName, columnName;
 
 	private KoreanT9ConvertTask task;
+	private SQLiteDatabase database;
 
 	public T9Converter(Context context, EngineMode engineMode) {
 		hangulEngine = new TwelveHangulEngine();
@@ -56,6 +60,27 @@ public class T9Converter implements WordConverter {
 		tableName = engineMode.getPrefValues()[0];
 		columnName = "keys";
 		hangulEngine.setMoachigi(false);
+		this.database = T9DatabaseHelper.getInstance().getReadableDatabase();
+
+		for(int[] item : engineMode.layout) {
+			char sourceChar = ' ';
+			if(item[0] <= -2000 && item[0] > -2100) {
+				sourceChar = (char) (-item[0] - 2000 + 0x30);
+			} else if(item[0] <= -200 && item[0] > -300) {
+				sourceChar = (char) (-item[0] - 200 + 0x30);
+			} else continue;
+			if(sourceChar == 0x30 + 10) sourceChar = '0';
+			if(sourceChar == 0x30 + 11) sourceChar = '*';
+			if(sourceChar == 0x30 + 12) sourceChar = '#';
+			char jamo = (char) item[1];
+			if(jamo >= 'ㄱ' && jamo <= 'ㅎ') {
+				consonantList.add(sourceChar);
+			} else if(jamo >= 'ㅏ' && jamo <= 'ㅣ') {
+				vowelList.add(sourceChar);
+			} else if(jamo == '\u318d') {			// 아래아
+				vowelList.add(sourceChar);
+			}
+		}
 	}
 
 	public void generate(InputStream words, EngineMode mode) {
@@ -74,16 +99,18 @@ public class T9Converter implements WordConverter {
 			task.cancel(true);
 		}
 		hangulEngine.resetCycle();
-		task = new KoreanT9ConvertTask(T9DatabaseHelper.getInstance().getReadableDatabase(), word, hangulEngine, tableName, columnName);
+		task = new KoreanT9ConvertTask(this, word, tableName, columnName);
 		task.execute();
 	}
 
 	static class KoreanT9ConvertTask extends AsyncTask<Void, Integer, Integer> implements HangulEngine.HangulEngineListener {
 
-		private SQLiteDatabase database;
+		private T9Converter converter;
+
 		private ComposingWord word;
-		private List<String> result = new ArrayList<>();
 		private HangulEngine hangulEngine;
+
+		private List<String> result = new ArrayList<>();
 
 		private String tableName;
 		private String columnName;
@@ -91,12 +118,12 @@ public class T9Converter implements WordConverter {
 		private String composing;
 		private StringBuilder composingWord;
 
-		public KoreanT9ConvertTask(SQLiteDatabase database, ComposingWord word, HangulEngine hangulEngine, String tableName, String columnName) {
-			this.database = database;
+		KoreanT9ConvertTask(T9Converter converter, ComposingWord word, String tableName, String columnName) {
+			this.converter = converter;
 			this.word = word;
 			this.composing = "";
 			this.composingWord = new StringBuilder();
-			this.hangulEngine = hangulEngine;
+			this.hangulEngine = converter.hangulEngine;
 			this.tableName = tableName;
 			this.columnName = columnName;
 			hangulEngine.resetComposition();
@@ -115,18 +142,43 @@ public class T9Converter implements WordConverter {
 
 		@Override
 		protected Integer doInBackground(Void... params) {
+			String word = this.word.getEntireWord();
 			if(T9DatabaseHelper.getInstance().hasTable(tableName + TRAILS)) {
-				for(int i = 4 ; i >= 2; i--) {
+				List<String> trailSource = new ArrayList<>();
+				char cho, jung, jong;
+				cho = jung = jong = '\0';
+				for(int i = 0 ; i <= 4 ; i++) {
 					if(isCancelled()) return null;
-					List<String> trails = getTrails(i);
+					if(word.length() <= i) break;
+					char ch = word.charAt(word.length()-i-1);
+					if(converter.vowelList.contains(ch)) {
+						if(cho != '\0') {
+							trailSource.add(new String(jong == '\0' ? new char[] {cho, jung} : new char[] {cho, jung, jong}));
+							cho = jong = '\0';
+							jung = ch;
+						}
+						else jung = ch;
+					} else if(converter.consonantList.contains(ch)) {
+						if(cho != '\0') {
+							trailSource.add(new String(jong == '\0' ? new char[] {cho, jung} : new char[] {cho, jung, jong}));
+							cho = jung = '\0';
+							jong = ch;
+						}
+						else if(jung != '\0') cho = ch;
+						else jong = ch;
+					}
+				}
+				StringBuilder trail = new StringBuilder();
+				for(String str : trailSource) {
+					trail.insert(0, str);
+					List<String> trails = getTrails(trail.toString());
 					if(trails != null) {
 						if(isCancelled()) return null;
-						String search = word.getEntireWord();
-						search = search.substring(0, search.length()-i);
-						List<String> words = getWords(search, 10 - search.length());
-						for(String trail : trails) {
-							for(String word : words) {
-								result.add(word + trail);
+						String search = word.substring(0, word.length()-trail.length());
+						List<String> words = getWords(search, 4);
+						for(String tr : trails) {
+							for(String w : words) {
+								result.add(w + tr);
 							}
 						}
 					}
@@ -135,9 +187,9 @@ public class T9Converter implements WordConverter {
 
 			if(isCancelled()) return null;
 
-			result.addAll(getWords(word.getEntireWord(), 0));
+			result.addAll(getWords(word, 0));
 
-			for(char ch : word.getEntireWord().toCharArray()) {
+			for(char ch : word.toCharArray()) {
 				if(isCancelled()) return null;
 				Integer code = KEY_MAP.get(ch);
 				if(code != null) {
@@ -148,8 +200,8 @@ public class T9Converter implements WordConverter {
 					composingWord.append(ch);
 				}
 			}
-			String word = composingWord + composing;
-			if(!result.contains(word)) result.add(word);
+			String w = composingWord + composing;
+			if(!result.contains(w)) result.add(w);
 
 			return 1;
 		}
@@ -162,7 +214,7 @@ public class T9Converter implements WordConverter {
 			sb.append(" where `" + columnName + "` = ? ");
 			if(limit > 0) sb.append(" limit " + limit + " ");
 
-			Cursor cursor = database.rawQuery(sb.toString(),
+			Cursor cursor = converter.database.rawQuery(sb.toString(),
 					new String[] {
 							search
 					}
@@ -179,15 +231,7 @@ public class T9Converter implements WordConverter {
 			return result;
 		}
 
-		private List<String> getTrails(int length) {
-			String search;
-			try {
-				search = word.getEntireWord();
-				search = search.substring(search.length() - length);
-			} catch(StringIndexOutOfBoundsException ex) {
-				return null;
-			}
-
+		private List<String> getTrails(String search) {
 			List<String> result = new ArrayList<>();
 
 			StringBuilder sb = new StringBuilder();
@@ -195,7 +239,7 @@ public class T9Converter implements WordConverter {
 			sb.append(" where `" + columnName + "` = ? ");
 			sb.append(" limit 3 ");
 
-			Cursor cursor = database.rawQuery(sb.toString(),
+			Cursor cursor = converter.database.rawQuery(sb.toString(),
 					new String[] {
 							search
 					}

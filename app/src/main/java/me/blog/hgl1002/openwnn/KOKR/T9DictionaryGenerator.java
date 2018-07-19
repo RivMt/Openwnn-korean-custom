@@ -37,7 +37,6 @@ public class T9DictionaryGenerator {
 	}
 
 	private static class GenerateTask extends AsyncTask<Void, Void, Integer> {
-
 		private InputStream is;
 		private SQLiteDatabase database;
 		private String tableSuffix;
