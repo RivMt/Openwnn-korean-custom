@@ -45,7 +45,6 @@ public class TwelveHangulEngine extends HangulEngine {
 	public int inputJamo(int jamo) {
 		// 획추가 키.
 		if(jamo == DefaultSoftKeyboardKOKR.KEYCODE_KR12_ADDSTROKE) {
-			System.out.println(addStrokeBase + " " + addStrokeBaseCombined);
 			boolean found = false;
 			for(int[] item : addStrokeTable) {
 				if(item[0] == addStrokeBase || item[0] == addStrokeBaseCombined) {

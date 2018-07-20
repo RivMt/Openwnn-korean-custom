@@ -47,14 +47,14 @@ public class CandidatesViewManagerKOKR {
 		for(final String candidate : candidates) {
 			TextView candidateView = (TextView) parent.getLayoutInflater().inflate(R.layout.candidates_item, null);
 			candidateView.setText(candidate);
-			candidateView.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					EventBus.getDefault().post(new SelectCandidateEvent(new WnnWord(candidate, "")));
-				}
+			candidateView.setOnClickListener((v) -> {
+				EventBus.getDefault().post(new SelectCandidateEvent(new WnnWord(candidate, "")));
 			});
 			if(position < 0) firstView.addView(candidateView);
-			else firstView.addView(candidateView, position);
+			else {
+				firstView.addView(candidateView, position);
+				position++;
+			}
 		}
 	}
 

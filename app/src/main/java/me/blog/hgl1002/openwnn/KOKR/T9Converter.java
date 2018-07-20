@@ -103,7 +103,7 @@ public class T9Converter implements WordConverter {
 		task.execute();
 	}
 
-	static class KoreanT9ConvertTask extends AsyncTask<Void, Integer, Integer> implements HangulEngine.HangulEngineListener {
+	static class KoreanT9ConvertTask extends AsyncTask<Void, List<String>, Integer> implements HangulEngine.HangulEngineListener {
 
 		private T9Converter converter;
 
@@ -143,7 +143,34 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
+
+			List<String> result = new ArrayList<>();
+
+			for(char ch : word.toCharArray()) {
+				if(isCancelled()) return null;
+				Integer code = KEY_MAP.get(ch);
+				if(code != null) {
+					int jamo = hangulEngine.inputCode(code, 0);
+					if(jamo != -1) hangulEngine.inputJamo(jamo);
+				} else {
+					hangulEngine.resetComposition();
+					composingWord.append(ch);
+				}
+			}
+			String composedWord = composingWord + composing;
+			result.add(composedWord);
+
+			publishProgress(result);
+
+			if(isCancelled()) return null;
+
+			result = getWords(word, 0);
+			publishProgress(result);
+
 			if(T9DatabaseHelper.getInstance().hasTable(tableName + TRAILS)) {
+				if(isCancelled()) return null;
+
+				result = new ArrayList<>();
 				List<String> trailSource = new ArrayList<>();
 				char cho, jung, jong;
 				cho = jung = jong = '\0';
@@ -183,25 +210,9 @@ public class T9Converter implements WordConverter {
 						}
 					}
 				}
+				this.result = result;
+				publishProgress(result);
 			}
-
-			if(isCancelled()) return null;
-
-			result.addAll(getWords(word, 0));
-
-			for(char ch : word.toCharArray()) {
-				if(isCancelled()) return null;
-				Integer code = KEY_MAP.get(ch);
-				if(code != null) {
-					int jamo = hangulEngine.inputCode(code, 0);
-					if(jamo != -1) hangulEngine.inputJamo(jamo);
-				} else {
-					hangulEngine.resetComposition();
-					composingWord.append(ch);
-				}
-			}
-			String w = composingWord + composing;
-			if(!result.contains(w)) result.add(w);
 
 			return 1;
 		}
@@ -256,12 +267,16 @@ public class T9Converter implements WordConverter {
 		}
 
 		@Override
+		protected void onProgressUpdate(List<String>... values) {
+			List<String> result = values[0];
+			EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
+			if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
+			super.onProgressUpdate(values);
+		}
+
+		@Override
 		protected void onPostExecute(Integer integer) {
 			super.onPostExecute(integer);
-			if(integer == 1 && !result.isEmpty()) {
-				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
-				EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
-			}
 		}
 	}
 
