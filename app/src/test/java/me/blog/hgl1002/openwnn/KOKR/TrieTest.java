@@ -14,6 +14,7 @@ public class TrieTest {
 			String[] splitted = word.split(":");
 			dictionary.insert(splitted[0], splitted.length >= 2 ? Integer.parseInt(splitted[1]) : 1);
 		}
+		System.out.println(dictionary.getAllWords());
 		System.out.println(dictionary.searchStroke("13538"));
 	}
 

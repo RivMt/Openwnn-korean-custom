@@ -2,6 +2,7 @@ package me.blog.hgl1002.openwnn.KOKR.trie;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,46 +42,31 @@ public class TrieDictionary extends Trie {
 	}
 
 	public List<Word> searchStroke(String stroke) {
-		return searchStroke(stroke, root, new LinkedList<>(), "", 0);
+		if(stroke == null || stroke.length() == 0) return null;
+		return searchStroke(stroke, root, "", new ArrayList<>(), 0, true);
 	}
 
-	public List<Word> searchStroke(String stroke, TrieNode p, List<Word> words, String currentWord, int depth) {
-		if(depth >= stroke.length()) return words;
-		if(p.frequency > 0) {
+	private List<Word> searchStroke(String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength) {
+		if(p.frequency > 0 && (fitLength && depth == stroke.length()))
 			words.add(new Word(Normalizer.normalize(currentWord, Normalizer.Form.NFC), p.frequency));
-		}
-		for(int i = 0 ; i < p.children.length ; i++) {
-			if(p.children[i] == null) continue;
-			char ch = (char) (i >= 26 ? i - 26 + '\u1100' : i + 'a');
-			char[] search = new char[4];
-			search[0] = ch;
-			try {
-				search[1] = CONVERT_CHO.charAt(COMPAT_CHO.indexOf(ch));
-			} catch(StringIndexOutOfBoundsException ex) {}
-			try {
-				search[2] = CONVERT_JUNG.charAt(COMPAT_JUNG.indexOf(ch));
-			} catch(StringIndexOutOfBoundsException ex) {}
-			try {
-				search[3] = CONVERT_JONG.charAt(COMPAT_CHO.indexOf(ch));
-			} catch(StringIndexOutOfBoundsException ex) {}
-			for(char c : search) {
-				if(c == '\0') continue;
-				String charStroke = keyMap.get(c);
-				checkStroke:
-				if(charStroke != null && charStroke.charAt(0) == stroke.charAt(depth)) {
-					for(int j = 1 ; j < charStroke.length() ; j++) {
-						if(charStroke.charAt(j) != stroke.charAt(depth + j)) {
-							break checkStroke;
-						}
+		if(depth >= stroke.length()) return words;
+		for(char ch : p.children.keySet()) {
+			TrieNode child = p.children.get(ch);
+			String charStroke = keyMap.get(ch);
+			checkStroke:
+			if(charStroke != null && charStroke.charAt(0) == stroke.charAt(depth)) {
+				for(int j = 1 ; j < charStroke.length() ; j++) {
+					if(charStroke.charAt(j) != stroke.charAt(depth + j)) {
+						break checkStroke;
 					}
-					searchStroke(stroke, p.children[i], words, currentWord + c, depth + 1);
 				}
+				searchStroke(stroke, child, currentWord + ch, words, depth + 1, fitLength);
 			}
 		}
 		return words;
 	}
 
-	public Map<Character, String> generateKeyMap(EngineMode engineMode) {
+	private Map<Character, String> generateKeyMap(EngineMode engineMode) {
 		Map<Character, String> map = new HashMap<>();
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
@@ -159,7 +145,7 @@ public class TrieDictionary extends Trie {
 		}
 	}
 
-	public static class Word {
+	public static class Word implements Comparable<Word> {
 		private String word;
 		private int frequency;
 
@@ -187,6 +173,11 @@ public class TrieDictionary extends Trie {
 		@Override
 		public String toString() {
 			return word;
+		}
+
+		@Override
+		public int compareTo(Word word) {
+			return frequency - word.frequency;
 		}
 	}
 
