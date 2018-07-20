@@ -43,25 +43,21 @@ public class T9Converter implements WordConverter {
 	private List<Character> consonantList = new ArrayList<>();
 	private List<Character> vowelList = new ArrayList<>();
 
+	private EngineMode engineMode;
 	private TwelveHangulEngine hangulEngine;
 
-	private String tableName, columnName;
-
 	private KoreanT9ConvertTask task;
-	private SQLiteDatabase database;
 
 	private TrieDictionary dictionary;
 	private TrieDictionary trailsDictionary;
 
-	public T9Converter(Context context, EngineMode engineMode) {
+	public T9Converter(EngineMode engineMode) {
+		this.engineMode = engineMode;
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
 		hangulEngine.setCombinationTable(engineMode.combination);
-		tableName = engineMode.getPrefValues()[0];
-		columnName = "keys";
 		hangulEngine.setMoachigi(false);
-		this.database = T9DatabaseHelper.getInstance().getReadableDatabase();
 
 		dictionary = new TrieDictionary(engineMode);
 		trailsDictionary = new TrieDictionary(engineMode);
@@ -255,6 +251,10 @@ public class T9Converter implements WordConverter {
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 		}
+	}
+
+	public EngineMode getEngineMode() {
+		return engineMode;
 	}
 
 }

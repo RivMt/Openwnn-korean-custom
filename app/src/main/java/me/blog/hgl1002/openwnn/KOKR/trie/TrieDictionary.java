@@ -61,12 +61,13 @@ public class TrieDictionary extends Trie {
 			if(charStroke != null
 					&& depth + charStroke.length() - 1 < stroke.length()
 					&& charStroke.charAt(0) == stroke.charAt(depth)) {
-				for(int j = 1 ; j < charStroke.length() ; j++) {
+				int j;
+				for(j = 1 ; j < charStroke.length() ; j++) {
 					if(charStroke.charAt(j) != stroke.charAt(depth + j)) {
 						break checkStroke;
 					}
 				}
-				searchStroke(stroke, child, currentWord + ch, words, depth + 1, fitLength, limit);
+				searchStroke(stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
 			}
 		}
 		return words;

@@ -104,7 +104,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 	List<WordConverter> converters = new ArrayList<>();
-	T9Converter t9Converter;
+	T9Converter[] t9Converters = new T9Converter[4];
+	T9Converter currentT9Converter;
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -411,21 +412,29 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EngineMode.Properties prop = mode.properties;
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
-			t9Converter = new T9Converter(this, mode);
-			try {
-				if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-						|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE)
-					t9Converter.generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
-				else
-					t9Converter.generate(getAssets().open("words/english.txt"), mode);
-			} catch(IOException ex) {
-				ex.printStackTrace();
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+			if(t9Converters[DefaultSoftKeyboard.LANG_KO] == null
+					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
+				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode);
+				try {
+					t9Converters[DefaultSoftKeyboard.LANG_KO].generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
 			}
-		} else {
-			t9Converter = null;
+			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_KO];
+		} else if(mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
+			if(t9Converters[DefaultSoftKeyboard.LANG_EN] == null
+					|| t9Converters[DefaultSoftKeyboard.LANG_EN].getEngineMode() != mode) {
+				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode);
+				try {
+					t9Converters[DefaultSoftKeyboard.LANG_EN].generate(getAssets().open("words/english.txt"), mode);
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_EN];
 		}
 
 		if(prop.altMode) {
@@ -703,7 +712,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		case KeyEvent.KEYCODE_SPACE:
-			if(t9Converter != null) {
+			if(currentT9Converter != null) {
 				if(mComposingWord.getFixedWord() != null) {
 					resetCharComposition();
 					resetWordComposition();
@@ -1084,8 +1093,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(t9Converter != null) {
-			t9Converter.convert(mComposingWord);
+		if(currentT9Converter != null) {
+			currentT9Converter.convert(mComposingWord);
 		}
 		for(WordConverter converter : converters) {
 			converter.convert(mComposingWord);
