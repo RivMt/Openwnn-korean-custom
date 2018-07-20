@@ -1,5 +1,10 @@
 package me.blog.hgl1002.openwnn.KOKR.trie;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +24,9 @@ public class Trie {
 		word = Normalizer.normalize(word, Normalizer.Form.NFD);
 		TrieNode p = root;
 		for(char c : word.toCharArray()) {
-			c = Character.toLowerCase(c);
 			TrieNode child = p.children.get(c);
 			if(child == null) {
+
 				TrieNode temp = new TrieNode(c);
 				p.children.put(c, temp);
 				p = temp;
@@ -69,6 +74,38 @@ public class Trie {
 
 	public boolean isEmpty() {
 		return root.children.isEmpty();
+	}
+
+	public void serialize(OutputStream out) throws IOException {
+		DataOutputStream dos = new DataOutputStream(out);
+		serialize(dos, root);
+	}
+
+	private void serialize(DataOutputStream out, TrieNode p) throws IOException {
+		out.writeChar(p.ch);
+		out.writeInt(p.frequency);
+		out.writeShort(p.children.size());
+		for(char ch : p.children.keySet()) {
+			TrieNode child = p.children.get(ch);
+			serialize(out, child);
+		}
+		out.flush();
+	}
+
+	public void deserialize(InputStream in) throws IOException {
+		DataInputStream dis = new DataInputStream(in);
+		this.root = deserialize(dis);
+	}
+
+	private TrieNode deserialize(DataInputStream in) throws IOException {
+		TrieNode p = new TrieNode(in.readChar());
+		p.frequency = in.readInt();
+		int size = in.readShort();
+		for(int i = 0 ; i < size ; i++) {
+			TrieNode child = deserialize(in);
+			p.children.put(child.ch, child);
+		}
+		return p;
 	}
 
 }

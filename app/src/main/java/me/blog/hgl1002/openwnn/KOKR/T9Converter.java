@@ -88,10 +88,12 @@ public class T9Converter implements WordConverter {
 	}
 
 	public void generate(InputStream words, EngineMode mode) {
+		if(!dictionary.isEmpty()) return;
 		new DictionaryGenerateTask(words, dictionary).execute();
 	}
 
 	public void generate(InputStream words, InputStream trails, EngineMode mode) {
+		if(!dictionary.isEmpty() && !trailsDictionary.isEmpty()) return;
 		new DictionaryGenerateTask(words, dictionary).execute();
 		new DictionaryGenerateTask(trails, trailsDictionary).execute();
 	}

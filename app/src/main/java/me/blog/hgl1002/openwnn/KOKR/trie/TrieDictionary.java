@@ -28,7 +28,7 @@ public class TrieDictionary extends Trie {
 		add('ᅴ');
 	}};
 
-	Map<Character, String> keyMap = new HashMap<>();
+	private Map<Character, String> keyMap;
 
 	public TrieDictionary(EngineMode engineMode) {
 		super();
@@ -183,7 +183,9 @@ public class TrieDictionary extends Trie {
 
 		@Override
 		public int compareTo(Word word) {
-			return frequency - word.frequency;
+			if(frequency > word.frequency) return 1;
+			else if(frequency < word.frequency) return -1;
+			else return 0;
 		}
 	}
 
