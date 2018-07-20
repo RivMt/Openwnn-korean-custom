@@ -67,4 +67,8 @@ public class Trie {
 		return result;
 	}
 
+	public boolean isEmpty() {
+		return root.children.isEmpty();
+	}
+
 }
