@@ -169,11 +169,15 @@ public class T9Converter implements WordConverter {
 				StringBuilder trail = new StringBuilder();
 				for(String str : trailSource) {
 					trail.insert(0, str);
-					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString(), 2);
+					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString());
 					if(trails != null) {
+						Collections.sort(trails, Collections.reverseOrder());
+						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
 						if(isCancelled()) return null;
 						String search = word.substring(0, word.length()-trail.length());
-						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(search, 4);
+						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(search);
+						Collections.sort(words, Collections.reverseOrder());
+						words = words.subList(0, words.size() < 4 ? words.size() : 4);
 						for(TrieDictionary.Word tr : trails) {
 							for(TrieDictionary.Word w : words) {
 								result.add(new TrieDictionary.Word(w.getWord() + tr.getWord(),
