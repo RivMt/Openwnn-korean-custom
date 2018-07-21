@@ -81,6 +81,8 @@ public class T9Converter implements WordConverter {
 		this.dictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 0);
 		this.trailsDictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 1);
 
+		consonantList = new ArrayList<>();
+		vowelList = new ArrayList<>();
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
 			if(item[0] <= -2000 && item[0] > -2100) {
@@ -145,7 +147,6 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
-
 			if(converter.dictionary == null || !converter.dictionary.isReady()) {
 				this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
 				return 1;

@@ -45,6 +45,10 @@ public class ComposingWord {
 		return composingWord.toString() + composingChar;
 	}
 
+	public int length() {
+		return composingWord.length() + (composingChar.isEmpty() ? 0 : 1);
+	}
+
 	public String getFixedWord() {
 		return fixedWord;
 	}

@@ -42,6 +42,7 @@ import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
+import me.blog.hgl1002.openwnn.KOKR.converter.WordPredictConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.event.*;
 
@@ -104,8 +105,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 	List<WordConverter> converters = new ArrayList<>();
-	T9Converter[] t9Converters = new T9Converter[4];
-	T9Converter currentT9Converter;
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -260,6 +259,13 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 						e.printStackTrace();
 					}
 				}
+				try {
+					Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+					Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
+				converters.add(new WordPredictConverter());
 			}
 		}
 
@@ -414,22 +420,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		EngineMode.Properties prop = mode.properties;
 
-		switch(mode) {
-		case TWELVE_ALPHABET_A_PREDICTIVE:
-		case TWELVE_ALPHABET_B_PREDICTIVE:
-		case TWELVE_DUBUL_CHEONJIIN_PREDICTIVE:
-		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
-		case TWELVE_DUBUL_SKY2_PREDICTIVE:
-			try {
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
-			} catch(IOException ex) {
-				ex.printStackTrace();
-			}
-			break;
-		}
-
 		resetWordComposition();
 		updateInputView();
 
@@ -461,12 +451,21 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mQwertyEngine.setFullMoachigi(mFullMoachigi && !hardHidden);
 		if(mFullMoachigi && !hardHidden) mEnableTimeout = true;
 
-		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_SKY2_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
+		switch(mode) {
+		case TWELVE_ALPHABET_A_PREDICTIVE:
+		case TWELVE_ALPHABET_B_PREDICTIVE:
+		case TWELVE_DUBUL_CHEONJIIN_PREDICTIVE:
+		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
+		case TWELVE_DUBUL_SKY2_PREDICTIVE:
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
+			try {
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+			break;
 		}
 
 		((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
@@ -708,13 +707,11 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		case KeyEvent.KEYCODE_SPACE:
-			if(currentT9Converter != null) {
-				if(mComposingWord.getFixedWord() != null) {
-					resetCharComposition();
-					resetWordComposition();
-					updateInputView();
-					return;
-				}
+			if(mComposingWord.getFixedWord() != null) {
+				resetCharComposition();
+				resetWordComposition();
+				updateInputView();
+				return;
 			}
 			// 두벌식 단모음, 천지인, 12키 알파벳 자판 등에서 스페이스바로 조합 끊기 옵션 적용시
 			if(mSpaceResetJohab && !mComposingWord.getComposingChar().equals("")) {
@@ -1098,9 +1095,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(currentT9Converter != null) {
-			currentT9Converter.convert(mComposingWord);
-		}
 		for(WordConverter converter : converters) {
 			converter.convert(mComposingWord);
 		}

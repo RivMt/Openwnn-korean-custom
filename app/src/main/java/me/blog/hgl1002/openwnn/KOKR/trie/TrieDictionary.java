@@ -34,8 +34,8 @@ public class TrieDictionary extends Trie {
 		super();
 	}
 
-	public List<Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke) {
-		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, false, 0);
+	public List<Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke, int limit) {
+		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, false, limit);
 	}
 
 	public List<Word> searchStroke(Map<Character, String> keyMap, String stroke) {
@@ -48,16 +48,15 @@ public class TrieDictionary extends Trie {
 	}
 
 	private List<Word> searchStroke(Map<Character, String>keyMap, String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
-		if(p.frequency > 0 && (fitLength && depth == stroke.length()))
+		if(limit > 0 && depth > limit) return words;
+		if(p.frequency > 0 && depth >= stroke.length())
 			words.add(new Word(Normalizer.normalize(currentWord, Normalizer.Form.NFC), p.frequency));
-		if(limit > 0 && words.size() >= limit) return words;
 		for(char ch : p.children.keySet()) {
 			TrieNode child = p.children.get(ch);
 			String charStroke = keyMap.get(ch);
+			if(charStroke == null) charStroke = String.valueOf(ch);
 			checkStroke:
-			if(charStroke != null
-					&& depth + charStroke.length() - 1 < stroke.length()
-					&& charStroke.charAt(0) == stroke.charAt(depth)) {
+			if(depth + charStroke.length() - 1 < stroke.length() && charStroke.charAt(0) == stroke.charAt(depth)) {
 				int j;
 				for(j = 1 ; j < charStroke.length() ; j++) {
 					if(charStroke.charAt(j) != stroke.charAt(depth + j)) {
@@ -65,6 +64,8 @@ public class TrieDictionary extends Trie {
 					}
 				}
 				searchStroke(keyMap, stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
+			} else if(!fitLength && depth + charStroke.length() > stroke.length()) {
+				searchStroke(keyMap, stroke, child, currentWord + ch, words, depth + 1, fitLength, limit);
 			}
 		}
 		return words;

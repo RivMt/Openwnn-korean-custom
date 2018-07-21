@@ -610,7 +610,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 	
 	public void setDefaultKeyboard() {
-		changeKeyMode(KEYMODE_ALT_SYMBOLS);
 		if(mForceHangul) {
 			mCurrentLanguage = LANG_KO;
 			mCurrentLanguageIndex = 1;
