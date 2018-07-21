@@ -3,6 +3,7 @@ package me.blog.hgl1002.openwnn.KOKR;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -96,7 +97,6 @@ public class T9Converter implements WordConverter {
 
 	@Override
 	public void convert(ComposingWord word) {
-		if(word.getEntireWord() == null) return;
 		if(task != null) {
 			task.cancel(true);
 		}
@@ -128,6 +128,14 @@ public class T9Converter implements WordConverter {
 			hangulEngine.setListener(this);
 		}
 
+		public void execute() {
+			if(Build.VERSION.SDK_INT >= 11) {
+				super.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			} else {
+				super.execute();
+			}
+		}
+
 		@Override
 		public void onEvent(HangulEngine.HangulEngineEvent event) {
 			if(event instanceof HangulEngine.SetComposingEvent) {
@@ -141,11 +149,17 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
-			if(converter.trailsDictionary != null && !converter.trailsDictionary.isEmpty()) {
+
+			if(converter.dictionary == null || !converter.dictionary.isReady()) {
+				this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
+				return 1;
+			}
+
+			if(converter.trailsDictionary != null && converter.trailsDictionary.isReady()) {
 				List<String> trailSource = new ArrayList<>();
 				char cho, jung, jong;
 				cho = jung = jong = '\0';
-				for(int i = 0 ; i <= 4 ; i++) {
+				for(int i = 0 ; i <= 8 ; i++) {
 					if(isCancelled()) return null;
 					if(word.length() <= i) break;
 					char ch = word.charAt(word.length()-i-1);
@@ -193,6 +207,12 @@ public class T9Converter implements WordConverter {
 			List<TrieDictionary.Word> result = converter.dictionary.searchStroke(word);
 			if(result != null) this.result.addAll(result);
 
+			this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
+
+			return 1;
+		}
+
+		private String rawCompose(String word) {
 			for(char ch : word.toCharArray()) {
 				if(isCancelled()) return null;
 				Integer code = KEY_MAP.get(ch);
@@ -204,10 +224,7 @@ public class T9Converter implements WordConverter {
 					composingWord.append(ch);
 				}
 			}
-			String w = composingWord + composing;
-			this.result.add(new TrieDictionary.Word(w, 1));
-
-			return 1;
+			return composingWord + composing;
 		}
 
 		@Override
@@ -220,7 +237,7 @@ public class T9Converter implements WordConverter {
 					result.add(word.getWord());
 				}
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
-				EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
+				if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
 			}
 		}
 	}
@@ -235,15 +252,25 @@ public class T9Converter implements WordConverter {
 			this.dictionary = dictionary;
 		}
 
+		public void execute() {
+			if(Build.VERSION.SDK_INT >= 11) {
+				super.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			} else {
+				super.execute();
+			}
+		}
+
 		@Override
 		protected Integer doInBackground(Void... voids) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			try {
+				dictionary.setReady(false);
 				String line;
 				int i = Integer.MAX_VALUE;
 				while((line = br.readLine()) != null) {
 					dictionary.insert(line, i--);
 				}
+				dictionary.setReady(true);
 				return 1;
 			} catch(IOException ex) {
 				ex.printStackTrace();

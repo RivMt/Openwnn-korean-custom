@@ -30,6 +30,8 @@ public class TrieDictionary extends Trie {
 
 	private Map<Character, String> keyMap;
 
+	protected boolean ready = true;
+
 	public TrieDictionary(EngineMode engineMode) {
 		super();
 		this.keyMap = generateKeyMap(engineMode);
@@ -190,4 +192,11 @@ public class TrieDictionary extends Trie {
 		}
 	}
 
+	public boolean isReady() {
+		return ready;
+	}
+
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
 }
