@@ -195,7 +195,7 @@ public class T9Converter implements WordConverter {
 						for(TrieDictionary.Word tr : trails) {
 							for(TrieDictionary.Word w : words) {
 								result.add(new TrieDictionary.Word(w.getWord() + tr.getWord(),
-										(w.getFrequency() + tr.getFrequency()) / 2));
+										(w.getFrequency()/2 + tr.getFrequency()/2)));
 							}
 						}
 					}
