@@ -28,13 +28,10 @@ public class TrieDictionary extends Trie {
 		add('ᅴ');
 	}};
 
-	private Map<Character, String> keyMap;
-
 	protected boolean ready = true;
 
-	public TrieDictionary(EngineMode engineMode) {
+	public TrieDictionary() {
 		super();
-		this.keyMap = generateKeyMap(engineMode);
 	}
 
 	public List<String> searchStorkeStartsWith(String stroke) {
@@ -43,16 +40,16 @@ public class TrieDictionary extends Trie {
 		return result;
 	}
 
-	public List<Word> searchStroke(String stroke) {
-		return searchStroke(stroke, 0);
+	public List<Word> searchStroke(Map<Character, String>keyMap, String stroke) {
+		return searchStroke(keyMap, stroke, 0);
 	}
 
-	public List<Word> searchStroke(String stroke, int limit) {
+	public List<Word> searchStroke(Map<Character, String>keyMap, String stroke, int limit) {
 		if(stroke == null || stroke.length() == 0) return null;
-		return searchStroke(stroke, root, "", new ArrayList<>(), 0, true, limit);
+		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, true, limit);
 	}
 
-	private List<Word> searchStroke(String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
+	private List<Word> searchStroke(Map<Character, String>keyMap, String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
 		if(p.frequency > 0 && (fitLength && depth == stroke.length()))
 			words.add(new Word(Normalizer.normalize(currentWord, Normalizer.Form.NFC), p.frequency));
 		if(limit > 0 && words.size() >= limit) return words;
@@ -69,13 +66,13 @@ public class TrieDictionary extends Trie {
 						break checkStroke;
 					}
 				}
-				searchStroke(stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
+				searchStroke(keyMap, stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
 			}
 		}
 		return words;
 	}
 
-	private Map<Character, String> generateKeyMap(EngineMode engineMode) {
+	public static Map<Character, String> generateKeyMap(EngineMode engineMode) {
 		Map<Character, String> map = new HashMap<>();
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';

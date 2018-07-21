@@ -42,6 +42,8 @@ import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
+import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
@@ -413,24 +415,28 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				|| mode == EngineMode.TWELVE_DUBUL_SKY2_PREDICTIVE) {
 			if(t9Converters[DefaultSoftKeyboard.LANG_KO] == null
 					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
-				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode);
+				TrieDictionary dictionary = null;
+				TrieDictionary trails = null;
 				try {
-					t9Converters[DefaultSoftKeyboard.LANG_KO].generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"));
+					dictionary = Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+					trails = Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
 				} catch(IOException ex) {
 					ex.printStackTrace();
 				}
+				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode, dictionary, trails);
 			}
 			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_KO];
 		} else if(mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
 				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
 			if(t9Converters[DefaultSoftKeyboard.LANG_EN] == null
 					|| t9Converters[DefaultSoftKeyboard.LANG_EN].getEngineMode() != mode) {
-				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode);
+				TrieDictionary dictionary = null;
 				try {
-					t9Converters[DefaultSoftKeyboard.LANG_EN].generate(getAssets().open("words/english.txt"));
+					dictionary = Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
 				} catch(IOException ex) {
 					ex.printStackTrace();
 				}
+				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode, dictionary, null);
 			}
 			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_EN];
 		} else {

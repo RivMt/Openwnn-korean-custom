@@ -50,10 +50,12 @@ public class T9Converter implements WordConverter {
 
 	private KoreanT9ConvertTask task;
 
+	private Map<Character, String> keyMap;
+
 	private TrieDictionary dictionary;
 	private TrieDictionary trailsDictionary;
 
-	public T9Converter(EngineMode engineMode) {
+	public T9Converter(EngineMode engineMode, TrieDictionary dictionary, TrieDictionary trailsDictionary) {
 		this.engineMode = engineMode;
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
@@ -61,8 +63,9 @@ public class T9Converter implements WordConverter {
 		hangulEngine.setCombinationTable(engineMode.combination);
 		hangulEngine.setMoachigi(false);
 
-		dictionary = new TrieDictionary(engineMode);
-		trailsDictionary = new TrieDictionary(engineMode);
+		this.keyMap = TrieDictionary.generateKeyMap(engineMode);
+		this.dictionary = dictionary;
+		this.trailsDictionary = trailsDictionary;
 
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
@@ -83,17 +86,6 @@ public class T9Converter implements WordConverter {
 				vowelList.add(sourceChar);
 			}
 		}
-	}
-
-	public void generate(InputStream words) {
-		if(!dictionary.isEmpty()) return;
-		new DictionaryGenerateTask(words, dictionary).execute();
-	}
-
-	public void generate(InputStream words, InputStream trails) {
-		if(!dictionary.isEmpty() && !trailsDictionary.isEmpty()) return;
-		new DictionaryGenerateTask(words, dictionary).execute();
-		new DictionaryGenerateTask(trails, trailsDictionary).execute();
 	}
 
 	@Override
@@ -184,13 +176,13 @@ public class T9Converter implements WordConverter {
 				StringBuilder trail = new StringBuilder();
 				for(String str : trailSource) {
 					trail.insert(0, str);
-					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString());
+					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(converter.keyMap, trail.toString());
 					if(trails != null) {
 						Collections.sort(trails, Collections.reverseOrder());
 						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
 						if(isCancelled()) return null;
 						String search = word.substring(0, word.length()-trail.length());
-						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(search);
+						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(converter.keyMap, search);
 						Collections.sort(words, Collections.reverseOrder());
 						words = words.subList(0, words.size() < 4 ? words.size() : 4);
 						for(TrieDictionary.Word tr : trails) {
@@ -205,7 +197,7 @@ public class T9Converter implements WordConverter {
 
 			if(isCancelled()) return null;
 
-			List<TrieDictionary.Word> result = converter.dictionary.searchStroke(word);
+			List<TrieDictionary.Word> result = converter.dictionary.searchStroke(converter.keyMap, word);
 			if(result != null) this.result.addAll(result);
 
 			this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
@@ -262,47 +254,6 @@ public class T9Converter implements WordConverter {
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 				if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
 			}
-		}
-	}
-
-	static class DictionaryGenerateTask extends AsyncTask<Void, Void, Integer> {
-
-		private InputStream is;
-		private TrieDictionary dictionary;
-
-		public DictionaryGenerateTask(InputStream is, TrieDictionary dictionary) {
-			this.is = is;
-			this.dictionary = dictionary;
-		}
-
-		public void execute() {
-			if(Build.VERSION.SDK_INT >= 11) {
-				super.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-			} else {
-				super.execute();
-			}
-		}
-
-		@Override
-		protected Integer doInBackground(Void... voids) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			try {
-				dictionary.setReady(false);
-				String line;
-				int i = Integer.MAX_VALUE;
-				while((line = br.readLine()) != null) {
-					dictionary.insert(line, i--);
-				}
-				dictionary.setReady(true);
-				return 1;
-			} catch(IOException ex) {
-				ex.printStackTrace();
-			}
-			return -1;
-		}
-
-		protected void onPostExecute(Integer result) {
-			super.onPostExecute(result);
 		}
 	}
 
