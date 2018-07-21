@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
+import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
@@ -36,9 +37,9 @@ public class T9Converter implements WordConverter {
 		put('7', -2007);
 		put('8', -2008);
 		put('9', -2009);
-		put('*', -2011);
+		put('-', -2011);
 		put('0', -2010);
-		put('#', -2012);
+		put('=', -2012);
 	}};
 
 	private List<Character> consonantList = new ArrayList<>();
@@ -212,17 +213,39 @@ public class T9Converter implements WordConverter {
 			return 1;
 		}
 
-		private String rawCompose(String word) {
-			for(char ch : word.toCharArray()) {
+		private String rawCompose(String stroke) {
+			for(char ch : stroke.toCharArray()) {
 				if(isCancelled()) return null;
-				Integer code = KEY_MAP.get(ch);
-				if(code != null) {
-					int jamo = hangulEngine.inputCode(code, 0);
-					if(jamo != -1) hangulEngine.inputJamo(jamo);
-				} else {
-					hangulEngine.resetComposition();
-					composingWord.append(ch);
+				int code = ch;
+				boolean shift = false;
+				if(Character.isUpperCase(ch)) {
+					code = Character.toLowerCase(ch);
+					shift = true;
 				}
+				for(int[] item : OpenWnnKOKR.SHIFT_CONVERT) {
+					if(item[1] == ch) {
+						code = item[0];
+						shift = true;
+						break;
+					}
+				}
+				if(code >= '1' && code <= '9') code = -code + '0' + -2000;
+				if(code == '0') code = -2010;
+				if(code == '-') code = -2011;
+				if(code == '=') code = -2012;
+
+				int jamo = hangulEngine.inputCode(code, 0);
+
+				if(shift) {
+					jamo = Character.toUpperCase(jamo);
+					for(int[] item : OpenWnnKOKR.SHIFT_CONVERT) {
+						if(item[0] == jamo) {
+							jamo = item[1];
+							break;
+						}
+					}
+				}
+				if(jamo != -1) hangulEngine.inputJamo(jamo);
 			}
 			return composingWord + composing;
 		}

@@ -983,7 +983,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if ((key <= -200 && key > -300) || (key <= -2000 && key > -3000)) {
 			int jamo = mHangulEngine.inputCode(key, mHardShift);
 			if (jamo != -1) {
-				if (mHardShift != 0) jamo = Character.toUpperCase(jamo);
+				if (mHardShift != 0) {
+					jamo = Character.toUpperCase(jamo);
+					for(int[] item : SHIFT_CONVERT) {
+						if(item[0] == jamo) {
+							jamo = item[1];
+							break;
+						}
+					}
+				}
 				if (mHangulEngine.inputJamo(jamo) == 0) {
 					mComposingWord.composeChar(new String(new char[] {(char) jamo}));
 					resetCharComposition();

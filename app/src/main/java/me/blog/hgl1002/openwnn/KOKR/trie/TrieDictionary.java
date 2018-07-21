@@ -85,8 +85,8 @@ public class TrieDictionary extends Trie {
 				sourceChar = (char) (-item[0] - 200 + 0x30);
 			} else continue;
 			if(sourceChar == 0x30 + 10) sourceChar = '0';
-			if(sourceChar == 0x30 + 11) sourceChar = '*';
-			if(sourceChar == 0x30 + 12) sourceChar = '#';
+			if(sourceChar == 0x30 + 11) sourceChar = '-';
+			if(sourceChar == 0x30 + 12) sourceChar = '=';
 
 			for(int i = 1 ; i < item.length ; i++) {
 				char ch = (char) item[i];
