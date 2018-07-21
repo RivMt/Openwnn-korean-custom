@@ -83,12 +83,12 @@ public class T9Converter implements WordConverter {
 		}
 	}
 
-	public void generate(InputStream words, EngineMode mode) {
+	public void generate(InputStream words) {
 		if(!dictionary.isEmpty()) return;
 		new DictionaryGenerateTask(words, dictionary).execute();
 	}
 
-	public void generate(InputStream words, InputStream trails, EngineMode mode) {
+	public void generate(InputStream words, InputStream trails) {
 		if(!dictionary.isEmpty() && !trailsDictionary.isEmpty()) return;
 		new DictionaryGenerateTask(words, dictionary).execute();
 		new DictionaryGenerateTask(trails, trailsDictionary).execute();
@@ -238,8 +238,8 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... voids) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			String line;
 			try {
+				String line;
 				int i = Integer.MAX_VALUE;
 				while((line = br.readLine()) != null) {
 					dictionary.insert(line, i--);

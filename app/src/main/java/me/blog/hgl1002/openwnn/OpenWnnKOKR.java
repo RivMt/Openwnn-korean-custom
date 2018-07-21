@@ -417,7 +417,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
 				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode);
 				try {
-					t9Converters[DefaultSoftKeyboard.LANG_KO].generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
+					t9Converters[DefaultSoftKeyboard.LANG_KO].generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"));
 				} catch(IOException ex) {
 					ex.printStackTrace();
 				}
@@ -429,13 +429,18 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					|| t9Converters[DefaultSoftKeyboard.LANG_EN].getEngineMode() != mode) {
 				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode);
 				try {
-					t9Converters[DefaultSoftKeyboard.LANG_EN].generate(getAssets().open("words/english.txt"), mode);
+					t9Converters[DefaultSoftKeyboard.LANG_EN].generate(getAssets().open("words/english.txt"));
 				} catch(IOException ex) {
 					ex.printStackTrace();
 				}
 			}
 			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_EN];
+		} else {
+			currentT9Converter = null;
 		}
+
+		resetWordComposition();
+		updateInputView();
 
 		if(prop.altMode) {
 			mAltMode = true;
@@ -449,7 +454,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return;
 		}
 
-		resetWordComposition();
 
 		mAltMode = false;
 		mDirectInputMode = prop.direct;
@@ -905,7 +909,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onAutoConvert(AutoConvertEvent event) {
-		mComposingWord.setFixedWord(event.getCandidate());
+		String candidate = event.getCandidate();
+		mComposingWord.setFixedWord(candidate.isEmpty() ? null : candidate);
 		updateInputView();
 	}
 
