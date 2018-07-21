@@ -32,7 +32,7 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 
 	public static void copyDatabase(Context context) {
 		File file = new File(new File(context.getFilesDir().getParentFile(), "databases"), DATABASE_NAME);
-		file.mkdirs();
+		file.getParentFile().mkdirs();
 		if(!file.exists()) {
 			AssetManager assetManager = context.getAssets();
 			try {
