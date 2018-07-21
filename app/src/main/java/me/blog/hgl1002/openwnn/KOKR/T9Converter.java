@@ -1,25 +1,23 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
@@ -45,22 +43,24 @@ public class T9Converter implements WordConverter {
 	private List<Character> consonantList = new ArrayList<>();
 	private List<Character> vowelList = new ArrayList<>();
 
+	private EngineMode engineMode;
 	private TwelveHangulEngine hangulEngine;
 
-	private String tableName, columnName;
-
 	private KoreanT9ConvertTask task;
-	private SQLiteDatabase database;
 
-	public T9Converter(Context context, EngineMode engineMode) {
+	private TrieDictionary dictionary;
+	private TrieDictionary trailsDictionary;
+
+	public T9Converter(EngineMode engineMode) {
+		this.engineMode = engineMode;
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
 		hangulEngine.setCombinationTable(engineMode.combination);
-		tableName = engineMode.getPrefValues()[0];
-		columnName = "keys";
 		hangulEngine.setMoachigi(false);
-		this.database = T9DatabaseHelper.getInstance().getReadableDatabase();
+
+		dictionary = new TrieDictionary(engineMode);
+		trailsDictionary = new TrieDictionary(engineMode);
 
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
@@ -83,13 +83,15 @@ public class T9Converter implements WordConverter {
 		}
 	}
 
-	public void generate(InputStream words, EngineMode mode) {
-		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
+	public void generate(InputStream words) {
+		if(!dictionary.isEmpty()) return;
+		new DictionaryGenerateTask(words, dictionary).execute();
 	}
 
-	public void generate(InputStream words, InputStream trails, EngineMode mode) {
-		T9DictionaryGenerator.generate(words, T9DatabaseHelper.getInstance().getWritableDatabase(), "", mode);
-		T9DictionaryGenerator.generate(trails, T9DatabaseHelper.getInstance().getWritableDatabase(), TRAILS, mode);
+	public void generate(InputStream words, InputStream trails) {
+		if(!dictionary.isEmpty() && !trailsDictionary.isEmpty()) return;
+		new DictionaryGenerateTask(words, dictionary).execute();
+		new DictionaryGenerateTask(trails, trailsDictionary).execute();
 	}
 
 	@Override
@@ -99,8 +101,9 @@ public class T9Converter implements WordConverter {
 			task.cancel(true);
 		}
 		hangulEngine.resetCycle();
-		task = new KoreanT9ConvertTask(this, word, tableName, columnName);
+		task = new KoreanT9ConvertTask(this, word);
 		task.execute();
+
 	}
 
 	static class KoreanT9ConvertTask extends AsyncTask<Void, List<String>, Integer> implements HangulEngine.HangulEngineListener {
@@ -110,22 +113,17 @@ public class T9Converter implements WordConverter {
 		private ComposingWord word;
 		private HangulEngine hangulEngine;
 
-		private List<String> result = new ArrayList<>();
-
-		private String tableName;
-		private String columnName;
+		private List<TrieDictionary.Word> result = new ArrayList<>();
 
 		private String composing;
 		private StringBuilder composingWord;
 
-		KoreanT9ConvertTask(T9Converter converter, ComposingWord word, String tableName, String columnName) {
+		KoreanT9ConvertTask(T9Converter converter, ComposingWord word) {
 			this.converter = converter;
 			this.word = word;
 			this.composing = "";
 			this.composingWord = new StringBuilder();
 			this.hangulEngine = converter.hangulEngine;
-			this.tableName = tableName;
-			this.columnName = columnName;
 			hangulEngine.resetComposition();
 			hangulEngine.setListener(this);
 		}
@@ -143,34 +141,7 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
-
-			List<String> result = new ArrayList<>();
-
-			for(char ch : word.toCharArray()) {
-				if(isCancelled()) return null;
-				Integer code = KEY_MAP.get(ch);
-				if(code != null) {
-					int jamo = hangulEngine.inputCode(code, 0);
-					if(jamo != -1) hangulEngine.inputJamo(jamo);
-				} else {
-					hangulEngine.resetComposition();
-					composingWord.append(ch);
-				}
-			}
-			String composedWord = composingWord + composing;
-			result.add(composedWord);
-
-			publishProgress(result);
-
-			if(isCancelled()) return null;
-
-			result = getWords(word, 0);
-			publishProgress(result);
-
-			if(T9DatabaseHelper.getInstance().hasTable(tableName + TRAILS)) {
-				if(isCancelled()) return null;
-
-				result = new ArrayList<>();
+			if(converter.trailsDictionary != null && !converter.trailsDictionary.isEmpty()) {
 				List<String> trailSource = new ArrayList<>();
 				char cho, jung, jong;
 				cho = jung = jong = '\0';
@@ -198,86 +169,95 @@ public class T9Converter implements WordConverter {
 				StringBuilder trail = new StringBuilder();
 				for(String str : trailSource) {
 					trail.insert(0, str);
-					List<String> trails = getTrails(trail.toString());
+					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString());
 					if(trails != null) {
+						Collections.sort(trails, Collections.reverseOrder());
+						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
 						if(isCancelled()) return null;
 						String search = word.substring(0, word.length()-trail.length());
-						List<String> words = getWords(search, 4);
-						for(String tr : trails) {
-							for(String w : words) {
-								result.add(w + tr);
+						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(search);
+						Collections.sort(words, Collections.reverseOrder());
+						words = words.subList(0, words.size() < 4 ? words.size() : 4);
+						for(TrieDictionary.Word tr : trails) {
+							for(TrieDictionary.Word w : words) {
+								result.add(new TrieDictionary.Word(w.getWord() + tr.getWord(),
+										(w.getFrequency() + tr.getFrequency()) / 2));
 							}
 						}
 					}
 				}
-				this.result = result;
-				publishProgress(result);
 			}
+
+			if(isCancelled()) return null;
+
+			List<TrieDictionary.Word> result = converter.dictionary.searchStroke(word);
+			if(result != null) this.result.addAll(result);
+
+			for(char ch : word.toCharArray()) {
+				if(isCancelled()) return null;
+				Integer code = KEY_MAP.get(ch);
+				if(code != null) {
+					int jamo = hangulEngine.inputCode(code, 0);
+					if(jamo != -1) hangulEngine.inputJamo(jamo);
+				} else {
+					hangulEngine.resetComposition();
+					composingWord.append(ch);
+				}
+			}
+			String w = composingWord + composing;
+			this.result.add(new TrieDictionary.Word(w, 1));
 
 			return 1;
-		}
-
-		private List<String> getWords(String search, int limit) {
-			List<String> result = new ArrayList<>();
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(" select * from `" + tableName + "` ");
-			sb.append(" where `" + columnName + "` = ? ");
-			if(limit > 0) sb.append(" limit " + limit + " ");
-
-			Cursor cursor = converter.database.rawQuery(sb.toString(),
-					new String[] {
-							search
-					}
-			);
-
-			if(cursor.getCount() == 0) return result;
-
-			int column = cursor.getColumnIndex("word");
-			while(cursor.moveToNext()) {
-				result.add(cursor.getString(column));
-			}
-			cursor.close();
-
-			return result;
-		}
-
-		private List<String> getTrails(String search) {
-			List<String> result = new ArrayList<>();
-
-			StringBuilder sb = new StringBuilder();
-			sb.append(" select * from `" + tableName + TRAILS + "` ");
-			sb.append(" where `" + columnName + "` = ? ");
-			sb.append(" limit 3 ");
-
-			Cursor cursor = converter.database.rawQuery(sb.toString(),
-					new String[] {
-							search
-					}
-			);
-
-			if(cursor.getCount() == 0) return null;
-
-			int column = cursor.getColumnIndex("word");
-			if(cursor.moveToNext()) {
-				result.add(cursor.getString(column));
-			}
-			cursor.close();
-			return  result;
-		}
-
-		@Override
-		protected void onProgressUpdate(List<String>... values) {
-			List<String> result = values[0];
-			EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
-			if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
-			super.onProgressUpdate(values);
 		}
 
 		@Override
 		protected void onPostExecute(Integer integer) {
 			super.onPostExecute(integer);
+			if(integer == 1 && !result.isEmpty()) {
+				List<String> result = new ArrayList<>();
+				Collections.sort(this.result, Collections.reverseOrder());
+				for(TrieDictionary.Word word : this.result) {
+					result.add(word.getWord());
+				}
+				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
+				EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
+			}
 		}
+	}
+
+	static class DictionaryGenerateTask extends AsyncTask<Void, Void, Integer> {
+
+		private InputStream is;
+		private TrieDictionary dictionary;
+
+		public DictionaryGenerateTask(InputStream is, TrieDictionary dictionary) {
+			this.is = is;
+			this.dictionary = dictionary;
+		}
+
+		@Override
+		protected Integer doInBackground(Void... voids) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			try {
+				String line;
+				int i = Integer.MAX_VALUE;
+				while((line = br.readLine()) != null) {
+					dictionary.insert(line, i--);
+				}
+				return 1;
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+			return -1;
+		}
+
+		protected void onPostExecute(Integer result) {
+			super.onPostExecute(result);
+		}
+	}
+
+	public EngineMode getEngineMode() {
+		return engineMode;
 	}
 
 }

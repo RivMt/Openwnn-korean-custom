@@ -38,7 +38,6 @@ import me.blog.hgl1002.openwnn.KOKR.T9Converter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
-import me.blog.hgl1002.openwnn.KOKR.T9DatabaseHelper;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
@@ -104,7 +103,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 	List<WordConverter> converters = new ArrayList<>();
-	T9Converter t9Converter;
+	T9Converter[] t9Converters = new T9Converter[4];
+	T9Converter currentT9Converter;
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -196,8 +196,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	public void onCreate() {
 		super.onCreate();
 		EventBus.getDefault().register(this);
-
-		new T9DatabaseHelper(this);
 
 		HanjaConverter.copyDatabase(this);
 	}
@@ -411,24 +409,35 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EngineMode.Properties prop = mode.properties;
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
-			t9Converter = new T9Converter(this, mode);
-			try {
-				if(!T9DatabaseHelper.getInstance().hasDictionary(mode)) {
-					if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-							|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE)
-						t9Converter.generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"), mode);
-					else
-						t9Converter.generate(getAssets().open("words/english.txt"), mode);
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+			if(t9Converters[DefaultSoftKeyboard.LANG_KO] == null
+					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
+				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode);
+				try {
+					t9Converters[DefaultSoftKeyboard.LANG_KO].generate(getAssets().open("words/korean.txt"), getAssets().open("words/korean-trails.txt"));
+				} catch(IOException ex) {
+					ex.printStackTrace();
 				}
-			} catch(IOException ex) {
-				ex.printStackTrace();
 			}
+			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_KO];
+		} else if(mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
+				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
+			if(t9Converters[DefaultSoftKeyboard.LANG_EN] == null
+					|| t9Converters[DefaultSoftKeyboard.LANG_EN].getEngineMode() != mode) {
+				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode);
+				try {
+					t9Converters[DefaultSoftKeyboard.LANG_EN].generate(getAssets().open("words/english.txt"));
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_EN];
 		} else {
-			t9Converter = null;
+			currentT9Converter = null;
 		}
+
+		resetWordComposition();
+		updateInputView();
 
 		if(prop.altMode) {
 			mAltMode = true;
@@ -442,7 +451,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			return;
 		}
 
-		resetWordComposition();
 
 		mAltMode = false;
 		mDirectInputMode = prop.direct;
@@ -705,7 +713,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 
 		case KeyEvent.KEYCODE_SPACE:
-			if(t9Converter != null) {
+			if(currentT9Converter != null) {
 				if(mComposingWord.getFixedWord() != null) {
 					resetCharComposition();
 					resetWordComposition();
@@ -898,7 +906,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onAutoConvert(AutoConvertEvent event) {
-		mComposingWord.setFixedWord(event.getCandidate());
+		String candidate = event.getCandidate();
+		mComposingWord.setFixedWord(candidate.isEmpty() ? null : candidate);
 		updateInputView();
 	}
 
@@ -1086,8 +1095,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	private void performConversion() {
 		mCandidatesViewManager.clearCandidates();
-		if(t9Converter != null) {
-			t9Converter.convert(mComposingWord);
+		if(currentT9Converter != null) {
+			currentT9Converter.convert(mComposingWord);
 		}
 		for(WordConverter converter : converters) {
 			converter.convert(mComposingWord);
