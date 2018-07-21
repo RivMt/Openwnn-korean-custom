@@ -37,10 +37,12 @@ public enum EngineMode {
 	DUBULSIK_YET(new Properties(), JAMO_DUBUL_YET, null, COMB_FULL, null, "keyboard_dubul_yet"),
 	SEBUL_393Y(new Properties(), JAMO_SEBUL_393Y, null, COMB_FULL, null, "keyboard_sebul_393y"),
 	SEBUL_3_2015Y(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "keyboard_sebul_3_2015y"),
-	TWELVE_ALPHABET_A(new Properties(true, true), CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a", "keyboard_12key_alphabet_narrow_a"),
-	TWELVE_ALPHABET_B(new Properties(true, true), CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b", "keyboard_12key_alphabet_narrow_b"),
-	TWELVE_ALPHABET_A_PREDICTIVE(new Properties(true, true), CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a_predictive", "keyboard_12key_alphabet_narrow_a_predictive"),
-	TWELVE_ALPHABET_B_PREDICTIVE(new Properties(true, true), CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b_predictive", "keyboard_12key_alphabet_narrow_b_predictive"),
+
+	TWELVE_ALPHABET_A(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, true, true), CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a", "keyboard_12key_alphabet_narrow_a"),
+	TWELVE_ALPHABET_B(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, true, true), CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b", "keyboard_12key_alphabet_narrow_b"),
+	TWELVE_ALPHABET_A_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, true, true), CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a_predictive", "keyboard_12key_alphabet_narrow_a_predictive"),
+	TWELVE_ALPHABET_B_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, true, true), CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b_predictive", "keyboard_12key_alphabet_narrow_b_predictive"),
+
 	TWELVE_SEBUL_MUNHWA(new Properties(true, false), CYCLE_SEBUL_12KEY_MUNHWA, null, COMB_SEBUL_12KEY_MUNHWA, STROKE_SEBUL_12KEY_MUNHWA, "keyboard_12key_sebul_munhwa"),
 	TWELVE_SEBUL_HANSON(new Properties(true, false), CYCLE_SEBUL_12KEY_HANSON, null, COMB_SEBUL_12KEY_HANSON, STROKE_SEBUL_12KEY_HANSON, "keyboard_12key_sebul_hanson"),
 	TWELVE_SEBUL_SENA(new Properties(true, false), CYCLE_SEBUL_12KEY_SENA, null, COMB_SEBUL_12KEY_SENA, STROKE_SEBUL_12KEY_SENA, "keyboard_12key_sebul_sena"),
@@ -52,9 +54,9 @@ public enum EngineMode {
 	TWELVE_DUBUL_SKY2_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_SKY2, null, COMB_DUBUL_12KEY_SKY2, null, "keyboard_12key_dubul_sky2_predictive"),
 	TWELVE_DUBUL_DANMOEUM(new Properties(true, true), JAMO_DUBUL_DANMOEUM_GOOGLE, null, COMB_DUBUL_DANMOEUM_GOOGLE, null, "keyboard_dubul_danmoeum_google"),
 
-	ENGLISH_QWERTY(new Properties(false, false, false, false), null, null, null, null, "keyboard_alphabet_qwerty"),
-	ENGLISH_DVORAK(new Properties(), CONVERT_ENGLISH_DVORAK, null, null, null, "keyboard_alphabet_dvorak"),
-	ENGLISH_COLEMAK(new Properties(), CONVERT_ENGLISH_COLEMAK, null, null, null, "keyboard_alphabet_colemak"),
+	ENGLISH_QWERTY(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, false), null, null, null, null, "keyboard_alphabet_qwerty"),
+	ENGLISH_DVORAK(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, false), CONVERT_ENGLISH_DVORAK, null, null, null, "keyboard_alphabet_dvorak"),
+	ENGLISH_COLEMAK(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, false), CONVERT_ENGLISH_COLEMAK, null, null, null, "keyboard_alphabet_colemak"),
 
 	SYMBOL_A(new Properties(true, false, false, false, false), LayoutSymbol.SYMBOL_A, null, null, null, "keyboard_symbol_a"),
 	SYMBOL_B(new Properties(true, false, false, false, false), LayoutSymbol.SYMBOL_B, null, null, null, "keyboard_symbol_b");
@@ -78,14 +80,20 @@ public enum EngineMode {
 	}
 
 	public static class Properties {
+		public final int languageCode;
 		public final boolean altMode, direct, fullMoachigi, twelveEngine, timeout;
 
-		public Properties(boolean altMode, boolean direct, boolean fullMoachigi, boolean twelveEngine, boolean timeout) {
+		public Properties(int languageCode, boolean altMode, boolean direct, boolean fullMoachigi, boolean twelveEngine, boolean timeout) {
+			this.languageCode = languageCode;
 			this.altMode = altMode;
 			this.direct = direct;
 			this.fullMoachigi = fullMoachigi;
 			this.twelveEngine = twelveEngine;
 			this.timeout = timeout;
+		}
+
+		public Properties(boolean altMode, boolean direct, boolean fullMoachigi, boolean twelveEngine, boolean timeout) {
+			this(DefaultSoftKeyboardKOKR.LANG_KO, altMode, direct, fullMoachigi, twelveEngine, timeout);
 		}
 
 		public Properties(boolean direct, boolean fullMoachigi, boolean twelveEngine, boolean timeout) {

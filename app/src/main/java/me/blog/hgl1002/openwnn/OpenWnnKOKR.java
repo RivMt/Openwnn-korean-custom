@@ -28,13 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import me.blog.hgl1002.openwnn.KOKR.AutoTextConverter;
+import me.blog.hgl1002.openwnn.KOKR.converter.AutoTextConverter;
 import me.blog.hgl1002.openwnn.KOKR.CandidatesViewManagerKOKR;
 import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
-import me.blog.hgl1002.openwnn.KOKR.HanjaConverter;
-import me.blog.hgl1002.openwnn.KOKR.T9Converter;
+import me.blog.hgl1002.openwnn.KOKR.converter.HanjaConverter;
+import me.blog.hgl1002.openwnn.KOKR.converter.T9Converter;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
 import me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
@@ -43,7 +43,6 @@ import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
-import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
@@ -240,6 +239,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(!restarting) {
 			converters = new ArrayList<>();
 			if(pref.getBoolean("conversion_show_candidates", false)) {
+				converters.add(new T9Converter());
 				if (pref.getBoolean("conversion_use_hanja", false)) {
 					HanjaConverter hanjaConverter = new HanjaConverter(this);
 					converters.add(hanjaConverter);
@@ -397,6 +397,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		mCurrentEngineMode = mode;
 
+		for(WordConverter converter : converters) {
+			converter.setEngineMode(mCurrentEngineMode);
+		}
+
 		if(mode == EngineMode.DIRECT) {
 			mDirectInputMode = true;
 			mEnableTimeout = false;
@@ -410,37 +414,20 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		EngineMode.Properties prop = mode.properties;
 
-		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_SKY2_PREDICTIVE) {
-			if(t9Converters[DefaultSoftKeyboard.LANG_KO] == null
-					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
-				TrieDictionary dictionary = null;
-				TrieDictionary trails = null;
-				try {
-					dictionary = Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
-					trails = Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
-				} catch(IOException ex) {
-					ex.printStackTrace();
-				}
-				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode, dictionary, trails);
+		switch(mode) {
+		case TWELVE_ALPHABET_A_PREDICTIVE:
+		case TWELVE_ALPHABET_B_PREDICTIVE:
+		case TWELVE_DUBUL_CHEONJIIN_PREDICTIVE:
+		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
+		case TWELVE_DUBUL_SKY2_PREDICTIVE:
+			try {
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
+				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
+			} catch(IOException ex) {
+				ex.printStackTrace();
 			}
-			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_KO];
-		} else if(mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
-				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
-			if(t9Converters[DefaultSoftKeyboard.LANG_EN] == null
-					|| t9Converters[DefaultSoftKeyboard.LANG_EN].getEngineMode() != mode) {
-				TrieDictionary dictionary = null;
-				try {
-					dictionary = Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
-				} catch(IOException ex) {
-					ex.printStackTrace();
-				}
-				t9Converters[DefaultSoftKeyboard.LANG_EN] = new T9Converter(mode, dictionary, null);
-			}
-			currentT9Converter = t9Converters[DefaultSoftKeyboard.LANG_EN];
-		} else {
-			currentT9Converter = null;
+			break;
 		}
 
 		resetWordComposition();

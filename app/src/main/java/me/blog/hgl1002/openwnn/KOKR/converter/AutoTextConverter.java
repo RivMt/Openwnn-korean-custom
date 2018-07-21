@@ -1,4 +1,4 @@
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.converter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
+import me.blog.hgl1002.openwnn.KOKR.EngineMode;
+import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class AutoTextConverter implements WordConverter {
@@ -26,4 +29,8 @@ public class AutoTextConverter implements WordConverter {
 		}
 	}
 
+	@Override
+	public void setEngineMode(EngineMode engineMode) {
+
+	}
 }

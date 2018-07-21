@@ -1,4 +1,4 @@
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.converter;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -17,6 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
+import me.blog.hgl1002.openwnn.KOKR.EngineMode;
+import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
@@ -73,6 +77,11 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 		task.execute();
 	}
 
+	@Override
+	public void setEngineMode(EngineMode engineMode) {
+
+	}
+
 	static class HanjaConvertTask extends AsyncTask<Void, Integer, Integer> {
 
 		private SQLiteDatabase database;
@@ -82,6 +91,14 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 		public HanjaConvertTask(SQLiteDatabase database, ComposingWord word) {
 			this.database = database;
 			this.word = word;
+		}
+
+		public void execute() {
+			if(Build.VERSION.SDK_INT >= 11) {
+				super.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			} else {
+				super.execute();
+			}
 		}
 
 		@Override

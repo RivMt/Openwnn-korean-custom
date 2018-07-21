@@ -1,23 +1,22 @@
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.converter;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
+import me.blog.hgl1002.openwnn.KOKR.EngineMode;
+import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
+import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
+import me.blog.hgl1002.openwnn.KOKR.WordConverter;
+import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
@@ -25,47 +24,62 @@ import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class T9Converter implements WordConverter {
 
-	private static final String TRAILS = "_trails";
-
-	private static final Map<Character, Integer> KEY_MAP = new HashMap<Character, Integer>() {{
-		put('1', -2001);
-		put('2', -2002);
-		put('3', -2003);
-		put('4', -2004);
-		put('5', -2005);
-		put('6', -2006);
-		put('7', -2007);
-		put('8', -2008);
-		put('9', -2009);
-		put('-', -2011);
-		put('0', -2010);
-		put('=', -2012);
-	}};
-
 	private List<Character> consonantList = new ArrayList<>();
 	private List<Character> vowelList = new ArrayList<>();
 
 	private EngineMode engineMode;
 	private TwelveHangulEngine hangulEngine;
 
-	private KoreanT9ConvertTask task;
+	private boolean convert;
+	private T9ConvertTask task;
 
 	private Map<Character, String> keyMap;
 
 	private TrieDictionary dictionary;
 	private TrieDictionary trailsDictionary;
 
-	public T9Converter(EngineMode engineMode, TrieDictionary dictionary, TrieDictionary trailsDictionary) {
-		this.engineMode = engineMode;
+	public T9Converter() {
 		hangulEngine = new TwelveHangulEngine();
+		hangulEngine.setMoachigi(false);
+	}
+
+	@Override
+	public void convert(ComposingWord word) {
+		if(task != null) {
+			task.cancel(true);
+		}
+		if(!convert) return;
+
+		hangulEngine.resetCycle();
+		task = new T9ConvertTask(this, word);
+		task.execute();
+
+	}
+
+	@Override
+	public void setEngineMode(EngineMode engineMode) {
+		this.engineMode = engineMode;
 		hangulEngine.setJamoTable(engineMode.layout);
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
 		hangulEngine.setCombinationTable(engineMode.combination);
-		hangulEngine.setMoachigi(false);
+
+		switch(engineMode) {
+		case TWELVE_ALPHABET_A_PREDICTIVE:
+		case TWELVE_ALPHABET_B_PREDICTIVE:
+		case TWELVE_DUBUL_CHEONJIIN_PREDICTIVE:
+		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
+		case TWELVE_DUBUL_SKY2_PREDICTIVE:
+			convert = true;
+			break;
+		default:
+			convert = false;
+			return;
+		}
 
 		this.keyMap = TrieDictionary.generateKeyMap(engineMode);
-		this.dictionary = dictionary;
-		this.trailsDictionary = trailsDictionary;
+
+		this.dictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 0);
+		this.trailsDictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 1);
 
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
@@ -88,18 +102,7 @@ public class T9Converter implements WordConverter {
 		}
 	}
 
-	@Override
-	public void convert(ComposingWord word) {
-		if(task != null) {
-			task.cancel(true);
-		}
-		hangulEngine.resetCycle();
-		task = new KoreanT9ConvertTask(this, word);
-		task.execute();
-
-	}
-
-	static class KoreanT9ConvertTask extends AsyncTask<Void, List<String>, Integer> implements HangulEngine.HangulEngineListener {
+	static class T9ConvertTask extends AsyncTask<Void, List<String>, Integer> implements HangulEngine.HangulEngineListener {
 
 		private T9Converter converter;
 
@@ -111,7 +114,7 @@ public class T9Converter implements WordConverter {
 		private String composing;
 		private StringBuilder composingWord;
 
-		KoreanT9ConvertTask(T9Converter converter, ComposingWord word) {
+		T9ConvertTask(T9Converter converter, ComposingWord word) {
 			this.converter = converter;
 			this.word = word;
 			this.composing = "";

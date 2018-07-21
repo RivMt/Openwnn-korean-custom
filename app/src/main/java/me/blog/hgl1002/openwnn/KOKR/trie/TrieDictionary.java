@@ -34,13 +34,11 @@ public class TrieDictionary extends Trie {
 		super();
 	}
 
-	public List<String> searchStorkeStartsWith(String stroke) {
-		List<String> result = new LinkedList<>();
-
-		return result;
+	public List<Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke) {
+		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, false, 0);
 	}
 
-	public List<Word> searchStroke(Map<Character, String>keyMap, String stroke) {
+	public List<Word> searchStroke(Map<Character, String> keyMap, String stroke) {
 		return searchStroke(keyMap, stroke, 0);
 	}
 
