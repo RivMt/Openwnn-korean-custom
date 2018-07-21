@@ -101,9 +101,11 @@
     <string name="preference_keyboard_sebul_393y_10cols">옛한글 세벌식 393 (10열 배열)</string>
 
     <string name="preference_keyboard_12key_dubul_cheonjiin">12키 두벌식 천지인</string>
+    <string name="preference_keyboard_12key_dubul_cheonjiin_predictive">12키 두벌식 천지인 Predictive</string>
     <string name="preference_keyboard_12key_dubul_naratgeul">12키 두벌식 나랏글</string>
     <string name="preference_keyboard_12key_dubul_naratgeul_predictive">12키 두벌식 나랏글 Predictive</string>
     <string name="preference_keyboard_12key_dubul_sky2">12키 두벌식 SKY2</string>
+    <string name="preference_keyboard_12key_dubul_sky2_predictive">12키 두벌식 SKY2 Predictive</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
     <string name="preference_keyboard_12key_sebul_sena">한손 세벌식 (세나 배열)</string>
@@ -242,6 +244,8 @@
 
     <string name="preference_system_force_hangul_title">한글 키보드 강제</string>
     <string name="preference_system_force_hangul_summary">입력 상황에 관계없이 한글 키보드를 항상 먼저 보여줍니다.</string>
+
+    <string name="preference_aboutime_menu">IME 정보</string>
 
     <string name="initial_launch_help">ALT키를 길게 누르면 설정을 열 수 있습니다.</string>
 
