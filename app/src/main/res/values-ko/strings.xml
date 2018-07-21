@@ -203,6 +203,9 @@
     <string name="preference_conversion_show_candidates_title">후보 창 표시</string>
     <string name="preference_conversion_show_candidates_summary">단어 변환, 추천 기능을 사용하고 후보 창을 표시합니다.</string>
 
+    <string name="preference_conversion_use_word_completion_title">단어 자동완성</string>
+    <string name="preference_conversion_use_word_completion_summary">단어 자동완성을 사용합니다.</string>
+
     <string name="preference_conversion_use_hanja_title">한자 변환</string>
     <string name="preference_conversion_use_hanja_summary">한자와 한자어 변환을 사용합니다.</string>
 

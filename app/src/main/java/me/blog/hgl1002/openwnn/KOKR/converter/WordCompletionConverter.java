@@ -19,9 +19,9 @@ import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
-public class WordPredictConverter implements WordConverter {
+public class WordCompletionConverter implements WordConverter {
 
-	private WordPredictConvertTask task;
+	private WordCompletionConvertTask task;
 	private TrieDictionary dictionary;
 	private Map<Character, String> keyMap;
 
@@ -29,7 +29,7 @@ public class WordPredictConverter implements WordConverter {
 	public void convert(ComposingWord word) {
 		if(task != null) task.cancel(true);
 		if(word.length() <= 0) return;
-		task = new WordPredictConvertTask(word, keyMap, dictionary);
+		task = new WordCompletionConvertTask(word, keyMap, dictionary);
 		task.execute();
 	}
 
@@ -39,13 +39,13 @@ public class WordPredictConverter implements WordConverter {
 		keyMap = new HashMap<>();
 	}
 
-	private static class WordPredictConvertTask extends AsyncTask<Void, Integer, Integer> {
+	private static class WordCompletionConvertTask extends AsyncTask<Void, Integer, Integer> {
 		private ComposingWord word;
 		private Map<Character, String> keyMap;
 		private TrieDictionary dictionary;
 		private List<TrieDictionary.Word> result;
 
-		WordPredictConvertTask(ComposingWord word, Map<Character, String> keyMap, TrieDictionary dictionary) {
+		WordCompletionConvertTask(ComposingWord word, Map<Character, String> keyMap, TrieDictionary dictionary) {
 			this.word = word;
 			this.keyMap = keyMap;
 			this.dictionary = dictionary;

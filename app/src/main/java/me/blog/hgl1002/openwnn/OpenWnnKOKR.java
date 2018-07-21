@@ -42,7 +42,7 @@ import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.*;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
-import me.blog.hgl1002.openwnn.KOKR.converter.WordPredictConverter;
+import me.blog.hgl1002.openwnn.KOKR.converter.WordCompletionConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.event.*;
 
@@ -265,7 +265,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				} catch(IOException ex) {
 					ex.printStackTrace();
 				}
-				converters.add(new WordPredictConverter());
+				if(pref.getBoolean("conversion_use_word_completion", false)) {
+					converters.add(new WordCompletionConverter());
+				}
 			}
 		}
 

@@ -459,6 +459,9 @@
     <string name="preference_conversion_show_candidates_title">Show candidates window</string>
     <string name="preference_conversion_show_candidates_summary">Show candidates window to use conversion and prediction features.</string>
 
+    <string name="preference_conversion_use_word_completion_title">Word completion</string>
+    <string name="preference_conversion_use_word_completion_summary">Use automatic word completion.</string>
+
     <string name="preference_conversion_use_hanja_title">Hanja conversion</string>
     <string name="preference_conversion_use_hanja_summary">Use Hangeul to Hanja (Chinese characters) conversion.</string>
 
