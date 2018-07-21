@@ -49,6 +49,7 @@ public enum EngineMode {
 	TWELVE_DUBUL_NARATGEUL(new Properties(true, false), CYCLE_DUBUL_12KEY_NARATGEUL, null, COMB_DUBUL_12KEY_NARATGEUL, STROKE_DUBUL_12KEY_NARATGEUL, "keyboard_12key_dubul_naratgeul"),
 	TWELVE_DUBUL_NARATGEUL_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_NARATGEUL, null, COMB_DUBUL_12KEY_NARATGEUL, STROKE_DUBUL_12KEY_NARATGEUL, "keyboard_12key_dubul_naratgeul_predictive"),
 	TWELVE_DUBUL_SKY2(new Properties(true, true), CYCLE_DUBUL_12KEY_SKY2, null, COMB_DUBUL_12KEY_SKY2, null, "keyboard_12key_dubul_sky2"),
+	TWELVE_DUBUL_SKY2_PREDICTIVE(new Properties(true, true), CYCLE_DUBUL_12KEY_SKY2, null, COMB_DUBUL_12KEY_SKY2, null, "keyboard_12key_dubul_sky2_predictive"),
 	TWELVE_DUBUL_DANMOEUM(new Properties(true, true), JAMO_DUBUL_DANMOEUM_GOOGLE, null, COMB_DUBUL_DANMOEUM_GOOGLE, null, "keyboard_dubul_danmoeum_google"),
 
 	ENGLISH_QWERTY(new Properties(false, false, false, false), null, null, null, null, "keyboard_alphabet_qwerty"),

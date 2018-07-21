@@ -409,7 +409,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EngineMode.Properties prop = mode.properties;
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
-				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE) {
+				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
+				|| mode == EngineMode.TWELVE_DUBUL_SKY2_PREDICTIVE) {
 			if(t9Converters[DefaultSoftKeyboard.LANG_KO] == null
 					|| t9Converters[DefaultSoftKeyboard.LANG_KO].getEngineMode() != mode) {
 				t9Converters[DefaultSoftKeyboard.LANG_KO] = new T9Converter(mode);
@@ -469,6 +470,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		if(mode == EngineMode.TWELVE_DUBUL_NARATGEUL_PREDICTIVE
 				|| mode == EngineMode.TWELVE_DUBUL_CHEONJIIN_PREDICTIVE
+				|| mode == EngineMode.TWELVE_DUBUL_SKY2_PREDICTIVE
 				|| mode == EngineMode.TWELVE_ALPHABET_A_PREDICTIVE
 				|| mode == EngineMode.TWELVE_ALPHABET_B_PREDICTIVE) {
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);

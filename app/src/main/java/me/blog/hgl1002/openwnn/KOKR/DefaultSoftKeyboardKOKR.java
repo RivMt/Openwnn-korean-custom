@@ -451,6 +451,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			case "keyboard_12key_dubul_sky2":
+			case "keyboard_12key_dubul_sky2_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_dubul_sky2);
 				break;
 
