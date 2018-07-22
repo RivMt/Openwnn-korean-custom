@@ -6,12 +6,12 @@
 #include "list.h"
 #include "map.h"
 
+#define WORD_LENGTH 30
+
 typedef struct TrieNode TrieNode;
 typedef map_t(TrieNode*) trienode_map_t;
 typedef struct Word Word;
 typedef struct WordList WordList;
-
-const int WORD_LENGTH = 30;
 
 struct TrieNode {
     wchar_t ch;
@@ -130,26 +130,30 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jo
 TrieNode * compressRecursive(TrieNode * p) {
     map_iter_t iterator;
     const char * key;
-    int count;
+    const char * key2;
+    int count = 0;
     TrieNode * child;
 
-    count = 0;
     if(p->children == NULL) return p;
     iterator = map_iter(p->children);
-    while((key = map_next(p->children, &iterator)) != NULL) {
+    while((key = map_next(p->children, &iterator))) {
         child = *map_get(p->children, key);
         compressRecursive(child);
         count++;
     }
     if(count == 1) {
+        iterator = map_iter(p->children);
+        key2 = map_next(p->children, &iterator);
+        child = *map_get(p->children, key2);
         p->compressed = (char*) malloc(sizeof(char) * WORD_LENGTH);
+        strcpy(p->compressed, key2);
         if(child->compressed != NULL) {
             strcat(p->compressed, child->compressed);
             free(child->compressed);
         }
         else {
-            sprintf(p->compressed, "%s%c", p->compressed, child->ch);
             p->frequency = child->frequency;
+            sprintf(p->compressed, "%s%c", p->compressed, child->ch);
             map_deinit(p->children);
             free(p->children);
         }

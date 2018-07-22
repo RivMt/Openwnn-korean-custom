@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class NativeTrie implements Trie {
+public class NativeTrie implements Trie, Compressable {
 
 	static {
 		System.loadLibrary("triedictionary-lib");
@@ -15,6 +15,7 @@ public class NativeTrie implements Trie {
 	private native void initNative();
 	private native void insertNative(String word, int frequency);
 	private native String[] getAllWordsNative();
+	private native void compressNative();
 
 	public NativeTrie() {
 		this.initNative();
@@ -38,6 +39,11 @@ public class NativeTrie implements Trie {
 	@Override
 	public List<String> getAllWords() {
 		return Arrays.asList(getAllWordsNative());
+	}
+
+	@Override
+	public void compress() {
+		compressNative();
 	}
 
 	@Override
