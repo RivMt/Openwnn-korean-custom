@@ -74,7 +74,6 @@ public class Dictionaries {
 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-//			System.out.println(dictionary.getAllWords());
 		}
 	}
 

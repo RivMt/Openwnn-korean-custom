@@ -21,12 +21,6 @@ android {
         }
     }
 
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
-    }
-
     lintOptions {
         disable 'MissingTranslation'
     }
@@ -36,4 +30,9 @@ android {
         testImplementation 'junit:junit:4.12'
     }
 
+    externalNativeBuild {
+        ndkBuild {
+            path 'Android.mk'
+        }
+    }
 }

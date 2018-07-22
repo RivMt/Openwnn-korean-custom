@@ -50,12 +50,6 @@ import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
-	static {
-		System.loadLibrary("triedictionary-lib");
-	}
-
-	native String testFunction();
-
 	public static final int[][] SHIFT_CONVERT = {
 			{0x60, 0x7e},
 			{0x31, 0x21},
@@ -211,7 +205,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public View onCreateInputView() {
-		System.out.println(testFunction());
 		int hiddenState = getResources().getConfiguration().hardKeyboardHidden;
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);

@@ -3,6 +3,7 @@ package me.blog.hgl1002.openwnn.KOKR.trie;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class NativeTrie implements Trie, Compressable {
 
 	@Override
 	public void insert(String word, int frequency) {
-		this.insertNative(word, frequency);
+		this.insertNative(Normalizer.normalize(word, Normalizer.Form.NFD), frequency);
 	}
 
 	@Override
