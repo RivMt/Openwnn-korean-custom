@@ -64,6 +64,7 @@ public class Dictionaries {
 				while((line = br.readLine()) != null) {
 					dictionary.insert(line, i--);
 				}
+				dictionary.compress();
 				dictionary.setReady(true);
 				return 1;
 			} catch(IOException ex) {
@@ -74,6 +75,8 @@ public class Dictionaries {
 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
+			System.gc();
+			Runtime.getRuntime().gc();
 		}
 	}
 

@@ -58,6 +58,27 @@ public class Trie {
 		return p;
 	}
 
+	public void compress() {
+		compress(root);
+	}
+
+	private TrieNode compress(TrieNode p) {
+		if(p.children == null) return p;
+		for(char ch : p.children.keySet()) {
+			compress(p.children.get(ch));
+		}
+		if(p.children.size() == 1) {
+			for(char ch : p.children.keySet()) {
+				TrieNode child = p.children.get(ch);
+				if(child.compressed != null) p.compressed = p.ch + child.compressed;
+				else p.compressed = new String(new char[] {p.ch, child.ch});
+				p.frequency = child.frequency;
+				p.children = null;
+			}
+		}
+		return p;
+	}
+
 	public List<String> getAllWords() {
 		return getAllWords(root, "");
 	}
@@ -67,7 +88,8 @@ public class Trie {
 		if(p.frequency > 0) result.add(currentWord);
 		for(char ch : p.children.keySet()) {
 			TrieNode child = p.children.get(ch);
-			result.addAll(getAllWords(child, currentWord + ch));
+			if(child.compressed != null) result.add(currentWord + child.compressed);
+			else result.addAll(getAllWords(child, currentWord + ch));
 		}
 		return result;
 	}

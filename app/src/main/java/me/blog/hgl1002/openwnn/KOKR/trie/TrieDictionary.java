@@ -49,6 +49,30 @@ public class TrieDictionary extends Trie {
 
 	private List<Word> searchStroke(Map<Character, String>keyMap, String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
 		if(limit > 0 && depth > limit) return words;
+		if(p.compressed != null) {
+			if(limit > 0 && depth + p.compressed.length() > limit) return words;
+			boolean match = false;
+			checkStroke:
+			for(char ch : p.compressed.substring(1).toCharArray()) {
+				String charStroke = keyMap.get(ch);
+				if(charStroke == null) charStroke = String.valueOf(ch);
+				if(depth + charStroke.length() - 1 < stroke.length() && charStroke.charAt(0) == stroke.charAt(depth)) {
+					for(int j = 1 ; j < charStroke.length() ; j++) {
+						if(fitLength && depth + j >= stroke.length() || charStroke.charAt(j) != stroke.charAt(depth + j)) {
+							match = false;
+							break checkStroke;
+						} else {
+							match = true;
+						}
+					}
+				}
+				depth++;
+			}
+			if(match) {
+				words.add(new Word(Normalizer.normalize(currentWord + p.compressed.substring(1), Normalizer.Form.NFC), p.frequency));
+			}
+			return words;
+		}
 		if(p.frequency > 0 && depth >= stroke.length())
 			words.add(new Word(Normalizer.normalize(currentWord, Normalizer.Form.NFC), p.frequency));
 		for(char ch : p.children.keySet()) {
