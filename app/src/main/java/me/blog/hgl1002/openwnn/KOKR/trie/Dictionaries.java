@@ -25,12 +25,11 @@ public class Dictionaries {
 	}
 
 	public static TrieDictionary generate(int language, int index, InputStream words) {
-		return generate(language, index, words, false);
+		return generate(language, index, words, true);
 	}
 
 	public static TrieDictionary generate(int language, int index, InputStream words, boolean force) {
 		if(force || dictionaries[language][index] == null || dictionaries[language][index].isEmpty()) {
-			dictionaries[language][index] = new TrieDictionary();
 			new DictionaryGenerateTask(words, dictionaries[language][index]).execute();
 		}
 		return dictionaries[language][index];
@@ -64,7 +63,7 @@ public class Dictionaries {
 				while((line = br.readLine()) != null) {
 					dictionary.insert(line, i--);
 				}
-				dictionary.compress();
+				if(dictionary instanceof Compressable) ((Compressable) dictionary).compress();
 				dictionary.setReady(true);
 				return 1;
 			} catch(IOException ex) {
@@ -75,8 +74,6 @@ public class Dictionaries {
 
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-			System.gc();
-			Runtime.getRuntime().gc();
 		}
 	}
 

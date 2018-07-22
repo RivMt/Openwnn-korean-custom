@@ -7,7 +7,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +16,7 @@ import me.blog.hgl1002.openwnn.KOKR.HangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
+import me.blog.hgl1002.openwnn.KOKR.trie.HashMapTrieDictionary;
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
@@ -76,7 +76,7 @@ public class T9Converter implements WordConverter {
 			return;
 		}
 
-		this.keyMap = TrieDictionary.generateKeyMap(engineMode);
+		this.keyMap = HashMapTrieDictionary.generateKeyMap(engineMode);
 
 		this.dictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 0);
 		this.trailsDictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 1);
@@ -111,7 +111,7 @@ public class T9Converter implements WordConverter {
 		private ComposingWord word;
 		private HangulEngine hangulEngine;
 
-		private List<TrieDictionary.Word> result = new ArrayList<>();
+		private List<HashMapTrieDictionary.Word> result = new ArrayList<>();
 
 		private String composing;
 		private StringBuilder composingWord;
@@ -148,7 +148,7 @@ public class T9Converter implements WordConverter {
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
 			if(converter.dictionary == null || !converter.dictionary.isReady()) {
-				this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
+				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
 				return 1;
 			}
 
@@ -180,18 +180,18 @@ public class T9Converter implements WordConverter {
 				StringBuilder trail = new StringBuilder();
 				for(String str : trailSource) {
 					trail.insert(0, str);
-					List<TrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(converter.keyMap, trail.toString());
+					List<HashMapTrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(converter.keyMap, trail.toString());
 					if(trails != null) {
 						Collections.sort(trails, Collections.reverseOrder());
 						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
 						if(isCancelled()) return null;
 						String search = word.substring(0, word.length()-trail.length());
-						List<TrieDictionary.Word> words = converter.dictionary.searchStroke(converter.keyMap, search);
+						List<HashMapTrieDictionary.Word> words = converter.dictionary.searchStroke(converter.keyMap, search);
 						Collections.sort(words, Collections.reverseOrder());
 						words = words.subList(0, words.size() < 4 ? words.size() : 4);
-						for(TrieDictionary.Word tr : trails) {
-							for(TrieDictionary.Word w : words) {
-								result.add(new TrieDictionary.Word(w.getWord() + tr.getWord(),
+						for(HashMapTrieDictionary.Word tr : trails) {
+							for(HashMapTrieDictionary.Word w : words) {
+								result.add(new HashMapTrieDictionary.Word(w.getWord() + tr.getWord(),
 										(w.getFrequency()/2 + tr.getFrequency()/2)));
 							}
 						}
@@ -201,10 +201,10 @@ public class T9Converter implements WordConverter {
 
 			if(isCancelled()) return null;
 
-			List<TrieDictionary.Word> result = converter.dictionary.searchStroke(converter.keyMap, word);
+			List<HashMapTrieDictionary.Word> result = converter.dictionary.searchStroke(converter.keyMap, word);
 			if(result != null) this.result.addAll(result);
 
-			this.result.add(new TrieDictionary.Word(rawCompose(word), 1));
+			this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
 
 			return 1;
 		}
@@ -252,7 +252,7 @@ public class T9Converter implements WordConverter {
 			if(integer == 1 && !result.isEmpty()) {
 				List<String> result = new ArrayList<>();
 				Collections.sort(this.result, Collections.reverseOrder());
-				for(TrieDictionary.Word word : this.result) {
+				for(HashMapTrieDictionary.Word word : this.result) {
 					result.add(word.getWord());
 				}
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -44,9 +45,16 @@ import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.KOKR.converter.WordCompletionConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
+import me.blog.hgl1002.openwnn.KOKR.trie.NativeTrieDictionary;
 import me.blog.hgl1002.openwnn.event.*;
 
 public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
+
+	static {
+		System.loadLibrary("triedictionary-lib");
+	}
+
+	native String testFunction();
 
 	public static final int[][] SHIFT_CONVERT = {
 			{0x60, 0x7e},
@@ -198,10 +206,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		EventBus.getDefault().register(this);
 
 		HanjaConverter.copyDatabase(this);
+
 	}
 
 	@Override
 	public View onCreateInputView() {
+		System.out.println(testFunction());
 		int hiddenState = getResources().getConfiguration().hardKeyboardHidden;
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
@@ -217,7 +227,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	@Override
-	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+	public void onStartInputView(EditorInfo attribute, boolean restarting) {;
 		mComposingWord.composeChar("");
 		mComposingWord.setComposingWord("");
 		mComposingWord.setFixedWord(null);
@@ -244,7 +254,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					converters.add(hanjaConverter);
 				}
 				if(pref.getBoolean("conversion_use_autotext", false)) {
-					String rawTexts = pref.getString("autotexts", "");
+					String rawTexts = pref.getString("autotexts", "{}");
 					Map<String, String> autoTexts = new HashMap<>();
 					try {
 						JSONObject object = new JSONObject(rawTexts);
@@ -260,7 +270,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					}
 				}
 				try {
-					Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+					Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
+					Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
+//					Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
 					Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
 				} catch(IOException ex) {
 					ex.printStackTrace();
@@ -461,6 +473,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case TWELVE_DUBUL_SKY2_PREDICTIVE:
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 			try {
+				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
+				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 1, new NativeTrieDictionary());
+				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
