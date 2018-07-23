@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,7 +37,12 @@ public class NativeTrie implements Trie, Compressable {
 
 	@Override
 	public List<String> searchStartsWith(String prefix, int limit) {
-		return Arrays.asList(searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit));
+		String[] list = searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit);
+		List<String> result = new ArrayList<>();
+		for(String word : list) {
+			if(word != null) result.add(Normalizer.normalize(word, Normalizer.Form.NFC));
+		}
+		return result;
 	}
 
 	@Override
