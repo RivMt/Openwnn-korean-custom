@@ -7,6 +7,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class NativeTrie implements Trie, Compressable {
 
@@ -14,12 +15,12 @@ public class NativeTrie implements Trie, Compressable {
 		System.loadLibrary("triedictionary-lib");
 	}
 
-	private native void initNative();
-	private native void insertNative(String word, int frequency);
-	private native String[] getAllWordsNative();
-	private native String[] searchStartsWithNative(String search, int limit);
-	private native void compressNative();
-	private native void deinitNative();
+	protected native void initNative();
+	protected native void insertNative(String word, int frequency);
+	protected native String[] getAllWordsNative();
+	protected native Map<String, Integer> searchStartsWithNative(String search, int limit);
+	protected native void compressNative();
+	protected native void deinitNative();
 
 	public NativeTrie() {
 		this.initNative();
@@ -33,16 +34,6 @@ public class NativeTrie implements Trie, Compressable {
 	@Override
 	public boolean search(String word) {
 		return false;
-	}
-
-	@Override
-	public List<String> searchStartsWith(String prefix, int limit) {
-		String[] list = searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit);
-		List<String> result = new ArrayList<>();
-		for(String word : list) {
-			if(word != null) result.add(Normalizer.normalize(word, Normalizer.Form.NFC));
-		}
-		return result;
 	}
 
 	@Override
@@ -75,4 +66,9 @@ public class NativeTrie implements Trie, Compressable {
 
 	}
 
+	@Override
+	protected void finalize() throws Throwable {
+		this.deinitNative();
+		super.finalize();
+	}
 }

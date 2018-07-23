@@ -221,7 +221,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		System.out.println("onStartInputView");
 		mComposingWord.composeChar("");
 		mComposingWord.setComposingWord("");
 		mComposingWord.setFixedWord(null);

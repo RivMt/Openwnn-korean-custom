@@ -49,11 +49,6 @@ public class HashMapTrie implements Trie, Compressable {
 		return p != null;
 	}
 
-	@Override
-	public List<String> searchStartsWith(String prefix, int limit) {
-		return null;
-	}
-
 	public TrieNode searchNode(String s) {
 		s = Normalizer.normalize(s, Normalizer.Form.NFD);
 		TrieNode p = root;

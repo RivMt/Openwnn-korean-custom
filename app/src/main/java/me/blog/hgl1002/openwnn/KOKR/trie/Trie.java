@@ -15,8 +15,6 @@ public interface Trie {
 
 	boolean search(String word);
 
-	List<String> searchStartsWith(String prefix, int limit);
-
 	boolean startsWith(String prefix);
 
 	List<String> getAllWords();

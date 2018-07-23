@@ -96,6 +96,11 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 		return words;
 	}
 
+	@Override
+	public List<Word> searchStartsWith(String prefix, int limit) {
+		return null;
+	}
+
 	public static Map<Character, String> generateKeyMap(EngineMode engineMode) {
 		Map<Character, String> map = new HashMap<>();
 		for(int[] item : engineMode.layout) {

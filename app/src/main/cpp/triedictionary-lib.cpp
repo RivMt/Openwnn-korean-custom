@@ -58,17 +58,17 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchNative(JNIEnv * jenv, jo
     return (jboolean) (p != nullptr && (fitLength && p->frequency == 0));
 }
 
-std::list<std::wstring> * searchStartsWith(TrieNode * p, std::wstring prefix, std::list<std::wstring> * list, std::wstring currentWord, int depth, int limit) {
+std::map<std::wstring, int> * searchStartsWith(TrieNode * p, std::wstring prefix, std::map<std::wstring, int> * list, std::wstring currentWord, int depth, int limit) {
     if(prefix.length() <= 1) return list;
     if(limit > 0 && currentWord.length() > limit) return list;
     if(p->compressed != nullptr) {
         if(limit == 0 || depth < limit) limit = depth;
         if(limit > 0 && currentWord.length() + p->compressed->length() - 1 > limit) return list;
-        list->push_back(currentWord + p->compressed->substr(1));
+        list->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
         return list;
     }
     if(p->frequency > 0 && depth >= prefix.length()) {
-        list->push_back(currentWord);
+        list->insert(std::make_pair(currentWord, p->frequency));
     }
     wchar_t ch = prefix[depth];
     if(p->children != nullptr) {
@@ -83,24 +83,39 @@ std::list<std::wstring> * searchStartsWith(TrieNode * p, std::wstring prefix, st
     return list;
 }
 
-JNIEXPORT jobjectArray JNICALL
+JNIEXPORT jobject JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStartsWithNative(JNIEnv * jenv, jobject self, jstring word_, jint limit) {
+    jclass hashMapClass = jenv->FindClass("java/util/HashMap");
+    jmethodID hashMapInit = jenv->GetMethodID(hashMapClass, "<init>", "()V");
+    jmethodID hashMapPut = jenv->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+
+    jclass integerClass = jenv->FindClass("java/lang/Integer");
+    jmethodID integerInit = jenv->GetMethodID(integerClass, "<init>", "(I)V");
+
     const char * chars = jenv->GetStringUTFChars(word_, JNI_FALSE);
     size_t length = strlen(chars) + 1;
     wchar_t * word = (wchar_t*) malloc(sizeof(wchar_t) * length);
     mbstowcs(word, chars, length);
-    std::list<std::wstring> * list = searchStartsWith(getRoot(jenv, self), word, new std::list<std::wstring>(), std::wstring(), 0, 0);
-    jobjectArray result = jenv->NewObjectArray((jsize) list->size(), jenv->FindClass("java/lang/String"), jenv->NewStringUTF(""));
+    std::map<std::wstring, int> * list = searchStartsWith(getRoot(jenv, self), word, new std::map<std::wstring, int>(), std::wstring(), 0, 0);
+    jobject result = jenv->NewObject(hashMapClass, hashMapInit);
     for(auto it = list->begin() ; it != list->end() ; it++) {
         int index = (int) std::distance(list->begin(), it);
         if(index > 256) break;
-        size_t len = it->length() * sizeof(wchar_t) + 1;
+        size_t len = it->first.length() * sizeof(wchar_t) + 1;
         char str[len];
-        wcstombs(str, it->c_str(), len);
-        jenv->SetObjectArrayElement(result, (jsize) index, jenv->NewStringUTF(str));
+        wcstombs(str, it->first.c_str(), len);
+        jstring utfString = jenv->NewStringUTF(str);
+        jobject integer = jenv->NewObject(integerClass, integerInit, it->second);
+        jenv->CallObjectMethod(result, hashMapPut, utfString, integer);
+        jenv->DeleteLocalRef(utfString);
+        jenv->DeleteLocalRef(integer);
     }
     delete list;
     free(word);
+
+    jenv->DeleteLocalRef(hashMapClass);
+    jenv->DeleteLocalRef(integerClass);
+
     return result;
 }
 
@@ -152,12 +167,12 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jo
             p = p->children->find(c)->second;
         } else {
             TrieNode * child = new TrieNode(c);
-            (*p->children)[c] = child;
+            if(!p->children->count(c)) p->children->insert(std::make_pair(c, child));
             p = child;
         }
     }
     free(word);
-    p->frequency = (int) frequency;
+    if(p->frequency == 0) p->frequency = (int) frequency;
 }
 
 TrieNode * compress(TrieNode * p) {
