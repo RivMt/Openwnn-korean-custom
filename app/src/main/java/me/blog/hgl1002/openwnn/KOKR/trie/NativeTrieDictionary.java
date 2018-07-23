@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 
+	static {
+		System.loadLibrary("triedictionary-lib");
+	}
+
 	private boolean ready = true;
 
 	public NativeTrieDictionary() {

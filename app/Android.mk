@@ -2,6 +2,8 @@ LOCAL_PATH := $(call my-dir)/src/main/cpp
 
 include $(CLEAR_VARS)
 
+LOCAL_CPPFLAGS := -O3
+
 LOCAL_MODULE := triedictionary-lib
 LOCAL_SRC_FILES := triedictionary-lib.cpp
 

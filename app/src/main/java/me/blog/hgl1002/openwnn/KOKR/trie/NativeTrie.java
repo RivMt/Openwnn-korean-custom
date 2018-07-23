@@ -16,7 +16,9 @@ public class NativeTrie implements Trie, Compressable {
 	private native void initNative();
 	private native void insertNative(String word, int frequency);
 	private native String[] getAllWordsNative();
+	private native String[] searchStartsWithNative(String search, int limit);
 	private native void compressNative();
+	private native void deinitNative();
 
 	public NativeTrie() {
 		this.initNative();
@@ -30,6 +32,11 @@ public class NativeTrie implements Trie, Compressable {
 	@Override
 	public boolean search(String word) {
 		return false;
+	}
+
+	@Override
+	public List<String> searchStartsWith(String prefix, int limit) {
+		return Arrays.asList(searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit));
 	}
 
 	@Override

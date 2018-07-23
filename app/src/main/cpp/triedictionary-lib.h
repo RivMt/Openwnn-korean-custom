@@ -16,7 +16,7 @@ public:
     TrieNode(wchar_t ch);
 };
 
-std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * list, std::wstring currentWord);
+std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * list, std::wstring currentWord, int limit);
 
 };
 

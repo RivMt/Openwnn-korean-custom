@@ -43,7 +43,7 @@ public class WordCompletionConverter implements WordConverter {
 		private ComposingWord word;
 		private Map<Character, String> keyMap;
 		private TrieDictionary dictionary;
-		private List<TrieDictionary.Word> result;
+		private List<String> result;
 
 		WordCompletionConvertTask(ComposingWord word, Map<Character, String> keyMap, TrieDictionary dictionary) {
 			this.word = word;
@@ -63,7 +63,7 @@ public class WordCompletionConverter implements WordConverter {
 		protected Integer doInBackground(Void... voids) {
 			String word = Normalizer.normalize(this.word.getEntireWord(), Normalizer.Form.NFKD);
 			if(dictionary != null && dictionary.isReady()) {
-				this.result = dictionary.searchStorkeStartsWith(keyMap, word, word.length() * 2);
+				this.result = dictionary.searchStartsWith(word, word.length() * 2);
 				return 1;
 			}
 			return -1;
@@ -73,11 +73,7 @@ public class WordCompletionConverter implements WordConverter {
 		protected void onPostExecute(Integer integer) {
 			super.onPostExecute(integer);
 			if(integer == 1) {
-				List<String> result = new ArrayList<>();
-				Collections.sort(this.result, Collections.reverseOrder());
-				for(TrieDictionary.Word word : this.result) {
-					result.add(word.getWord());
-				}
+				if(this.result == null) return;
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 			}
 		}
