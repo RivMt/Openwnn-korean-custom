@@ -105,15 +105,19 @@ std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::
             std::wstring * charStroke;
             if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
             else charStroke = new std::wstring(1, ch);
-            if(depth + charStroke->length() - 1 < stroke->length() && charStroke->at(0) == stroke->at(depth)) {
-                for(int j = 1 ; j < charStroke->length() ; j++) {
-                    if(fitLength && depth + j >= stroke->length() || charStroke->at(j) != stroke->at(depth + j)) {
+            int j;
+            if(charStroke->length() == stroke->length() - depth) {
+                for(j = 0 ; j < stroke->length() - depth ; j++) {
+                    if((fitLength && depth + j >= stroke->length()) || charStroke->at(j) != stroke->at(depth + j)) {
                         match = false;
                         break;
                     } else {
                         match = true;
                     }
                 }
+                depth += j;
+            } else {
+                match = false;
             }
             delete charStroke;
             if(!match) break;
@@ -131,10 +135,6 @@ std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::
         TrieNode * child = it->second;
         std::wstring * charStroke;
         wchar_t ch = child->ch;
-//        while(ch == L'') {
-//            child = child->children->begin()->second;
-//            ch = child->ch;
-//        }
         if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
         else charStroke = new std::wstring(1, ch);
         if(depth + charStroke->length() - 1 < stroke->length() && charStroke->at(0) == stroke->at(depth)) {
@@ -217,29 +217,34 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchNative(JNIEnv * jenv, jo
     return (jboolean) (p != nullptr && (fitLength && p->frequency == 0));
 }
 
-std::map<std::wstring, int> * searchStartsWith(TrieNode * p, std::wstring prefix, std::map<std::wstring, int> * list, std::wstring currentWord, int depth, int limit) {
-    if(prefix.length() <= 1) return list;
-    if(limit > 0 && currentWord.length() > limit) return list;
+std::map<std::wstring, int> * searchStartsWith(TrieNode * p, std::wstring prefix, std::map<std::wstring, int> * words, std::wstring currentWord, int depth, int limit) {
+    if(prefix.length() <= 1) return words;
+    if(limit > 0 && currentWord.length() > limit) return words;
     if(p->compressed != nullptr) {
-        if(limit == 0 || depth < limit) limit = depth;
-        if(limit > 0 && currentWord.length() + p->compressed->length() - 1 > limit) return list;
-        list->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
-        return list;
+        int length = (int) currentWord.length() + (int) p->compressed->length() - 1;
+        if(limit > 0 && length > limit || prefix.length() > length) return words;
+        if(prefix.length() > depth) {
+            for(int j = 0 ; j < prefix.length() - depth ; j++) {
+                if(p->compressed->substr(1).at(j) != prefix.at(depth + j)) return words;
+            }
+        }
+        words->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
+        return words;
     }
     if(p->frequency > 0 && depth >= prefix.length()) {
-        list->insert(std::make_pair(currentWord, p->frequency));
+        words->insert(std::make_pair(currentWord, p->frequency));
     }
     wchar_t ch = prefix[depth];
     if(p->children != nullptr) {
         if(p->children->count(ch)) {
-            searchStartsWith(p->children->find(ch)->second, prefix, list, currentWord + ch, depth+1, limit);
+            searchStartsWith(p->children->find(ch)->second, prefix, words, currentWord + ch, depth+1, limit);
         } else if(depth >= prefix.length()) {
             for(auto it = p->children->begin() ; it != p->children->end() ; it++) {
-                searchStartsWith(it->second, prefix, list, currentWord + it->second->ch, depth+1, limit);
+                searchStartsWith(it->second, prefix, words, currentWord + it->second->ch, depth+1, limit);
             }
         }
     }
-    return list;
+    return words;
 }
 
 JNIEXPORT jobject JNICALL
@@ -255,10 +260,10 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStartsWithNative(JNIEnv 
     size_t length = strlen(chars) + 1;
     wchar_t * word = (wchar_t*) malloc(sizeof(wchar_t) * length);
     mbstowcs(word, chars, length);
-    std::map<std::wstring, int> * list = searchStartsWith(getRoot(jenv, self), word, new std::map<std::wstring, int>(), std::wstring(), 0, 0);
+    std::map<std::wstring, int> * words = searchStartsWith(getRoot(jenv, self), word, new std::map<std::wstring, int>(), std::wstring(), 0, 0);
     jobject result = jenv->NewObject(hashMapClass, hashMapInit);
-    for(auto it = list->begin() ; it != list->end() ; it++) {
-        int index = (int) std::distance(list->begin(), it);
+    for(auto it = words->begin() ; it != words->end() ; it++) {
+        int index = (int) std::distance(words->begin(), it);
         if(index > 256) break;
         size_t len = it->first.length() * sizeof(wchar_t) + 1;
         char str[len];
@@ -269,7 +274,7 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStartsWithNative(JNIEnv 
         jenv->DeleteLocalRef(utfString);
         jenv->DeleteLocalRef(integer);
     }
-    delete list;
+    delete words;
     free(word);
 
     jenv->DeleteLocalRef(hashMapClass);
