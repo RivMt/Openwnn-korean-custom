@@ -40,7 +40,8 @@ TrieNode * searchNode(TrieNode * root, wchar_t * word, size_t length) {
     for(int i = 0 ; i < length ; i++) {
         wchar_t c = word[i];
         if(c == L'\0') break;
-        if(p->children != nullptr && p->children->count(c)) p = p->children->find(c)->second;
+        if(p->compressed != nullptr) return p;
+        else if(p->children != nullptr && p->children->count(c)) p = p->children->find(c)->second;
         else return nullptr;
     }
     if(p == root) return nullptr;
@@ -70,8 +71,9 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStartsWithNative(JNIEnv 
         for(auto it = list->begin() ; it != list->end() ; it++) {
             int index = (int) std::distance(list->begin(), it);
             if(index > 256) break;
-            char str[it->length() + 1];
-            wcstombs(str, it->c_str(), it->length() + 1);
+            size_t len = it->length() * sizeof(wchar_t) + 1;
+            char str[len];
+            wcstombs(str, it->c_str(), len);
             jenv->SetObjectArrayElement(result, (jsize) index, jenv->NewStringUTF(str));
         }
         delete list;
@@ -91,7 +93,7 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStrokeNative(JNIEnv * je
 
 JNIEXPORT jobjectArray JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_getAllWordsNative(JNIEnv * jenv, jobject self) {
-    std::list<std::wstring> * list = getAllWords(getRoot(jenv, self), new std::list<std::wstring>(), std::wstring(L""), 0);
+    std::list<std::wstring> * list = getAllWords(getRoot(jenv, self), new std::list<std::wstring>(), std::wstring(0), 0);
     jobjectArray result = jenv->NewObjectArray((jsize) list->size(), jenv->FindClass("java/lang/String"), jenv->NewStringUTF(""));
     for(auto it = list->begin() ; it != list->end() ; it++) {
         char str[it->length() + 1];
@@ -102,12 +104,17 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_getAllWordsNative(JNIEnv * jen
 }
 
 std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * list, std::wstring currentWord, int limit) {
+    if(p->compressed != nullptr) {
+        if(limit <= 0 || currentWord.length() + p->compressed->length() <= limit)
+            list->push_back(currentWord + p->compressed->substr(1));
+        return list;
+    }
     if(p->frequency > 0) list->push_back(currentWord);
     if(p->children == nullptr) return list;
     if(limit > 0 && currentWord.length() > limit) return list;
     for(auto it = p->children->begin() ; it != p->children->end() ; it++) {
         TrieNode * child = it->second;
-        getAllWords(child, list, currentWord + L"" + std::wstring(1, it->first), limit);
+        getAllWords(child, list, currentWord + std::wstring(1, it->first), limit);
     }
     return list;
 }
@@ -142,6 +149,7 @@ TrieNode * compress(TrieNode * p) {
     }
     if(p->children->size() == 1) {
         TrieNode * child = p->children->begin()->second;
+        if(child->children != nullptr) return p;
         if(child->compressed != nullptr) {
             p->compressed = new std::wstring(1, p->ch);
             p->compressed->append(*child->compressed);
@@ -149,7 +157,7 @@ TrieNode * compress(TrieNode * p) {
             child->compressed = nullptr;
         } else {
             p->compressed = new std::wstring(1, p->ch);
-            p->compressed->append(1, child->ch);
+            p->compressed->append(std::wstring(1, child->ch));
         }
         p->frequency = child->frequency;
         delete child->children;
