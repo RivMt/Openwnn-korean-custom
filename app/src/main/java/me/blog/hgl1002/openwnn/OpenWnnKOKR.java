@@ -263,7 +263,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					}
 				}
 				try {
-					Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
+//					Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
 					Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
 //					Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
 					Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
@@ -465,16 +465,16 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
 		case TWELVE_DUBUL_SKY2_PREDICTIVE:
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
-			try {
-				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
-				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 1, new NativeTrieDictionary());
-				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
-			} catch(IOException ex) {
-				ex.printStackTrace();
-			}
+//			try {
+//				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
+//				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 1, new NativeTrieDictionary());
+//				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
+//				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
+//				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
+//				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));
+//			} catch(IOException ex) {
+//				ex.printStackTrace();
+//			}
 			break;
 		}
 

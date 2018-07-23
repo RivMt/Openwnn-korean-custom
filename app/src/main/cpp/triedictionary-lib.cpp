@@ -16,11 +16,23 @@ TrieNode::TrieNode(wchar_t ch) {
     this->compressed = nullptr;
 }
 
-TrieNode * root;
+std::map<int, TrieNode*> * roots = new std::map<int, TrieNode*>();
+
+const int getHashCode(JNIEnv * jenv, jobject obj) {
+    jclass cls = jenv->GetObjectClass(obj);
+    jmethodID mid = jenv->GetMethodID(cls, "hashCode", "()I");
+    if(mid == 0) return 0;
+    jint result = jenv->CallIntMethod(obj, mid);
+    return (int) result;
+}
+
+TrieNode * getRoot(JNIEnv * jenv, jobject obj) {
+    return roots->find(getHashCode(jenv, obj))->second;
+}
 
 JNIEXPORT void JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_initNative(JNIEnv * jenv, jobject self) {
-    root = new TrieNode(L'\0');
+    roots->insert(std::make_pair(getHashCode(jenv, self), new TrieNode(L'\0')));
 }
 
 JNIEXPORT void JNICALL
@@ -28,14 +40,9 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchNative(JNIEnv * jenv, jo
 
 }
 
-TrieNode * searchNode(std::wstring s) {
-    TrieNode * p = root;
-    return p;
-}
-
 JNIEXPORT jobjectArray JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_getAllWordsNative(JNIEnv * jenv, jobject self) {
-    std::list<std::wstring> * list = getAllWords(root, new std::list<std::wstring>(), std::wstring(L""));
+    std::list<std::wstring> * list = getAllWords(getRoot(jenv, self), new std::list<std::wstring>(), std::wstring(L""));
     jobjectArray result = jenv->NewObjectArray((jsize) list->size(), jenv->FindClass("java/lang/String"), jenv->NewStringUTF(""));
     for(auto it = list->begin() ; it != list->end() ; it++) {
         char str[it->length() + 1];
@@ -58,21 +65,23 @@ std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * li
 JNIEXPORT void JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jobject self, jstring word_, jint frequency) {
     const char * chars = jenv->GetStringUTFChars(word_, JNI_FALSE);
-    size_t length = strlen(chars)/sizeof(wchar_t) + 1;
-    wchar_t word[length];
+    size_t length = strlen(chars) + 1;
+    wchar_t * word = (wchar_t*) malloc(sizeof(wchar_t) * length);
     mbstowcs(word, chars, length);
-    TrieNode * p = root;
-    for(wchar_t c : word) {
+    TrieNode * p = getRoot(jenv, self);
+    for(int i = 0 ; i < length ; i++) {
+        wchar_t c = word[i];
         if(c == L'\0') break;
         if(p->children == nullptr) p->children = new std::map<wchar_t, TrieNode*>();
         if(p->children->count(c)) {
             p = p->children->find(c)->second;
         } else {
             TrieNode * child = new TrieNode(c);
-            p->children->insert(std::make_pair(c, child));
+            (*p->children)[c] = child;
             p = child;
         }
     }
+    free(word);
     p->frequency = (int) frequency;
 }
 
