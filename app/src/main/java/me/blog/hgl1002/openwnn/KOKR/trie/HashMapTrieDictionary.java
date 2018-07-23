@@ -27,28 +27,34 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 	}};
 
 	protected boolean ready = true;
+	protected Map<Character, String> keyMap;
 
 	public HashMapTrieDictionary() {
 		super();
 	}
 
 	@Override
-	public List<Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke, int limit) {
-		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, false, limit);
+	public void setKeyMap(Map<Character, String> keyMap) {
+		this.keyMap = keyMap;
 	}
 
 	@Override
-	public List<Word> searchStroke(Map<Character, String> keyMap, String stroke) {
-		return searchStroke(keyMap, stroke, 0);
+	public List<Word> searchStorkeStartsWith(String stroke, int limit) {
+		return searchStroke(stroke, root, "", new ArrayList<>(), 0, false, limit);
 	}
 
 	@Override
-	public List<Word> searchStroke(Map<Character, String>keyMap, String stroke, int limit) {
+	public List<Word> searchStroke(String stroke) {
+		return searchStroke(stroke, 0);
+	}
+
+	@Override
+	public List<Word> searchStroke(String stroke, int limit) {
 		if(stroke == null || stroke.length() == 0) return null;
-		return searchStroke(keyMap, stroke, root, "", new ArrayList<>(), 0, true, limit);
+		return searchStroke(stroke, root, "", new ArrayList<>(), 0, true, limit);
 	}
 
-	private List<Word> searchStroke(Map<Character, String>keyMap, String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
+	private List<Word> searchStroke(String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
 		if(limit > 0 && depth > limit) return words;
 		if(p.compressed != null) {
 			if(limit > 0 && depth + p.compressed.length() > limit) return words;
@@ -88,9 +94,9 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 						break checkStroke;
 					}
 				}
-				searchStroke(keyMap, stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
+				searchStroke(stroke, child, currentWord + ch, words, depth + j, fitLength, limit);
 			} else if(!fitLength && depth + charStroke.length() > stroke.length()) {
-				searchStroke(keyMap, stroke, child, currentWord + ch, words, depth + 1, fitLength, limit);
+				searchStroke(stroke, child, currentWord + ch, words, depth + 1, fitLength, limit);
 			}
 		}
 		return words;

@@ -81,6 +81,9 @@ public class T9Converter implements WordConverter {
 		this.dictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 0);
 		this.trailsDictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 1);
 
+		if(dictionary != null) this.dictionary.setKeyMap(keyMap);
+		if(trailsDictionary != null) this.trailsDictionary.setKeyMap(keyMap);
+
 		consonantList = new ArrayList<>();
 		vowelList = new ArrayList<>();
 		for(int[] item : engineMode.layout) {
@@ -180,13 +183,13 @@ public class T9Converter implements WordConverter {
 				StringBuilder trail = new StringBuilder();
 				for(String str : trailSource) {
 					trail.insert(0, str);
-					List<HashMapTrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(converter.keyMap, trail.toString());
+					List<HashMapTrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString());
 					if(trails != null) {
 						Collections.sort(trails, Collections.reverseOrder());
 						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
 						if(isCancelled()) return null;
 						String search = word.substring(0, word.length()-trail.length());
-						List<HashMapTrieDictionary.Word> words = converter.dictionary.searchStroke(converter.keyMap, search);
+						List<HashMapTrieDictionary.Word> words = converter.dictionary.searchStroke(search);
 						Collections.sort(words, Collections.reverseOrder());
 						words = words.subList(0, words.size() < 4 ? words.size() : 4);
 						for(HashMapTrieDictionary.Word tr : trails) {
@@ -201,7 +204,7 @@ public class T9Converter implements WordConverter {
 
 			if(isCancelled()) return null;
 
-			List<HashMapTrieDictionary.Word> result = converter.dictionary.searchStroke(converter.keyMap, word);
+			List<HashMapTrieDictionary.Word> result = converter.dictionary.searchStroke(word);
 			if(result != null) this.result.addAll(result);
 
 			this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));

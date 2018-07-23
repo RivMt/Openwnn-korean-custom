@@ -12,24 +12,30 @@ public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 	}
 
 	private boolean ready = true;
+	protected Map<Character, String> keyMap;
 
 	public NativeTrieDictionary() {
 		super();
 	}
 
 	@Override
-	public List<HashMapTrieDictionary.Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke, int limit) {
+	public List<Word> searchStorkeStartsWith(String stroke, int limit) {
 		return null;
 	}
 
 	@Override
-	public List<HashMapTrieDictionary.Word> searchStroke(Map<Character, String> keyMap, String stroke) {
+	public List<Word> searchStroke(String stroke) {
 		return null;
 	}
 
 	@Override
-	public List<HashMapTrieDictionary.Word> searchStroke(Map<Character, String> keyMap, String stroke, int limit) {
+	public List<Word> searchStroke(String stroke, int limit) {
 		return null;
+	}
+
+	@Override
+	public void setKeyMap(Map<Character, String> keyMap) {
+		this.keyMap = keyMap;
 	}
 
 	@Override

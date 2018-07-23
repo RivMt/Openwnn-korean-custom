@@ -16,6 +16,15 @@ public:
     TrieNode(wchar_t ch);
 };
 
+class Dictionary {
+public:
+    int javaHash;
+    TrieNode * root;
+    std::map<wchar_t, std::wstring*> * keyMap;
+
+    Dictionary(int javaHash);
+};
+
 std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * list, std::wstring currentWord, int limit);
 
 };

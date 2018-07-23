@@ -5,13 +5,15 @@ import java.util.Map;
 
 public interface TrieDictionary extends Trie {
 
-	List<Word> searchStorkeStartsWith(Map<Character, String> keyMap, String stroke, int limit);
+	List<Word> searchStorkeStartsWith(String stroke, int limit);
 
-	List<Word> searchStroke(Map<Character, String> keyMap, String stroke);
+	List<Word> searchStroke(String stroke);
 
-	List<Word> searchStroke(Map<Character, String>keyMap, String stroke, int limit);
+	List<Word> searchStroke(String stroke, int limit);
 
 	List<Word> searchStartsWith(String prefix, int limit);
+
+	void setKeyMap(Map<Character, String>keyMap);
 
 	boolean isReady();
 	void setReady(boolean ready);

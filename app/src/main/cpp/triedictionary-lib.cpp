@@ -16,7 +16,13 @@ TrieNode::TrieNode(wchar_t ch) {
     this->compressed = nullptr;
 }
 
-std::map<int, TrieNode*> * roots = new std::map<int, TrieNode*>();
+Dictionary::Dictionary(int javaHash) {
+    this->javaHash = javaHash;
+    this->keyMap = nullptr;
+    this->root = new TrieNode('\0');
+}
+
+std::map<int, Dictionary*> * dictionaries = new std::map<int, Dictionary*>();
 
 const int getHashCode(JNIEnv * jenv, jobject obj) {
     jclass cls = jenv->GetObjectClass(obj);
@@ -27,12 +33,13 @@ const int getHashCode(JNIEnv * jenv, jobject obj) {
 }
 
 TrieNode * getRoot(JNIEnv * jenv, jobject obj) {
-    return roots->find(getHashCode(jenv, obj))->second;
+    return dictionaries->find(getHashCode(jenv, obj))->second->root;
 }
 
 JNIEXPORT void JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_initNative(JNIEnv * jenv, jobject self) {
-    roots->insert(std::make_pair(getHashCode(jenv, self), new TrieNode(L'\0')));
+    int hashCode = getHashCode(jenv, self);
+    dictionaries->insert(std::make_pair(hashCode, new Dictionary(hashCode)));
 }
 
 TrieNode * searchNode(TrieNode * root, wchar_t * word, size_t length) {
