@@ -14,28 +14,41 @@ public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 	private boolean ready = true;
 	protected Map<Character, String> keyMap;
 
+	private native void setKeyMapNative(Map<Character, String> keyMap);
+	private native Map<String, Integer> searchStrokeNative(String stroke, boolean fitLength, int limit);
+
 	public NativeTrieDictionary() {
 		super();
 	}
 
 	@Override
 	public List<Word> searchStorkeStartsWith(String stroke, int limit) {
-		return null;
+		return this.searchStroke(stroke, false, limit);
 	}
 
 	@Override
 	public List<Word> searchStroke(String stroke) {
-		return null;
+		return this.searchStroke(stroke, true, 0);
 	}
 
 	@Override
 	public List<Word> searchStroke(String stroke, int limit) {
-		return null;
+		return this.searchStroke(stroke, true, limit);
+	}
+
+	private List<Word> searchStroke(String stroke, boolean fitLength, int limit) {
+		Map<String, Integer> map = searchStrokeNative(stroke, fitLength, limit);
+		List<Word> result = new ArrayList<>();
+		for(String word : map.keySet()) {
+			result.add(new Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
+		}
+		return result;
 	}
 
 	@Override
 	public void setKeyMap(Map<Character, String> keyMap) {
 		this.keyMap = keyMap;
+		this.setKeyMapNative(keyMap);
 	}
 
 	@Override

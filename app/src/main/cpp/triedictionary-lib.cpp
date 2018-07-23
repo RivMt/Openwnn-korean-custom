@@ -42,6 +42,158 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_initNative(JNIEnv * jenv, jobj
     dictionaries->insert(std::make_pair(hashCode, new Dictionary(hashCode)));
 }
 
+JNIEXPORT void JNICALL
+Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrieDictionary_setKeyMapNative(JNIEnv * jenv, jobject self, jobject keyMap_) {
+    Dictionary * dictionary = dictionaries->find(getHashCode(jenv, self))->second;
+
+    jclass hashMapClass = jenv->FindClass("java/util/HashMap");
+    jmethodID hashMapEntrySet = jenv->GetMethodID(hashMapClass, "entrySet", "()Ljava/util/Set;");
+    jclass setClass = jenv->FindClass("java/util/Set");
+    jmethodID setIterator = jenv->GetMethodID(setClass, "iterator", "()Ljava/util/Iterator;");
+    jclass iteratorClass = jenv->FindClass("java/util/Iterator");
+    jmethodID iteratorHasNext = jenv->GetMethodID(iteratorClass, "hasNext", "()Z");
+    jmethodID iteratorNext = jenv->GetMethodID(iteratorClass, "next", "()Ljava/lang/Object;");
+    jclass mapEntryClass = jenv->FindClass("java/util/Map$Entry");
+    jmethodID entryGetKey = jenv->GetMethodID(mapEntryClass, "getKey", "()Ljava/lang/Object;");
+    jmethodID entryGetValue = jenv->GetMethodID(mapEntryClass, "getValue", "()Ljava/lang/Object;");
+
+    jclass characterClass = jenv->FindClass("java/lang/Character");
+    jmethodID characterGetValue = jenv->GetMethodID(characterClass, "charValue", "()C");
+
+    jobject entrySet = jenv->CallObjectMethod(keyMap_, hashMapEntrySet);
+    jobject iterator = jenv->CallObjectMethod(entrySet, setIterator);
+
+    if(dictionary->keyMap != nullptr) delete dictionary->keyMap;
+    dictionary->keyMap = new std::map<wchar_t, std::wstring*>();
+
+    while(jenv->CallBooleanMethod(iterator, iteratorHasNext)) {
+        jobject entry = jenv->CallObjectMethod(iterator, iteratorNext);
+        jobject key = jenv->CallObjectMethod(entry, entryGetKey);
+        jobject value = jenv->CallObjectMethod(entry, entryGetValue);
+
+        wchar_t ch = (wchar_t) jenv->CallCharMethod(key, characterGetValue);
+        const char * chars = jenv->GetStringUTFChars((jstring) value, JNI_FALSE);
+        size_t length = strlen(chars) + 1;
+        wchar_t * wchars = (wchar_t*) malloc(sizeof(wchar_t) * length);
+        mbstowcs(wchars, chars, length);
+        std::wstring * str = new std::wstring(wchars);
+
+        dictionary->keyMap->insert(std::make_pair(ch, str));
+
+        free(wchars);
+        jenv->DeleteLocalRef(entry);
+        jenv->DeleteLocalRef(key);
+        jenv->DeleteLocalRef(value);
+    }
+
+    jenv->DeleteLocalRef(entrySet);
+    jenv->DeleteLocalRef(iterator);
+
+    jenv->DeleteLocalRef(hashMapClass);
+    jenv->DeleteLocalRef(setClass);
+    jenv->DeleteLocalRef(iteratorClass);
+    jenv->DeleteLocalRef(mapEntryClass);
+    jenv->DeleteLocalRef(characterClass);
+}
+
+std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::wstring*> * keyMap, std::wstring * stroke, std::wstring currentWord, std::map<std::wstring, int> * words, int depth, bool fitLength, int limit) {
+    if(limit > 0 && depth > limit) return words;
+    if(p->compressed != nullptr) {
+        if(limit > 0 && depth + p->compressed->length() > limit) return words;
+        bool match = false;
+        for(wchar_t ch : p->compressed->substr(1)) {
+            std::wstring * charStroke;
+            if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
+            else charStroke = new std::wstring(1, ch);
+            if(depth + charStroke->length() - 1 < stroke->length() && charStroke->at(0) == stroke->at(depth)) {
+                for(int j = 1 ; j < charStroke->length() ; j++) {
+                    if(fitLength && depth + j >= stroke->length() || charStroke->at(j) != stroke->at(depth + j)) {
+                        match = false;
+                        break;
+                    } else {
+                        match = true;
+                    }
+                }
+            }
+            delete charStroke;
+            if(!match) break;
+        }
+        if(match) {
+            words->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
+        }
+        return words;
+    }
+    if(p->frequency > 0 && depth >= stroke->length()) {
+        words->insert(std::make_pair(currentWord, p->frequency));
+    }
+    if(p->children == nullptr) return words;
+    for(auto it = p->children->begin() ; it != p->children->end() ; it++) {
+        TrieNode * child = it->second;
+        std::wstring * charStroke;
+        wchar_t ch = child->ch;
+//        while(ch == L'') {
+//            child = child->children->begin()->second;
+//            ch = child->ch;
+//        }
+        if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
+        else charStroke = new std::wstring(1, ch);
+        if(depth + charStroke->length() - 1 < stroke->length() && charStroke->at(0) == stroke->at(depth)) {
+            bool check = true;
+            int j;
+            for(j = 1 ; j < charStroke->length() ; j++) {
+                if(charStroke->at(j) != stroke->at(depth + j)) {
+                    check = false;
+                    break;
+                }
+            }
+            if(check) searchStroke(child, keyMap, stroke, currentWord + ch, words, depth + j, fitLength, limit);
+        } else if(!fitLength && depth + charStroke->length() > stroke->length()) {
+            searchStroke(child, keyMap, stroke, currentWord + ch, words, depth + 1, fitLength, limit);
+        }
+        delete charStroke;
+    }
+    return words;
+}
+
+JNIEXPORT jobject JNICALL
+Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrieDictionary_searchStrokeNative(JNIEnv * jenv, jobject self, jstring word_, jboolean fitLength, jint limit) {
+    Dictionary * dictionary = dictionaries->find(getHashCode(jenv, self))->second;
+    jclass hashMapClass = jenv->FindClass("java/util/HashMap");
+    jmethodID hashMapInit = jenv->GetMethodID(hashMapClass, "<init>", "()V");
+    jmethodID hashMapPut = jenv->GetMethodID(hashMapClass, "put", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
+
+    jclass integerClass = jenv->FindClass("java/lang/Integer");
+    jmethodID integerInit = jenv->GetMethodID(integerClass, "<init>", "(I)V");
+
+    const char * chars = jenv->GetStringUTFChars(word_, JNI_FALSE);
+    size_t length = strlen(chars) + 1;
+    wchar_t * word = (wchar_t*) malloc(sizeof(wchar_t) * length);
+    mbstowcs(word, chars, length);
+    std::wstring * stroke = new std::wstring(word);
+    std::map<std::wstring, int> * words = searchStroke(dictionary->root, dictionary->keyMap, stroke, std::wstring(), new std::map<std::wstring, int>(), 0, fitLength, limit);
+    jobject result = jenv->NewObject(hashMapClass, hashMapInit);
+    for(auto it = words->begin() ; it != words->end() ; it++) {
+        int index = (int) std::distance(words->begin(), it);
+        if(index > 256) break;
+        size_t len = it->first.length() * sizeof(wchar_t) + 1;
+        char str[len];
+        wcstombs(str, it->first.c_str(), len);
+        jstring utfString = jenv->NewStringUTF(str);
+        jobject integer = jenv->NewObject(integerClass, integerInit, it->second);
+        jenv->CallObjectMethod(result, hashMapPut, utfString, integer);
+        jenv->DeleteLocalRef(utfString);
+        jenv->DeleteLocalRef(integer);
+    }
+    delete words;
+    delete stroke;
+    free(word);
+
+    jenv->DeleteLocalRef(hashMapClass);
+    jenv->DeleteLocalRef(integerClass);
+
+    return result;
+}
+
 TrieNode * searchNode(TrieNode * root, wchar_t * word, size_t length) {
     TrieNode * p = root;
     for(int i = 0 ; i < length ; i++) {
@@ -154,7 +306,7 @@ std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * li
     if(limit > 0 && currentWord.length() > limit) return list;
     for(auto it = p->children->begin() ; it != p->children->end() ; it++) {
         TrieNode * child = it->second;
-        getAllWords(child, list, currentWord + std::wstring(1, it->first), limit);
+        getAllWords(child, list, currentWord + it->first, limit);
     }
     return list;
 }
