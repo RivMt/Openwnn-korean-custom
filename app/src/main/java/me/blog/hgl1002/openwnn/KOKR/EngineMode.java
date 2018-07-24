@@ -96,6 +96,8 @@ SEBUL_3_2015Y		(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "ke
 
 	TWELVE_SEBUL_MUNHWA					(new Properties(true, false, false),
 			CYCLE_SEBUL_12KEY_MUNHWA, null, COMB_SEBUL_12KEY_MUNHWA, STROKE_SEBUL_12KEY_MUNHWA, "keyboard_12key_sebul_munhwa"),
+	TWELVE_SEBUL_MUNHWA_PREDICTIVE		(new Properties(true, true, true),
+			CYCLE_SEBUL_12KEY_MUNHWA, null, COMB_SEBUL_12KEY_MUNHWA, STROKE_SEBUL_12KEY_MUNHWA, "keyboard_12key_sebul_munhwa_predictive"),
 	TWELVE_SEBUL_HANSON					(new Properties(true, false, false),
 			CYCLE_SEBUL_12KEY_HANSON, null, COMB_SEBUL_12KEY_HANSON, STROKE_SEBUL_12KEY_HANSON, "keyboard_12key_sebul_hanson"),
 	TWELVE_SEBUL_SENA					(new Properties(true, false, false),

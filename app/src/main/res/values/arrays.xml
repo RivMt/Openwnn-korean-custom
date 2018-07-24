@@ -201,6 +201,7 @@
 		<item>@string/preference_keyboard_12key_dubul_sky2_predictive</item>
 	    <item>@string/preference_keyboard_dubul_danmoeum_google</item>
         <item>@string/preference_keyboard_12key_sebul_munhwa</item>
+		<item>@string/preference_keyboard_12key_sebul_munhwa_predictive</item>
         <item>@string/preference_keyboard_12key_sebul_hanson</item>
         <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
@@ -214,6 +215,7 @@
 		<item>keyboard_12key_dubul_sky2_predictive</item>
 	    <item>keyboard_dubul_danmoeum_google</item>
         <item>keyboard_12key_sebul_munhwa</item>
+		<item>keyboard_12key_sebul_munhwa_predictive</item>
         <item>keyboard_12key_sebul_hanson</item>
         <item>keyboard_12key_sebul_sena</item>
     </string-array>

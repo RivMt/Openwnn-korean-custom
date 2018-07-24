@@ -63,18 +63,7 @@ public class T9Converter implements WordConverter {
 		hangulEngine.setAddStrokeTable(engineMode.addStroke);
 		hangulEngine.setCombinationTable(engineMode.combination);
 
-		switch(engineMode) {
-		case TWELVE_ALPHABET_A_PREDICTIVE:
-		case TWELVE_ALPHABET_B_PREDICTIVE:
-		case TWELVE_DUBUL_CHEONJIIN_PREDICTIVE:
-		case TWELVE_DUBUL_NARATGEUL_PREDICTIVE:
-		case TWELVE_DUBUL_SKY2_PREDICTIVE:
-			convert = true;
-			break;
-		default:
-			convert = false;
-			return;
-		}
+		convert = engineMode.properties.predictive;
 
 		this.keyMap = HashMapTrieDictionary.generateKeyMap(engineMode);
 

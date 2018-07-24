@@ -460,6 +460,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			case "keyboard_12key_sebul_munhwa":
+			case "keyboard_12key_sebul_munhwa_predictive":
 				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_sebul_munhwa);
 				break;
 
