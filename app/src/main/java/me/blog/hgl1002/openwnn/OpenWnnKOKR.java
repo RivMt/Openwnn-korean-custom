@@ -209,11 +209,14 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
 
+		mAltSymbols = EngineMode.SYMBOL_B.layout;
+
 		if (mInputViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			return mInputViewManager.initView(this,
 					wm.getDefaultDisplay().getWidth(),
 					wm.getDefaultDisplay().getHeight());
+
 		} else {
 			return super.onCreateInputView();
 		}
@@ -226,7 +229,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mComposingWord.setComposingWord("");
 		mComposingWord.setFixedWord(null);
 		resetWordComposition();
-		
+
 		if(!restarting) {
 			((DefaultSoftKeyboard) mInputViewManager).resetCurrentKeyboard();
 			mHardShift = 0;
@@ -382,7 +385,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				updateNumKeyboardShiftState();
 			}
 		}
-		if(!mAltPressing ){
+		if(!mAltPressing) {
 			if(key == KeyEvent.KEYCODE_ALT_LEFT || key == KeyEvent.KEYCODE_ALT_RIGHT){
 				mHardAlt = 0;
 				mAltPressing   = true;
@@ -424,7 +427,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mDirectInputMode = prop.direct;
 			mEnableTimeout = prop.timeout;
 			mFullMoachigi = prop.fullMoachigi;
-			mAltSymbols = mode.layout;
 
 			((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
 

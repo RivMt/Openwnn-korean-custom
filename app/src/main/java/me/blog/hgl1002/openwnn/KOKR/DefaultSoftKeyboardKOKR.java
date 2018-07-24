@@ -640,11 +640,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				(parent.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 						? LANDSCAPE : PORTRAIT;
 
-        /*
-         * create keyboards & the view.
-         * To re-display the input view when the display mode is changed portrait <-> landscape,
-         * create keyboards every time.
-         */
 		createKeyboards(parent);
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
@@ -673,7 +668,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mMainView.removeView(help);
 					SharedPreferences.Editor editor = pref.edit();
 					editor.putBoolean("initial_launch", false);
-					editor.commit();
+					editor.apply();
 				}
 			});
 		}
@@ -688,18 +683,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		mNumKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		TextView langView = mSubView.findViewById(R.id.lang);
-		langView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {
-					if(mVibrator != null) {
-						mVibrator.vibrate(30);
-					}
-					nextLanguage();
-					updateIndicator(HARD_KEYMODE_LANG + mCurrentLanguage);
+		langView.setOnTouchListener((v, event) -> {
+			if(event.getAction() == MotionEvent.ACTION_DOWN) {
+				if(mVibrator != null) {
+					mVibrator.vibrate(30);
 				}
-				return false;
+				nextLanguage();
+				updateIndicator(HARD_KEYMODE_LANG + mCurrentLanguage);
 			}
+			return false;
 		});
 
 		return mMainView;
