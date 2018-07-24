@@ -472,7 +472,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			}
-			mCurrentKeyboards[LANG_KO] = getEngineMode(defaultLayout);
+			mCurrentKeyboards[LANG_KO] = EngineMode.get(defaultLayout);
 
 		} else {
 
@@ -494,7 +494,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					defaultLayout = pref.getString("keyboard_hangul_layout", defaultLayout);
 				}
 			}
-			mCurrentKeyboards[LANG_KO] = getEngineMode(defaultLayout);
+			mCurrentKeyboards[LANG_KO] = EngineMode.get(defaultLayout);
 
 			String softLayout = "l1.2";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_hangul_soft_layout_portrait", softLayout);
@@ -503,10 +503,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		}
 
-		//TODO: load these somewhere else
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		mAltKeyMode = EngineMode.SYMBOL_B;
+		int altSoftLayout = R.xml.keyboard_ko_l1_1_mobile_num;
+		String altLayout = pref.getString("keyboard_symbols_layout", "keyboard_symbols_a");
+		mAltKeyMode = EngineMode.get(altLayout);
+
+		{
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
+		}
 
 		if(useAlphabetQwerty) {
 
@@ -518,7 +522,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			} else {
 				defaultLayout = pref.getString("keyboard_alphabet_layout", "keyboard_alphabet_qwerty");
 			}
-			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
+			mCurrentKeyboards[LANG_EN] = EngineMode.get(defaultLayout);
 
 			String softLayout = "l1.0";
 			if(mDisplayMode == PORTRAIT) softLayout = pref.getString("keyboard_alphabet_soft_layout_portrait", softLayout);
@@ -557,14 +561,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				break;
 
 			}
-			mCurrentKeyboards[LANG_EN] = getEngineMode(defaultLayout);
+			mCurrentKeyboards[LANG_EN] = EngineMode.get(defaultLayout);
 
 		}
 
-		//TODO: load these somewhere else
-		keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-		mAltKeyMode = EngineMode.SYMBOL_B;
+		{
+			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
+			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
+		}
 
 		keyList = mNumKeyboard[LANG_KO][mDisplayMode][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
@@ -1050,18 +1054,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			break;
 
 		}
-	}
-
-	protected EngineMode getEngineMode(String defaultLayout) {
-		for(EngineMode mode : EngineMode.values()) {
-			if(mode.getPrefValues() == null) continue;
-			for(String prefValue : mode.getPrefValues()) {
-				if(prefValue.equals(defaultLayout)) {
-					return mode;
-				}
-			}
-		}
-		return EngineMode.DIRECT;
 	}
 
 	@SuppressWarnings("deprecation")

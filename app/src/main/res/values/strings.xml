@@ -361,14 +361,14 @@
     <string name="preference_keyboard_12key_sebul_hanson">One-hand Sebeolsik (ZanNavi)</string>
     <string name="preference_keyboard_12key_sebul_sena">One-hand Sebeolsik (Sena)</string>
 
-  <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
+    <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">Use qwerty based Alphabet layout while using 12-key as Hangul.</string>
 
     <string name="preference_keyboard_alphabet_soft_portrait_title">Alphabet Soft Layout (Portrait)</string>
     <string name="preference_keyboard_alphabet_soft_landscape_title">Alphabet Soft Layout (Landscape)</string>
     <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout.</string>
 
-  <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
+    <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
     <string name="preference_keyboard_alphabet_summary">Type of Alphabet keyboard.</string>
 
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
@@ -388,16 +388,19 @@
     <string name="preference_keyboard_12key_alphabet_narrow_a_predictive">Narrow A Predictive</string>
     <string name="preference_keyboard_12key_alphabet_narrow_b_predictive">Narrow B Predictive</string>
 
+    <string name="preference_keyboard_symbols_title">Symbols keyboard type</string>
+    <string name="preference_keyboard_symbols_summary">Type of Symbols keyboard.</string>
+
     <string name="preference_keyboard_use_flick_title">Use Flick</string>
     <string name="preference_keyboard_use_flick_summary">Use flick (slide) function for keyboard.</string>
 
-  <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
+    <string name="preference_keyboard_flick_sensitivity_title">Flick Sensitivity</string>
     <string name="preference_keyboard_flick_sensitivity_summary">Adjust flick sensitivity. Default value is 100.</string>
 
-  <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
+    <string name="preference_keyboard_timeout_delay_title">Timeout Delay</string>
     <string name="preference_keyboard_timeout_delay_summary">Adjust auto composition end timer. Value 0 disables the timer.</string>
 
-  <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
+    <string name="preference_keyboard_use_moachigi_title">Use Moajugi</string>
     <string name="preference_keyboard_use_moachigi_summary">Use moajugi. (Fix jamo order automatically when using sebeol layouts)</string>
 
     <string name="preference_keyboard_quick_period_title">Quick Period Input</string>

@@ -122,10 +122,10 @@ SEBUL_3_2015Y		(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "ke
 	ENGLISH_COLEMAK	(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, false, false),
 			CONVERT_ENGLISH_COLEMAK, null, null, null, "keyboard_alphabet_colemak"),
 
-	SYMBOL_A(new Properties(true, false, false, false, false, false),
-			LayoutSymbol.SYMBOL_A, null, null, null, "keyboard_symbol_a"),
-	SYMBOL_B(new Properties(true, false, false, false, false, false),
-			LayoutSymbol.SYMBOL_B, null, null, null, "keyboard_symbol_b");
+	SYMBOLS_A(new Properties(true, false, false, false, false, false),
+			LayoutSymbol.SYMBOL_A, null, null, null, "keyboard_symbols_a"),
+	SYMBOLS_B(new Properties(true, false, false, false, false, false),
+			LayoutSymbol.SYMBOL_B, null, null, null, "keyboard_symbols_b");
 
 	public Properties properties;
 	public int[][] layout, combination, addStroke;
@@ -143,6 +143,18 @@ SEBUL_3_2015Y		(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "ke
 
 	public String[] getPrefValues() {
 		return prefValues;
+	}
+
+	public static EngineMode get(String defaultLayout) {
+		for(EngineMode mode : EngineMode.values()) {
+			if(mode.getPrefValues() == null) continue;
+			for(String prefValue : mode.getPrefValues()) {
+				if(prefValue.equals(defaultLayout)) {
+					return mode;
+				}
+			}
+		}
+		return EngineMode.DIRECT;
 	}
 
 	public static class Properties {

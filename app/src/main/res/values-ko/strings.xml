@@ -126,12 +126,15 @@
     <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
 
     <string name="preference_keyboard_alphabet_title">영문 키보드 종류</string>
-    <string name="preference_keyboard_alphabet_summary">영문 키보드 레이아웃을 설정합니다.</string>
+    <string name="preference_keyboard_alphabet_summary">영문 키보드 종류를 설정합니다.</string>
     
     <string name="preference_keyboard_alphabet_qwerty">QWERTY</string>
     <string name="preference_keyboard_alphabet_dvorak">DVORAK</string>
     <string name="preference_keyboard_alphabet_colemak">COLEMAK</string>
-    
+
+    <string name="preference_keyboard_symbols_title">기호 키보드 종류</string>
+    <string name="preference_keyboard_symbols_summary">기호 키보드 종류를 설정합니다.</string>
+
     <string name="preference_keyboard_use_flick_title">플릭 사용</string>
     <string name="preference_keyboard_use_flick_summary">키보드에 플릭(밀기) 기능을 사용합니다.</string>
     
