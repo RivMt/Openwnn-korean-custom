@@ -253,6 +253,16 @@
 		<item>keyboard_12key_alphabet_narrow_a_predictive</item>
 		<item>keyboard_12key_alphabet_narrow_b_predictive</item>
     </string-array>
+	
+	<string-array name="keyboard_symbols_layout">
+		<item>keyboard_symbols_a</item>
+		<item>keyboard_symbols_b</item>
+	</string-array>
+
+	<string-array name="keyboard_symbols_layout_id">
+		<item>keyboard_symbols_a</item>
+		<item>keyboard_symbols_b</item>
+	</string-array>
 
 	<string-array name="lang_key_actions">
 		<item>@string/preference_system_list_actions</item>

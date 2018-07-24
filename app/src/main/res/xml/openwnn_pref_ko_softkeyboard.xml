@@ -71,6 +71,29 @@
 			android:entryValues="@array/keyboard_soft_layout_id"
 			layoutKey="keyboard_alphabet_layout"
 			android:defaultValue="l1.0" />
+		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+			android:key="keyboard_symbols_layout"
+			android:title="@string/preference_keyboard_symbols_title"
+			android:summary="@string/preference_keyboard_symbols_summary"
+			android:entries="@array/keyboard_symbols_layout"
+			android:entryValues="@array/keyboard_symbols_layout_id"
+			android:defaultValue="keyboard_symbols_a" />
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
+			android:key="keyboard_symbols_soft_layout_portrait"
+			android:title="@string/preference_keyboard_symbols_soft_portrait_title"
+			android:summary="@string/preference_keyboard_symbols_soft_summary"
+			android:entries="@array/keyboard_soft_layout"
+			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_symbols_layout"
+			android:defaultValue="l1.0" />
+		<me.blog.hgl1002.openwnn.KOKR.SoftLayoutPreference
+			android:key="keyboard_symbols_soft_layout_landscape"
+			android:title="@string/preference_keyboard_symbols_soft_landscape_title"
+			android:summary="@string/preference_keyboard_symbols_soft_summary"
+			android:entries="@array/keyboard_soft_layout"
+			android:entryValues="@array/keyboard_soft_layout_id"
+			layoutKey="keyboard_symbols_layout"
+			android:defaultValue="l1.0" />
 		<CheckBoxPreference android:key="keyboard_use_flick"
 			android:title="@string/preference_keyboard_use_flick_title"
 			android:summary="@string/preference_keyboard_use_flick_summary"

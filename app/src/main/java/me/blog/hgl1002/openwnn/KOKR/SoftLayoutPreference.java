@@ -74,6 +74,10 @@ public class SoftLayoutPreference extends ListPreference {
 		case "keyboard_alphabet_dvorak":
 			return R.array.keyboard_soft_layout_dvorak;
 
+		case "keyboard_symbols_a":
+		case "keyboard_symbols_b":
+			return R.array.keyboard_soft_layout_alt;
+
 		case "keyboard_alphabet_qwerty":
 		case "keyboard_sebul_semoe_2016":
 		case "keyboard_sebul_semoe":
@@ -113,6 +117,10 @@ public class SoftLayoutPreference extends ListPreference {
 
 		case "keyboard_alphabet_dvorak":
 			return R.array.keyboard_soft_layout_dvorak_id;
+
+		case "keyboard_symbols_a":
+		case "keyboard_symbols_b":
+			return R.array.keyboard_soft_layout_alt_id;
 
 		case "keyboard_alphabet_qwerty":
 		case "keyboard_sebul_semoe_2016":

@@ -132,7 +132,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	ComposingWord mComposingWord;
 
-	int[][] mAltSymbols;
+	int[][] mAltLayout;
 	boolean mAltMode;
 
 	int mHardShift;
@@ -227,8 +227,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
 
-		mAltSymbols = EngineMode.SYMBOL_B.layout;
-
 		if (mInputViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			assert wm != null;
@@ -293,6 +291,9 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 
 		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
+
+		String altLayout = pref.getString("keyboard_symbols_layout", "keyboard_symbols_a");
+		mAltLayout = EngineMode.get(altLayout).layout;
 
 		setCandidatesViewShown(pref.getBoolean("conversion_show_candidates", false));
 
@@ -760,7 +761,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		}
 
 		if (mAltMode) {
-			for(int[] item : mAltSymbols) {
+			for(int[] item : mAltLayout) {
 				code = Character.toLowerCase(code);
 				if(code == item[0]) {
 					resetCharComposition();
@@ -1151,7 +1152,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 		}
 		case FLICK_SYMBOL: {
-			for(int[] item : mAltSymbols) {
+			for(int[] item : mAltLayout) {
 				if(item[0] == keyCode) {
 					this.inputChar((char) item[1], true);
 					break;
@@ -1160,7 +1161,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			break;
 		}
 		case FLICK_SYMBOL_SHIFT: {
-			for(int[] item : mAltSymbols) {
+			for(int[] item : mAltLayout) {
 				if(item[0] == keyCode) {
 					this.inputChar((char) item[2], true);
 					break;
@@ -1276,6 +1277,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	public int[][] getAltSymbols() {
-		return mAltSymbols;
+		return mAltLayout;
 	}
 }
