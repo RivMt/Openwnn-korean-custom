@@ -166,7 +166,7 @@ public class T9Converter implements WordConverter {
 					if(converter.vowelList.contains(ch)) {
 						if(cho != '\0') {
 							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
-							cho = jong = '\0';
+							cho = jong = jung2 = '\0';
 							jung = ch;
 						}
 						else if(jung != '\0') {
@@ -176,7 +176,7 @@ public class T9Converter implements WordConverter {
 					} else if(converter.consonantList.contains(ch)) {
 						if(cho != '\0') {
 							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
-							cho = jung = '\0';
+							cho = jung = jung2 = '\0';
 							jong = ch;
 						}
 						else if(jung != '\0') cho = ch;
