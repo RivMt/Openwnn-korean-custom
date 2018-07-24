@@ -122,9 +122,9 @@ SEBUL_3_2015Y		(new Properties(), JAMO_SEBUL_3_2015Y, null, COMB_FULL, null, "ke
 	ENGLISH_COLEMAK	(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, false, false),
 			CONVERT_ENGLISH_COLEMAK, null, null, null, "keyboard_alphabet_colemak"),
 
-	SYMBOL_A(new Properties(true, false, false, false, false),
+	SYMBOL_A(new Properties(true, false, false, false, false, false),
 			LayoutSymbol.SYMBOL_A, null, null, null, "keyboard_symbol_a"),
-	SYMBOL_B(new Properties(true, false, false, false, false),
+	SYMBOL_B(new Properties(true, false, false, false, false, false),
 			LayoutSymbol.SYMBOL_B, null, null, null, "keyboard_symbol_b");
 
 	public Properties properties;
