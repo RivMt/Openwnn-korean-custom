@@ -825,7 +825,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mInputConnection == null) return;
 		String word = mComposingWord.getEntireWord();
 		if(mComposingWord.getFixedWord() != null) word = mComposingWord.getFixedWord();
-		if(!word.isEmpty()) mInputConnection.setComposingText(word, 1);
+		if(mInputConnection.getSelectedText(0) == null) mInputConnection.setComposingText(word, 1);
 	}
 
 	public void onLangKey(String action) {
