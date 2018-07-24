@@ -107,6 +107,7 @@
     <string name="preference_keyboard_12key_dubul_sky2">12키 두벌식 SKY2</string>
     <string name="preference_keyboard_12key_dubul_sky2_predictive">12키 두벌식 SKY2 Predictive</string>
     <string name="preference_keyboard_12key_sebul_munhwa">12키 공병우 세벌식 (한글문화원)</string>
+    <string name="preference_keyboard_12key_sebul_munhwa_predictive">12키 공병우 세벌식 (한글문화원) Predictive</string>
     <string name="preference_keyboard_12key_sebul_hanson">한손 세벌식 (손상길)</string>
     <string name="preference_keyboard_12key_sebul_sena">한손 세벌식 (세나 배열)</string>
     
