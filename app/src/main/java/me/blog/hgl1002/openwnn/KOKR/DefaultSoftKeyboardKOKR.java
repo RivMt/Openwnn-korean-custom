@@ -91,7 +91,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	protected int mSpaceSlideSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
-	protected int mTimeoutDelay = 500;
+	protected int mTimeoutDelay = 0;
 	
 	protected int mVibrateDuration = 30;
 
@@ -640,18 +640,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				(parent.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
 						? LANDSCAPE : PORTRAIT;
 
-        /*
-         * create keyboards & the view.
-         * To re-display the input view when the display mode is changed portrait <-> landscape,
-         * create keyboards every time.
-         */
 		createKeyboards(parent);
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
-		String skin = pref.getString("keyboard_skin",
-				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
-		int id = parent.getResources().getIdentifier(skin, "layout", "me.blog.hgl1002.openwnn");
-
+		String skin = "keyboard_" + pref.getString("keyboard_skin", mWnn.getResources().getString(R.string.keyboard_skin_id_default));
+		int id = parent.getResources().getIdentifier(skin, "layout", parent.getPackageName());
+		if(id == 0) id = R.layout.keyboard_android_default;
 		mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
 		mKeyboardView.setOnKeyboardActionListener(this);
 		mCurrentKeyboard = null;
@@ -673,7 +667,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					mMainView.removeView(help);
 					SharedPreferences.Editor editor = pref.edit();
 					editor.putBoolean("initial_launch", false);
-					editor.commit();
+					editor.apply();
 				}
 			});
 		}
@@ -688,18 +682,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		mNumKeyboardView.setOnTouchListener(new OnKeyboardViewTouchListener());
 		TextView langView = mSubView.findViewById(R.id.lang);
-		langView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {
-					if(mVibrator != null) {
-						mVibrator.vibrate(30);
-					}
-					nextLanguage();
-					updateIndicator(HARD_KEYMODE_LANG + mCurrentLanguage);
+		langView.setOnTouchListener((v, event) -> {
+			if(event.getAction() == MotionEvent.ACTION_DOWN) {
+				if(mVibrator != null) {
+					mVibrator.vibrate(30);
 				}
-				return false;
+				nextLanguage();
+				updateIndicator(HARD_KEYMODE_LANG + mCurrentLanguage);
 			}
+			return false;
 		});
 
 		return mMainView;
@@ -948,7 +939,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
-		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 500);
+		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", mTimeoutDelay);
 		mSpaceSlideSensitivity = mFlickSensitivity;
 		mVibrateDuration = pref.getInt("key_vibration_duration", mVibrateDuration);
 		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
@@ -1081,7 +1072,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
 		int icon = 0;
 		switch(skin) {
-		case "keyboard_white":
+		case "white":
 			icon = 1;
 			break;
 			

@@ -157,7 +157,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	boolean mFullMoachigi = true;
 	int mMoachigiDelay;
 	boolean mQuickPeriod;
-	boolean mSpaceResetJohab;
+	boolean mSpaceResetJohab = true;
 
 	boolean mStandardJamo;
 	String mLangKeyAction;
@@ -227,12 +227,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
 
+		mAltSymbols = EngineMode.SYMBOL_B.layout;
+
 		if (mInputViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			assert wm != null;
 			return mInputViewManager.initView(this,
 					wm.getDefaultDisplay().getWidth(),
 					wm.getDefaultDisplay().getHeight());
+
 		} else {
 			return super.onCreateInputView();
 		}
@@ -240,6 +243,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
+
 		mComposingWord.composeChar("");
 		mComposingWord.setComposingWord("");
 		mComposingWord.setFixedWord(null);
@@ -288,11 +292,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			}
 		}
 
-		if (mCandidatesViewManager != null) mCandidatesViewManager.setPreferences(pref);
-		if (mInputViewManager != null) mInputViewManager.setPreferences(pref, attribute);
-		if (mPreConverter != null) mPreConverter.setPreferences(pref);
-		if (mConverter != null) mConverter.setPreferences(pref);
-
 		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
 
 		setCandidatesViewShown(pref.getBoolean("conversion_show_candidates", false));
@@ -302,7 +301,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mFullMoachigi = pref.getBoolean("hardware_full_moachigi", mFullMoachigi);
 		mMoachigiDelay = pref.getInt("hardware_full_moachigi_delay", 100);
 		mQuickPeriod = pref.getBoolean("keyboard_quick_period", false);
-		mSpaceResetJohab = pref.getBoolean("keyboard_space_reset_composing", false);
+		mSpaceResetJohab = pref.getBoolean("keyboard_space_reset_composing", mSpaceResetJohab);
 
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
@@ -405,7 +404,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				updateNumKeyboardShiftState();
 			}
 		}
-		if(!mAltPressing){
+		if(!mAltPressing) {
 			if(key == KeyEvent.KEYCODE_ALT_LEFT || key == KeyEvent.KEYCODE_ALT_RIGHT){
 				mHardAlt = 0;
 				mAltPressing = true;
@@ -447,7 +446,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mDirectInputMode = prop.direct;
 			mEnableTimeout = prop.timeout;
 			mFullMoachigi = prop.fullMoachigi;
-			mAltSymbols = mode.layout;
 
 			((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
 
@@ -482,6 +480,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onInputViewChange(InputViewChangeEvent event) {
 		setInputView(onCreateInputView());
+		setCandidatesView(onCreateCandidatesView());
 		onStartInputView(getCurrentInputEditorInfo(), false);
 	}
 
@@ -823,7 +822,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if(mInputConnection == null) return;
 		String word = mComposingWord.getEntireWord();
 		if(mComposingWord.getFixedWord() != null) word = mComposingWord.getFixedWord();
-		mInputConnection.setComposingText(word, 1);
+		if(!word.isEmpty()) mInputConnection.setComposingText(word, 1);
 	}
 
 	public void onLangKey(String action) {
