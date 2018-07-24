@@ -157,22 +157,25 @@ public class T9Converter implements WordConverter {
 
 			if(converter.trailsDictionary != null && converter.trailsDictionary.isReady()) {
 				List<String> trailSource = new ArrayList<>();
-				char cho, jung, jong;
-				cho = jung = jong = '\0';
+				char cho, jung, jung2, jong;
+				cho = jung = jung2 = jong = '\0';
 				for(int i = 0 ; i <= 8 ; i++) {
 					if(isCancelled()) return null;
 					if(word.length() <= i) break;
 					char ch = word.charAt(word.length()-i-1);
 					if(converter.vowelList.contains(ch)) {
 						if(cho != '\0') {
-							trailSource.add(new String(jong == '\0' ? new char[] {cho, jung} : new char[] {cho, jung, jong}));
+							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
 							cho = jong = '\0';
 							jung = ch;
+						}
+						else if(jung != '\0') {
+							jung2 = ch;
 						}
 						else jung = ch;
 					} else if(converter.consonantList.contains(ch)) {
 						if(cho != '\0') {
-							trailSource.add(new String(jong == '\0' ? new char[] {cho, jung} : new char[] {cho, jung, jong}));
+							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
 							cho = jung = '\0';
 							jong = ch;
 						}
