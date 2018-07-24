@@ -106,6 +106,7 @@ std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::
             if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
             else charStroke = new std::wstring(1, ch);
 
+            if(fitLength && depth + charStroke->length() < stroke->length()) return words;
             match = false;
             int j;
             for(j = 0 ; j < charStroke->length() ; j++) {
