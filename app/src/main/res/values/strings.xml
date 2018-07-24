@@ -364,9 +364,9 @@
     <string name="preference_keyboard_alphabet_use_qwerty_title">Always use Qwerty-based layout for Alphabet</string>
     <string name="preference_keyboard_alphabet_use_qwerty_summary">Use qwerty based Alphabet layout while using 12-key as Hangul.</string>
 
-    <string name="preference_keyboard_alphabet_soft_portrait_title">Alphabet Soft Layout (Portrait)</string>
-    <string name="preference_keyboard_alphabet_soft_landscape_title">Alphabet Soft Layout (Landscape)</string>
-    <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout.</string>
+    <string name="preference_keyboard_symbols_soft_portrait_title">Symbols Soft Layout (Portrait)</string>
+    <string name="preference_keyboard_symbols_soft_landscape_title">Symbols Soft Layout (Landscape)</string>
+    <string name="preference_keyboard_symbols_soft_summary">Type of Symbols Soft Layout.</string>
 
     <string name="preference_keyboard_alphabet_title">Alphabet keyboard type</string>
     <string name="preference_keyboard_alphabet_summary">Type of Alphabet keyboard.</string>
@@ -390,6 +390,10 @@
 
     <string name="preference_keyboard_symbols_title">Symbols keyboard type</string>
     <string name="preference_keyboard_symbols_summary">Type of Symbols keyboard.</string>
+
+    <string name="preference_keyboard_alphabet_soft_portrait_title">Alphabet Soft Layout (Portrait)</string>
+    <string name="preference_keyboard_alphabet_soft_landscape_title">Alphabet Soft Layout (Landscape)</string>
+    <string name="preference_keyboard_alphabet_soft_summary">Type of Alphabet Soft Layout.</string>
 
     <string name="preference_keyboard_use_flick_title">Use Flick</string>
     <string name="preference_keyboard_use_flick_summary">Use flick (slide) function for keyboard.</string>

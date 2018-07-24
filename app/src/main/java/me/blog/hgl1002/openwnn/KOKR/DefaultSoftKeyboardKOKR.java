@@ -503,14 +503,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		}
 
-		int altSoftLayout = R.xml.keyboard_ko_l1_1_mobile_num;
+		String altSoftLayout = "l1.0";
+		if(mDisplayMode == PORTRAIT) altSoftLayout = pref.getString("keyboard_symbols_soft_layout_portrait", altSoftLayout);
+		else altSoftLayout = pref.getString("keyboard_symbols_soft_layout_landscape", altSoftLayout);
 		String altLayout = pref.getString("keyboard_symbols_layout", "keyboard_symbols_a");
 		mAltKeyMode = EngineMode.get(altLayout);
-
-		{
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
-		}
+		loadSoftLayout(keyList, KEYMODE_ALT_SYMBOLS, altSoftLayout);
 
 		if(useAlphabetQwerty) {
 
@@ -565,10 +563,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		}
 
-		{
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_ALT_SYMBOLS][0] = loadKeyboardLayout(mWnn, altSoftLayout);
-		}
+		loadSoftLayout(keyList, KEYMODE_ALT_SYMBOLS, altSoftLayout);
 
 		keyList = mNumKeyboard[LANG_KO][mDisplayMode][mCurrentKeyboardType];
 		keyList[KEYBOARD_SHIFT_OFF][0][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_special_number);
@@ -1007,50 +1002,54 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	protected void loadSoftLayout(Keyboard[][][] keyList, String softLayout) {
+		this.loadSoftLayout(keyList, KEYMODE_HANGUL, softLayout);
+	}
+
+	protected void loadSoftLayout(Keyboard[][][] keyList, int keyMode, String softLayout) {
 		switch(softLayout) {
 		case "l1.0":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_0_mobile);
 			break;
 
 		case "l1.1":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_1_mobile_num);
 			break;
 
 		case "l1.2":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_2_mod_quote);
 			break;
 
 		case "l1.3":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_3_punc_grave);
 			break;
 
 		case "l1.4":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_4_punc_slash);
 			break;
 
 		case "l1.9":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_9_colemak);
 			break;
 
 		case "l1.10":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l1_10_dvorak);
 			break;
 
 		case "l2.0":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_l2_0_11cols);
 			break;
 
 		case "pc1":
-			keyList[KEYBOARD_SHIFT_OFF][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
-			keyList[KEYBOARD_SHIFT_ON][KEYMODE_HANGUL][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
+			keyList[KEYBOARD_SHIFT_OFF][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
+			keyList[KEYBOARD_SHIFT_ON][keyMode][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_pc1_alphanumeric);
 			break;
 
 		}
