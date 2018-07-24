@@ -102,25 +102,22 @@ std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::
         if(limit > 0 && depth + p->compressed->length() > limit) return words;
         bool match = false;
         for(wchar_t ch : p->compressed->substr(1)) {
+            if(fitLength && depth >= stroke->length()) return words;
             std::wstring * charStroke;
             if(keyMap->count(ch)) charStroke = new std::wstring(keyMap->find(ch)->second->c_str());
             else charStroke = new std::wstring(1, ch);
             int j;
-            if(charStroke->length() == stroke->length() - depth) {
-                for(j = 0 ; j < stroke->length() - depth ; j++) {
-                    if((fitLength && depth + j >= stroke->length()) || charStroke->at(j) != stroke->at(depth + j)) {
-                        match = false;
-                        break;
-                    } else {
-                        match = true;
-                    }
+            for(j = 0 ; j < stroke->length() - depth ; j++) {
+                if(charStroke->length() > j && stroke->length() > depth + j
+                   && charStroke->at(j) == stroke->at(depth + j)) {
+                    match = true;
+                } else {
+                    match = false;
+                    break;
                 }
-                depth += j;
-            } else {
-                match = false;
             }
             delete charStroke;
-            if(!match) break;
+            depth += j;
         }
         if(match) {
             words->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
