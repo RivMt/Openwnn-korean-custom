@@ -91,7 +91,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	protected int mSpaceSlideSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	
-	protected int mTimeoutDelay = 500;
+	protected int mTimeoutDelay = 0;
 	
 	protected int mVibrateDuration = 30;
 
@@ -948,7 +948,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mLongPressTimeout = pref.getInt("keyboard_long_press_timeout", 500);
 		mUseFlick = pref.getBoolean("keyboard_use_flick", true);
 		mFlickSensitivity = pref.getInt("keyboard_flick_sensitivity", DEFAULT_FLICK_SENSITIVITY);
-		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", 500);
+		mTimeoutDelay = pref.getInt("keyboard_timeout_delay", mTimeoutDelay);
 		mSpaceSlideSensitivity = mFlickSensitivity;
 		mVibrateDuration = pref.getInt("key_vibration_duration", mVibrateDuration);
 		boolean showSubView = pref.getBoolean("hardware_use_subview", true);
