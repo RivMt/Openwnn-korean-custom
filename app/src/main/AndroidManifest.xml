@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="me.blog.hgl1002.openwnn"
-    android:versionCode="18072101"
-    android:versionName="180721-01">
+    android:versionCode="18072102"
+    android:versionName="180721-02">
 
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android"
         android:name="android.permission.VIBRATE" />
