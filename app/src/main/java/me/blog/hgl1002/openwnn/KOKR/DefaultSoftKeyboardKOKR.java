@@ -643,10 +643,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		createKeyboards(parent);
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
-		String skin = pref.getString("keyboard_skin",
-				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
-		int id = parent.getResources().getIdentifier(skin, "layout", "me.blog.hgl1002.openwnn");
-
+		String skin = "keyboard_" + pref.getString("keyboard_skin", mWnn.getResources().getString(R.string.keyboard_skin_id_default));
+		int id = parent.getResources().getIdentifier(skin, "layout", parent.getPackageName());
+		if(id == 0) id = R.layout.keyboard_android_default;
 		mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
 		mKeyboardView.setOnKeyboardActionListener(this);
 		mCurrentKeyboard = null;
@@ -1073,7 +1072,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				mWnn.getResources().getString(R.string.keyboard_skin_id_default));
 		int icon = 0;
 		switch(skin) {
-		case "keyboard_white":
+		case "white":
 			icon = 1;
 			break;
 			

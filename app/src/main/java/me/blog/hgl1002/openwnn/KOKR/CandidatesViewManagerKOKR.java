@@ -2,6 +2,7 @@ package me.blog.hgl1002.openwnn.KOKR;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,15 +19,19 @@ import me.blog.hgl1002.openwnn.event.SelectCandidateEvent;
 public class CandidatesViewManagerKOKR {
 
 	OpenWnn parent;
-
 	LinearLayout mainView;
+
+	int itemViewId;
 
 	public View initView(OpenWnn parent, int width, int height) {
 		this.parent = parent;
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
-
-		mainView = (LinearLayout) parent.getLayoutInflater().inflate(R.layout.candidates_view, null);
+		String skin = pref.getString("keyboard_skin", parent.getResources().getString(R.string.keyboard_skin_id_default));
+		int id = parent.getResources().getIdentifier("candidates_view_" + skin, "layout", parent.getPackageName());
+		itemViewId = parent.getResources().getIdentifier("candidates_item_" + skin, "layout", parent.getPackageName());
+		if(id != 0) mainView = (LinearLayout) parent.getLayoutInflater().inflate(id, null);
+		else mainView = (LinearLayout) parent.getLayoutInflater().inflate(R.layout.candidates_view, null);
 
 		return mainView;
 	}
@@ -44,22 +49,24 @@ public class CandidatesViewManagerKOKR {
 	public void displayCandidates(List<String> candidates, int position) {
 		if(mainView == null || candidates == null) return;
 		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
+		LayoutInflater inflater = parent.getLayoutInflater();
 		for(final String candidate : candidates) {
-			TextView candidateView = (TextView) parent.getLayoutInflater().inflate(R.layout.candidates_item, null);
-			candidateView.setText(candidate);
-			candidateView.setOnClickListener((v) -> {
+			TextView candidateItemView;
+			if(itemViewId == 0) candidateItemView = (TextView) inflater.inflate(R.layout.candidates_item, null);
+			else candidateItemView = (TextView) inflater.inflate(itemViewId, null);
+			candidateItemView.setText(candidate);
+			candidateItemView.setOnClickListener((v) -> {
 				EventBus.getDefault().post(new SelectCandidateEvent(new WnnWord(candidate, "")));
 			});
-			if(position < 0) firstView.addView(candidateView);
+			if(position < 0) firstView.addView(candidateItemView);
 			else {
-				firstView.addView(candidateView, position);
+				firstView.addView(candidateItemView, position);
 				position++;
 			}
 		}
 	}
 
-	public void setPreferences(SharedPreferences preferences) {
-
+	public void setPreferences(SharedPreferences pref) {
 	}
 
 }

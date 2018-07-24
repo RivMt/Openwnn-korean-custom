@@ -467,6 +467,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onInputViewChange(InputViewChangeEvent event) {
 		setInputView(onCreateInputView());
+		setCandidatesView(onCreateCandidatesView());
 		onStartInputView(getCurrentInputEditorInfo(), false);
 	}
 

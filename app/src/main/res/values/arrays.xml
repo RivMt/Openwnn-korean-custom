@@ -28,12 +28,12 @@
     <string name="keyboard_skin_id_default">keyboard_android_default</string>
 
     <string-array name="keyboard_skin_id">
-        <item>keyboard_android_default</item>
-        <item>keyboard_simple</item>
-        <item>keyboard_metal</item>
-        <item>keyboard_flat</item>
-        <item>keyboard_white</item>
-        <item>keyboard_dark</item>
+        <item>android_default</item>
+        <item>simple</item>
+        <item>metal</item>
+        <item>flat</item>
+        <item>white</item>
+        <item>dark</item>
     </string-array>
 
     <string-array name="keyboard_soft_layout">
