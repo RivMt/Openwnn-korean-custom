@@ -27,4 +27,8 @@
     <color name="indicator_textbackground_default">#fff0f0f0</color>
     <color name="indicator_background_lock_caps">#5532CD32</color>
     <color name="indicator_background_lock_alt">#55ff8800</color>
+
+    <color name="keybg_white_mod">#C5CCD6</color>
+    <color name="keybg_white_enter">#007AFF</color>
+
 </resources>

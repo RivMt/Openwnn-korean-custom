@@ -24,7 +24,7 @@
 		<Key android:codes="-2012" android:keyLabel="ㅅ" />
 		<Key android:codes="-2013" android:keyLabel="ㅡ" />
 		<Key android:codes="-2014" android:keyLabel="ㅅ" />
-		<Key android:codes="-214" android:keyIcon="@drawable/key_12key_del" android:keyEdgeFlags="right" />
+		<Key android:codes="-214" android:keyIcon="@drawable/key_12key_del_b" android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>

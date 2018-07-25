@@ -9,8 +9,8 @@
 		<Key android:codes="-2002" android:keyLabel="abc" />
 		<Key android:codes="-2003" android:keyLabel="def" />
 		<Key android:codes="-214" android:keyEdgeFlags="right"
-			android:keyIcon="@drawable/key_12key_del"
-			android:iconPreview="@drawable/key_12key_del"
+			android:keyIcon="@drawable/key_12key_del_b"
+			android:iconPreview="@drawable/key_12key_del_b"
 			android:isRepeatable="false" />
 	</Row>
 

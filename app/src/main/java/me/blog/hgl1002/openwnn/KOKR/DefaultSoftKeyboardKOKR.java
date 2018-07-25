@@ -134,10 +134,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}});
 		put("white", new SoftKeyboardDisplay() {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift_b, R.drawable.keybg_white_mod_def));
-			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_white_enter_def));
 			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space_b));
 			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del_b, R.drawable.keybg_white_mod_def));
-			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_white_enter_def));
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space_b, R.drawable.keybg_white_mod_def));
 			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del_b, R.drawable.keybg_white_mod_def));
 			add(KEYCODE_QWERTY_ALT, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));

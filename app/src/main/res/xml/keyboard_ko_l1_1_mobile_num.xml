@@ -47,7 +47,7 @@
   
   <Row>
     <Key android:codes="-1"
-	 android:keyIcon="@drawable/key_qwerty_shift" android:iconPreview="@drawable/key_qwerty_shift_b"
+	 android:keyIcon="@drawable/key_qwerty_shift" android:iconPreview="@drawable/key_qwerty_shift"
          android:keyWidth="15%p" android:isModifier="true"
          android:isSticky="true" android:keyEdgeFlags="left"/>
     <Key android:codes="122" android:keyLabel="z"/>
