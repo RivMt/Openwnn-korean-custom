@@ -20,11 +20,17 @@ public interface TrieDictionary extends Trie {
 
 	class Word implements Comparable<Word> {
 		private String word;
+		private String stroke;
 		private int frequency;
 
-		public Word(String word, int frequency) {
+		public Word(String word, String stroke, int frequency) {
 			this.word = word;
+			this.stroke = stroke;
 			this.frequency = frequency;
+		}
+
+		public Word(String word, int frequency) {
+			this(word, "", frequency);
 		}
 
 		public String getWord() {
@@ -33,6 +39,14 @@ public interface TrieDictionary extends Trie {
 
 		public void setWord(String word) {
 			this.word = word;
+		}
+
+		public String getStroke() {
+			return stroke;
+		}
+
+		public void setStroke(String stroke) {
+			this.stroke = stroke;
 		}
 
 		public int getFrequency() {
@@ -50,6 +64,8 @@ public interface TrieDictionary extends Trie {
 
 		@Override
 		public int compareTo(Word word) {
+			if(getWord().length() > word.getWord().length()) return 1;
+			else if(getWord().length() < word.getWord().length()) return -1;
 			if(frequency > word.frequency) return 1;
 			else if(frequency < word.frequency) return -1;
 			else return 0;

@@ -75,10 +75,6 @@ public class WordCompletionConverter implements WordConverter {
 			if(integer == 1) {
 				if(this.result == null) return;
 				Collections.sort(result, Collections.reverseOrder());
-				List<String> result = new ArrayList<>();
-				for(TrieDictionary.Word word : this.result) {
-					result.add(word.getWord());
-				}
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 			}
 		}

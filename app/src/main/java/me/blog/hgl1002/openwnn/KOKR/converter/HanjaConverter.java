@@ -21,6 +21,7 @@ import java.util.List;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
@@ -86,7 +87,7 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 
 		private SQLiteDatabase database;
 		private ComposingWord word;
-		private List<String> result = new ArrayList<>();
+		private List<TrieDictionary.Word> result = new ArrayList<>();
 
 		public HanjaConvertTask(SQLiteDatabase database, ComposingWord word) {
 			this.database = database;
@@ -121,7 +122,7 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 			int count = cursor.getCount();
 			while(cursor.moveToNext()) {
 				if(isCancelled()) return null;
-				result.add(cursor.getString(column));
+				result.add(new TrieDictionary.Word(cursor.getString(column), 1));
 				publishProgress(10 + 90 / count);
 			}
 			cursor.close();

@@ -28,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import me.blog.hgl1002.openwnn.KOKR.CandidatesViewManagerKOKR;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
@@ -52,6 +54,7 @@ import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOS;
 import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOSChain;
 import me.blog.hgl1002.openwnn.KOKR.trie.NativeTrieDictionary;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.POSSupport;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.CommitComposingTextEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
@@ -133,6 +136,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	HangulEngine mQwertyEngine, m12keyEngine;
 
 	ComposingWord mComposingWord;
+	private Queue<KoreanPOS> posChain;
 
 	int[][] mAltLayout;
 	boolean mAltMode;
@@ -221,6 +225,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		HanjaConverter.copyDatabase(this);
 
+		posChain = new LinkedBlockingQueue<>();
+
 	}
 
 	@Override
@@ -233,7 +239,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		converters = new ArrayList<>();
 		if(pref.getBoolean("conversion_show_candidates", false)) {
-			converters.add(new T9Converter());
+			converters.add(new T9Converter(posChain));
 			if (pref.getBoolean("conversion_use_hanja", false)) {
 				HanjaConverter hanjaConverter = new HanjaConverter(this);
 				converters.add(hanjaConverter);
@@ -274,7 +280,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Override
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-
 		mComposingWord.composeChar("");
 		mComposingWord.setComposingWord("");
 		mComposingWord.setFixedWord(null);
@@ -286,6 +291,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
 			updateNumKeyboardShiftState();
+			posChain.clear();
 		}
 
 		super.onStartInputView(attribute, restarting);
@@ -881,7 +887,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onAutoConvert(AutoConvertEvent event) {
-		String candidate = event.getCandidate();
+		String candidate = event.getCandidate().getWord();
 		mComposingWord.setFixedWord(candidate.isEmpty() ? null : candidate);
 		updateInputView();
 	}
@@ -889,10 +895,27 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onCandidateSelect(SelectCandidateEvent event) {
 		mComposingWord.setFixedWord(null);
-		String candiadte = event.getWord().candidate;
 		mComposingWord.commitComposingChar();
-		mComposingWord.setComposingWord(candiadte);
-		resetWordComposition();
+		if(event.getWnnWord() != null) {
+			String candidate = event.getWnnWord().candidate;
+			mComposingWord.setComposingWord(candidate);
+			resetWordComposition();
+		} else if(event.getWord() != null) {
+			String candidate = event.getWord().getWord();
+			String originalStroke = mComposingWord.getEntireWord();
+			mComposingWord.setComposingWord(candidate);
+			if(event.getWord() instanceof POSSupport.Word) {
+				posChain.offer(((POSSupport.Word) event.getWord()).getPos());
+				if(posChain.size() > 3) posChain.poll();
+			}
+			resetWordComposition();
+			String stroke = event.getWord().getStroke();
+			if(stroke != null && !stroke.isEmpty() && stroke.length() < originalStroke.length()) {
+				mComposingWord.setComposingWord(originalStroke.substring(stroke.length()));
+				updateInputView();
+				performConversion();
+			}
+		}
 	}
 
 	@SuppressLint("NewApi")

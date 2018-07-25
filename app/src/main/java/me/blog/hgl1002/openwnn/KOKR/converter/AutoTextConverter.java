@@ -9,6 +9,7 @@ import java.util.Map;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
 
 public class AutoTextConverter implements WordConverter {
@@ -21,10 +22,10 @@ public class AutoTextConverter implements WordConverter {
 
 	@Override
 	public void convert(ComposingWord word) {
-		List<String> result = new ArrayList<>();
+		List<TrieDictionary.Word> result = new ArrayList<>();
 		String str = autoTexts.get(word.getEntireWord());
 		if(str != null) {
-			result.add(str);
+			result.add(new TrieDictionary.Word(str, 1));
 			EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
 		}
 	}

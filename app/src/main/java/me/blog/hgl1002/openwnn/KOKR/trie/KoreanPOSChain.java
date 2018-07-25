@@ -6,12 +6,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class KoreanPOSChain {
 
-	private static Map<String, List<KoreanPOS>> chains = new HashMap<>();
+	private static Map<String, Set<KoreanPOS>> chains = new HashMap<>();
 
 	public static void generate(InputStream is) {
 		try {
@@ -23,7 +25,7 @@ public class KoreanPOSChain {
 					int resultPosCode = Integer.parseInt(line.substring(index+1));
 					KoreanPOS resultPos = KoreanPOS.get(resultPosCode);
 					String key = line.substring(0, index);
-					if(!chains.containsKey(key)) chains.put(key, new ArrayList<>());
+					if(!chains.containsKey(key)) chains.put(key, new HashSet<>());
 					chains.get(key).add(resultPos);
 				} catch(NumberFormatException ignore) {}
 			}
@@ -32,7 +34,7 @@ public class KoreanPOSChain {
 		}
 	}
 
-	public static List<KoreanPOS> getAvailablePOS(List<KoreanPOS> chain) {
+	public static Set<KoreanPOS> getAvailablePOS(List<KoreanPOS> chain) {
 		if(chain.size() == 0) return null;
 		int begin = chain.size() - 4;
 		if(begin < 0) begin = 0;

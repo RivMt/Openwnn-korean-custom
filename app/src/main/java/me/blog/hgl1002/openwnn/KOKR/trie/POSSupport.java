@@ -10,8 +10,8 @@ public interface POSSupport extends TrieDictionary {
 
 		private KoreanPOS pos;
 
-		public Word(String word, int frequency, KoreanPOS pos) {
-			super(word, frequency);
+		public Word(String word, String stroke, int frequency, KoreanPOS pos) {
+			super(word, stroke, frequency);
 			this.pos = pos;
 		}
 

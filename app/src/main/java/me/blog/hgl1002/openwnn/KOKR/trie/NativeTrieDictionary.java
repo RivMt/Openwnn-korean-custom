@@ -45,7 +45,7 @@ public class NativeTrieDictionary extends NativeTrie implements POSSupport {
 		Map<String, Integer> map = searchStrokeNative(stroke, fitLength, limit);
 		List<TrieDictionary.Word> result = new ArrayList<>();
 		for(String word : map.keySet()) {
-			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
+			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), stroke, map.get(word)));
 		}
 		return result;
 	}
@@ -61,7 +61,7 @@ public class NativeTrieDictionary extends NativeTrie implements POSSupport {
 		Map<String, Integer> map = searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit);
 		List<TrieDictionary.Word> result = new ArrayList<>();
 		for(String word : map.keySet()) {
-			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
+			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), prefix, map.get(word)));
 		}
 		return result;
 	}

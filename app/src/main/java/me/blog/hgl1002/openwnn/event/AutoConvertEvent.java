@@ -1,14 +1,16 @@
 package me.blog.hgl1002.openwnn.event;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
+
 public class AutoConvertEvent extends OpenWnnEvent {
 
-	private String candidate;
+	private TrieDictionary.Word candidate;
 
-	public AutoConvertEvent(String candidate) {
+	public AutoConvertEvent(TrieDictionary.Word candidate) {
 		this.candidate = candidate;
 	}
 
-	public String getCandidate() {
+	public TrieDictionary.Word getCandidate() {
 		return candidate;
 	}
 

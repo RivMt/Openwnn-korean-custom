@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.OpenWnn;
 import me.blog.hgl1002.openwnn.R;
 import me.blog.hgl1002.openwnn.WnnWord;
@@ -42,21 +43,21 @@ public class CandidatesViewManagerKOKR {
 		firstView.removeAllViews();
 	}
 
-	public void displayCandidates(List<String> candidates) {
+	public void displayCandidates(List<TrieDictionary.Word> candidates) {
 		this.displayCandidates(candidates, -1);
 	}
 
-	public void displayCandidates(List<String> candidates, int position) {
+	public void displayCandidates(List<TrieDictionary.Word> candidates, int position) {
 		if(mainView == null || candidates == null) return;
 		LinearLayout firstView = mainView.findViewById(R.id.candidates_1st_view);
 		LayoutInflater inflater = parent.getLayoutInflater();
-		for(final String candidate : candidates) {
+		for(final TrieDictionary.Word candidate : candidates) {
 			TextView candidateItemView;
 			if(itemViewId == 0) candidateItemView = (TextView) inflater.inflate(R.layout.candidates_item, null);
 			else candidateItemView = (TextView) inflater.inflate(itemViewId, null);
-			candidateItemView.setText(candidate);
+			candidateItemView.setText(candidate.getWord());
 			candidateItemView.setOnClickListener((v) -> {
-				EventBus.getDefault().post(new SelectCandidateEvent(new WnnWord(candidate, "")));
+				EventBus.getDefault().post(new SelectCandidateEvent(candidate));
 			});
 			if(position < 0) firstView.addView(candidateItemView);
 			else {
