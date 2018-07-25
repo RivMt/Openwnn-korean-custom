@@ -102,8 +102,9 @@ public class DefaultSoftKeyboardViewKOKR extends KeyboardView {
 			} catch(IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			if(label.length() == 1) paint.getTextBounds("a", 0, 1, bounds);
-			else paint.getTextBounds(label, 0, label.length(), bounds);
+			StringBuilder boundsString = new StringBuilder("A");
+			for(int i = 0 ; i < label.length() ; i++) boundsString.append('A');
+			paint.getTextBounds(boundsString.toString(), 0, boundsString.length(), bounds);
 
 			int labelTextSize = 4;
 			float desiredTextSize;
