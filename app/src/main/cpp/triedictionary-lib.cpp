@@ -120,7 +120,7 @@ std::map<std::wstring, int> * searchStroke(TrieNode * p, std::map<wchar_t, std::
             delete charStroke;
             depth += j;
         }
-        if(match && depth == stroke->length()) {
+        if(match && (!fitLength || depth == stroke->length())) {
             words->insert(std::make_pair(currentWord + p->compressed->substr(1), p->frequency));
         }
         return words;

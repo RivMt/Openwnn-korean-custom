@@ -36,6 +36,11 @@ public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 		return this.searchStroke(stroke, true, limit);
 	}
 
+	@Override
+	public List<Word> searchStrokeStartsWith(String stroke, int limit) {
+		return this.searchStroke(stroke, false, limit);
+	}
+
 	private List<Word> searchStroke(String stroke, boolean fitLength, int limit) {
 		Map<String, Integer> map = searchStrokeNative(stroke, fitLength, limit);
 		List<Word> result = new ArrayList<>();

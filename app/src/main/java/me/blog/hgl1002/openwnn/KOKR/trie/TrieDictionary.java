@@ -11,6 +11,8 @@ public interface TrieDictionary extends Trie {
 
 	List<Word> searchStroke(String stroke, int limit);
 
+	List<Word> searchStrokeStartsWith(String stroke, int limit);
+
 	List<Word> searchStartsWith(String prefix, int limit);
 
 	void setKeyMap(Map<Character, String>keyMap);

@@ -54,6 +54,11 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 		return searchStroke(stroke, root, "", new ArrayList<>(), 0, true, limit);
 	}
 
+	@Override
+	public List<Word> searchStrokeStartsWith(String stroke, int limit) {
+		return searchStroke(stroke, root, "", new ArrayList<>(), 0, false, limit);
+	}
+
 	private List<Word> searchStroke(String stroke, TrieNode p, String currentWord, List<Word> words, int depth, boolean fitLength, int limit) {
 		if(limit > 0 && depth > limit) return words;
 		if(p.compressed != null) {
