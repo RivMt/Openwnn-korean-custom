@@ -623,7 +623,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mode = mAltKeyMode;
 		}
 
-//		changeEngineOption();
 		EventBus.getDefault().post(new EngineModeChangeEvent(mode));
 
 		changeKeyboard(kbd);

@@ -227,6 +227,37 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		boolean hidden = (hiddenState == Configuration.HARDKEYBOARDHIDDEN_YES);
 		((DefaultSoftKeyboardKOKR) mInputViewManager).setHardKeyboardHidden(hidden);
 
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+		converters = new ArrayList<>();
+		if(pref.getBoolean("conversion_show_candidates", false)) {
+			converters.add(new T9Converter());
+			if (pref.getBoolean("conversion_use_hanja", false)) {
+				HanjaConverter hanjaConverter = new HanjaConverter(this);
+				converters.add(hanjaConverter);
+			}
+			if(pref.getBoolean("conversion_use_autotext", false)) {
+				String rawTexts = pref.getString("autotexts", "{}");
+				Map<String, String> autoTexts = new HashMap<>();
+				try {
+					JSONObject object = new JSONObject(rawTexts);
+					Iterator<String> keys = object.keys();
+					while (keys.hasNext()) {
+						String key = keys.next();
+						autoTexts.put(key, object.getString(key));
+					}
+					AutoTextConverter autoTextConverter = new AutoTextConverter(autoTexts);
+					converters.add(autoTextConverter);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			generateDictionaries();
+			if(pref.getBoolean("conversion_use_word_completion", false)) {
+				converters.add(new WordCompletionConverter());
+			}
+		}
+
 		if (mInputViewManager != null) {
 			WindowManager wm = (WindowManager)getSystemService(Context.WINDOW_SERVICE);
 			assert wm != null;
@@ -258,37 +289,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		super.onStartInputView(attribute, restarting);
 
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		if(!restarting) {
-			converters = new ArrayList<>();
-			if(pref.getBoolean("conversion_show_candidates", false)) {
-				converters.add(new T9Converter());
-				if (pref.getBoolean("conversion_use_hanja", false)) {
-					HanjaConverter hanjaConverter = new HanjaConverter(this);
-					converters.add(hanjaConverter);
-				}
-				if(pref.getBoolean("conversion_use_autotext", false)) {
-					String rawTexts = pref.getString("autotexts", "{}");
-					Map<String, String> autoTexts = new HashMap<>();
-					try {
-						JSONObject object = new JSONObject(rawTexts);
-						Iterator<String> keys = object.keys();
-						while (keys.hasNext()) {
-							String key = keys.next();
-							autoTexts.put(key, object.getString(key));
-						}
-						AutoTextConverter autoTextConverter = new AutoTextConverter(autoTexts);
-						converters.add(autoTextConverter);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-				generateDictionaries();
-				if(pref.getBoolean("conversion_use_word_completion", false)) {
-					converters.add(new WordCompletionConverter());
-				}
-			}
-		}
 
 		boolean hardKeyboardHidden = ((DefaultSoftKeyboard) mInputViewManager).mHardKeyboardHidden;
 
@@ -422,10 +422,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		mCurrentEngineMode = mode;
 
-		for(WordConverter converter : converters) {
-			converter.setEngineMode(mCurrentEngineMode);
-		}
-
 		if(mode == EngineMode.DIRECT) {
 			mDirectInputMode = true;
 			mEnableTimeout = false;
@@ -442,19 +438,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		resetWordComposition();
 		updateInputView();
 
-		if(prop.altMode) {
-			mAltMode = true;
-			mDirectInputMode = prop.direct;
-			mEnableTimeout = prop.timeout;
-			mFullMoachigi = prop.fullMoachigi;
-
-			((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
-
-			return;
-		}
-
-
-		mAltMode = false;
+		mAltMode = prop.altMode;
 		mDirectInputMode = prop.direct;
 		mEnableTimeout = prop.timeout;
 		mFullMoachigi = prop.fullMoachigi;
@@ -472,6 +456,10 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		if (mode.properties.predictive) {
 			mHangulEngine.setJamoTable(Layout12KeyDubul.CYCLE_PREDICTIVE);
 			generateDictionaries();
+		}
+
+		for(WordConverter converter : converters) {
+			converter.setEngineMode(mCurrentEngineMode);
 		}
 
 		((DefaultSoftKeyboardKOKR) mInputViewManager).updateKeyLabels();
