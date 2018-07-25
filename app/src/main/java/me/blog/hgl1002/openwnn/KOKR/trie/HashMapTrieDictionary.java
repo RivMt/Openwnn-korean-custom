@@ -109,6 +109,7 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 
 	public static Map<Character, String> generateKeyMap(EngineMode engineMode) {
 		Map<Character, String> map = new HashMap<>();
+		if(engineMode.layout == null) return map;
 		for(int[] item : engineMode.layout) {
 			char sourceChar = ' ';
 			if(item[0] <= -2000 && item[0] > -2100) {

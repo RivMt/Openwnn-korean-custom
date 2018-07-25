@@ -73,6 +73,8 @@ public class T9Converter implements WordConverter {
 		if(dictionary != null) this.dictionary.setKeyMap(keyMap);
 		if(trailsDictionary != null) this.trailsDictionary.setKeyMap(keyMap);
 
+		if(engineMode.layout == null) return;
+
 		consonantList = new ArrayList<>();
 		vowelList = new ArrayList<>();
 		for(int[] item : engineMode.layout) {
