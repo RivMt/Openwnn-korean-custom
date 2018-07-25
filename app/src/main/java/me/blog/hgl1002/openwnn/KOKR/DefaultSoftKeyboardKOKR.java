@@ -1,10 +1,13 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -38,14 +41,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int HARD_KEYMODE_LANG_KOREAN = HARD_KEYMODE_LANG + LANG_KO;
 
 	private static final int KEYMODE_LENGTH = 11;
-	
+
 	protected static final int DEFAULT_FLICK_SENSITIVITY = 100;
 
 	protected static final int SPACE_SLIDE_UNIT = 30;
 	protected static final int BACKSPACE_SLIDE_UNIT = 250;
-	
+
 	protected static final int KEYCODE_NOP = -310;
-	
+
 	public static final int KEYCODE_KR12_ADDSTROKE = -310;
 
 	public static final int KEYCODE_RIGHT = -217;
@@ -57,7 +60,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	public static final int KEYCODE_TOGGLE_ONE_HAND_SIDE = -520;
 
 	protected static final int INVALID_KEYMODE = -1;
-	
+
 	public static final int KEYMODE_HANGUL = 1;
 	public static final int KEYMODE_HANGUL_CHO = 2;
 	public static final int KEYMODE_HANGUL_JUNG = 3;
@@ -69,16 +72,16 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected Keyboard[][][][][][] mNumKeyboard;
 
 	protected boolean mCapsLock;
-	
+
 	protected int mLastInputType = 0;
 	protected int mLastKeyMode = -1;
 	protected int mReturnLanguage = -1;
 
 	protected EngineMode[] mCurrentKeyboards;
 	protected EngineMode mAltKeyMode;
-	
+
 	protected int[] mLimitedKeyMode = null;
-	
+
 	protected int mPreferenceKeyMode = INVALID_KEYMODE;
 	protected int mPreferenceLanguage = INVALID_KEYMODE;
 
@@ -86,13 +89,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	protected boolean mUse12Key = false;
 	protected boolean mUseAlphabetQwerty = true;
-	
+
 	protected boolean mUseFlick = true;
 	protected int mFlickSensitivity = DEFAULT_FLICK_SENSITIVITY;
 	protected int mSpaceSlideSensitivity = DEFAULT_FLICK_SENSITIVITY;
-	
+
 	protected int mTimeoutDelay = 0;
-	
+
 	protected int mVibrateDuration = 30;
 
 	protected int mKeyHeightPortrait = 50;
@@ -104,7 +107,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	public static final boolean ONE_HAND_LEFT = false;
 	public static final boolean ONE_HAND_RIGHT = true;
-	
+
 	protected boolean mShowSubView = true;
 
 	protected boolean mShowNumKeyboardViewPortrait = true;
@@ -113,30 +116,32 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected boolean mShowKeyPreview = false;
 
 	protected boolean mForceHangul;
-	
+
 	protected int[] mLanguageCycleTable = {
 			LANG_EN, LANG_KO
 	};
 	int mCurrentLanguageIndex = 0;
 
-	SparseArray<SparseArray<Integer>> mKeyIcons = new SparseArray<SparseArray<Integer>>() {{
-		put(0, new SparseArray<Integer>() {{
-			put(KEYCODE_QWERTY_SHIFT, R.drawable.key_qwerty_shift);
-			put(KEYCODE_QWERTY_ENTER, R.drawable.key_qwerty_enter);
-			put(-10, R.drawable.key_qwerty_space);
-			put(KEYCODE_QWERTY_BACKSPACE, R.drawable.key_qwerty_del);
-			put(KEYCODE_JP12_ENTER, R.drawable.key_12key_enter);
-			put(KEYCODE_JP12_SPACE, R.drawable.key_12key_space);
-			put(KEYCODE_JP12_BACKSPACE, R.drawable.key_12key_del);
+	Map<String, SoftKeyboardDisplay> mKeyboardDisplays = new HashMap<String, SoftKeyboardDisplay>() {{
+		put("dark", new SoftKeyboardDisplay() {{
+			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
+			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter));
+			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space));
+			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
+			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter));
+			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
+			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
 		}});
-		put(1, new SparseArray<Integer>() {{
-			put(KEYCODE_QWERTY_SHIFT, R.drawable.key_qwerty_shift_b);
-			put(KEYCODE_QWERTY_ENTER, R.drawable.key_qwerty_enter_b);
-			put(-10, R.drawable.key_qwerty_space_b);
-			put(KEYCODE_QWERTY_BACKSPACE, R.drawable.key_qwerty_del_b);
-			put(KEYCODE_JP12_ENTER, R.drawable.key_12key_enter_b);
-			put(KEYCODE_JP12_SPACE, R.drawable.key_12key_space_b);
-			put(KEYCODE_JP12_BACKSPACE, R.drawable.key_12key_del_b);
+		put("white", new SoftKeyboardDisplay() {{
+			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter_b, R.drawable.keybg_white_mod_def));
+			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space_b));
+			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del_b, R.drawable.keybg_white_mod_def));
+			add(KEYCODE_QWERTY_ALT, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
+			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
 		}});
 	}};
 
@@ -149,7 +154,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	}
 
 	int mLongPressTimeout = 500;
-	
+
 	class LongClickHandler implements Runnable {
 		int keyCode;
 		boolean performed = false;
@@ -341,7 +346,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 
 	}
-	
+
 	class OnKeyboardViewTouchListener implements View.OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -402,9 +407,9 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mCurrentLanguage = mLanguageCycleTable[mCurrentLanguageIndex];
 		mCurrentKeyboardType = KEYBOARD_QWERTY;
 		mShiftOn = KEYBOARD_SHIFT_OFF;
-		
+
 	}
-	
+
 	@Override
 	protected void createKeyboards(OpenWnn parent) {
 		/* Keyboard[# of Languages][portrait/landscape][# of keyboard type][shift off/on][max # of key-modes][subkeyboard] */
@@ -591,7 +596,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mCurrentKeyMode = targetMode;
 
 		EngineMode mode = EngineMode.DIRECT;
-		
+
 		if(targetMode == KEYMODE_HANGUL || targetMode == KEYMODE_ENGLISH) {
 			mode = mCurrentKeyboards[mCurrentLanguage];
 		} else if(targetMode == KEYMODE_ALT_SYMBOLS) {
@@ -608,7 +613,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 		mLastKeyMode = mCurrentKeyMode;
 	}
-	
+
 	public void setDefaultKeyboard() {
 		if(mForceHangul) {
 			mCurrentLanguage = LANG_KO;
@@ -618,7 +623,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		}
 		Locale locale = Locale.getDefault();
 		int language = mCurrentLanguage;
-		
+
 		if(mReturnLanguage != -1) {
 			mCurrentLanguageIndex = mReturnLanguage;
 			language = mLanguageCycleTable[mReturnLanguage];
@@ -643,12 +648,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		createKeyboards(parent);
 
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
-		String skin = "keyboard_" + pref.getString("keyboard_skin", mWnn.getResources().getString(R.string.keyboard_skin_id_default));
-		int id = parent.getResources().getIdentifier(skin, "layout", parent.getPackageName());
+		String skin = pref.getString("keyboard_skin", mWnn.getResources().getString(R.string.keyboard_skin_id_default));
+		int id = parent.getResources().getIdentifier("keyboard_" + skin, "layout", parent.getPackageName());
 		if(id == 0) id = R.layout.keyboard_android_default;
 		mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
 		mKeyboardView.setOnKeyboardActionListener(this);
 		mCurrentKeyboard = null;
+		if(mKeyboardView instanceof DefaultSoftKeyboardViewKOKR) {
+			((DefaultSoftKeyboardViewKOKR) mKeyboardView).setKeyboardDisplay(mKeyboardDisplays.get(skin));
+		}
 
 		mNumKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
 		mNumKeyboardView.setOnKeyboardActionListener(this);
@@ -832,14 +840,14 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 
 	public void nextLanguage() {
 		int language = mCurrentLanguage;
-		
+
 		if(++mCurrentLanguageIndex >= mLanguageCycleTable.length) mCurrentLanguageIndex = 0;
 		language = mLanguageCycleTable[mCurrentLanguageIndex];
-		
+
 		mCurrentLanguage = language;
-		
+
 		changeKeyMode(KEYMODE_HANGUL);
-		
+
 	}
 
 	public void setShiftState(int shiftState) {
@@ -915,7 +923,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	@Override
 	public void setPreferences(SharedPreferences pref, EditorInfo editor) {
 		super.setPreferences(pref, editor);
-		
+
 		int keyHeightPortrait = pref.getInt("key_height_portrait", mKeyHeightPortrait);
 		int keyHeightLandscape = pref.getInt("key_height_landscape", mKeyHeightLandscape);
 		if(keyHeightPortrait != mKeyHeightPortrait || keyHeightLandscape != mKeyHeightLandscape) {
@@ -957,10 +965,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mShowKeyPreview = pref.getBoolean("popup_preview", true);
 
 		mForceHangul = pref.getBoolean("system_force_hangul", false);
-		
+
 		int inputType = editor.inputType;
 		if(mHardKeyboardHidden) {
-			
+
 		}
 
 		mLimitedKeyMode = null;
@@ -969,11 +977,11 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		mNoInput = true;
 		mDisableKeyInput = false;
 		mCapsLock = false;
-		
+
 		switch(inputType & EditorInfo.TYPE_MASK_CLASS) {
 		case EditorInfo.TYPE_CLASS_NUMBER:
 		case EditorInfo.TYPE_CLASS_DATETIME:
-			
+
 			break;
 		case EditorInfo.TYPE_CLASS_TEXT:
 			switch(inputType & EditorInfo.TYPE_MASK_VARIATION) {
@@ -981,21 +989,21 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			case EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD:
 				mPreferenceLanguage = mLanguageCycleTable[0];
 				break;
-				
+
 			case EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS:
 			case EditorInfo.TYPE_TEXT_VARIATION_URI:
 				mPreferenceLanguage = mLanguageCycleTable[0];
 				break;
-				
+
 			default:
 				break;
 			}
 			break;
-			
+
 		default:
 			break;
 		}
-		
+
 		if(inputType != mLastInputType) {
 			mLastInputType = inputType;
 		}
@@ -1067,7 +1075,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		case "white":
 			icon = 1;
 			break;
-			
+
 		default:
 			icon = 0;
 		}
@@ -1077,35 +1085,31 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		keyboard.resizeHeight(height);
 		if(mOneHandedMode) {
 			keyboard.oneHandedMode(mWnn, mOneHandedSide, mOneHandedRatio / 100d);
-//			if(mOneHandedSide == ONE_HAND_LEFT) {
-//				keyboard.resizeWidth(mOneHandedRatio / 100d);
-//			} else {
-//				keyboard.resizeWidthToRight(mOneHandedRatio / 100d);
-//			}
 		}
-		SparseArray<Integer> keyIcons = mKeyIcons.get(icon);
+		SoftKeyboardDisplay keyboardDisplay = mKeyboardDisplays.get(skin);
 		for(Keyboard.Key key : keyboard.getKeys()) {
-			Integer keyIcon = keyIcons.get(key.codes[0]);
-			if(keyIcon != null) {
-				Drawable drawable = mWnn.getResources().getDrawable(keyIcon);
+			SoftKeyDisplay keyDisplay = keyboardDisplay.get(key.codes[0]);
+			if(keyDisplay != null) {
+				if(keyDisplay.getKeyIcon() == 0) continue;
+				Drawable drawable = mWnn.getResources().getDrawable(keyDisplay.getKeyIcon());
 				key.icon = drawable;
 				key.iconPreview = drawable;
 			}
 		}
-		
+
 		return keyboard;
 	}
 
 	private int filterKeyMode(int keyMode) {
 		int targetMode = keyMode;
 		int[] limits = mLimitedKeyMode;
-		
+
 		if(limits != null) {
 			boolean hasAccepted = false;
 			boolean hasRequiredChange = false;
 			int size = limits.length;
 			int nowMode = mCurrentKeyMode;
-			
+
 			for(int i = 0 ; i < size ; i++) {
 				if(targetMode == limits[i]) {
 					hasAccepted = true;
@@ -1115,7 +1119,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 					hasRequiredChange = false;
 				}
 			}
-			
+
 			if(!hasAccepted) {
 				if(hasRequiredChange) {
 					targetMode = mLimitedKeyMode[0];
