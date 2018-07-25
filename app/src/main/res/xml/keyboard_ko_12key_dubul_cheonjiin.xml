@@ -24,15 +24,16 @@
 		<Key android:codes="-2007" android:keyLabel="ㅂㅍ" android:keyEdgeFlags="left" />
 		<Key android:codes="-2008" android:keyLabel="ㅅㅎ" />
 		<Key android:codes="-2009" android:keyLabel="ㅈㅊ" />
-		<Key android:codes="-2011" android:keyLabel=".,?!" android:keyEdgeFlags="right" />
+		<Key android:codes="-215"
+			android:keyIcon="@drawable/key_12key_space"
+			android:iconPreview="@drawable/key_12key_space"
+			android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>
 		<Key android:codes="-103" android:keyLabel="123" android:keyEdgeFlags="left" />
 		<Key android:codes="-2010" android:keyLabel="ㅇㅁ" />
-		<Key android:codes="-215"
-			android:keyIcon="@drawable/key_12key_space"
-			android:iconPreview="@drawable/key_12key_space" />
+		<Key android:codes="-2011" android:keyLabel=".,?!" />
 		<Key android:codes="-216" android:keyEdgeFlags="right"
 			android:keyIcon="@drawable/key_12key_enter"
 			android:iconPreview="@drawable/key_12key_enter" />
