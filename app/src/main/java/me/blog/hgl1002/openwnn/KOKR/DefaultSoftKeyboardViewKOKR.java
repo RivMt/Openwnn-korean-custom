@@ -77,22 +77,28 @@ public class DefaultSoftKeyboardViewKOKR extends KeyboardView {
 			String label = key.label.toString();
 
 			Field field;
-			int labelTextSize = 0;
+			int minimumTextSize = 0;
 			try {
 				field = KeyboardView.class.getDeclaredField("mLabelTextSize");
 				field.setAccessible(true);
-				labelTextSize = (int) field.get(this);
+				minimumTextSize = (int) field.get(this);
 			} catch(NoSuchFieldException e) {
 				e.printStackTrace();
 			} catch(IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			paint.setTextSize(labelTextSize);
-			if(label.length() > 1 && key.codes.length <= 1) paint.setTypeface(Typeface.DEFAULT_BOLD);
-			else paint.setTypeface(Typeface.DEFAULT);
-
 			paint.getTextBounds(label, 0, label.length(), bounds);
-			canvas.drawText(label, key.x + key.width/2, key.y + key.height/2, paint);
+
+			int labelTextSize = 4;
+			float desiredTextSize;
+			if(key.width < key.height) desiredTextSize = labelTextSize * key.width / bounds.width();
+			else desiredTextSize = labelTextSize * key.height / bounds.height();
+			if(desiredTextSize < minimumTextSize) desiredTextSize = minimumTextSize;
+			paint.setTextSize(desiredTextSize);
+			if(label.length() > 1 && key.codes.length <= 1) paint.setTypeface(Typeface.DEFAULT);
+			else paint.setTypeface(Typeface.DEFAULT_BOLD);
+
+			canvas.drawText(label, key.x + key.width/2, key.y + key.height/2 + desiredTextSize/3, paint);
 		}
 
 	}
