@@ -23,6 +23,7 @@
         <item>@string/preference_keyboard_flat</item>
         <item>@string/preference_keyboard_white</item>
         <item>@string/preference_keyboard_dark</item>
+        <item>@string/preference_keyboard_blue</item>
     </string-array>
 
     <string name="keyboard_skin_id_default">keyboard_android_default</string>
@@ -34,6 +35,7 @@
         <item>flat</item>
         <item>white</item>
         <item>dark</item>
+        <item>blue</item>
     </string-array>
 
     <string-array name="keyboard_soft_layout">
@@ -191,7 +193,7 @@
     <string-array name="keyboard_hangul_layout_dev_id">
         <item>keyboard_nebul_1969</item>
     </string-array>
-    
+
     <string-array name="keyboard_12key_layout">
         <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>
 		<item>@string/preference_keyboard_12key_dubul_cheonjiin_predictive</item>
@@ -205,7 +207,7 @@
         <item>@string/preference_keyboard_12key_sebul_hanson</item>
         <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
-    
+
     <string-array name="keyboard_12key_layout_id">
         <item>keyboard_12key_dubul_cheonjiin</item>
 		<item>keyboard_12key_dubul_cheonjiin_predictive</item>
@@ -219,13 +221,13 @@
         <item>keyboard_12key_sebul_hanson</item>
         <item>keyboard_12key_sebul_sena</item>
     </string-array>
-    
+
     <string-array name="keyboard_alphabet_layout">
     	<item>@string/preference_keyboard_alphabet_qwerty</item>
     	<item>@string/preference_keyboard_alphabet_dvorak</item>
     	<item>@string/preference_keyboard_alphabet_colemak</item>
     </string-array>
-    
+
     <string-array name="keyboard_alphabet_layout_id">
     	<item>keyboard_alphabet_qwerty</item>
     	<item>keyboard_alphabet_dvorak</item>
@@ -295,5 +297,5 @@
 	    <item>symbol</item>
 	    <item>symbol_shift</item>
     </string-array>
-	
+
 </resources>

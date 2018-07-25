@@ -57,9 +57,11 @@
     <string name="preference_keyboard_android_default">Standard</string>
     <string name="preference_keyboard_simple">Simple</string>
     <string name="preference_keyboard_metal">Metal</string>
-    <string name="preference_keyboard_flat">Flat</string>
+    <string name="preference_keyboard_flat">Flat Dark</string>
+    <string name="preference_keyboard_flatlight">Flat Light</string>
     <string name="preference_keyboard_white">White</string>
     <string name="preference_keyboard_dark">Dark</string>
+    <string name="preference_keyboard_blue">Blue</string>
 
     <string name="preference_conversion_menu">Conversion</string>
 
