@@ -8,21 +8,20 @@ public interface POSSupport extends TrieDictionary {
 
 	class Word extends TrieDictionary.Word {
 
-		private int pos;
+		private KoreanPOS pos;
 
-		public Word(String word, int frequency, int pos) {
+		public Word(String word, int frequency, KoreanPOS pos) {
 			super(word, frequency);
 			this.pos = pos;
 		}
 
-		public int getPos() {
+		public KoreanPOS getPos() {
 			return pos;
 		}
 
-		public void setPos(int pos) {
+		public void setPos(KoreanPOS pos) {
 			this.pos = pos;
 		}
-
 	}
 
 }

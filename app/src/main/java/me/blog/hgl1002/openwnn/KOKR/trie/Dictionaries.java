@@ -1,5 +1,6 @@
 package me.blog.hgl1002.openwnn.KOKR.trie;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 
@@ -10,7 +11,7 @@ import java.io.InputStreamReader;
 
 public class Dictionaries {
 
-	private static TrieDictionary[][] dictionaries = new TrieDictionary[5][2];
+	private static TrieDictionary[][] dictionaries = new TrieDictionary[5][22];
 
 	public static TrieDictionary getDictionary(int language, int index) {
 		try {

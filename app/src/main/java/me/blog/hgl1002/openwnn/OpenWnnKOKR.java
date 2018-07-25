@@ -48,6 +48,8 @@ import me.blog.hgl1002.openwnn.KOKR.converter.HanjaConverter;
 import me.blog.hgl1002.openwnn.KOKR.converter.T9Converter;
 import me.blog.hgl1002.openwnn.KOKR.converter.WordCompletionConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
+import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOS;
+import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOSChain;
 import me.blog.hgl1002.openwnn.KOKR.trie.NativeTrieDictionary;
 
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
@@ -1087,10 +1089,16 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
 			}
-			if(Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_KO, 1) == null) {
-				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 1, new NativeTrieDictionary());
-				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 1, getAssets().open("words/korean-trails.txt"));
+			for(KoreanPOS pos : KoreanPOS.values()) {
+				int index = pos.getDictionaryIndex();
+				if(index > 0 && Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_KO, index) == null) {
+					Dictionaries.setDictionary(DefaultSoftKeyboardKOKR.LANG_KO, index, new NativeTrieDictionary());
+					for(String fileName : pos.getDictionaryFiles()) {
+						Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, index, getAssets().open(fileName));
+					}
+				}
 			}
+			KoreanPOSChain.generate(getAssets().open("words/korean-pos-chain.txt"));
 			if(Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_EN, 0) == null) {
 				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));

@@ -6,9 +6,12 @@ import android.os.Build;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
 import me.blog.hgl1002.openwnn.KOKR.EngineMode;
@@ -17,6 +20,9 @@ import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.KOKR.trie.HashMapTrieDictionary;
+import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOS;
+import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOSChain;
+import me.blog.hgl1002.openwnn.KOKR.trie.POSSupport;
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
@@ -35,12 +41,14 @@ public class T9Converter implements WordConverter {
 
 	private Map<Character, String> keyMap;
 
-	private TrieDictionary dictionary;
-	private TrieDictionary trailsDictionary;
+	private int language;
+
+	private Queue<KoreanPOS> posChain;
 
 	public T9Converter() {
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setMoachigi(false);
+		posChain = new LinkedBlockingQueue<>();
 	}
 
 	@Override
@@ -67,11 +75,12 @@ public class T9Converter implements WordConverter {
 
 		this.keyMap = HashMapTrieDictionary.generateKeyMap(engineMode);
 
-		this.dictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 0);
-		this.trailsDictionary = Dictionaries.getDictionary(engineMode.properties.languageCode, 1);
+		this.language = engineMode.properties.languageCode;
 
-		if(dictionary != null) this.dictionary.setKeyMap(keyMap);
-		if(trailsDictionary != null) this.trailsDictionary.setKeyMap(keyMap);
+		for(int i = 0 ; i < 22 ; i++) {
+			TrieDictionary dictionary = Dictionaries.getDictionary(language, i);
+			if(dictionary != null) dictionary.setKeyMap(keyMap);
+		}
 
 		if(engineMode.layout == null) return;
 
@@ -141,69 +150,78 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
-			if(converter.dictionary == null || !converter.dictionary.isReady()) {
+			TrieDictionary mainDictionary = Dictionaries.getDictionary(converter.language, 0);
+			if(mainDictionary == null || !mainDictionary.isReady()) {
 				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
 				return 1;
 			}
 
-			if(converter.trailsDictionary != null && converter.trailsDictionary.isReady()) {
-				List<String> trailSource = new ArrayList<>();
-				char cho, jung, jung2, jong;
-				cho = jung = jung2 = jong = '\0';
-				for(int i = 0 ; i <= 8 ; i++) {
-					if(isCancelled()) return null;
-					if(word.length() <= i) break;
-					char ch = word.charAt(word.length()-i-1);
-					if(converter.vowelList.contains(ch)) {
-						if(cho != '\0') {
-							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
-							cho = jong = jung2 = '\0';
-							jung = ch;
-						}
-						else if(jung != '\0') {
-							jung2 = ch;
-						}
-						else jung = ch;
-					} else if(converter.consonantList.contains(ch)) {
-						if(cho != '\0') {
-							trailSource.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
-							cho = jung = jung2 = '\0';
-							jong = ch;
-						}
-						else if(jung != '\0') cho = ch;
-						else jong = ch;
-					}
-				}
-				StringBuilder trail = new StringBuilder();
-				for(String str : trailSource) {
-					trail.insert(0, str);
-					List<HashMapTrieDictionary.Word> trails = converter.trailsDictionary.searchStroke(trail.toString());
-					if(trails != null) {
-						Collections.sort(trails, Collections.reverseOrder());
-						trails = trails.subList(0, trails.size() < 3 ? trails.size() : 3);
-						if(isCancelled()) return null;
-						String search = word.substring(0, word.length()-trail.length());
-						List<HashMapTrieDictionary.Word> words = converter.dictionary.searchStroke(search);
-						Collections.sort(words, Collections.reverseOrder());
-						words = words.subList(0, words.size() < 4 ? words.size() : 4);
-						for(HashMapTrieDictionary.Word tr : trails) {
-							for(HashMapTrieDictionary.Word w : words) {
-								result.add(new HashMapTrieDictionary.Word(w.getWord() + tr.getWord(),
-										(w.getFrequency()/2 + tr.getFrequency()/2)));
+			List<String> syllables = getSyllables(word);
+			if(syllables == null) return null;
+
+			if(mainDictionary instanceof POSSupport) {
+				StringBuilder stroke = new StringBuilder();
+				List<KoreanPOS> posList = KoreanPOSChain.getAvailablePOS(new ArrayList<>(converter.posChain));
+				if(posList == null) posList = Arrays.asList(KoreanPOS.values());
+				List<TrieDictionary.Word> result = new ArrayList<>();
+				for(int i = 0 ; i < syllables.size() ; i++) {
+					stroke.append(syllables.get(i));
+					List<TrieDictionary.Word> result1 = new ArrayList<>();
+					for(KoreanPOS pos : posList) {
+						if(pos == KoreanPOS.POS_SPACE) {
+							result1.add(new TrieDictionary.Word(" ", Integer.MAX_VALUE/2));
+						} else if(pos.getDictionaryIndex() > 0) {
+							TrieDictionary dictionary = Dictionaries.getDictionary(converter.language, pos.getDictionaryIndex());
+							if(dictionary != null) {
+								result1.addAll(dictionary.searchStroke(stroke.toString()));
 							}
 						}
 					}
 				}
+
+				this.result.addAll(result);
+				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
+
 			}
 
 			if(isCancelled()) return null;
 
-			List<HashMapTrieDictionary.Word> result = converter.dictionary.searchStroke(word);
+			List<TrieDictionary.Word> result = mainDictionary.searchStroke(word);
 			if(result != null) this.result.addAll(result);
 
 			this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
 
 			return 1;
+		}
+
+		private List<String> getSyllables(String stroke) {
+			List<String> result = new ArrayList<>();
+			char cho, jung, jung2, jong;
+			cho = jung = jung2 = jong = '\0';
+			for(int i = stroke.length()-1 ; i >= 0 ; i--) {
+				if(isCancelled()) return null;
+				char ch = stroke.charAt(i);
+				if(converter.vowelList.contains(ch)) {
+					if(cho != '\0') {
+						result.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
+						cho = jong = jung2 = '\0';
+						jung = ch;
+					}
+					else if(jung != '\0') {
+						jung2 = ch;
+					}
+					else jung = ch;
+				} else if(converter.consonantList.contains(ch)) {
+					if(cho != '\0') {
+						result.add(cho + "" + (jung2 != '\0' ? jung2 + "" + jung : jung) + "" + (jong != '\0' ? jong : ""));
+						cho = jung = jung2 = '\0';
+						jong = ch;
+					}
+					else if(jung != '\0') cho = ch;
+					else jong = ch;
+				}
+			}
+			return result;
 		}
 
 		private String rawCompose(String stroke) {
@@ -260,6 +278,14 @@ public class T9Converter implements WordConverter {
 
 	public EngineMode getEngineMode() {
 		return engineMode;
+	}
+
+	public static List<POSSupport.Word> convertToPOSWord(List<TrieDictionary.Word> words, KoreanPOS pos) {
+		List<POSSupport.Word> result = new ArrayList<>();
+		for(TrieDictionary.Word word : words) {
+			result.add(new POSSupport.Word(word.getWord(), word.getFrequency(), pos));
+		}
+		return result;
 	}
 
 }
