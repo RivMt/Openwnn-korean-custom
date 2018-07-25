@@ -123,6 +123,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	int mCurrentLanguageIndex = 0;
 
 	Map<String, SoftKeyboardDisplay> mKeyboardDisplays = new HashMap<String, SoftKeyboardDisplay>() {{
+		put("flat", new SoftKeyboardDisplay(R.drawable.keybg_flat_bg, R.drawable.keybg_flat_def, Color.WHITE) {{
+			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
+			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
+			add(-10, new SoftKeyDisplay(0, R.drawable.keybg_flat_space_def));
+			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
+			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
+			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
+			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
+		}});
 		put("dark", new SoftKeyboardDisplay() {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_dark_enter_def));
@@ -1089,13 +1098,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			keyboard.oneHandedMode(mWnn, mOneHandedSide, mOneHandedRatio / 100d);
 		}
 		SoftKeyboardDisplay keyboardDisplay = mKeyboardDisplays.get(skin);
-		for(Keyboard.Key key : keyboard.getKeys()) {
-			SoftKeyDisplay keyDisplay = keyboardDisplay.get(key.codes[0]);
-			if(keyDisplay != null) {
-				if(keyDisplay.getKeyIcon() == 0) continue;
-				Drawable drawable = mWnn.getResources().getDrawable(keyDisplay.getKeyIcon());
-				key.icon = drawable;
-				key.iconPreview = drawable;
+		if(keyboardDisplay != null) {
+			for (Keyboard.Key key : keyboard.getKeys()) {
+				SoftKeyDisplay keyDisplay = keyboardDisplay.get(key.codes[0]);
+				if (keyDisplay != null) {
+					if (keyDisplay.getKeyIcon() == 0) continue;
+					Drawable drawable = mWnn.getResources().getDrawable(keyDisplay.getKeyIcon());
+					key.icon = drawable;
+					key.iconPreview = drawable;
+				}
 			}
 		}
 

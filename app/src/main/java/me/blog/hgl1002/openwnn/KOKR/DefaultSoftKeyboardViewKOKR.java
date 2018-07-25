@@ -26,29 +26,44 @@ public class DefaultSoftKeyboardViewKOKR extends KeyboardView {
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
 
 		Keyboard keyboard = this.getKeyboard();
-		if(keyboard == null) return;
-		if(keyboardDisplay == null) return;
+		if(keyboard == null || keyboardDisplay == null) {
+			super.onDraw(canvas);
+			return;
+		}
+		if(keyboardDisplay.getBackground() == 0 || keyboardDisplay.getKeyBackground() == 0) {
+			super.onDraw(canvas);
+		} else {
+			Drawable npd = context.getResources().getDrawable(keyboardDisplay.getBackground());
+			Rect rect = new Rect();
+			getLocalVisibleRect(rect);
+			npd.setBounds(rect);
+		}
 
 		for(Keyboard.Key key : keyboard.getKeys()) {
 			int keyCode = key.codes[0];
 			SoftKeyDisplay keyDisplay = keyboardDisplay.get(keyCode);
-			if(keyDisplay == null) continue;
-			if(keyDisplay.getKeyBackground() != 0) {
-				onDrawBackground(keyDisplay.getKeyBackground(), canvas, key);
+			if(keyDisplay != null && keyDisplay.getKeyBackground() != 0) {
+				onDrawBackground(keyDisplay.getKeyBackground(), keyDisplay.getFixWidth(), canvas, key);
 				onDrawForeground(keyDisplay.getKeyIcon(), keyDisplay.getColor(), canvas, key);
+			} else if(keyboardDisplay.getKeyBackground() != 0) {
+				onDrawBackground(keyboardDisplay.getKeyBackground(), false, canvas, key);
+				onDrawForeground(0, keyboardDisplay.getColor(), canvas, key);
 			}
 		}
 
 	}
 
-	private void onDrawBackground(int drawableId, Canvas canvas, Keyboard.Key key) {
+	private void onDrawBackground(int drawableId, boolean fixWidth, Canvas canvas, Keyboard.Key key) {
 		Drawable npd = context.getResources().getDrawable(drawableId);
 		int[] drawableState = key.getCurrentDrawableState();
 		if(key.codes[0] != 0) npd.setState(drawableState);
-		npd.setBounds(key.x, key.y, key.x + key.width, key.y + key.height);
+		if(fixWidth) {
+			int x = key.x + (key.width - key.height) / 2;
+			npd.setBounds(x, key.y, x + key.height, key.y + key.height);
+		}
+		else npd.setBounds(key.x, key.y, key.x + key.width, key.y + key.height);
 		npd.draw(canvas);
 	}
 
@@ -87,16 +102,16 @@ public class DefaultSoftKeyboardViewKOKR extends KeyboardView {
 			} catch(IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			paint.getTextBounds(label, 0, label.length(), bounds);
+			if(label.length() == 1) paint.getTextBounds("a", 0, 1, bounds);
+			else paint.getTextBounds(label, 0, label.length(), bounds);
 
 			int labelTextSize = 4;
 			float desiredTextSize;
-			if(key.width < key.height) desiredTextSize = labelTextSize * key.width / bounds.width();
+			if(key.width < key.height) desiredTextSize = labelTextSize * key.width / bounds.height();
 			else desiredTextSize = labelTextSize * key.height / bounds.height();
 			if(desiredTextSize < minimumTextSize) desiredTextSize = minimumTextSize;
 			paint.setTextSize(desiredTextSize);
-			if(label.length() > 1 && key.codes.length <= 1) paint.setTypeface(Typeface.DEFAULT);
-			else paint.setTypeface(Typeface.DEFAULT_BOLD);
+			paint.setTypeface(Typeface.DEFAULT);
 
 			canvas.drawText(label, key.x + key.width/2, key.y + key.height/2 + desiredTextSize/3, paint);
 		}
