@@ -1,4 +1,6 @@
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.layout;
+
+import me.blog.hgl1002.openwnn.KOKR.DefaultSoftKeyboardKOKR;
 
 public class Layout12KeySebul {
 

@@ -39,7 +39,7 @@ import me.blog.hgl1002.openwnn.KOKR.HangulEngine.HangulEngineEvent;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.HangulEngineListener;
 import me.blog.hgl1002.openwnn.KOKR.HangulEngine.SetComposingEvent;
 import me.blog.hgl1002.openwnn.KOKR.KeystrokePreference;
-import me.blog.hgl1002.openwnn.KOKR.Layout12KeyDubul;
+import me.blog.hgl1002.openwnn.KOKR.layout.Layout12KeyDubul;
 import me.blog.hgl1002.openwnn.KOKR.ListLangKeyActionDialogActivity;
 import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
