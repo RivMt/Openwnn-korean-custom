@@ -12,6 +12,7 @@ extern "C" {
 TrieNode::TrieNode(wchar_t ch) {
     this->ch = ch;
     this->frequency = 0;
+    this->pos = new std::list<int>();
     this->children = nullptr;
     this->compressed = nullptr;
 }
@@ -282,11 +283,6 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStartsWithNative(JNIEnv 
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_searchStrokeNative(JNIEnv * jenv, jobject self) {
-
-}
-
-JNIEXPORT jobjectArray JNICALL
 Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_getAllWordsNative(JNIEnv * jenv, jobject self) {
     std::list<std::wstring> * list = getAllWords(getRoot(jenv, self), new std::list<std::wstring>(), std::wstring(0), 0);
     jobjectArray result = jenv->NewObjectArray((jsize) list->size(), jenv->FindClass("java/lang/String"), jenv->NewStringUTF(""));
@@ -315,7 +311,7 @@ std::list<std::wstring> * getAllWords(TrieNode * p, std::list<std::wstring> * li
 }
 
 JNIEXPORT void JNICALL
-Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jobject self, jstring word_, jint frequency) {
+Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jobject self, jstring word_, jint frequency, jint pos) {
     const char * chars = jenv->GetStringUTFChars(word_, JNI_FALSE);
     size_t length = strlen(chars) + 1;
     wchar_t * word = (wchar_t*) malloc(sizeof(wchar_t) * length);
@@ -335,6 +331,7 @@ Java_me_blog_hgl1002_openwnn_KOKR_trie_NativeTrie_insertNative(JNIEnv * jenv, jo
     }
     free(word);
     if(p->frequency == 0) p->frequency = (int) frequency;
+    p->pos->push_back((int) pos);
 }
 
 TrieNode * compress(TrieNode * p) {
@@ -356,6 +353,8 @@ TrieNode * compress(TrieNode * p) {
         }
         p->frequency = child->frequency;
         delete child->children;
+        delete p->pos;
+        p->pos = child->pos;
         delete child;
         delete p->children;
         p->children = nullptr;

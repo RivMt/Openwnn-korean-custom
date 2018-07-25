@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
+public class NativeTrieDictionary extends NativeTrie implements POSSupport {
 
 	static {
 		System.loadLibrary("triedictionary-lib");
@@ -22,30 +22,30 @@ public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 	}
 
 	@Override
-	public List<Word> searchStorkeStartsWith(String stroke, int limit) {
-		return this.searchStroke(stroke, false, limit);
+	public void insert(String word, int frequency, int pos) {
+		this.insertNative(Normalizer.normalize(word, Normalizer.Form.NFD), frequency, pos);
 	}
 
 	@Override
-	public List<Word> searchStroke(String stroke) {
+	public List<TrieDictionary.Word> searchStroke(String stroke) {
 		return this.searchStroke(stroke, true, 0);
 	}
 
 	@Override
-	public List<Word> searchStroke(String stroke, int limit) {
+	public List<TrieDictionary.Word> searchStroke(String stroke, int limit) {
 		return this.searchStroke(stroke, true, limit);
 	}
 
 	@Override
-	public List<Word> searchStrokeStartsWith(String stroke, int limit) {
+	public List<TrieDictionary.Word> searchStrokeStartsWith(String stroke, int limit) {
 		return this.searchStroke(stroke, false, limit);
 	}
 
-	private List<Word> searchStroke(String stroke, boolean fitLength, int limit) {
+	private List<TrieDictionary.Word> searchStroke(String stroke, boolean fitLength, int limit) {
 		Map<String, Integer> map = searchStrokeNative(stroke, fitLength, limit);
-		List<Word> result = new ArrayList<>();
+		List<TrieDictionary.Word> result = new ArrayList<>();
 		for(String word : map.keySet()) {
-			result.add(new Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
+			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
 		}
 		return result;
 	}
@@ -57,11 +57,11 @@ public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 	}
 
 	@Override
-	public List<Word> searchStartsWith(String prefix, int limit) {
+	public List<TrieDictionary.Word> searchStartsWith(String prefix, int limit) {
 		Map<String, Integer> map = searchStartsWithNative(Normalizer.normalize(prefix, Normalizer.Form.NFD), limit);
-		List<Word> result = new ArrayList<>();
+		List<TrieDictionary.Word> result = new ArrayList<>();
 		for(String word : map.keySet()) {
-			result.add(new Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
+			result.add(new TrieDictionary.Word(Normalizer.normalize(word, Normalizer.Form.NFC), map.get(word)));
 		}
 		return result;
 	}

@@ -39,11 +39,6 @@ public class HashMapTrieDictionary extends HashMapTrie implements TrieDictionary
 	}
 
 	@Override
-	public List<Word> searchStorkeStartsWith(String stroke, int limit) {
-		return searchStroke(stroke, root, "", new ArrayList<>(), 0, false, limit);
-	}
-
-	@Override
 	public List<Word> searchStroke(String stroke) {
 		return searchStroke(stroke, 0);
 	}

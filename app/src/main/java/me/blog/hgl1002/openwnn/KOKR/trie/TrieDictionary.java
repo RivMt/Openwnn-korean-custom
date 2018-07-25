@@ -5,8 +5,6 @@ import java.util.Map;
 
 public interface TrieDictionary extends Trie {
 
-	List<Word> searchStorkeStartsWith(String stroke, int limit);
-
 	List<Word> searchStroke(String stroke);
 
 	List<Word> searchStroke(String stroke, int limit);
