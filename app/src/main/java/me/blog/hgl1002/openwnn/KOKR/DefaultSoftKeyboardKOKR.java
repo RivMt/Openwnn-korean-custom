@@ -123,15 +123,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	int mCurrentLanguageIndex = 0;
 
 	Map<String, SoftKeyboardDisplay> mKeyboardDisplays = new HashMap<String, SoftKeyboardDisplay>() {{
-		put("flat", new SoftKeyboardDisplay(R.drawable.keybg_flat_bg, R.drawable.keybg_flat_def, Color.WHITE) {{
-			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
-			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
-			add(-10, new SoftKeyDisplay(0, R.drawable.keybg_flat_space_def));
-			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
-			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
-			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
-			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
-		}});
 		put("dark", new SoftKeyboardDisplay() {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_dark_enter_def));
@@ -154,7 +145,16 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			add(KEYCODE_QWERTY_ALT, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
 			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
 		}});
-		put("blue", new SoftKeyboardDisplay(R.drawable.keybg_blue_bg, R.drawable.keybg_blue_def, Color.WHITE) {{
+		put("flat_dark", new SoftKeyboardDisplay(R.drawable.keybg_flat_bg, R.drawable.keybg_flat_def, Color.WHITE) {{
+			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
+			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
+			add(-10, new SoftKeyDisplay(0, R.drawable.keybg_flat_space_def));
+			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
+			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
+			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
+			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
+		}});
+		put("flat_blue", new SoftKeyboardDisplay(R.drawable.keybg_blue_bg, R.drawable.keybg_blue_def, Color.WHITE) {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
 			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space));
@@ -670,7 +670,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent);
 		String skin = pref.getString("keyboard_skin", mWnn.getResources().getString(R.string.keyboard_skin_id_default));
 		int id = parent.getResources().getIdentifier("keyboard_" + skin, "layout", parent.getPackageName());
-		if(id == 0) id = R.layout.keyboard_android_default;
+		if(id == 0) id = R.layout.keyboard_white;
 		mKeyboardView = (KeyboardView) mWnn.getLayoutInflater().inflate(id, null);
 		mKeyboardView.setOnKeyboardActionListener(this);
 		mCurrentKeyboard = null;

@@ -17,25 +17,19 @@
 <resources>
 
     <string-array name="keyboard_skin">
-        <item>@string/preference_keyboard_android_default</item>
-        <item>@string/preference_keyboard_simple</item>
-        <item>@string/preference_keyboard_metal</item>
-        <item>@string/preference_keyboard_flat</item>
         <item>@string/preference_keyboard_white</item>
         <item>@string/preference_keyboard_dark</item>
-        <item>@string/preference_keyboard_blue</item>
+		<item>@string/preference_keyboard_flat_dark</item>
+        <item>@string/preference_keyboard_flat_blue</item>
     </string-array>
 
-    <string name="keyboard_skin_id_default">keyboard_android_default</string>
+    <string name="keyboard_skin_id_default">white</string>
 
     <string-array name="keyboard_skin_id">
-        <item>android_default</item>
-        <item>simple</item>
-        <item>metal</item>
-        <item>flat</item>
         <item>white</item>
         <item>dark</item>
-        <item>blue</item>
+		<item>flat_dark</item>
+        <item>flat_blue</item>
     </string-array>
 
     <string-array name="keyboard_soft_layout">
