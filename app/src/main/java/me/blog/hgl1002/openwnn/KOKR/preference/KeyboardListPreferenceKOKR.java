@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,9 +23,7 @@ import android.util.AttributeSet;
 
 import org.greenrobot.eventbus.EventBus;
 
-import me.blog.hgl1002.openwnn.*;
 import me.blog.hgl1002.openwnn.event.InputViewChangeEvent;
-import me.blog.hgl1002.openwnn.event.OpenWnnEvent;
 
 /**
  * The preference class of keyboard image list for Japanese IME.

@@ -9,7 +9,7 @@
 		<CheckBoxPreference android:key="key_vibration"
 			android:title="@string/preference_key_vibration_title"
 			android:summary="@string/preference_key_vibration_summary"/>
-		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
 			android:key="key_vibration_duration"
 			android:title="@string/preference_key_vibration_duration_title"
 			android:summary="@string/preference_key_vibration_duration_summary"
@@ -18,12 +18,12 @@
 			android:title="@string/preference_preview_title"
 			android:summary="@string/preference_preview_summary"
 			android:defaultValue="false" />
-		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
 			android:key="key_height_portrait"
 			android:title="@string/preference_key_height_portrait_title"
 			android:summary="@string/preference_key_height_portrait_summary"
 			android:defaultValue="50"/>
-		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
 			android:key="key_height_landscape"
 			android:title="@string/preference_key_height_landscape_title"
 			android:summary="@string/preference_key_height_landscape_summary"
@@ -33,17 +33,17 @@
 			android:title="@string/preference_keyboard_one_hand_title"
 			android:summary="@string/preference_keyboard_one_hand_summary"
 			android:defaultValue="false"/>
-		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
 			android:key="keyboard_one_hand_ratio"
 			android:title="@string/preference_keyboard_one_hand_ratio_title"
 			android:summary="@string/preference_keyboard_one_hand_ratio_summary"
 			android:defaultValue="90"/>
-		<me.blog.hgl1002.openwnn.KOKR.IntEditTextPreference
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
 			android:key="keyboard_long_press_timeout"
 			android:title="@string/preference_keyboard_long_press_timeout_title"
 			android:summary="@string/preference_keyboard_long_press_timeout_summary"
 			android:defaultValue="500" />
-		<me.blog.hgl1002.openwnn.KOKR.KeyboardListPreferenceKOKR
+		<me.blog.hgl1002.openwnn.KOKR.preference.KeyboardListPreferenceKOKR
 			android:key="keyboard_skin"
 			android:title="@string/preference_keyboard_skin_title"
 			android:summary="@string/preference_keyboard_skin_summary"

@@ -1,4 +1,4 @@
-package me.blog.hgl1002.openwnn.KOKR;
+package me.blog.hgl1002.openwnn.KOKR.preference;
 
 import android.content.Context;
 import android.preference.EditTextPreference;
