@@ -91,9 +91,9 @@ public enum EngineMode {
 			CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a", "keyboard_12key_alphabet_narrow_a"),
 	TWELVE_ALPHABET_B			(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, true, true),
 			CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b", "keyboard_12key_alphabet_narrow_b"),
-	TWELVE_ALPHABET_A_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, false, false, true, true),
+	TWELVE_ALPHABET_A_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, true, false, true, true),
 			CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a_predictive", "keyboard_12key_alphabet_narrow_a_predictive"),
-	TWELVE_ALPHABET_B_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, false, false, true, true),
+	TWELVE_ALPHABET_B_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, true, false, true, true),
 			CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b_predictive", "keyboard_12key_alphabet_narrow_b_predictive"),
 
 	TWELVE_SEBUL_MUNHWA					(new Properties(true, false, false),
