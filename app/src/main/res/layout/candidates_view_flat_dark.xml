@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="4dp"
     android:background="@drawable/keybg_flat_bg">
-    <HorizontalScrollView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/candidate_view_scroll"
         android:layout_width="match_parent"
-        android:layout_height="40dip"
-        android:scrollbars="horizontal">
-        <LinearLayout
-            android:id="@+id/candidates_1st_view"
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </HorizontalScrollView>
-</LinearLayout>
+        android:layout_height="40dip" />
+</FrameLayout>
