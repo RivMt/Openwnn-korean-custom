@@ -584,6 +584,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_narrow_b_shift);
 				break;
 
+			case "keyboard_12key_alphabet_smallqwerty":
+			case "keyboard_12key_alphabet_smallqwerty_predictive":
+				keyList[KEYBOARD_SHIFT_OFF][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_smallqwerty);
+				keyList[KEYBOARD_SHIFT_ON][KEYMODE_ENGLISH][0] = loadKeyboardLayout(mWnn, R.xml.keyboard_ko_12key_english_smallqwerty_shift);
+				break;
+
 			}
 			mCurrentKeyboards[LANG_EN] = EngineMode.get(defaultLayout);
 

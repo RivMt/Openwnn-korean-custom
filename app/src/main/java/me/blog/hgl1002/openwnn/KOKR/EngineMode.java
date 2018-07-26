@@ -22,6 +22,7 @@ import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutAlphabet.CONVERT_ENGLISH
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutAlphabet.CONVERT_ENGLISH_DVORAK;
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutAlphabet.CYCLE_12KEY_ALPHABET_A;
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutAlphabet.CYCLE_12KEY_ALPHABET_B;
+import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutAlphabet.CYCLE_12KEY_ALPHABET_SMALLQWERTY;
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutDev.COMB_NEBUL_1969;
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutDev.JAMO_NEBUL_1969;
 import static me.blog.hgl1002.openwnn.KOKR.layout.LayoutDubul.COMB_DUBUL_DANMOEUM_GOOGLE;
@@ -91,10 +92,14 @@ public enum EngineMode {
 			CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a", "keyboard_12key_alphabet_narrow_a"),
 	TWELVE_ALPHABET_B			(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, true, true),
 			CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b", "keyboard_12key_alphabet_narrow_b"),
+	TWELVE_ALPHABET_SMALLQWERTY	(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, false, false, false, true, true),
+			CYCLE_12KEY_ALPHABET_SMALLQWERTY, null, null, null, "keyboard_12key_alphabet_smallqwerty"),
 	TWELVE_ALPHABET_A_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, true, false, true, true),
 			CYCLE_12KEY_ALPHABET_A, null, null, null, "keyboard_12key_alphabet_wide_a_predictive", "keyboard_12key_alphabet_narrow_a_predictive"),
 	TWELVE_ALPHABET_B_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, true, false, true, true),
 			CYCLE_12KEY_ALPHABET_B, null, null, null, "keyboard_12key_alphabet_wide_b_predictive", "keyboard_12key_alphabet_narrow_b_predictive"),
+	TWELVE_ALPHABET_SMALLQWERTY_PREDICTIVE(new Properties(DefaultSoftKeyboardKOKR.LANG_EN, false, true, true, false, true, true),
+			CYCLE_12KEY_ALPHABET_SMALLQWERTY, null, null, null, "keyboard_12key_alphabet_smallqwerty_predictive"),
 
 	TWELVE_SEBUL_MUNHWA					(new Properties(true, false, false),
 			CYCLE_SEBUL_12KEY_MUNHWA, null, COMB_SEBUL_12KEY_MUNHWA, STROKE_SEBUL_12KEY_MUNHWA, "keyboard_12key_sebul_munhwa"),
