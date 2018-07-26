@@ -89,12 +89,12 @@ public class T9Converter implements WordConverter {
 				sourceChar = (char) (-item[0] - 200 + 0x30);
 			} else continue;
 			if(sourceChar == 0x30 + 10) sourceChar = '0';
-			if(sourceChar == 0x30 + 11) sourceChar = '*';
-			if(sourceChar == 0x30 + 12) sourceChar = '#';
+			if(sourceChar == 0x30 + 11) sourceChar = '-';
+			if(sourceChar == 0x30 + 12) sourceChar = '=';
 			char jamo = (char) item[1];
-			if(jamo >= 'ㄱ' && jamo <= 'ㅎ') {
+			if(jamo >= 'ㄱ' && jamo <= 'ㅎ' || jamo >= '\u1100' && jamo <= '\u115f' || jamo >= '\u11a8' && jamo <= '\u11ff') {
 				consonantList.add(sourceChar);
-			} else if(jamo >= 'ㅏ' && jamo <= 'ㅣ') {
+			} else if(jamo >= 'ㅏ' && jamo <= 'ㅣ' || jamo >= '\u1160' && jamo <= '\u11a7') {
 				vowelList.add(sourceChar);
 			} else if(jamo == '\u318d') {			// 아래아
 				vowelList.add(sourceChar);
@@ -151,17 +151,21 @@ public class T9Converter implements WordConverter {
 				return 1;
 			}
 
-			List<String> syllables = getSyllables(word);
-			if(syllables == null) return null;
-
 			if(converter.language == DefaultSoftKeyboard.LANG_KO) {
+
+				List<String> syllables = getSyllables(word);
+				if(syllables == null) return null;
+
 				List<TrieDictionary.Word> result = new ArrayList<>();
 				for(POSChain chain : POSChain.values()) {
+					if(isCancelled()) return null;
 					result.addAll(searchSyllables(syllables, chain, 0, 0));
 				}
 				this.result.addAll(result);
 				this.result.addAll(mainDictionary.searchStroke(word));
 				this.result.add(new TrieDictionary.Word(rawCompose(word), word, 1));
+
+				if(isCancelled()) return null;
 
 				Collections.sort(this.result, Collections.reverseOrder());
 				this.result = new ArrayList<>(new LinkedHashSet<>(this.result));
@@ -198,7 +202,9 @@ public class T9Converter implements WordConverter {
 				for(TrieDictionary.Word w1 : front) {
 					for(TrieDictionary.Word w2 : back) {
 						TrieDictionary.MultipleWords multipleWords = TrieDictionary.MultipleWords.create(w1, w2);
-						if(multipleWords.getWord().length() + syllableIndex == syllables.size()) result.add(multipleWords);
+						if(multipleWords.getWord().length() + syllableIndex == syllables.size()) {
+							result.add(multipleWords);
+						}
 					}
 				}
 				if(back.isEmpty()) {
