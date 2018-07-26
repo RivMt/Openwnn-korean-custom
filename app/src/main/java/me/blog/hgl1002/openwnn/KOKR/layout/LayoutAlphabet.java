@@ -113,6 +113,7 @@ public class LayoutAlphabet {
 			{-2010, '-'},
 			{-2011, ',', '?', '!'},
 	};
+
 	public static final int[][] CYCLE_12KEY_ALPHABET_B = {
 			{-2001, '.', 'q', 'z'},
 			{-2002, 'a', 'b', 'c'},
@@ -125,6 +126,20 @@ public class LayoutAlphabet {
 			{-2009, 'w', 'x', 'y'},
 			{-2010, '-'},
 			{-2011, ',', '?', '!'},
+	};
+
+	public static final int[][] CYCLE_12KEY_ALPHABET_SMALLQWERTY = {
+			{-2001, 'e', 'w', 'q'},
+			{-2002, 't', 'u', 'y'},
+			{-2003, 'o', 'p'},
+			{-2004, 'a', 'd', 'z'},
+			{-2005, 'r', 'f', 'v'},
+			{-2006, 'i', 'l', 'j'},
+			{-2007, 's', 'c', 'x'},
+			{-2008, 'h', 'g', 'b'},
+			{-2009, 'n', 'm', 'k'},
+			{-2010, '-'},
+			{-2011, '.', ',', '?', '!'},
 	};
 
 }

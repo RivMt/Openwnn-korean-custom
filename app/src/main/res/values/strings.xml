@@ -385,11 +385,13 @@
     <string name="preference_keyboard_12key_alphabet_wide_b">Wide B</string>
     <string name="preference_keyboard_12key_alphabet_narrow_a">Narrow A</string>
     <string name="preference_keyboard_12key_alphabet_narrow_b">Narrow B</string>
+    <string name="preference_keyboard_12key_alphabet_smallqwerty">smallQWERTY</string>
 
     <string name="preference_keyboard_12key_alphabet_wide_a_predictive">Wide A Predictive</string>
     <string name="preference_keyboard_12key_alphabet_wide_b_predictive">Wide B Predictive</string>
     <string name="preference_keyboard_12key_alphabet_narrow_a_predictive">Narrow A Predictive</string>
     <string name="preference_keyboard_12key_alphabet_narrow_b_predictive">Narrow B Predictive</string>
+    <string name="preference_keyboard_12key_alphabet_smallqwerty_predictive">smallQWERTY Predictive</string>
 
     <string name="preference_keyboard_symbols_title">Symbols keyboard type</string>
     <string name="preference_keyboard_symbols_summary">Type of Symbols keyboard.</string>
