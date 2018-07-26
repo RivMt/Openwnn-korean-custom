@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
@@ -23,9 +22,8 @@ import me.blog.hgl1002.openwnn.KOKR.TwelveHangulEngine;
 import me.blog.hgl1002.openwnn.KOKR.WordConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.KOKR.trie.HashMapTrieDictionary;
-import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOS;
-import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOSChain;
-import me.blog.hgl1002.openwnn.KOKR.trie.POSSupport;
+import me.blog.hgl1002.openwnn.KOKR.trie.MiniPOS;
+import me.blog.hgl1002.openwnn.KOKR.trie.POSChain;
 import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.OpenWnnKOKR;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
@@ -46,12 +44,9 @@ public class T9Converter implements WordConverter {
 
 	private int language;
 
-	private Queue<KoreanPOS> posChain;
-
-	public T9Converter(Queue<KoreanPOS> posChain) {
+	public T9Converter() {
 		hangulEngine = new TwelveHangulEngine();
 		hangulEngine.setMoachigi(false);
-		this.posChain = posChain;
 	}
 
 	@Override
@@ -162,26 +157,13 @@ public class T9Converter implements WordConverter {
 			List<String> syllables = getSyllables(word);
 			if(syllables == null) return null;
 
-			if(converter.language == DefaultSoftKeyboard.LANG_KO && mainDictionary instanceof POSSupport) {
-				StringBuilder stroke = new StringBuilder();
-				Set<KoreanPOS> posList = KoreanPOSChain.getAvailablePOS(new ArrayList<>(converter.posChain));
-				if(posList == null) posList = new HashSet<>(Arrays.asList(KoreanPOS.values()));
+			if(converter.language == DefaultSoftKeyboard.LANG_KO) {
 				List<TrieDictionary.Word> result = new ArrayList<>();
-				for(int i = 0 ; i < syllables.size() ; i++) {
-					stroke.append(syllables.get(i));
-					for(KoreanPOS pos : posList) {
-						if(pos == KoreanPOS.POS_SPACE) {
-							result.add(new POSSupport.Word(" ", "", Integer.MAX_VALUE/2, pos));
-						} else if(pos.getDictionaryIndex() > 0) {
-							TrieDictionary dictionary = Dictionaries.getDictionary(converter.language, pos.getDictionaryIndex());
-							if(dictionary != null) {
-								result.addAll(convertToPOSWord(dictionary.searchStroke(stroke.toString()), pos));
-							}
-						}
-					}
+				for(POSChain chain : POSChain.values()) {
+					result = searchSyllables(syllables, chain, 0, 0);
 				}
-				Collections.sort(result, Collections.reverseOrder());
 				this.result.addAll(result);
+				this.result.addAll(mainDictionary.searchStroke(word));
 				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), word, 1));
 
 				Collections.sort(this.result, Collections.reverseOrder());
@@ -199,6 +181,36 @@ public class T9Converter implements WordConverter {
 			Collections.sort(this.result, Collections.reverseOrder());
 
 			return 1;
+		}
+
+		private List<TrieDictionary.Word> searchSyllables(List<String> syllables, POSChain chain, int posIndex, int syllableIndex) {
+			List<TrieDictionary.Word> result = new ArrayList<>();
+			if(posIndex >= chain.getPosList().length) return result;
+			MiniPOS pos = chain.getPosList()[posIndex];
+			if(pos == MiniPOS.SPACE) {
+				result.add(new TrieDictionary.Word(" ", "", Integer.MAX_VALUE/2));
+			}
+			if(pos.getDictionaryIndex() <= 0) return result;
+			TrieDictionary dictionary = Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_KO, pos.getDictionaryIndex());
+			if(dictionary == null) return result;
+			StringBuilder stroke = new StringBuilder();
+			for(int i = syllableIndex ; i < syllables.size() ; i++) {
+				stroke.append(syllables.get(i));
+				List<TrieDictionary.Word> front = dictionary.searchStroke(stroke.toString());
+				List<TrieDictionary.Word> back = searchSyllables(syllables, chain, posIndex+1, i+1);
+				for(TrieDictionary.Word w1 : front) {
+					for(TrieDictionary.Word w2 : back) {
+						result.add(new TrieDictionary.Word(
+								w1.getWord() + w2.getWord(),
+								w1.getStroke()+ w2.getStroke(),
+								w1.getFrequency()/2 + w2.getFrequency()/2));
+					}
+				}
+				if(back.isEmpty()) {
+					result.addAll(front);
+				}
+			}
+			return result;
 		}
 
 		private List<String> getSyllables(String stroke) {
@@ -285,10 +297,10 @@ public class T9Converter implements WordConverter {
 		return engineMode;
 	}
 
-	public static List<POSSupport.Word> convertToPOSWord(List<TrieDictionary.Word> words, KoreanPOS pos) {
-		List<POSSupport.Word> result = new ArrayList<>();
+	public static List<MiniPOS.Word> convertToPOSWord(List<TrieDictionary.Word> words, MiniPOS pos) {
+		List<MiniPOS.Word> result = new ArrayList<>();
 		for(TrieDictionary.Word word : words) {
-			result.add(new POSSupport.Word(word.getWord(), word.getStroke(), word.getFrequency(), pos));
+			result.add(new MiniPOS.Word(word.getWord(), word.getStroke(), word.getFrequency(), pos));
 		}
 		return result;
 	}

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NativeTrieDictionary extends NativeTrie implements POSSupport {
+public class NativeTrieDictionary extends NativeTrie implements TrieDictionary {
 
 	static {
 		System.loadLibrary("triedictionary-lib");
@@ -19,11 +19,6 @@ public class NativeTrieDictionary extends NativeTrie implements POSSupport {
 
 	public NativeTrieDictionary() {
 		super();
-	}
-
-	@Override
-	public void insert(String word, int frequency, int pos) {
-		this.insertNative(Normalizer.normalize(word, Normalizer.Form.NFD), frequency, pos);
 	}
 
 	@Override

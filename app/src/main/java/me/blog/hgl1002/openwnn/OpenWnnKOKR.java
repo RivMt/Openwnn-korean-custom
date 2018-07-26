@@ -50,11 +50,9 @@ import me.blog.hgl1002.openwnn.KOKR.converter.HanjaConverter;
 import me.blog.hgl1002.openwnn.KOKR.converter.T9Converter;
 import me.blog.hgl1002.openwnn.KOKR.converter.WordCompletionConverter;
 import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
-import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOS;
-import me.blog.hgl1002.openwnn.KOKR.trie.KoreanPOSChain;
+import me.blog.hgl1002.openwnn.KOKR.trie.MiniPOS;
 import me.blog.hgl1002.openwnn.KOKR.trie.NativeTrieDictionary;
 
-import me.blog.hgl1002.openwnn.KOKR.trie.POSSupport;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.CommitComposingTextEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
@@ -136,7 +134,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	HangulEngine mQwertyEngine, m12keyEngine;
 
 	ComposingWord mComposingWord;
-	private Queue<KoreanPOS> posChain;
 
 	int[][] mAltLayout;
 	boolean mAltMode;
@@ -225,8 +222,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		HanjaConverter.copyDatabase(this);
 
-		posChain = new LinkedBlockingQueue<>();
-
 	}
 
 	@Override
@@ -239,7 +234,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 		converters = new ArrayList<>();
 		if(pref.getBoolean("conversion_show_candidates", false)) {
-			converters.add(new T9Converter(posChain));
+			converters.add(new T9Converter());
 			if (pref.getBoolean("conversion_use_hanja", false)) {
 				HanjaConverter hanjaConverter = new HanjaConverter(this);
 				converters.add(hanjaConverter);
@@ -291,7 +286,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mHardAlt = 0;
 			updateMetaKeyStateDisplay();
 			updateNumKeyboardShiftState();
-			posChain.clear();
 		}
 
 		super.onStartInputView(attribute, restarting);
@@ -904,10 +898,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			String candidate = event.getWord().getWord();
 			String originalStroke = mComposingWord.getEntireWord();
 			mComposingWord.setComposingWord(candidate);
-			if(event.getWord() instanceof POSSupport.Word) {
-				posChain.offer(((POSSupport.Word) event.getWord()).getPos());
-				if(posChain.size() > 3) posChain.poll();
-			}
 			resetWordComposition();
 			String stroke = event.getWord().getStroke();
 			if(stroke != null && !stroke.isEmpty() && stroke.length() < originalStroke.length()) {
@@ -1112,7 +1102,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_KO, 0, new NativeTrieDictionary());
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_KO, 0, getAssets().open("words/korean.txt"));
 			}
-			for(KoreanPOS pos : KoreanPOS.values()) {
+			for(MiniPOS pos : MiniPOS.values()) {
 				int index = pos.getDictionaryIndex();
 				if(index > 0 && Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_KO, index) == null) {
 					Dictionaries.setDictionary(DefaultSoftKeyboardKOKR.LANG_KO, index, new NativeTrieDictionary());
@@ -1121,7 +1111,6 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 					}
 				}
 			}
-			KoreanPOSChain.generate(getAssets().open("words/korean-pos-chain.txt"));
 			if(Dictionaries.getDictionary(DefaultSoftKeyboard.LANG_EN, 0) == null) {
 				Dictionaries.setDictionary(DefaultSoftKeyboard.LANG_EN, 0, new NativeTrieDictionary());
 				Dictionaries.generate(DefaultSoftKeyboard.LANG_EN, 0, getAssets().open("words/english.txt"));

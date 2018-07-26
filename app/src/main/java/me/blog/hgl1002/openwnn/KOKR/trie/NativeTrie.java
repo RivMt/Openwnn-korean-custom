@@ -16,7 +16,7 @@ public class NativeTrie implements Trie, Compressable {
 	}
 
 	protected native void initNative();
-	protected native void insertNative(String word, int frequency, int pos);
+	protected native void insertNative(String word, int frequency);
 	protected native String[] getAllWordsNative();
 	protected native Map<String, Integer> searchStartsWithNative(String search, int limit);
 	protected native void compressNative();
@@ -28,7 +28,7 @@ public class NativeTrie implements Trie, Compressable {
 
 	@Override
 	public void insert(String word, int frequency) {
-		this.insertNative(Normalizer.normalize(word, Normalizer.Form.NFD), frequency, 0);
+		this.insertNative(Normalizer.normalize(word, Normalizer.Form.NFD), frequency);
 	}
 
 	@Override

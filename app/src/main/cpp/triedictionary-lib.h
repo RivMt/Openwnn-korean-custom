@@ -34,7 +34,6 @@ class TrieNode {
 public:
     wchar_t ch;
     int frequency;
-    std::list<int> * pos;
     std::map<wchar_t, TrieNode*> * children;
     std::wstring * compressed;
 

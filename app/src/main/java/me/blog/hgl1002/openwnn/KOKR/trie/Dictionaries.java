@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 
 public class Dictionaries {
 
-	private static TrieDictionary[][] dictionaries = new TrieDictionary[5][22];
+	private static TrieDictionary[][] dictionaries = new TrieDictionary[5][10];
 
 	public static TrieDictionary getDictionary(int language, int index) {
 		try {
