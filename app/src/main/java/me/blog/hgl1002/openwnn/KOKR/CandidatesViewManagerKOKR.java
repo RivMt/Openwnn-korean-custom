@@ -1,8 +1,11 @@
 package me.blog.hgl1002.openwnn.KOKR;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -60,19 +63,8 @@ public class CandidatesViewManagerKOKR {
 	}
 
 	public void displayCandidates(List<TrieDictionary.Word> candidates) {
-		this.displayCandidates(candidates, -1);
-	}
-
-	public void displayCandidates(List<TrieDictionary.Word> candidates, int position) {
 		if(mainView == null || candidates == null) return;
-		if(position < 0) adapter.set(candidates);
-		else adapter.addAll(candidates, position);
-	}
-
-	public void addDisplayCandidates(List<TrieDictionary.Word> candidates, int position) {
-		if(mainView == null || candidates == null) return;
-		if(position < 0) adapter.addAll(candidates);
-		else adapter.addAll(candidates, position);
+		adapter.set(candidates);
 	}
 
 	public void setPreferences(SharedPreferences pref) {
@@ -115,31 +107,14 @@ public class CandidatesViewManagerKOKR {
 			add(string, getItemCount());
 		}
 
-		public void remove(int index) {
-			candidateList.remove(index);
-			notifyItemRemoved(index);
+		public void set(List<TrieDictionary.Word> candidates){
+			CandidatesDiffCallback callback = new CandidatesDiffCallback(this.candidateList, candidates);
+			final DiffUtil.DiffResult result = DiffUtil.calculateDiff(callback);
+			this.candidateList.clear();
+			this.candidateList.addAll(candidates);
+			new Handler(Looper.getMainLooper()).post(() -> result.dispatchUpdatesTo(this));
 		}
 
-		public void removeAll(){
-			candidateList.clear();
-			notifyDataSetChanged();
-		}
-
-		public void set(List<TrieDictionary.Word> strings){
-			removeAll();
-			addAll(strings);
-		}
-
-		public void addAll(List<TrieDictionary.Word> strings){
-			addAll(strings, getItemCount());
-		}
-
-		public void addAll(List<TrieDictionary.Word> strings, int position){
-			for(TrieDictionary.Word string: strings) {
-				add(string, position);
-				position++;
-			}
-		}
 	}
 
 	private class CandidatesViewHolder extends RecyclerView.ViewHolder {
@@ -159,4 +134,36 @@ public class CandidatesViewManagerKOKR {
 			candidateText.setText(candidateString);
 		}
 	}
+
+	private class CandidatesDiffCallback extends DiffUtil.Callback {
+
+		private final List<TrieDictionary.Word> oldList;
+		private final List<TrieDictionary.Word> newList;
+
+		public CandidatesDiffCallback(List<TrieDictionary.Word> oldList, List<TrieDictionary.Word> newList) {
+			this.oldList = oldList;
+			this.newList = newList;
+		}
+
+		@Override
+		public int getOldListSize() {
+			return oldList.size();
+		}
+
+		@Override
+		public int getNewListSize() {
+			return newList.size();
+		}
+
+		@Override
+		public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+			return oldList.get(oldItemPosition).getWord().equals(newList.get(newItemPosition).getWord());
+		}
+
+		@Override
+		public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+			return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
+		}
+	}
+
 }

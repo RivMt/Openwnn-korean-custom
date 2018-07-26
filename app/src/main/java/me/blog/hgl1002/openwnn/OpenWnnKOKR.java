@@ -879,7 +879,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onDisplayCandidates(DisplayCandidatesEvent event) {
-		convertedResults.addAll(event.getCandidates());
+		if(event.getPosition() > -1) convertedResults.addAll(event.getPosition(), event.getCandidates());
+		else convertedResults.addAll(event.getCandidates());
 		convertedCount++;
 		if (convertedCount >= converters.size()) {
 			mCandidatesViewManager.displayCandidates(convertedResults);
@@ -890,7 +891,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onAutoConvert(AutoConvertEvent event) {
 		String candidate = event.getCandidate().getWord();
-		mComposingWord.setFixedWord(candidate.isEmpty() ? null : candidate);
+		mComposingWord.setFixedWord(candidate);
 		updateInputView();
 	}
 
