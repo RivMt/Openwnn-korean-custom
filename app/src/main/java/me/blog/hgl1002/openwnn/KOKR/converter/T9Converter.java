@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -160,14 +161,14 @@ public class T9Converter implements WordConverter {
 			if(converter.language == DefaultSoftKeyboard.LANG_KO) {
 				List<TrieDictionary.Word> result = new ArrayList<>();
 				for(POSChain chain : POSChain.values()) {
-					result = searchSyllables(syllables, chain, 0, 0);
+					result.addAll(searchSyllables(syllables, chain, 0, 0));
 				}
 				this.result.addAll(result);
 				this.result.addAll(mainDictionary.searchStroke(word));
 				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), word, 1));
 
 				Collections.sort(this.result, Collections.reverseOrder());
-
+				this.result = new ArrayList<>(new LinkedHashSet<>(this.result));
 				return 1;
 			}
 
@@ -185,7 +186,7 @@ public class T9Converter implements WordConverter {
 
 		private List<TrieDictionary.Word> searchSyllables(List<String> syllables, POSChain chain, int posIndex, int syllableIndex) {
 			List<TrieDictionary.Word> result = new ArrayList<>();
-			if(posIndex >= chain.getPosList().length) return result;
+			if(posIndex >= chain.getPosList().length || syllableIndex >= syllables.size()) return result;
 			MiniPOS pos = chain.getPosList()[posIndex];
 			if(pos == MiniPOS.SPACE) {
 				result.add(new TrieDictionary.Word(" ", "", Integer.MAX_VALUE/2));
@@ -200,15 +201,16 @@ public class T9Converter implements WordConverter {
 				List<TrieDictionary.Word> back = searchSyllables(syllables, chain, posIndex+1, i+1);
 				for(TrieDictionary.Word w1 : front) {
 					for(TrieDictionary.Word w2 : back) {
-						result.add(new TrieDictionary.Word(
-								w1.getWord() + w2.getWord(),
-								w1.getStroke()+ w2.getStroke(),
-								w1.getFrequency()/2 + w2.getFrequency()/2));
+						result.add(TrieDictionary.MultipleWords.create(w1, w2));
 					}
 				}
 				if(back.isEmpty()) {
 					result.addAll(front);
+				} else if(front.isEmpty()) {
+					result.addAll(back);
 				}
+				Collections.sort(result, Collections.reverseOrder());
+				if(result.size() > 4) result = result.subList(0, 5);
 			}
 			return result;
 		}
