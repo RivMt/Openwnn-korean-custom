@@ -66,8 +66,6 @@ public interface TrieDictionary extends Trie {
 
 		@Override
 		public int compareTo(Word word) {
-			if(getWord().length() > word.getWord().length()) return 1;
-			else if(getWord().length() < word.getWord().length()) return -1;
 			if(frequency > word.frequency) return 1;
 			else if(frequency < word.frequency) return -1;
 			else return 0;
@@ -138,17 +136,15 @@ public interface TrieDictionary extends Trie {
 			return words;
 		}
 
-		public int length() {
+		public int count() {
 			return words.length;
 		}
 
 		@Override
 		public int compareTo(Word word) {
 			if(word instanceof MultipleWords) {
-				if(words.length > 1 && ((MultipleWords) word).words.length > 1) {
-					if(words.length < ((MultipleWords) word).words.length) return 1;
-					else if(words.length > ((MultipleWords) word).words.length) return -1;
-				}
+				if(words.length < ((MultipleWords) word).words.length) return 1;
+				else if(words.length > ((MultipleWords) word).words.length) return -1;
 			}
 			return super.compareTo(word);
 		}

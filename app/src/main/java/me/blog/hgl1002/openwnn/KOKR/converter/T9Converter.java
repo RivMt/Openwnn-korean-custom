@@ -6,14 +6,10 @@ import android.os.Build;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 
 import me.blog.hgl1002.openwnn.DefaultSoftKeyboard;
 import me.blog.hgl1002.openwnn.KOKR.ComposingWord;
@@ -165,7 +161,7 @@ public class T9Converter implements WordConverter {
 				}
 				this.result.addAll(result);
 				this.result.addAll(mainDictionary.searchStroke(word));
-				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), word, 1));
+				this.result.add(new TrieDictionary.Word(rawCompose(word), word, 1));
 
 				Collections.sort(this.result, Collections.reverseOrder());
 				this.result = new ArrayList<>(new LinkedHashSet<>(this.result));
@@ -201,13 +197,18 @@ public class T9Converter implements WordConverter {
 				List<TrieDictionary.Word> back = searchSyllables(syllables, chain, posIndex+1, i+1);
 				for(TrieDictionary.Word w1 : front) {
 					for(TrieDictionary.Word w2 : back) {
-						result.add(TrieDictionary.MultipleWords.create(w1, w2));
+						TrieDictionary.MultipleWords multipleWords = TrieDictionary.MultipleWords.create(w1, w2);
+						if(multipleWords.getWord().length() + syllableIndex == syllables.size()) result.add(multipleWords);
 					}
 				}
 				if(back.isEmpty()) {
-					result.addAll(front);
+					for(TrieDictionary.Word w1 : front) {
+						if(w1.getWord().length() + syllableIndex == syllables.size()) result.add(w1);
+					}
 				} else if(front.isEmpty()) {
-					result.addAll(back);
+					for(TrieDictionary.Word w1 : back) {
+						if(w1.getWord().length() + syllableIndex == syllables.size()) result.add(w1);
+					}
 				}
 				Collections.sort(result, Collections.reverseOrder());
 				if(result.size() > 4) result = result.subList(0, 5);
