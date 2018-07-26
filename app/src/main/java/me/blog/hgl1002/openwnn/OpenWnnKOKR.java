@@ -891,7 +891,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	@Subscribe
 	public void onAutoConvert(AutoConvertEvent event) {
 		String candidate = event.getCandidate().getWord();
-		mComposingWord.setFixedWord(candidate);
+		mComposingWord.setFixedWord(candidate.isEmpty() ? null : candidate);
 		updateInputView();
 	}
 

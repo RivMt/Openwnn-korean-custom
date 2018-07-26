@@ -148,8 +148,10 @@ public class T9Converter implements WordConverter {
 		protected Integer doInBackground(Void... params) {
 			String word = this.word.getEntireWord();
 			TrieDictionary mainDictionary = Dictionaries.getDictionary(converter.language, 0);
+
 			if(mainDictionary == null || !mainDictionary.isReady()) {
-				this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
+				String rawComposed = rawCompose(word);
+				if(rawComposed != null && !rawComposed.isEmpty()) this.result.add(new HashMapTrieDictionary.Word(rawComposed, 1));
 				return 1;
 			}
 
@@ -164,24 +166,19 @@ public class T9Converter implements WordConverter {
 					result.addAll(searchSyllables(syllables, chain, 0, 0));
 				}
 				this.result.addAll(result);
-				this.result.addAll(mainDictionary.searchStroke(word));
-				this.result.add(new TrieDictionary.Word(rawCompose(word), word, 1));
+			} else {
+				List<TrieDictionary.Word> result = mainDictionary.searchStroke(word);
+				if(result != null) this.result.addAll(result);
 
-				if(isCancelled()) return null;
-
-				Collections.sort(this.result, Collections.reverseOrder());
-				this.result = new ArrayList<>(new LinkedHashSet<>(this.result));
-				return 1;
 			}
 
 			if(isCancelled()) return null;
 
-			List<TrieDictionary.Word> result = mainDictionary.searchStroke(word);
-			if(result != null) this.result.addAll(result);
-
-			this.result.add(new HashMapTrieDictionary.Word(rawCompose(word), 1));
+			String rawComposed = rawCompose(word);
+			if(rawComposed != null && !rawComposed.isEmpty()) this.result.add(new HashMapTrieDictionary.Word(rawComposed, 1));
 
 			Collections.sort(this.result, Collections.reverseOrder());
+			this.result = new ArrayList<>(new LinkedHashSet<>(this.result));
 
 			return 1;
 		}
@@ -300,6 +297,7 @@ public class T9Converter implements WordConverter {
 			if(integer == 1) {
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 				if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
+				else EventBus.getDefault().post(new AutoConvertEvent(new TrieDictionary.Word("", 1)));
 			}
 		}
 	}
