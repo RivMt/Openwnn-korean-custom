@@ -53,6 +53,7 @@ import me.blog.hgl1002.openwnn.KOKR.trie.Dictionaries;
 import me.blog.hgl1002.openwnn.KOKR.trie.MiniPOS;
 import me.blog.hgl1002.openwnn.KOKR.trie.NativeTrieDictionary;
 
+import me.blog.hgl1002.openwnn.KOKR.trie.TrieDictionary;
 import me.blog.hgl1002.openwnn.event.AutoConvertEvent;
 import me.blog.hgl1002.openwnn.event.CommitComposingTextEvent;
 import me.blog.hgl1002.openwnn.event.DisplayCandidatesEvent;
@@ -129,6 +130,8 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	CandidatesViewManagerKOKR mCandidatesViewManager;
 	List<WordConverter> converters = new ArrayList<>();
+	List<TrieDictionary.Word> convertedResults = new ArrayList <>();
+	private int convertedCount = 0;
 
 	HangulEngine mHangulEngine;
 	HangulEngine mQwertyEngine, m12keyEngine;
@@ -876,7 +879,12 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 
 	@Subscribe
 	public void onDisplayCandidates(DisplayCandidatesEvent event) {
-		mCandidatesViewManager.displayCandidates(event.getCandidates(), event.getPosition());
+		convertedResults.addAll(event.getCandidates());
+		convertedCount++;
+		if (convertedCount >= converters.size()) {
+			mCandidatesViewManager.displayCandidates(convertedResults);
+			flushConversionResult();
+		}
 	}
 
 	@Subscribe
@@ -1090,10 +1098,15 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 	}
 
 	private void performConversion() {
-		mCandidatesViewManager.clearCandidates();
+		flushConversionResult();
 		for(WordConverter converter : converters) {
 			converter.convert(mComposingWord);
 		}
+	}
+
+	private void flushConversionResult () {
+		convertedResults.clear();
+		convertedCount = 0;
 	}
 
 	private void generateDictionaries() {

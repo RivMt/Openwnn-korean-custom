@@ -133,7 +133,7 @@ public class HanjaConverter extends SQLiteOpenHelper implements WordConverter {
 		@Override
 		protected void onPostExecute(Integer integer) {
 			super.onPostExecute(integer);
-			if(integer == 1 && !result.isEmpty()) {
+			if(integer == 1) {
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 			}
 		}
