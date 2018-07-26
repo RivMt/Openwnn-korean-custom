@@ -26,8 +26,8 @@ public class AutoTextConverter implements WordConverter {
 		String str = autoTexts.get(word.getEntireWord());
 		if(str != null) {
 			result.add(new TrieDictionary.Word(str, 1));
-			EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
 		}
+		EventBus.getDefault().post(new DisplayCandidatesEvent(result, 0));
 	}
 
 	@Override

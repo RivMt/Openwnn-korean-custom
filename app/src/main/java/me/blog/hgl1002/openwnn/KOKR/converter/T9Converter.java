@@ -51,8 +51,10 @@ public class T9Converter implements WordConverter {
 		if(task != null) {
 			task.cancel(true);
 		}
-		if(!convert) return;
-
+		if(!convert) {
+			EventBus.getDefault().post(new DisplayCandidatesEvent(new ArrayList <>()));
+			return;
+		}
 		hangulEngine.resetCycle();
 		task = new T9ConvertTask(this, word);
 		task.execute();
@@ -295,7 +297,7 @@ public class T9Converter implements WordConverter {
 		@Override
 		protected void onPostExecute(Integer integer) {
 			super.onPostExecute(integer);
-			if(integer == 1 && !result.isEmpty()) {
+			if(integer == 1) {
 				EventBus.getDefault().post(new DisplayCandidatesEvent(result));
 				if(result.size() > 0) EventBus.getDefault().post(new AutoConvertEvent(result.get(0)));
 			}
