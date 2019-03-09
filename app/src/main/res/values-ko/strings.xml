@@ -35,6 +35,15 @@
     <string name="preference_key_height_landscape_title">키 높이 (가로 화면)</string>
     <string name="preference_key_height_landscape_summary">가로 화면에서의 키 높이를 조절합니다. 기본값은 42입니다.</string>
 
+    <string name="preference_keyboard_margin_left_title">키보드 여백 (좌측)</string>
+    <string name="preference_keyboard_margin_left_summary">키보드의 왼쪽 여백을 조절합니다. 기본값은 0입니다.</string>
+
+    <string name="preference_keyboard_margin_right_title">키보드 여백 (우측)</string>
+    <string name="preference_keyboard_margin_right_summary">키보드의 오른쪽 여백을 조절합니다. 기본값은 0입니다.</string>
+
+    <string name="preference_keyboard_margin_bottom_title">키보드 여백 (하단)</string>
+    <string name="preference_keyboard_margin_bottom_summary">키보드의 아래쪽 여백을 조절합니다. 기본값은 0입니다.</string>
+
     <string name="preference_keyboard_one_hand_title">한손 키보드 모드</string>
     <string name="preference_keyboard_one_hand_summary">한손 키보드 모드를 설정합니다.</string>
 

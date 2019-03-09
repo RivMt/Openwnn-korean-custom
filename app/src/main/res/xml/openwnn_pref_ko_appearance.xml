@@ -28,6 +28,21 @@
 			android:title="@string/preference_key_height_landscape_title"
 			android:summary="@string/preference_key_height_landscape_summary"
 			android:defaultValue="42"/>
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
+			android:key="keyboard_margin_left"
+			android:title="@string/preference_keyboard_margin_left_title"
+			android:summary="@string/preference_keyboard_margin_left_summary"
+			android:defaultValue="0" />
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
+			android:key="keyboard_margin_right"
+			android:title="@string/preference_keyboard_margin_right_title"
+			android:summary="@string/preference_keyboard_margin_right_summary"
+			android:defaultValue="0" />
+		<me.blog.hgl1002.openwnn.KOKR.preference.IntEditTextPreference
+			android:key="keyboard_margin_bottom"
+			android:title="@string/preference_keyboard_margin_bottom_title"
+			android:summary="@string/preference_keyboard_margin_bottom_summary"
+			android:defaultValue="0" />
 		<CheckBoxPreference
 			android:key="keyboard_one_hand"
 			android:title="@string/preference_keyboard_one_hand_title"

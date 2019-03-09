@@ -3,8 +3,6 @@ package me.blog.hgl1002.openwnn.KOKR;
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
 
-import me.blog.hgl1002.openwnn.R;
-
 public class KeyboardKOKR extends Keyboard {
 	
 	int mTotalWidth, mTotalHeight;
@@ -27,8 +25,7 @@ public class KeyboardKOKR extends Keyboard {
 		double widthModifier = 1;
 		int width = 0;
 		for(Key key : getKeys()) {
-			int oldWidth = key.width;
-			widthModifier = (double) keyWidth / (double) oldWidth * (double) oldWidth / (double) getKeyWidth();
+			widthModifier = (double) keyWidth / (double) getKeyWidth();
 			key.width *= widthModifier;
 			key.x *= widthModifier;
 		}
@@ -42,8 +39,7 @@ public class KeyboardKOKR extends Keyboard {
 		double heightModifier = 1;
 		int height = 0;
 		for(Key key : getKeys()) {
-			int oldHeight = key.height;
-			heightModifier = (double) keyHeight / (double) oldHeight * (double) oldHeight / (double) getKeyHeight();
+			heightModifier = (double) keyHeight / (double) getKeyHeight();
 			key.height *= heightModifier;
 			key.y *= heightModifier;
 			height = key.height;
@@ -53,7 +49,7 @@ public class KeyboardKOKR extends Keyboard {
 		getNearestKeys(0, 0);
 	}
 
-	public void resizeWidth(double widthModifier) {
+	public void resizeWidthToLeft(double widthModifier) {
 		mTotalWidth = getWidth();
 		int width = 0;
 		for(Key key : getKeys()) {
@@ -81,7 +77,7 @@ public class KeyboardKOKR extends Keyboard {
 
 	public void oneHandedMode(Context context, boolean direction, double ratio) {
 		if(direction == DefaultSoftKeyboardKOKR.ONE_HAND_LEFT) {
-			resizeWidth(ratio);
+			resizeWidthToLeft(ratio);
 		} else {
 			resizeWidthToRight(ratio);
 		}
@@ -91,8 +87,6 @@ public class KeyboardKOKR extends Keyboard {
 		mTotalHeight = getHeight();
 		int height = 0;
 		for(Key key : getKeys()) {
-			height = key.width;
-			int oldHeight = key.height;
 			key.height *= heightModifier;
 			key.y *= heightModifier;
 			height = key.height;
@@ -100,6 +94,20 @@ public class KeyboardKOKR extends Keyboard {
 		setKeyHeight(height);
 		mTotalHeight *= heightModifier;
 		getNearestKeys(0, 0);
+	}
+
+	public void setMargins(int left, int right, int bottom) {
+		mTotalWidth = getWidth();
+		mTotalHeight = getHeight();
+		double widthModifier = (double) (mTotalWidth - left - right) / mTotalWidth;
+		double heightModifier = (double) (mTotalHeight - bottom) / mTotalHeight;
+		for(Key key : getKeys()) {
+			key.width *= widthModifier;
+			key.x *= widthModifier;
+			key.x += left;
+			key.height *= heightModifier;
+			key.y *= heightModifier;
+		}
 	}
 
 	public int getWidth() {

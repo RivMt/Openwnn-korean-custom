@@ -101,6 +101,10 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 	protected int mKeyHeightPortrait = 50;
 	protected int mKeyHeightLandscape = 42;
 
+	protected int mMarginLeft = 0;
+	protected int mMarginRight = 0;
+	protected int mMarginBottom = 0;
+
 	protected boolean mOneHandedMode;
 	protected int mOneHandedRatio;
 	protected boolean mOneHandedSide;
@@ -956,6 +960,15 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			mKeyHeightLandscape = keyHeightLandscape;
 			EventBus.getDefault().post(new InputViewChangeEvent());
 		}
+		int marginLeft = pref.getInt("keyboard_margin_left", mMarginLeft);
+		int marginRight = pref.getInt("keyboard_margin_right", mMarginRight);
+		int marginBottom = pref.getInt("keyboard_margin_bottom", mMarginBottom);
+		if(marginLeft != mMarginLeft || marginRight != mMarginRight || marginBottom != mMarginBottom) {
+			mMarginLeft = marginLeft;
+			mMarginRight = marginRight;
+			mMarginBottom = marginBottom;
+			EventBus.getDefault().post(new InputViewChangeEvent());
+		}
 		boolean oneHandedMode = pref.getBoolean("keyboard_one_hand", false);
 		int oneHandedRatio = pref.getInt("keyboard_one_hand_ratio", 100);
 		if(oneHandedMode != mOneHandedMode || oneHandedRatio != mOneHandedRatio) {
@@ -1108,6 +1121,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 		int height = (mDisplayMode == PORTRAIT) ? mKeyHeightPortrait : mKeyHeightLandscape;
 		height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
 		keyboard.resizeHeight(height);
+		keyboard.setMargins(mMarginLeft, mMarginRight, mMarginBottom);
 		if(mOneHandedMode) {
 			keyboard.oneHandedMode(mWnn, mOneHandedSide, mOneHandedRatio / 100d);
 		}

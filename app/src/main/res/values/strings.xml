@@ -43,13 +43,22 @@
     <string name="preference_preview_summary"> Enable key preview. </string>
 
     <string name="preference_key_height_portrait_title">Key Height (Portrait)</string>
-    <string name="preference_key_height_portrait_summary">Adjust key height in portrait engineMode. Default value is 50.</string>
+    <string name="preference_key_height_portrait_summary">Adjust key height in portrait mode. Default value is 50.</string>
 
   <string name="preference_key_height_landscape_title">Key Height (Landscape)</string>
-    <string name="preference_key_height_landscape_summary">Adjust key height in landscape engineMode. Default value is 42.</string>
+    <string name="preference_key_height_landscape_summary">Adjust key height in landscape mode. Default value is 42.</string>
+
+  <string name="preference_keyboard_margin_left_title">Keyboard Margin (Left)</string>
+  <string name="preference_keyboard_margin_left_summary">Adjust keyboard margin of left side. Default value is 0.</string>
+
+  <string name="preference_keyboard_margin_right_title">Keyboard Margin (Right)</string>
+  <string name="preference_keyboard_margin_right_summary">Adjust keyboard margin of right side. Default value is 0.</string>
+
+  <string name="preference_keyboard_margin_bottom_title">Keyboard Margin (Bottom)</string>
+  <string name="preference_keyboard_margin_bottom_summary">Adjust keyboard margin of bottom side. Default value is 0.</string>
 
   <string name="preference_auto_caps_title"> Auto Capitalization </string>
-    <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet engineMode. </string>
+    <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet mode. </string>
 
     <string name="preference_keyboard_skin_title">Keyboard Image</string>
     <string name="preference_keyboard_skin_summary">Change keyboard image.</string>
