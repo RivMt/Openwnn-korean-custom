@@ -270,7 +270,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 		mStandardJamo = pref.getBoolean("system_use_standard_jamo", mStandardJamo);
 		mLangKeyAction = pref.getString("system_action_on_lang_key_press", LANGKEY_SWITCH_KOR_ENG);
 		mLangKeyLongAction = pref.getString("system_action_on_lang_key_long_press", LANGKEY_LIST_METHODS);
-		mAltKeyLongAction = pref.getString("system_action_on_alt_key_long_press", LANGKEY_OPEN_SETTINGS);
+		mAltKeyLongAction = pref.getString("system_action_on_alt_key_long_press", LANGKEY_LIST_ACTIONS);
 		mHardLangKey = KeystrokePreference.parseKeyStroke(pref.getString("system_hardware_lang_key_stroke", "---s62"));
 
 		flickAction.put(SoftKeyFlickEvent.Direction.UP, pref.getString("keyboard_action_on_flick_up", FLICK_SHIFT));
