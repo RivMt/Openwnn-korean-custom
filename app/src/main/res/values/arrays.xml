@@ -190,29 +190,21 @@
 
     <string-array name="keyboard_12key_layout">
         <item>@string/preference_keyboard_12key_dubul_cheonjiin</item>
-		<item>@string/preference_keyboard_12key_dubul_cheonjiin_predictive</item>
         <item>@string/preference_keyboard_12key_dubul_naratgeul</item>
-		<item>@string/preference_keyboard_12key_dubul_naratgeul_predictive</item>
-	    <item>@string/preference_keyboard_12key_dubul_sky2</item>
-		<item>@string/preference_keyboard_12key_dubul_sky2_predictive</item>
-	    <item>@string/preference_keyboard_dubul_danmoeum_google</item>
+		<item>@string/preference_keyboard_12key_dubul_sky2</item>
+		<item>@string/preference_keyboard_dubul_danmoeum_google</item>
         <item>@string/preference_keyboard_12key_sebul_munhwa</item>
-		<item>@string/preference_keyboard_12key_sebul_munhwa_predictive</item>
-        <item>@string/preference_keyboard_12key_sebul_hanson</item>
+		<item>@string/preference_keyboard_12key_sebul_hanson</item>
         <item>@string/preference_keyboard_12key_sebul_sena</item>
     </string-array>
 
     <string-array name="keyboard_12key_layout_id">
         <item>keyboard_12key_dubul_cheonjiin</item>
-		<item>keyboard_12key_dubul_cheonjiin_predictive</item>
-        <item>keyboard_12key_dubul_naratgeul</item>
-		<item>keyboard_12key_dubul_naratgeul_predictive</item>
-        <item>keyboard_12key_dubul_sky2</item>
-		<item>keyboard_12key_dubul_sky2_predictive</item>
-	    <item>keyboard_dubul_danmoeum_google</item>
+		<item>keyboard_12key_dubul_naratgeul</item>
+		<item>keyboard_12key_dubul_sky2</item>
+		<item>keyboard_dubul_danmoeum_google</item>
         <item>keyboard_12key_sebul_munhwa</item>
-		<item>keyboard_12key_sebul_munhwa_predictive</item>
-        <item>keyboard_12key_sebul_hanson</item>
+		<item>keyboard_12key_sebul_hanson</item>
         <item>keyboard_12key_sebul_sena</item>
     </string-array>
 
@@ -234,12 +226,7 @@
 	    <item>@string/preference_keyboard_12key_alphabet_narrow_a</item>
 		<item>@string/preference_keyboard_12key_alphabet_narrow_b</item>
 		<item>@string/preference_keyboard_12key_alphabet_smallqwerty</item>
-		<item>@string/preference_keyboard_12key_alphabet_wide_a_predictive</item>
-		<item>@string/preference_keyboard_12key_alphabet_wide_b_predictive</item>
-		<item>@string/preference_keyboard_12key_alphabet_narrow_a_predictive</item>
-		<item>@string/preference_keyboard_12key_alphabet_narrow_b_predictive</item>
-		<item>@string/preference_keyboard_12key_alphabet_smallqwerty_predictive</item>
-    </string-array>
+		</string-array>
 
     <string-array name="keyboard_12key_alphabet_layout_id">
 	    <item>keyboard_12key_alphabet_wide_a</item>
@@ -247,12 +234,7 @@
 	    <item>keyboard_12key_alphabet_narrow_a</item>
 		<item>keyboard_12key_alphabet_narrow_b</item>
 		<item>keyboard_12key_alphabet_smallqwerty</item>
-		<item>keyboard_12key_alphabet_wide_a_predictive</item>
-		<item>keyboard_12key_alphabet_wide_b_predictive</item>
-		<item>keyboard_12key_alphabet_narrow_a_predictive</item>
-		<item>keyboard_12key_alphabet_narrow_b_predictive</item>
-		<item>keyboard_12key_alphabet_smallqwerty_predictive</item>
-    </string-array>
+		</string-array>
 	
 	<string-array name="keyboard_symbols_layout">
 		<item>keyboard_symbols_a</item>
