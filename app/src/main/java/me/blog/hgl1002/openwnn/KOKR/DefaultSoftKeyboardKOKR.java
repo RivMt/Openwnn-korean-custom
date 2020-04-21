@@ -131,12 +131,12 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_dark_enter_def));
 			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space));
+			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(R.drawable.key_qwerty_language, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_dark_enter_def));
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del, R.drawable.keybg_dark_mod_def));
 			add(KEYCODE_QWERTY_ALT, new SoftKeyDisplay(0, R.drawable.keybg_dark_mod));
-			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(0, R.drawable.keybg_dark_mod_def));
 		}});
 		put("white", new SoftKeyboardDisplay() {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift_b, R.drawable.keybg_white_mod_def));
@@ -147,12 +147,13 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space_b, R.drawable.keybg_white_mod_def));
 			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del_b, R.drawable.keybg_white_mod_def));
 			add(KEYCODE_QWERTY_ALT, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
-			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(0, R.drawable.keybg_white_mod_def, Color.BLACK));
+			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(R.drawable.key_qwerty_language_b, R.drawable.keybg_white_mod_def, Color.BLACK));
 		}});
 		put("flat_dark", new SoftKeyboardDisplay(R.drawable.keybg_flat_bg, R.drawable.keybg_flat_def, Color.WHITE) {{
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
 			add(-10, new SoftKeyDisplay(0, R.drawable.keybg_flat_space_def));
+			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(R.drawable.key_qwerty_language));
 			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
 			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
@@ -162,6 +163,7 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
 			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
 			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space));
+			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(R.drawable.key_qwerty_language));
 			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
 			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
