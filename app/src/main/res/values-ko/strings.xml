@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="preference_ime_setting_app">OpenWnn 설정</string>
+    <string name="preference_ime_setting_app">키보드 설정</string>
 
     <!-- Dialog Messages -->
     <string name="dialog_button_ok">확인</string>
