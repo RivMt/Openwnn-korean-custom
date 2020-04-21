@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="me.blog.hgl1002.openwnn"
+    package="io.rivmt.keyboard.openwnn"
     android:versionCode="19030902"
     android:versionName="190309-02">
 
@@ -14,7 +14,7 @@
         android:fullBackupContent="true">
         <service
             android:id="@+id/openwnn_korean"
-            android:name=".OpenWnnKOKR"
+            android:name="io.rivmt.keyboard.openwnn.OpenWnnKOKR"
             android:label="@string/ime_name"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
@@ -27,7 +27,7 @@
         </service>
 
         <activity
-            android:name=".OpenWnnControlPanelKOKR"
+            android:name="io.rivmt.keyboard.openwnn.OpenWnnControlPanelKOKR"
             android:label="@string/preference_ime_setting_app"
             android:taskAffinity="">
             <intent-filter>
@@ -36,7 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".KOKR.ListLangKeyActionDialogActivity"
+        <activity android:name="io.rivmt.keyboard.openwnn.KOKR.ListLangKeyActionDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"

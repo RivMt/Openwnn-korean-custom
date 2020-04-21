@@ -10,7 +10,7 @@
 	<PreferenceCategory android:title="@string/preference_dev_softkeyboard">
 		<CheckBoxPreference android:key="keyboard_dev_use_hangul_soft"
 			android:title="@string/preference_dev_use_hangul_soft" />
-		<me.blog.hgl1002.openwnn.KOKR.preference.KeyboardListPreferenceKOKR
+		<io.rivmt.keyboard.openwnn.KOKR.preference.KeyboardListPreferenceKOKR
 			android:key="keyboard_dev_soft_layout"
 			android:title="@string/preference_dev_hangul_soft_title"
 			android:entries="@array/keyboard_hangul_layout_dev"
@@ -21,7 +21,7 @@
 	<PreferenceCategory android:title="@string/preference_dev_hardkeyboard">
 		<CheckBoxPreference android:key="keyboard_dev_use_hangul_hard"
 			android:title="@string/preference_dev_use_hangul_hard" />
-		<me.blog.hgl1002.openwnn.KOKR.preference.KeyboardListPreferenceKOKR
+		<io.rivmt.keyboard.openwnn.KOKR.preference.KeyboardListPreferenceKOKR
 			android:key="keyboard_dev_hard_layout"
 			android:title="@string/preference_dev_hangul_hard_title"
 			android:entries="@array/keyboard_hangul_layout_dev"
