@@ -1,0 +1,34 @@
+package io.rivmt.keyboard.openwnn.KOKR.trie;
+
+import static io.rivmt.keyboard.openwnn.KOKR.trie.MiniPOS.*;
+
+public enum POSChain {
+
+	SUBSTANTIVE_JOSA(SUBSTANTIVE, JOSA),
+	PREDICATE_PREEOMI_EOMI(PREDICATE, PRE_EOMI, EOMI),
+	PREDICATE_EOMI(PREDICATE, EOMI),
+
+	SUBSTANTIVE_PREDICATE_EOMI(SUBSTANTIVE, PREDICATE, EOMI),
+	SUBSTANTIVE_PREDICATE_PREEOMI_EOMI(SUBSTANTIVE, PREDICATE, PRE_EOMI, EOMI),
+
+	SUBSTANTIVE_SUBSTANTIVE(SUBSTANTIVE, SUBSTANTIVE),
+	SUBSTANTIVE_SUBSTANTIVE_JOSA(SUBSTANTIVE, SUBSTANTIVE, JOSA),
+
+	MODIFIER_SPACE(MODIFIER, SPACE),
+	INDEPENDENT_SPACE(INDEPENDENT, SPACE);
+
+	private final MiniPOS[] posList;
+
+	POSChain(MiniPOS... posLIst) {
+		this.posList = posLIst;
+	}
+
+	public MiniPOS[] getPosList() {
+		return posList;
+	}
+
+	public int length() {
+		return posList.length;
+	}
+
+}

@@ -140,20 +140,20 @@
     <!-- OpenWnn English -->
     <string name="openwnn_english_copyright">Ver.1.3.5\nOMRON SOFTWARE Co., Ltd.</string>
     <string name="openwnn_english">OpenWnn English</string>
-    <string name="openwnn_english_system_dictionary">/data/data/me.blog.hgl1002.openwnn/lib/libWnnEngDic.so</string>
-    <string name="openwnn_english_writable_dictionary">/data/data/me.blog.hgl1002.openwnn/writableEN.dic</string>
+    <string name="openwnn_english_system_dictionary">/data/data/io.rivmt.keyboard.openwnn/lib/libWnnEngDic.so</string>
+    <string name="openwnn_english_writable_dictionary">/data/data/io.rivmt.keyboard.openwnn/writableEN.dic</string>
     <string name="en_word_separators">.,;:!?</string>
 
     <!-- OpenWnn Japanese -->
     <string name="openwnn_japanese_copyright">Ver.1.3.5\nOMRON SOFTWARE Co., Ltd.</string>
     <string name="openwnn_japanese">Japanese IME</string>
-    <string name="openwnn_japanese_system_dictionary">/data/data/me.blog.hgl1002.openwnn/lib/libWnnJpnDic.so</string>
-    <string name="openwnn_japanese_writable_dictionary">/data/data/me.blog.hgl1002.openwnn/writableJAJP.dic</string>
+    <string name="openwnn_japanese_system_dictionary">/data/data/io.rivmt.keyboard.openwnn/lib/libWnnJpnDic.so</string>
+    <string name="openwnn_japanese_writable_dictionary">/data/data/io.rivmt.keyboard.openwnn/writableJAJP.dic</string>
 
     <!-- OpenWnn Chinese -->
     <string name="openwnn_china_copyright">Ver.1.3.5\nOMRON SOFTWARE Co., Ltd.</string>
     <string name="openwnn_china">OpenWnn Chinese</string>
-    <string name="openwnn_china_system_dictionary">/data/data/me.blog.hgl1002.openwnn/lib/libWnnZHCNDic.so</string>
+    <string name="openwnn_china_system_dictionary">/data/data/io.rivmt.keyboard.openwnn/lib/libWnnZHCNDic.so</string>
 
   <!-- OpenWnn Korean -->
     <string name="openwnn_korean_copyright">" hgl1002@naver.com"</string>
@@ -163,7 +163,7 @@
     <string name="openwnn_korean_donate_summary">개발을 계속할 수 있도록 후원해 주시면 정말 감사하겠습니다. 후원 문의는 hgl1002@naver.com으로 부탁드립니다.</string>
 
   <!-- After Config Change -->
-    <string name="openwnn_china_writable_dictionary">/data/data/me.blog.hgl1002.openwnn/writableZHCN.dic</string>
+    <string name="openwnn_china_writable_dictionary">/data/data/io.rivmt.keyboard.openwnn/writableZHCN.dic</string>
     <string name="cn_word_separators">.,;:!?</string>
 
   <!-- Candidate Delete -->

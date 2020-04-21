@@ -37,20 +37,20 @@
      android:layout_height="wrap_content"
      android:gravity="center"
      >
-    <me.blog.hgl1002.openwnn.CandidateViewButton
+    <io.rivmt.keyboard.openwnn.CandidateViewButton
        android:id="@+id/candidate_select"
        android:layout_height="match_parent"
        android:layout_width="wrap_content" 
        android:text="@string/button_candidate_select"
        />
-    <me.blog.hgl1002.openwnn.CandidateViewButton
+    <io.rivmt.keyboard.openwnn.CandidateViewButton
        android:id="@+id/candidate_delete"
        android:layout_height="match_parent"
        android:layout_width="wrap_content" 
        android:text="@string/button_candidate_delete"
        android:visibility="gone"
        />
-    <me.blog.hgl1002.openwnn.CandidateViewButton
+    <io.rivmt.keyboard.openwnn.CandidateViewButton
        android:id="@+id/candidate_cancel"
        android:layout_height="match_parent"
        android:layout_width="wrap_content" 
