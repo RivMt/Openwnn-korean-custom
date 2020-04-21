@@ -609,6 +609,7 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			if(mSpaceResetJohab) {
 				if(mCurrentEngineMode.properties.timeout) {
 					resetCharComposition();
+                    mInputConnection.commitText(" ", 1);
 					return;
 				}
 			}
