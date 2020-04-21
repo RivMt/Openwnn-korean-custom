@@ -156,8 +156,8 @@
     <string name="openwnn_china_system_dictionary">/data/data/me.blog.hgl1002.openwnn/lib/libWnnZHCNDic.so</string>
 
   <!-- OpenWnn Korean -->
-    <string name="openwnn_korean_copyright">hgl1002@naver.com</string>
-    <string name="openwnn_korean">OpenWnn Korean</string>
+    <string name="openwnn_korean_copyright">" hgl1002@naver.com"</string>
+    <string name="openwnn_korean" translatable="false">"OpenWnn Korean "</string>
 
     <string name="openwnn_korean_donate_title">앱 후원</string>
     <string name="openwnn_korean_donate_summary">개발을 계속할 수 있도록 후원해 주시면 정말 감사하겠습니다. 후원 문의는 hgl1002@naver.com으로 부탁드립니다.</string>
@@ -541,5 +541,7 @@
   <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
 
   <string name="initial_launch_help">Long Press ALT Key to open Settings.</string>
+  <string name="openwnn_korean_r" translatable="false">OpenWnn Korean R</string>
+  <string name="openwnn_korean_r_copyright">devrivmt@gmail.com&#10;이 앱은 OpenWnn Korean 앱을 포크한 뒤 일부를 수정한 앱입니다.</string>
 
 </resources>
