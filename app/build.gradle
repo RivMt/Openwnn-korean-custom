@@ -4,7 +4,7 @@ android {
     buildToolsVersion '28.0.1'
 
     defaultConfig {
-        applicationId "me.blog.hgl1002.openwnn"
+        applicationId "io.rivmt.keyboard.openwnn"
         minSdkVersion 14
         targetSdkVersion 28
         compileOptions {
