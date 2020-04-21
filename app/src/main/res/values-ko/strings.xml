@@ -268,5 +268,7 @@
     <string name="preference_aboutime_menu">IME 정보</string>
 
     <string name="initial_launch_help">ALT키를 길게 누르면 설정을 열 수 있습니다.</string>
+    <string name="ime_name">OpenWnn  한국어</string>
+    <string name="app_name" translatable="false">한국어 키보드</string>
 
 </resources>

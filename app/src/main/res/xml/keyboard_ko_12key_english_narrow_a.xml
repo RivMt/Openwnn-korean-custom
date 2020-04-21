@@ -33,7 +33,7 @@
 	</Row>
 
 	<Row>
-		<Key android:codes="-500" android:keyLabel="가" android:keyEdgeFlags="left" />
+		<Key android:codes="-500" android:keyIcon="@drawable/key_qwerty_language" android:keyEdgeFlags="left" />
 		<Key android:codes="-1" android:keyLabel="a A" />
 		<Key android:codes="-2010" android:keyLabel="-" />
 		<Key android:codes="-2011" android:keyLabel=", ? !" />

@@ -72,7 +72,7 @@
 
 	<Row android:keyHeight="25dip">
 		<Key android:codes="-103" android:keyLabel="ALT" android:keyHeight="50dip" android:keyEdgeFlags="left"/>
-		<Key android:codes="-500" android:keyLabel="가" android:keyHeight="50dip"/>
+		<Key android:codes="-500" android:keyIcon="@drawable/key_qwerty_language" android:keyHeight="50dip"/>
 		<Key android:codes="96" android:keyLabel="`" android:keyHeight="50dip" />
 		<Key android:codes="-10" android:keyHeight="50dip"
 			android:keyIcon="@drawable/key_qwerty_space"

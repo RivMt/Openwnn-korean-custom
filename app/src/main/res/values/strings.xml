@@ -16,7 +16,7 @@
 <resources>
   <!-- common part -->
 
-  <string name="app_name">OpenWnn Korean</string>
+  <string name="app_name">Korean Keyboard</string>
   <string name="ime_name">OpenWnn Korean</string>
 
   <!-- Preferences -->

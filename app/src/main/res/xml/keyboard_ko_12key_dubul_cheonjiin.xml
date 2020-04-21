@@ -17,7 +17,7 @@
 		<Key android:codes="-2004" android:keyLabel="ㄱㅋ" android:keyEdgeFlags="left" />
 		<Key android:codes="-2005" android:keyLabel="ㄴㄹ" />
 		<Key android:codes="-2006" android:keyLabel="ㄷㅌ" />
-		<Key android:codes="-500" android:keyLabel="ABC" android:keyEdgeFlags="right" />
+		<Key android:codes="-500" android:keyIcon="@drawable/key_qwerty_language" android:keyEdgeFlags="right" />
 	</Row>
 
 	<Row>
