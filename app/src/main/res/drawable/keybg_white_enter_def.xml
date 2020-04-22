@@ -9,6 +9,6 @@
   <item android:state_checkable="true"
 	android:drawable="@drawable/keybg_white_sftoff" />
   <item android:state_pressed="true"
-	android:drawable="@drawable/keybg_white_mod_p" />
+	android:drawable="@drawable/keybg_white_enter_p" />
   <item android:drawable="@drawable/keybg_white_enter" />
 </selector>
