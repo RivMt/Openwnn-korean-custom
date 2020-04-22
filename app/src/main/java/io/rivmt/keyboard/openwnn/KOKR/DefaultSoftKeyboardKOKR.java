@@ -159,16 +159,6 @@ public class DefaultSoftKeyboardKOKR extends DefaultSoftKeyboard {
 			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
 			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
 		}});
-		put("flat_blue", new SoftKeyboardDisplay(R.drawable.keybg_blue_bg, R.drawable.keybg_blue_def, Color.WHITE) {{
-			add(KEYCODE_QWERTY_SHIFT, new SoftKeyDisplay(R.drawable.key_qwerty_shift));
-			add(KEYCODE_QWERTY_ENTER, new SoftKeyDisplay(R.drawable.key_qwerty_enter, R.drawable.keybg_flat_enter_def, true));
-			add(-10, new SoftKeyDisplay(R.drawable.key_qwerty_space));
-			add(KEYCODE_CHANGE_LANG, new SoftKeyDisplay(R.drawable.key_qwerty_language));
-			add(KEYCODE_QWERTY_BACKSPACE, new SoftKeyDisplay(R.drawable.key_qwerty_del));
-			add(KEYCODE_JP12_ENTER, new SoftKeyDisplay(R.drawable.key_12key_enter, R.drawable.keybg_flat_enter_def, true));
-			add(KEYCODE_JP12_SPACE, new SoftKeyDisplay(R.drawable.key_12key_space));
-			add(KEYCODE_JP12_BACKSPACE, new SoftKeyDisplay(R.drawable.key_12key_del));
-		}});
 	}};
 
 	Handler mTimeoutHandler;

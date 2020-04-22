@@ -20,7 +20,6 @@
         <item>@string/preference_keyboard_white</item>
         <item>@string/preference_keyboard_dark</item>
 		<item>@string/preference_keyboard_flat_dark</item>
-        <item>@string/preference_keyboard_flat_blue</item>
     </string-array>
 
     <string name="keyboard_skin_id_default">white</string>
