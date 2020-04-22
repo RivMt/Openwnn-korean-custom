@@ -30,6 +30,7 @@
 
     <color name="keybg_white_mod">#C5CCD6</color>
     <color name="keybg_white_enter">#007AFF</color>
+    <color name="keybg_white_enter_p">#0D47A1</color>
 
     <color name="keybg_dark_mod">#343434</color>
 
