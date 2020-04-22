@@ -7,7 +7,7 @@
         android:bottom="5dp">
         <shape>
             <corners android:radius="3dip"/>
-			<solid android:color="#85868A"/>
+			<solid android:color="@color/keybg_white_outline"/>
         </shape>
     </item>
     <item
@@ -26,7 +26,7 @@
         android:width="5dp"
         android:height="5dp">
         <shape android:shape="oval">
-            <solid android:color="#ffffff"/>
+            <solid android:color="@color/keybg_white"/>
         </shape>
     </item>
 </layer-list>

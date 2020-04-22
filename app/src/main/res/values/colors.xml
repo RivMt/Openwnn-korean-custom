@@ -28,7 +28,12 @@
     <color name="indicator_background_lock_caps">#5532CD32</color>
     <color name="indicator_background_lock_alt">#55ff8800</color>
 
+    <color name="keybg_white">#ffffff</color>
+    <color name="keybg_white_p">#BBBCBF</color>
+    <color name="keybg_white_background">#DBDEE3</color>
     <color name="keybg_white_mod">#C5CCD6</color>
+    <color name="keybg_white_mod_p">#85868A</color>
+    <color name="keybg_white_outline">#85868A</color>
     <color name="keybg_white_enter">#007AFF</color>
     <color name="keybg_white_enter_p">#0D47A1</color>
 

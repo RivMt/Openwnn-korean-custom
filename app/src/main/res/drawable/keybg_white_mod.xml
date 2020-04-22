@@ -7,7 +7,7 @@
         android:bottom="5dp">
         <shape>
             <corners android:radius="3dip"/>
-			<solid android:color="#85868A"/>
+			<solid android:color="@color/keybg_white_outline"/>
         </shape>
     </item>
     <item
