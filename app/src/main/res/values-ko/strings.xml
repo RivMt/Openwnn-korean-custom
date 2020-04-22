@@ -57,8 +57,6 @@
     <string name="preference_keyboard_skin_summary">키보드 테마를 바꿉니다.</string>
 
     <string name="preference_keyboard_android_default">기본</string>
-    <string name="preference_keyboard_simple">심플</string>
-    <string name="preference_keyboard_metal">메탈</string>
 
     <string name="preference_key_setting_menu">소프트 키보드</string>
 

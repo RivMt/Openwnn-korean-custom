@@ -22,7 +22,7 @@
 		<item>@string/preference_keyboard_flat_dark</item>
     </string-array>
 
-    <string name="keyboard_skin_id_default">white</string>
+    <string name="keyboard_skin_id_default" translatable="false">white</string>
 
     <string-array name="keyboard_skin_id">
         <item>white</item>

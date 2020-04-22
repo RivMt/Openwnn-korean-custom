@@ -24,8 +24,8 @@
 
     <string name="preference_method_setting_menu">Input Method</string>
 
-  <string name="preference_method_enabler_title">Enable / Disable Input Methods</string>
-    <string name="preference_method_enabler_summary">Please enable \'OpenWnn Korean\'.</string>
+  <string name="preference_method_enabler_title">Open Input Methods Window</string>
+    <string name="preference_method_enabler_summary">Please activate \'OpenWnn Korean\'.</string>
     <string name="preference_method_picker_title">Show Input Method Picker</string>
 
     <string name="preference_appearance_setting_menu">Keyboard Appearance</string>
@@ -60,13 +60,11 @@
   <string name="preference_auto_caps_title"> Auto Capitalization </string>
     <string name="preference_auto_caps_summary"> Automatically capitalize the 1st char of a sentence in alphabet mode. </string>
 
-    <string name="preference_keyboard_skin_title">Keyboard Image</string>
-    <string name="preference_keyboard_skin_summary">Change keyboard image.</string>
+    <string name="preference_keyboard_skin_title">Keyboard Theme</string>
+    <string name="preference_keyboard_skin_summary">Change keyboard theme.</string>
 
     <string name="preference_keyboard_android_default">Standard</string>
-    <string name="preference_keyboard_simple">Simple</string>
-    <string name="preference_keyboard_metal">Metal</string>
-    <string name="preference_keyboard_white">White</string>
+  <string name="preference_keyboard_white">White</string>
     <string name="preference_keyboard_dark">Dark</string>
   <string name="preference_keyboard_flat_dark">Flat Dark</string>
   <string name="preference_keyboard_flat_light">Flat Light</string>
@@ -542,6 +540,6 @@
 
   <string name="initial_launch_help">Long Press ALT Key to open Settings.</string>
   <string name="openwnn_korean_r" translatable="false">OpenWnn Korean R</string>
-  <string name="openwnn_korean_r_copyright">devrivmt@gmail.com&#10;이 앱은 OpenWnn Korean 앱을 포크한 뒤 일부를 수정한 앱입니다.</string>
+  <string name="openwnn_korean_r_copyright">devrivmt@gmail.com<br />이 앱은 OpenWnn Korean 앱을 포크한 뒤 일부를 수정한 앱입니다.</string>
 
 </resources>
