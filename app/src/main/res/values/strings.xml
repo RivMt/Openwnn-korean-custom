@@ -16,7 +16,7 @@
 <resources>
   <!-- common part -->
 
-  <string name="app_name">Korean Keyboard</string>
+  <string name="app_name">OpenWnn Korean Keyboard</string>
   <string name="ime_name">OpenWnn Korean</string>
 
   <!-- Preferences -->
@@ -155,7 +155,7 @@
 
   <!-- OpenWnn Korean -->
     <string name="openwnn_korean_copyright">" hgl1002@naver.com"</string>
-    <string name="openwnn_korean" translatable="false">"OpenWnn Korean "</string>
+    <string name="openwnn_korean">"OpenWnn Korean "</string>
 
     <string name="openwnn_korean_donate_title">앱 후원</string>
     <string name="openwnn_korean_donate_summary">개발을 계속할 수 있도록 후원해 주시면 정말 감사하겠습니다. 후원 문의는 hgl1002@naver.com으로 부탁드립니다.</string>
@@ -539,7 +539,11 @@
   <string name="preference_dev_hangul_hard_title">Hangul Hard Layout</string>
 
   <string name="initial_launch_help">Long Press ALT Key to open Settings.</string>
-  <string name="openwnn_korean_r" translatable="false">OpenWnn Korean R</string>
-  <string name="openwnn_korean_r_copyright">devrivmt@gmail.com<br />이 앱은 OpenWnn Korean 앱을 포크한 뒤 일부를 수정한 앱입니다.</string>
+  <string name="openwnn_korean_r">OpenWnn Korean (ver. 2004 and later)</string>
+  <string name="openwnn_korean_r_copyright">devrivmt@gmail.com</string>
+  <string name="preference_about_license">License</string>
+    <string name="openwnn_korean_license" translatable="false">Apache License 2.0</string>
+  <string name="preference_about_source_code">Source Code</string>
+  <string name="openwnn_korean_source_code" translatable="false"><a href="">https://github.com/RivMt/Openwnn-korean-custom</a></string>
 
 </resources>

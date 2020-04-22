@@ -267,6 +267,10 @@
 
     <string name="initial_launch_help">ALT키를 길게 누르면 설정을 열 수 있습니다.</string>
     <string name="ime_name">OpenWnn  한국어</string>
-    <string name="app_name" translatable="false">한국어 키보드</string>
+    <string name="app_name" translatable="false">OpenWnn 한국어 키보드</string>
+    <string name="openwnn_korean">OpenWnn 한국어</string>
+    <string name="openwnn_korean_r">OpenWnn 한국어 (버전 2004 이후)</string>
+    <string name="preference_about_license">라이센스</string>
+    <string name="preference_about_source_code">소스코드</string>
 
 </resources>

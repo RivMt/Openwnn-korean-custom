@@ -11,6 +11,16 @@
             android:key="reveal_dev_settings"
 			android:title="@string/openwnn_korean"
 			android:summary="@string/openwnn_korean_copyright" />
+		<Preference
+			android:key="pref_license"
+			android:title="@string/preference_about_license"
+			android:summary="@string/openwnn_korean_license"
+			/>
+		<Preference
+			android:key="pref_source_code"
+			android:title="@string/preference_about_source_code"
+			android:summary="@string/openwnn_korean_source_code"
+			/>
 	</PreferenceCategory>
 
 </PreferenceScreen>
