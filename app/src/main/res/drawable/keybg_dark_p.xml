@@ -3,11 +3,21 @@
     <item
         android:left="3dp"
         android:right="3dp"
-        android:top="5dp"
-        android:bottom="6dp">
+        android:top="6dp"
+        android:bottom="5dp">
         <shape>
-            <corners android:radius="4dip"/>
-			<solid android:color="#969696"/>
+            <corners android:radius="3dip"/>
+            <solid android:color="@color/keybg_dark_outline"/>
+        </shape>
+    </item>
+    <item
+        android:left="3dp"
+        android:right="3dp"
+        android:top="5dp"
+        android:bottom="5dp">
+        <shape>
+            <corners android:radius="3dip"/>
+            <solid android:color="@color/keybg_dark_p"/>
         </shape>
     </item>
 </layer-list>

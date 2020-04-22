@@ -37,6 +37,13 @@
     <color name="keybg_white_enter">#007AFF</color>
     <color name="keybg_white_enter_p">#0D47A1</color>
 
+    <color name="keybg_dark">#545454</color>
+    <color name="keybg_dark_p">#969696</color>
+    <color name="keybg_dark_background">#0A0A0A</color>
     <color name="keybg_dark_mod">#343434</color>
+    <color name="keybg_dark_mod_p">#85868A</color>
+    <color name="keybg_dark_outline">#3D3D40</color>
+    <color name="keybg_dark_enter">#009688</color>
+    <color name="keybg_dark_enter_p">#004D40</color>
 
 </resources>
