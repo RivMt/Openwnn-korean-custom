@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.rivmt.keyboard.openwnn"
-    android:versionCode="20042100"
-    android:versionName="2004-2100">
+    android:versionCode="20042101"
+    android:versionName="2004-2101">
 
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android"
         android:name="android.permission.VIBRATE" />
