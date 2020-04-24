@@ -45,7 +45,7 @@
   
   <Row>
     <Key android:codes="120" android:keyLabel="\u314b"
-        android:horizontalGap="12.5%p"  android:keyEdgeFlags="left"/>
+        android:horizontalGap="8%p"  android:keyEdgeFlags="left"/>
     <Key android:codes="99" android:keyLabel="\u314c"/>
     <Key android:codes="118" android:keyLabel="\u314a"/>
     <Key android:codes="98" android:keyLabel="\u314d"/>
@@ -53,7 +53,7 @@
     <Key android:codes="109" android:keyLabel="\u3161"/>
     <Key android:codes="-100"
      	 android:keyIcon="@drawable/key_qwerty_del"
-	 	 android:keyWidth="12.5%p" android:keyEdgeFlags="right" android:isRepeatable="false"/>
+	 	 android:keyWidth="17%p" android:keyEdgeFlags="right" android:isRepeatable="false"/>
   </Row>
   
   <Row android:rowEdgeFlags="bottom">
