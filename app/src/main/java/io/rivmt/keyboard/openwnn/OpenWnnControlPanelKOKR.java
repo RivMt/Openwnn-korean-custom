@@ -1,16 +1,20 @@
 package io.rivmt.keyboard.openwnn;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.rivmt.keyboard.openwnn.R;
+import java.util.Map;
 
 public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 
@@ -34,6 +38,8 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 			new OpenWnnKOKR(this);
 		}
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
 		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_method);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_appearance);
@@ -42,10 +48,40 @@ public class OpenWnnControlPanelKOKR extends PreferenceActivity {
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_conversion);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_system);
 			addPreferencesFromResource(R.xml.openwnn_pref_ko_about);
-			if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("hidden_settings_revealed", false)) {
+			if(prefs.getBoolean("hidden_settings_revealed", false)) {
 				addPreferencesFromResource(R.xml.openwnn_pref_ko_developer);
 			}
 		}
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		String skin = PreferenceManager.getDefaultSharedPreferences(this).getString("keyboard_skin", "white");
+		Log.d("Prefs", "Skin changed");
+		if (skin != null) {
+			Log.d("Prefs", skin);
+			toggleActivity(false, !skin.equals("eink"));
+			toggleActivity(true, skin.equals("eink"));
+		}
+	}
+
+	/**
+	 * Toggle control panel activity among normal and eink
+	 * @param isEink Bool value of target activity's icon is E-Ink or not
+	 * @param value Visibility
+	 */
+	private void toggleActivity(boolean isEink, boolean value) {
+		PackageManager manager = this.getPackageManager();
+		manager.setComponentEnabledSetting(
+				new ComponentName(
+						this.getPackageName(),
+						"io.rivmt.keyboard.openwnn.OpenWnnControlPanelKOKR" + (isEink ? "Eink": "")
+				),
+				value ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED : PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+				PackageManager.DONT_KILL_APP
+		);
 	}
 
 	@TargetApi(11)

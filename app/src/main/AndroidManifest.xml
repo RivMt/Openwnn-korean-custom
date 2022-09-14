@@ -29,13 +29,28 @@
         <activity
             android:name="io.rivmt.keyboard.openwnn.OpenWnnControlPanelKOKR"
             android:label="@string/preference_ime_setting_app"
-            android:taskAffinity="">
+            android:taskAffinity=""
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity-alias
+            android:name="io.rivmt.keyboard.openwnn.OpenWnnControlPanelKOKREink"
+            android:label="@string/preference_ime_setting_app"
+            android:taskAffinity=""
+            android:exported="true"
+            android:enabled="false"
+            android:icon="@mipmap/ic_launcher_eink"
+            android:targetActivity="io.rivmt.keyboard.openwnn.OpenWnnControlPanelKOKR">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <activity android:name="io.rivmt.keyboard.openwnn.KOKR.ListLangKeyActionDialogActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:launchMode="singleInstance"
