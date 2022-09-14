@@ -545,5 +545,6 @@
     <string name="openwnn_korean_license" translatable="false">Apache License 2.0</string>
   <string name="preference_about_source_code">Source Code</string>
   <string name="openwnn_korean_source_code" translatable="false"><a href="">https://github.com/RivMt/Openwnn-korean-custom</a></string>
+  <string name="preference_keyboard_eink">E-Ink</string>
 
 </resources>

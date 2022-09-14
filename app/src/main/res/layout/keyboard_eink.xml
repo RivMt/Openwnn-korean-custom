@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.rivmt.keyboard.openwnn.KOKR.DefaultSoftKeyboardViewKOKR
+xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/keyboard"
+	android:layout_alignParentBottom="true"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:keyTextColor="#000000"
+	android:shadowRadius="0.0"
+	android:keyBackground="@drawable/keybg_eink_def"
+	android:background="@color/keybg_eink_background"
+	android:keyPreviewLayout="@layout/keyboard_preview_eink"
+	android:keyPreviewOffset="@dimen/key_preview_offset"
+/>
