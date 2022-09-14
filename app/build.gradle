@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.1'
+    compileSdkVersion 30
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "io.rivmt.keyboard.openwnn"
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 30
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -26,7 +26,7 @@ android {
 
     dependencies {
         implementation 'org.greenrobot:eventbus:3.1.1'
-        testImplementation 'junit:junit:4.12'
+        testImplementation 'junit:junit:4.13.2'
     }
 
     externalNativeBuild {
@@ -36,12 +36,12 @@ android {
     }
 }
 repositories {
-    jcenter()
+    mavenCentral()
     maven {
         url "https://maven.google.com"
     }
 }
 
 dependencies {
-    implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 }
