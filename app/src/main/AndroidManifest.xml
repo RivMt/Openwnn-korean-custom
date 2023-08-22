@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.rivmt.keyboard.openwnn"
-    android:versionCode="22091830"
-    android:versionName="2209-1830">
+    android:versionCode="23080924"
+    android:versionName="23080924">
     <!-- Version Name: yyMM hhmm -->
 
     <uses-permission xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,8 @@
             android:id="@+id/openwnn_korean"
             android:name="io.rivmt.keyboard.openwnn.OpenWnnKOKR"
             android:label="@string/ime_name"
-            android:permission="android.permission.BIND_INPUT_METHOD">
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>

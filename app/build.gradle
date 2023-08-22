@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 30
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 33
+    buildToolsVersion '34.0.0'
+    namespace 'io.rivmt.keyboard.openwnn'
 
     defaultConfig {
         applicationId "io.rivmt.keyboard.openwnn"
         minSdkVersion 14
-        targetSdkVersion 30
+        targetSdkVersion 33
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
@@ -20,9 +21,6 @@ android {
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation'
-    }
 
     dependencies {
         implementation 'org.greenrobot:eventbus:3.1.1'
@@ -33,6 +31,9 @@ android {
         ndkBuild {
             path 'Android.mk'
         }
+    }
+    lint {
+        disable 'MissingTranslation'
     }
 }
 repositories {
