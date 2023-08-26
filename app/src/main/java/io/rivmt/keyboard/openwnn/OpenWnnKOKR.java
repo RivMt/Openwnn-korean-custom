@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.text.method.MetaKeyKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
@@ -916,12 +917,20 @@ public class OpenWnnKOKR extends OpenWnn implements HangulEngineListener {
 			mInputConnection.commitText(" ", 1);
 			return true;
 		} else if (key == KeyEvent.KEYCODE_DEL) {
-			if(!mHangulEngine.backspace()) {
+			CharSequence selectedText = mInputConnection.getSelectedText(0);
+			if (TextUtils.isEmpty(selectedText)) {
+				// no selection, so delete previous character
+				if(!mHangulEngine.backspace()) {
+					resetCharComposition();
+					mInputConnection.deleteSurroundingText(1, 0);
+				}
+				if (mHangulEngine.getComposing().equals(""))
+					resetCharComposition();
+			} else {
+				// delete the selection
 				resetCharComposition();
-				mInputConnection.deleteSurroundingText(1, 0);
+				getCurrentInputConnection().commitText("",1);
 			}
-			if (mHangulEngine.getComposing().equals(""))
-				resetCharComposition();
 			return true;
 		} else if (key == DefaultSoftKeyboardKOKR.KEYCODE_NON_SHIN_DEL) {
 			resetCharComposition();
