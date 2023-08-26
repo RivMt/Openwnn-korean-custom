@@ -5,5 +5,5 @@
 
 # Privacy Policy
 
-Currently, developers do not collect personal information using this app.
-All user input is processed locally and is not sent to a server managed by the developer.
+Currently, this app does not collect any personal information.
+All user input is processed locally and does not send to a server managed by developer.
